@@ -1,0 +1,50 @@
+snippet testsuite "Add the bones of a new testsuite"
+# Bring in required imports
+import pytest
+import os
+# import the function under test
+import [module_under_test] as [module_short_name] 
+
+class Suite_[function_under_test]:
+    '''
+    [Summary]:
+    This class tests the [function_under_test] function the test cases are as follows:
+        [Happy Path]: [description] 
+        [test_case_name]: [description] 
+    '''
+
+    # The setup/teardown method for this class 
+    @pytest.fixture(scope="class") 
+    def class_fixture(self):
+        # Before each tests do the following , this gives a universal variable to the test_data etc.
+        self.data_directory = [test_data_directory] 
+        print("setup, method called")
+        yield self 
+        print("teardown code running")
+
+    def test_happy_path(self, class_fixture):
+       	'''
+			[Given] - Valid input data for the function 
+			[When] - This data is passed as an arguement to the function
+			[Then] - The function should transform the data as expected
+		'''
+		pass
+
+    def test_[test_case_name](self, class_fixture): 
+       	'''
+			[Given] - 
+			[When] - 
+			[Then] - 
+		'''
+		pass
+endsnippet
+
+snippet newtestcase "Adds an extra test to the bottom of the test suite"
+def test_[test_case_name](self): 
+	'''
+		[Given] - 
+		[When] - 
+		[Then] - 
+	'''
+	pass
+endsnippet

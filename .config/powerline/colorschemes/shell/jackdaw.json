@@ -1,0 +1,13 @@
+{
+	"name": "Custom Theme I made for My Consoles",
+	"groups": {
+		"mode": { "fg": "black", "bg": "darkorange", "attrs": ["bold"] }
+	},
+	"mode_translations": {
+		"vicmd": {
+			"groups": {
+				"mode": { "fg": "darkorange", "bg": "black", "attrs": ["bold"] }
+			}
+		}
+	}
+}
