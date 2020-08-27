@@ -125,6 +125,11 @@ if [ -f ~/.bash_secrets ]; then
 	. ~/.bash_secrets
 fi
 
+# Define the on_exit functions
+if [ -f ~/.bash_exit ]; then
+	trap ~/.bash_exit EXIT
+fi
+
 # Environment Variables
 export PATH=$PATH:~/.local/bin
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
@@ -146,9 +151,7 @@ export PATH="$PATH:$CODE_HOME/bin"
 
 
 # Proxy Settings
-if [ "$USER_ID" == "m808752" ]; then
-	export no_proxy=".westpac.co.nz,.westpactrust.co.nz,127.0.0.1,localhost"
-	export NO_PROXY=".westpac.co.nz,.westpactrust.co.nz,127.0.0.1,localhost"
+if [ "$USER" == "m808752" ]; then
 	export {http,https,ftp}_proxy="http://localhost:3128"
 	export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
 fi
@@ -164,9 +167,12 @@ fi
 
 # ---- Automated Shell Commands For Startup ----
 # Starting Proxy Services
-if [ "$USER_ID" == "m808752" ]; then
-	echo $WORK_PASSWORD  | sudo -S service cntlm start
+if [ "$USER" == "m808752" ]; then
+	echo $WORK_PWD  | sudo -S service cntlm start
 fi
 
+# Go to the User Dir in the Windows File System
 cd $WINHOME
 clear
+
+

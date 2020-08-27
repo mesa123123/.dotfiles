@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "EXIT FUNCTION CALLED"
+function pause(){
+	   read -p "$*"
+   }
+
+pause 'press [Enter] Key to Continue'
+
+
