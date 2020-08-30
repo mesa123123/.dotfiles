@@ -149,6 +149,13 @@ export POLYNOTEHOME="/opt/polynote"
 export CODE_HOME="/mnt/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 export PATH="$PATH:$CODE_HOME/bin"
 
+# WORKS ALIASES
+if [ "$USER" == "m808752" ]; then
+   alias jumpdevnode1='ssh -J gateway2 edcdevNode1'
+   alias jumpprodnode1='ssh -J gateway2 edcprodNode1'
+   alias jumpdevnode2='ssh -J gateway2 edcdevNode2'
+   alias jumpprodnode2='ssh -J gateway2 edcprodNode2'
+fi
 
 # Proxy Settings
 if [ "$USER" == "m808752" ]; then
