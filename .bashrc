@@ -150,6 +150,7 @@ export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PYSPARK_PYTHON="/usr/bin/python3"
 export VIM_INIT='source ~/.vim/.vimrc'
+export VIMINIT='source ~/.vim/.vimrc'
 export EDITOR='vim'
 export CODE_HOME="/mnt/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
@@ -227,6 +228,7 @@ fi
 
 # Sync up the dotfiles repos
 if [ -f ~/.dotfiles/remote_dotfiles_sync.sh ]; then
+	echo "DotFiles Synced"
 	~/.dotfiles/remote_dotfiles_sync.sh -m begin;
 fi
 
