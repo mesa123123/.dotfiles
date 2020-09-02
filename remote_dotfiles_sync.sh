@@ -30,7 +30,7 @@ fi
 # --------
 
 # --------- Help Text ---------
-HELP_MESSAGE="Proper uses of this scripts are:\nbegin:\n\tsets up the dotfiles for the client\nend:\n\tsync up changes to the dotfiles to the github repo"
+HELP_MESSAGE="Proper uses of this scripts are:\n\nSwitch -m\n\tbegin:\n\t\tsets up the dotfiles for the client\n\tend:\n\t\tsync up changes to the dotfiles to the github repo"
 
 if [[ "$1" == "help" || "$1" == "--h" ]]; then
 	echo -e "${HELP_MESSAGE}"
@@ -46,7 +46,7 @@ key="$1"
 
 case $key in
 # Sync Mode Switch	
-	-m|--MODE)
+	-m|-mode)
 	MODE="$2"
 	shift # past argument
 	shift # past value
