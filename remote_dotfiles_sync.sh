@@ -29,12 +29,12 @@ fi
 # move all changes that have been made during the session to the cloud
 if [[ "${MODE}" == "end" ]]; then
 	# Regular Git Push Routine	
-	git add .
+	git -C ~/.dotfiles add .
 	# DateTime Stamped Commit
 	commit_message="Sessions End $(date)"
 	echo $commit_message
-	git commit -m "${commit_message}"
-	git push origin master
+	git -C ~/.dotfiles commit -m "${commit_message}"
+	git -C ~/.dotfiles push origin master
 fi
 
 
