@@ -228,7 +228,6 @@ fi
 
 # Sync up the dotfiles repos
 if [ -f ~/.dotfiles/remote_dotfiles_sync.sh ]; then
-	echo "DotFiles Synced"
 	~/.dotfiles/remote_dotfiles_sync.sh -m begin;
 fi
 

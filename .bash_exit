@@ -5,6 +5,5 @@ function pause(){
    }
 
 ~/.dotfiles/remote_dotfiles_sync.sh -m end
-pause 'press [Enter] Key to Continue'
 
 
