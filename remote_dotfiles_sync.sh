@@ -64,24 +64,30 @@ done
 
 function create_symlink()
 {
+
+	# If not, create a dotfiles backup directory (if not already created) 
+	if [ ! -d ~/.dotfilesbackup ]; then
+			mkdir ~/.dotfilesbackup
+	fi
 	# Put the named file in a variable
-	FILEFORSYNC="~/$1"
-	# Check if its not already a symlink to this repo
-	if [ -L "$FILEFORSYNC" ]; then
-		# If yes, do nothing	
-		return 
-	else
-		# If not, create a dotfiles backup directory (if not already created) 
-		if [! -d "~/.dotfilesbackup"]; then
-			mkdir "~/.dotfilesbackup"
+	FILEFORSYNC=~/${1}
+	# Check if the file exists on the client	
+	if [ -f ${FILEFORSYNC} ]; then
+		# Check if its not already a symlink to this repo
+		if [ -L "${FILEFORSYNC}" ]; then
+			# If yes, do nothing	
+			return 
+		else
+			mv ${FILEFORSYNC} ~/.dotfilesbackup/$1
+			# Then create a symlink file from this repo	
+			ln -s $(pwd)/${1} ${FILEFORSYNC}
 		fi
-		# Move the non-symlinked file to the backup directory
-		mv $FILEFORSYNC ~/.dotfilesbackup/$1
-		# Then create a symlink file from this repo	
-		ln -s ./$1 $FILEFORSYNC
+	# If the file doesn't current exist on the client	
+	else
+		# Create the symlink
+		ln -s $(pwd)/${1} ${FILEFORSYNC}
 	fi
 }
-
 
 # --------- End of Reuseable Methods --------
 
@@ -96,8 +102,10 @@ if [[ "${MODE}" == "begin" ]]; then
 	# Sync the repo up to date	
 	git -C ~/.dotfiles fetch
 	git -C ~/.dotfiles pull origin master
-	
-	
+	for i in "${TRACKEDFILESFORSYNC[@]}"
+	do
+		create_symlink $i
+	done	
 fi
 
 # move all changes that have been made during the session to the cloud
