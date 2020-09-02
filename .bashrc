@@ -95,10 +95,11 @@ alias l='ls -CF'
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+# --------
+# ---- Bash Configuration Files ----
+# --------
+
 # Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -130,24 +131,65 @@ if [ -f ~/.bash_exit ]; then
 	trap ~/.bash_exit EXIT
 fi
 
-# Environment Variables
+# --------
+# ---- End Of Bash Configuration Files ----
+# --------
+
+# ---------
+# ---- Start Of Environment Variables -----
+# ---------
+
+# Universal Environment Variables
 export PATH=$PATH:~/.local/bin
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
-export PATH="$PATH:$JAVA_HOME/bin"
+export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"
-export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export WINHOME="/mnt/c/Users/$USER"
 export SBT_HOME="/usr/bin/sbt"
-export PATH=$PATH:$SBT_HOME
-export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PYSPARK_PYTHON="/usr/bin/python3"
 export VIM_INIT='source ~/.vim/.vimrc'
 export EDITOR='vim'
-export POLYNOTEHOME="/opt/polynote"
 export CODE_HOME="/mnt/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
+export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
+
+# Home User Environment Variables
+if [ "$USER" == "bowmanpete" ]; then
+	# User Environment Vars for Home PC	
+	export EXERCISM_HOME="/home/$USER/.exercism"
+	export ANDROID_HOME="/home/$USER/Android/bin"
+	export SSL_CERT_DIR="/etc/ssl/certs"
+	export CODE_HOME='/mnt/c/Program Files/Microsoft\ VS\ Code/'
+	# Adding Home User Variables to Path
+	export PATH=$PATH:$ANDROID_HOME/emulator
+	export PATH=$PATH:$ANDROID_HOME/tools
+	export PATH=$PATH:$ANDROID_HOME/tools/bin
+	export PATH=$PATH:$ANDROID_HOME/platform-tools
+	export PATH=$PATH:/home/$USER/android-studio/bin
+	export PATH=$PATH:$EXERCISM_HOME/
+fi
+
+# Work Environment Variables
+if [ "$USER" == "m808752" ]; then
+	export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
+	export POLYNOTEHOME="/opt/polynote"
+fi
+
+# Appending Variables Variables to Path
+export PATH="$PATH:$JAVA_HOME/bin"
+export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
+export PATH=${PATH}:${SCALA_HOME}/bin
+export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
+export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
+# ---------
+# ---- End Of Environment Variables -----
+# ---------
+
+# --------
+# ---- Client Specific Aliases ----
+# --------
 
 # WORKS ALIASES
 if [ "$USER" == "m808752" ]; then
@@ -157,7 +199,12 @@ if [ "$USER" == "m808752" ]; then
    alias jumpprodnode2='ssh -J gateway2 edcprodNode2'
 fi
 
-# Proxy Settings
+# --------
+# ---- End of Client Specific Aliases ----
+# --------
+
+
+# Work Proxy Settings
 if [ "$USER" == "m808752" ]; then
 	export {http,https,ftp}_proxy="http://localhost:3128"
 	export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"

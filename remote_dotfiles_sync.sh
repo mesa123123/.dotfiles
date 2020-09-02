@@ -1,6 +1,44 @@
 #!/bin/bash
 
-# Process Command Switches
+# -----------
+# [Author] Peter Bowman
+#			A script to automatically sync my dotfiles at the start and end of a bash session
+# -----------
+
+VERSION=0.1.0
+SUBJECT="Dotfile Sync Script"
+USAGE="Usage: remote_dotfiles_sync.sh -m args"
+
+# -------- Script Running LOCK ---------
+LOCKFILE=/tmp/${SUBJECT}.lock
+
+if [ -f "$LOCKFILE" ]; then
+	echo "Script is already running"
+	exit
+fi
+
+trap "rm -f $LOCKFILE" EXIT
+touch $LOCKFILE
+# --------- End Of Script Running Lock -------
+
+
+# -------- Null Switches Method ------
+if [ $# == 0 ]; then 
+	echo $USAGE
+	exit 1;
+fi
+# --------
+
+# --------- Help Text ---------
+HELP_MESSAGE="Proper uses of this scripts are:\nbegin:\n\tsets up the dotfiles for the client\nend:\n\tsync up changes to the dotfiles to the github repo"
+
+if [[ "$1" == "help" || "$1" == "--h" ]]; then
+	echo -e "${HELP_MESSAGE}"
+	exit 0;
+fi
+# --------- End of Help Text ---------
+
+# --------- Process Command Switches ---------
 POSITIONAL=()
 while [[ $# -gt 0 ]]
 do
@@ -20,6 +58,9 @@ case $key in
 	;;
 esac
 done
+# --------- End of Command Switch Processes ---------
+
+# --------- Business Logic Starts Here -------
 
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
@@ -37,4 +78,6 @@ if [[ "${MODE}" == "end" ]]; then
 	git -C ~/.dotfiles push origin master
 fi
 
+# -------- End of Business Logic --------
 
+exit 0
