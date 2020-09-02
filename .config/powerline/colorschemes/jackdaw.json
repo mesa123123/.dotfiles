@@ -1,5 +1,5 @@
 {
-	"name": "Solarized dark",
+	"name": "Jackdaw",
 	"groups": {
 		"information:additional":     { "fg": "gray1", "bg": "mediumorange", "attrs": [] },
 		"information:regular":        { "fg": "brightorange", "bg": "gray3", "attrs": ["bold"] },
