@@ -9,6 +9,13 @@ VERSION=0.1.0
 SUBJECT="Dotfile Sync Script"
 USAGE="Usage: remote_dotfiles_sync.sh -m args"
 
+# ------- Global Script Variables -------
+
+declare -a TRACKEDFILESFORSYNC
+TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf" ".vim/.vimrc")
+
+# ------- End of Global Script Variables -------
+
 # -------- Script Running LOCK ---------
 LOCKFILE=/tmp/${SUBJECT}.lock
 
@@ -62,6 +69,11 @@ done
 
 # --------- Reuseable Methods --------
 
+function create_subfolders()
+{
+	echo "Creating Subfolder" 
+}
+
 function create_symlink()
 {
 
@@ -70,7 +82,14 @@ function create_symlink()
 			mkdir ~/.dotfilesbackup
 	fi
 	# Put the named file in a variable
-	FILEFORSYNC=~/${1}
+	FILEARG=${1}
+	# Filter out subfolders and create them if necessary
+	# Check for the filearg having /
+	if [ true ]; then
+		create_subfolders $FILEARG
+	fi
+	# Create a variable that has the relative path to home
+	FILEFORSYNC=~/$FILEARG
 	# Check if the file exists on the client	
 	if [ -f ${FILEFORSYNC} ]; then
 		# Check if its not already a symlink to this repo
@@ -80,22 +99,18 @@ function create_symlink()
 		else
 			mv ${FILEFORSYNC} ~/.dotfilesbackup/$1
 			# Then create a symlink file from this repo	
-			ln -s $(pwd)/${1} ${FILEFORSYNC}
+			ln -s $(pwd)/$FILEARG ${FILEFORSYNC}
 		fi
 	# If the file doesn't current exist on the client	
 	else
 		# Create the symlink
-		ln -s $(pwd)/${1} ${FILEFORSYNC}
+		ln -s $(pwd)/$FILEARG ${FILEFORSYNC}
 	fi
 }
 
 # --------- End of Reuseable Methods --------
 
 # --------- Business Logic Starts Here -------
-
-# Create an Array for the files that are to be moved to symlinks when the files are synced
-declare -a TRACKEDFILESFORSYNC
-TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit")
 
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
