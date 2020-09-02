@@ -225,6 +225,11 @@ if [ "$USER" == "m808752" ]; then
 	echo $WORK_PWD  | sudo -S service cntlm start
 fi
 
+# Sync up the dotfiles repos
+if [ -f ~/.dotfiles/remote_dotfiles_sync.sh ]; then
+	~/.dotfiles/remote_dotfiles_sync.sh -m begin;
+fi
+
 # Go to the User Dir in the Windows File System
 cd $WINHOME
 clear

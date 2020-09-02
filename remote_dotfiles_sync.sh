@@ -60,11 +60,44 @@ esac
 done
 # --------- End of Command Switch Processes ---------
 
+# --------- Reuseable Methods --------
+
+function create_symlink()
+{
+	# Put the named file in a variable
+	FILEFORSYNC="~/$1"
+	# Check if its not already a symlink to this repo
+	if [ -L "$FILEFORSYNC" ]; then
+		# If yes, do nothing	
+		return 
+	else
+		# If not, create a dotfiles backup directory (if not already created) 
+		if [! -d "~/.dotfilesbackup"]; then
+			mkdir "~/.dotfilesbackup"
+		fi
+		# Move the non-symlinked file to the backup directory
+		mv $FILEFORSYNC ~/.dotfilesbackup/$1
+		# Then create a symlink file from this repo	
+		ln -s ./$1 $FILEFORSYNC
+	fi
+}
+
+
+# --------- End of Reuseable Methods --------
+
 # --------- Business Logic Starts Here -------
+
+# Create an Array for the files that are to be moved to symlinks when the files are synced
+declare -a TRACKEDFILESFORSYNC
+TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit")
 
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
-	echo "Startup"
+	# Sync the repo up to date	
+	git -C ~/.dotfiles fetch
+	git -C ~/.dotfiles pull origin master
+	
+	
 fi
 
 # move all changes that have been made during the session to the cloud

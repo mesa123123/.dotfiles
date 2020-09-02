@@ -34,6 +34,7 @@ function learnhome()
 			cd $WINHOME/dev/Learning/$1
 		fi
 	fi
+}
 
 # export the functions to the shell session
 export -f devhome
