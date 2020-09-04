@@ -7,6 +7,9 @@ function devhome()
 	if [ -z "$1" ]; then
 		echo "Please enter one of the following:"	
 		ls $WINHOME/dev/Projects
+	# If I enter the word go, it just goes to the folder	
+	elif [ "$1" == "go" ]; then
+		cd $WINHOME/dev/
 	else
 		# If the arguement given is show, print out the list of project folders
 		if [ "$1" == "show" ]; then	
@@ -25,6 +28,9 @@ function learnhome()
 	if [ -z "$1" ]; then
 		echo "Please enter one of the following:"	
 		ls $WINHOME/dev/Learning/
+	# If the arguement is the word go, simply go to the folder	
+	elif [ "$1" == "go" ]; then
+		cd $WINHOME/dev/learning/
 	else
 		# If the arguement given is show, print out the list of project folders
 		if [ "$1" == "show" ]; then	
