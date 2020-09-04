@@ -14,7 +14,7 @@ function timestamppush()
 	commit_message="Sessions End $(date)"
 	# Commit mnad Push
 	git -C "${1}" -m "${commit_message}"
-	git -C "${1}" origin master
+	git -C "${1}" push origin master
 }
 		
 timestamppush ${learning_working_directory}
