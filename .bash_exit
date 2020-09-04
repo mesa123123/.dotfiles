@@ -8,12 +8,13 @@ learning_working_directory="/mnt/c/Users/bowmanpete/dev/learning"
 
 function timestamppush()
 {
+	echo "REMOTE: ${1}"
 	# Regular Git Push Routine
 	git -C "${1}" add .
 	# DateTime Stamped Commit
 	commit_message="Sessions End $(date)"
 	# Commit mnad Push
-	git -C "${1}" -m "${commit_message}"
+	git -C "${1}" commit -m "${commit_message}"
 	git -C "${1}" push origin master
 }
 		
