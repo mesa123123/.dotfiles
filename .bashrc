@@ -228,6 +228,8 @@ fi
 
 # Sync up the dotfiles repos
 if [ -f ~/.dotfiles/remote_dotfiles_sync.sh ]; then
+	eval "$(ssh-agent -s)"	
+	ssh-add ~/.ssh/id_rsa
 	~/.dotfiles/remote_dotfiles_sync.sh -m begin;
 fi
 
