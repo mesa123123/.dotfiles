@@ -101,7 +101,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 eval "$(ssh-agent -s)"	
 ssh-add ~/.ssh/id_rsa
-ssh-add ~/.ssh/id_rsa.pub
+
 # ---- End of Ssh-Start ----
 
 # --------
