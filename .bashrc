@@ -96,6 +96,15 @@ alias l='ls -CF'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # --------
+# ---- Ssh-Start ----
+# --------
+
+eval "$(ssh-agent -s)"	
+ssh-add ~/.ssh/id_rsa
+
+# ---- End of Ssh-Start ----
+
+# --------
 # ---- Bash Configuration Files ----
 # --------
 
@@ -131,9 +140,7 @@ if [ -f ~/.bash_exit ]; then
 	trap ~/.bash_exit EXIT
 fi
 
-# --------
 # ---- End Of Bash Configuration Files ----
-# --------
 
 # ---------
 # ---- Start Of Environment Variables -----
@@ -184,9 +191,8 @@ export PATH=${PATH}:${SCALA_HOME}/bin
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
-# ---------
+
 # ---- End Of Environment Variables -----
-# ---------
 
 # --------
 # ---- Client Specific Aliases ----
@@ -200,9 +206,7 @@ if [ "$USER" == "m808752" ]; then
    alias jumpprodnode2='ssh -J gateway2 edcprodNode2'
 fi
 
-# --------
 # ---- End of Client Specific Aliases ----
-# --------
 
 
 # Work Proxy Settings
@@ -228,8 +232,6 @@ fi
 
 # Sync up the dotfiles repos
 if [ -f ~/.dotfiles/remote_dotfiles_sync.sh ]; then
-	eval "$(ssh-agent -s)"	
-	ssh-add ~/.ssh/id_rsa
 	~/.dotfiles/remote_dotfiles_sync.sh -m begin;
 fi
 

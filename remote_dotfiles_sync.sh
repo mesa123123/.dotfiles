@@ -69,11 +69,27 @@ done
 
 # --------- Reuseable Methods --------
 
+# This creates subfolders where applicable, i.e. files that are actually stored in a subfolder such as ~/.vim/.vimrc this creates those subfolders forthe client within the home folder and .dotfilesbackup folder 
 function create_subfolders()
 {
-	echo "Creating Subfolder" 
+	echo "Creating Subfolder"
+	# Split the first arguement given to the function by the `/` character and turn it into an array
+	readarray -d / -t subfolders <<< ${1} 	
+	# Create a variable to store the partial file path	
+	File_Subpath=""	
+	# While the array's length is more than nothing do the following
+	while [[ ${#subfolders[*]} -gt 0 ]] 
+	do
+		# Take the first member of the array and pop it off the array's front 
+		echo "Code Me Please!"		
+		# Add that popped array member to the variable prefixed with a /
+		# Check if that folder exists in both ~/.dotfilesbackup and ~/
+		# If in either case that folder doesn't exist, create it
+		# Repeat the loop
+	done
 }
 
+# This function takes the previous dotfiles, and puts them into the .dotfilesbackup folder, then adds the folders from the local repo to the clients environment
 function create_symlink()
 {
 
@@ -83,9 +99,8 @@ function create_symlink()
 	fi
 	# Put the named file in a variable
 	FILEARG=${1}
-	# Filter out subfolders and create them if necessary
-	# Check for the filearg having /
-	if [ true ]; then
+	# Filter out subfolders and create them if necessary, this means checking the arguement for the character `/` meaning there is a subfolder structure
+	if [[ "$FILEARG" == *"\/"* ]]; then
 		create_subfolders $FILEARG
 	fi
 	# Create a variable that has the relative path to home
