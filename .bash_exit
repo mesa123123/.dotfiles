@@ -4,6 +4,21 @@ function pause(){
 	   read -p "$*"
    }
 
+learning_working_directory="/mnt/c/Users/bowmanpete/dev/learning"
+
+function timestamppush()
+{
+	# Regular Git Push Routine
+	git -C "${1}" add .
+	# DateTime Stamped Commit
+	commit_message="Sessions End $(date)"
+	# Commit mnad Push
+	git -C "${1}" -m "${commit_message}"
+	git -C "${1}" origin master
+}
+		
+timestamppush ${learning_working_directory}
+
 ~/.dotfiles/remote_dotfiles_sync.sh -m end
 
-
+pause
