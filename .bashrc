@@ -237,6 +237,5 @@ fi
 
 # Go to the User Dir in the Windows File System
 cd $WINHOME
-cls
 
 
