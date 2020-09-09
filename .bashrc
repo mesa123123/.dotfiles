@@ -228,6 +228,7 @@ fi
 # Starting Proxy Services
 if [ "$USER" == "m808752" ]; then
 	echo $WORK_PWD  | sudo -S service cntlm start
+	echo $WORK_PWD  | sudo -S service cntlm restart
 fi
 
 # Sync up the dotfiles repos
