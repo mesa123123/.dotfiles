@@ -6,8 +6,8 @@ alias winhome='cd $WINHOME'
 
 # Bash Config Files
 alias resetbash='source ~/.bashrc'
-alias editbash='sudo vim ~/.bashrc && source ~/.bashrc'
-alias editalias='sudo vim ~/.bash_aliases && source ~/.bashrc'
+alias editbash='vim ~/.bashrc && source ~/.bashrc'
+alias editalias='vim ~/.bash_aliases && source ~/.bashrc'
 alias editfuncs="vim ~/.bash_functions && source ~/.bashrc"
 alias editaptsource='sudo vim /etc/apt/sources.list'
 alias editexit="vim ~/.bash_exit && source ~/.bashrc"
