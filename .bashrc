@@ -232,8 +232,10 @@ fi
 
 # Sync up the dotfiles repos
 if [ -f ~/.dotfiles/remote_dotfiles_sync.sh ]; then
-	~/.dotfiles/remote_dotfiles_sync.sh -m begin;
+	~/.dotfiles/remote_dotfiles_sync.sh -m begin &
 fi
+
+# @todo; put in the ability to auto sync certain git repos
 
 # Go to the User Dir in the Windows File System
 cd $WINHOME

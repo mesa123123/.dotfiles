@@ -45,3 +45,5 @@ function learnhome()
 # export the functions to the shell session
 export -f devhome
 export -f learnhome
+
+# @bug devhome can't take a string as an arguement
