@@ -233,7 +233,7 @@ fi
 
 # Sync up the dotfiles repos
 if [ -f ~/.dotfiles/remote_dotfiles_sync.sh ]; then
-	~/.dotfiles/remote_dotfiles_sync.sh -m begin &
+	~/.dotfiles/remote_dotfiles_sync.sh -m begin >> ~/.dotfiles/synclogs.log &
 fi
 
 # @todo; put in the ability to auto sync certain git repos

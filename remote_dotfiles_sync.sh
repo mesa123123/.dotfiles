@@ -8,6 +8,7 @@
 VERSION=0.1.0
 SUBJECT="Dotfile Sync Script"
 USAGE="Usage: remote_dotfiles_sync.sh -m args"
+LOGFILE=./synclogs.log
 
 # ------- Global Script Variables -------
 
@@ -127,7 +128,7 @@ function create_symlink()
 # Check if the cntlm proxy is running on client
 function check_if_at_work()
 {
-	echo $(service cntlm status)
+	echo $(service cntlm status) >> $LOGFILE;
 }
 
 
@@ -146,8 +147,8 @@ function check_if_at_work()
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
 	# Sync the repo up to date	
-	git -C ~/.dotfiles fetch
-	git -C ~/.dotfiles pull origin master
+	git -C ~/.dotfiles fetch >> $LOGFILE
+	git -C ~/.dotfiles pull origin master -q >> $LOGFILE
 	for i in "${TRACKEDFILESFORSYNC[@]}"
 	do
 		create_symlink $i
@@ -160,12 +161,12 @@ fi
 # move all changes that have been made during the session to the cloud
 if [[ "${MODE}" == "end" ]]; then
 	# Regular Git Push Routine	
-	git -C ~/.dotfiles add .
+	git -C ~/.dotfiles add . >> $LOGFILE
 	# DateTime Stamped Commit
 	commit_message="Sessions End $(date)"
-	echo $commit_message
-	git -C ~/.dotfiles commit -m "${commit_message}"
-	git -C ~/.dotfiles push origin master
+	echo $commit_message >> $LOGFILE
+	git -C ~/.dotfiles commit -m "${commit_message}" >> $LOGFILE
+	git -C ~/.dotfiles push origin master >> $LOGFILE
 fi
 
 # -------- End of Business Logic --------
