@@ -228,6 +228,7 @@ fi
 # Starting Proxy Services
 if [ "$USER" == "m808752" ]; then
 	echo $WORK_PWD  | sudo -S service cntlm start
+	export START_UP=0
 fi
 
 # Sync up the dotfiles repos
@@ -239,3 +240,4 @@ fi
 
 # Go to the User Dir in the Windows File System
 cd $WINHOME
+

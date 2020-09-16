@@ -7,10 +7,10 @@ alias winhome='cd $WINHOME'
 # Bash Config Files
 alias resetbash='source ~/.bashrc'
 alias editbash='vim ~/.bashrc && source ~/.bashrc'
-alias editalias='vim ~/.bash_aliases && source ~/.bashrc'
-alias editfuncs="vim ~/.bash_functions && source ~/.bashrc"
+alias editalias='vim ~/.bash_aliases && source ~/.bash_alises'
+alias editfuncs="vim ~/.bash_functions && source ~/.bash_functions"
 alias editaptsource='sudo vim /etc/apt/sources.list'
-alias editexit="vim ~/.bash_exit && source ~/.bashrc"
+alias editexit="vim ~/.bash_exit && source ~/.bash_exit"
 alias editvim="vim ~/.vim/.vimrc"
 
 # Package Management
