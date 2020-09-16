@@ -1,0 +1,4 @@
+[master b8acd0d] test Sync
+ 4 files changed, 11 insertions(+), 8 deletions(-)
+ create mode 100644 rclogs.log
+ create mode 100644 synclogs.log

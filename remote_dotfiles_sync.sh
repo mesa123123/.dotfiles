@@ -166,7 +166,7 @@ if [[ "${MODE}" == "end" ]]; then
 	commit_message="Sessions End $(date)"
 	echo $commit_message >> $LOGFILE
 	git -C ~/.dotfiles commit -m "${commit_message}" >> $LOGFILE
-	git -C ~/.dotfiles push origin master >> $LOGFILE
+	git -C ~/.dotfiles push origin master -q >> $LOGFILE
 fi
 
 # -------- End of Business Logic --------
