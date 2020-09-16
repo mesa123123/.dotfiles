@@ -12,7 +12,7 @@ USAGE="Usage: remote_dotfiles_sync.sh -m args"
 # ------- Global Script Variables -------
 
 declare -a TRACKEDFILESFORSYNC
-TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf" ".vim/.vimrc")
+TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf") 
 
 # ------- End of Global Script Variables -------
 
