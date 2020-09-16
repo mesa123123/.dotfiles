@@ -137,12 +137,11 @@ function check_if_at_work()
 
 # Because a proxy takes a moment to really connect to the internet there needs to be a delay in
 # order to pull from any git files at the beginning
-am_i_at_work=`check_if_at_work`
-if [[ $am_i_at_work == *"cntlm is running"* ]]; then
-	sleep 90	
-else 
-	sleep 0
-fi
+
+# am_i_at_work=`check_if_at_work`
+# if [[ $am_i_at_work == *"cntlm is running"* ]]; then
+
+# fi
 
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
