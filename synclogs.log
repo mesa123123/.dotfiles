@@ -5,3 +5,8 @@
 [master 85ed017] test Sync
  3 files changed, 5 insertions(+), 3 deletions(-)
  delete mode 100644 rclogs.log
+Sessions End Wed Sep 16 17:32:49 NZST 2020
+[master a00fcb2] Sessions End Wed Sep 16 17:32:49 NZST 2020
+ 3 files changed, 3 insertions(+)
+ create mode 100644 Script.lock
+ create mode 100644 Sync
