@@ -139,7 +139,9 @@ function check_if_at_work()
 # order to pull from any git files at the beginning
 am_i_at_work=`check_if_at_work`
 if [[ $am_i_at_work == *"cntlm is running"* ]]; then
-	sleep 30	
+	sleep 90	
+else 
+	sleep 0
 fi
 
 # Sync all changes from other clients when things start up

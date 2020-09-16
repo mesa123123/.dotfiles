@@ -180,7 +180,6 @@ fi
 
 # Work Environment Variables
 if [ "$USER" == "m808752" ]; then
-	export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
 	export POLYNOTEHOME="/opt/polynote"
 fi
 
@@ -213,6 +212,7 @@ fi
 if [ "$USER" == "m808752" ]; then
 	export {http,https,ftp}_proxy="http://localhost:3128"
 	export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
+	export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
 fi
 
 # Powerline Setup
