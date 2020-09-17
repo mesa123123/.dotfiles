@@ -30,3 +30,10 @@ Cntlm Proxy Is Running
 Cntlm Proxy Is Running
 Cntlm Proxy Is Running
 Script.lock Sync index.html remote_dotfiles_sync.sh synclogs.log cntlm is running
+Sessions End Thu Sep 17 13:10:35 NZST 2020
+[master df0bb63] Sessions End Thu Sep 17 13:10:35 NZST 2020
+ 5 files changed, 1437 insertions(+), 8 deletions(-)
+ create mode 100644 Script.lock
+ create mode 100644 Sync
+ create mode 100644 index.html
+
