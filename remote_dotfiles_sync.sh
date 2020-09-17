@@ -93,7 +93,6 @@ function create_subfolders()
 # This function takes the previous dotfiles, and puts them into the .dotfilesbackup folder, then adds the folders from the local repo to the clients environment
 function create_symlink()
 {
-
 	# If not, create a dotfiles backup directory (if not already created) 
 	if [ ! -d ~/.dotfilesbackup ]; then
 			mkdir ~/.dotfilesbackup
@@ -131,18 +130,30 @@ function check_if_at_work()
 	echo $(service cntlm status) >> $LOGFILE;
 }
 
+# Check if git access is available
+function git_access_check()
+{
+	PING_GIT=`wget -Sq https://github.com`
+	RESPONSE=($PING_GIT)
+	[[ ${RESPONSE[@]} =~ *"403"* ]] && echo true || echo false 		
+}
+
 
 # --------- End of Reuseable Methods --------
 
 # --------- Business Logic Starts Here -------
 
-# Because a proxy takes a moment to really connect to the internet there needs to be a delay in
+# Because a proxy needs certain certs to connect to the internet there needs to be a cert refresh in
 # order to pull from any git files at the beginning
 
-# am_i_at_work=`check_if_at_work`
-# if [[ $am_i_at_work == *"cntlm is running"* ]]; then
-
-# fi
+am_i_at_work=`check_if_at_work`
+echo "$am_i_at_work"
+if [[ $am_i_at_work == *"cntlm is running"* ]]; then
+	echo "Cntlm Proxy Is Running" >> $LOGFILE
+	GIT_ACCESS=`git_access_check`
+	$(chrome https://github.com)
+	wait
+fi
 
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
@@ -154,8 +165,6 @@ if [[ "${MODE}" == "begin" ]]; then
 		create_symlink $i
 	done	
 fi
-
-
 
 
 # move all changes that have been made during the session to the cloud
