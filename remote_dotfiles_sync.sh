@@ -76,7 +76,7 @@ done
 # This creates subfolders where applicable, i.e. files that are actually stored in a subfolder such as ~/.vim/.vimrc this creates those subfolders forthe client within the home folder and .dotfilesbackup folder 
 function create_subfolders()
 {
-	echo "Creating Subfolder"
+	echo "Creating Subfolder" >> $LOGFILE
 	# Split the first arguement given to the function by the `/` character and turn it into an array
 	readarray -d / -t subfolders <<< ${1} 	
 	# Create a variable to store the partial file path	
@@ -130,16 +130,18 @@ function create_symlink()
 # Check if the cntlm proxy is running on client
 function check_if_at_work()
 {
-	echo $(service cntlm status) >> $LOGFILE;
+	echo $(service cntlm status)
 }
 
-# Check if git access is available
+# Check if git access is available >> $LOGFILE
 function git_access_check()
 {
-	PING_GIT=`wget -Sq https://github.com` >> $LOGFILE
-	RESPONSE=($PING_GIT)
-	echo "$RESPONSE" >> $LOGFILE
-	[[ ${RESPONSE[@]} =~ *"403"* ]] && echo false || echo true 		
+	echo "Pinging Git" >> $LOGFILE
+	# PING_GIT=`wget -SqO- https://github.com` &> $LOGFILE
+	PING_GIT="Word up 403"	
+	RESPONSE=($PING_GIT) >> $LOGFILE
+	echo "GIT ping Response ${RESPONSE}" >> $LOGFILE
+	[[ ${RESPONSE[@]} =~ *"403"* ]] && echo true || echo false
 }
 
 # Because a proxy needs certain certs to connect to the internet there needs to be a cert refresh in
@@ -147,15 +149,16 @@ function git_access_check()
 function start_browser_proxy()
 {
 	am_i_at_work=`check_if_at_work`
-	echo "$am_i_at_work"
+	echo "$am_i_at_work" >> $LOGFILE
 	if [[ $am_i_at_work == *"cntlm is running"* ]]; then
 		echo "Cntlm Proxy Is Running" >> $LOGFILE
 		GIT_ACCESS=`git_access_check`
+		echo "GIT ACCESS CHECK DONE" >> $LOGFILE
 		echo "GIT ACCESS CHECK $GIT_ACCESS" >> $LOGFILE
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
-			`eval ${BROWSER} https://github.com` >> $LOGFILE
+			$(eval ${BROWSER} https://github.com)
 			# This just gives the browser time to sort things out	
 			sleep 5 
 		fi
@@ -169,9 +172,9 @@ function start_browser_proxy()
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
 	# Sync the repo up to date	
-	start_browser_proxy
-	git -C ~/.dotfiles fetch >> $LOGFILE
-	git -C ~/.dotfiles pull origin master -q >> $LOGFILE
+	start_browser_proxy >> $LOGFILE
+	git -C ~/.dotfiles fetch >> $LOGFILE;
+	git -C ~/.dotfiles pull origin master -q >> $LOGFILE;
 	for i in "${TRACKEDFILESFORSYNC[@]}"
 	do
 		create_symlink $i
