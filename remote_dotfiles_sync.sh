@@ -138,7 +138,7 @@ function git_access_check()
 {
 	echo "Pinging Git" >> $LOGFILE
 	PING_GIT=`wget --spider -S "https://github.com" 2>&1 | grep "HTTP/" | awk '{print $2}'`
-	RESPONSE=($PING_GIT) >> $LOGFILE
+	RESPONSE=$PING_GIT >> $LOGFILE
 	echo "GIT ping Response ${RESPONSE}" >> $LOGFILE
 	[[ ${RESPONSE[@]} =~ *"403"* ]] && echo true || echo false
 }
