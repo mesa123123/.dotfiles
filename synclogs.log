@@ -54,3 +54,18 @@ Pinging Git
 GIT ping Response 200
 GIT ACCESS CHECK DONE
 GIT ACCESS CHECK false
+Sessions End Fri Sep 18 17:47:29 NZST 2020
+[master 20e71b9] Sessions End Fri Sep 18 17:47:29 NZST 2020
+ 4 files changed, 25 insertions(+), 4 deletions(-)
+ create mode 100644 Script.lock
+ create mode 100644 Sync
+3D Objects AppData Application Data Client ComponentXML Contacts Cookies Desktop Documents Downloads Favorites Functional Programming For Dummies (1).pdf GoJira - Epic Creation Guidance.pdf GoJira - Objectives & Key Results Creation and Mapping Guidelines.pdf IntelGraphicsProfiles Links Local Settings MicrosoftEdgeBackups Music My Documents NTUSER.DAT NTUSER.DAT{5a4f2cbf-9943-11ea-94c1-ac675d4e0f71}.TM.blf NTUSER.DAT{5a4f2cbf-9943-11ea-94c1-ac675d4e0f71}.TMContainer00000000000000000001.regtrans-ms NTUSER.DAT{5a4f2cbf-9943-11ea-94c1-ac675d4e0f71}.TMContainer00000000000000000002.regtrans-ms NetHood OneDrive - Westpac New Zealand Limited Pictures Postman PowerCenter PowerCenterConfigInfo.md PrintHood Recent Saved Games Script.lock Searches SendTo Spark Course Files Spark Course Files.zip Spark_Course_Notes.txt~ Sql_Concepts_To_Learn.md Start Menu Sync Templates Videos WNZL QE - IT Test Control Standard V1.5A GOJira Sept2020.pptx clones dev htmltest.html index.html mcafee dlp quarantined files node_modules ntuser.dat.LOG1 ntuser.dat.LOG2 ntuser.ini ntuser.pol pip.ini scala source synclogs.log wiggly.py wsl_config cntlm is running
+Cntlm Proxy Is Running
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+3D Objects AppData Application Data Client ComponentXML Contacts Cookies Desktop Documents Downloads Favorites Functional Programming For Dummies (1).pdf GoJira - Epic Creation Guidance.pdf GoJira - Objectives & Key Results Creation and Mapping Guidelines.pdf IntelGraphicsProfiles Links Local Settings MicrosoftEdgeBackups Music My Documents NTUSER.DAT NTUSER.DAT{5a4f2cbf-9943-11ea-94c1-ac675d4e0f71}.TM.blf NTUSER.DAT{5a4f2cbf-9943-11ea-94c1-ac675d4e0f71}.TMContainer00000000000000000001.regtrans-ms NTUSER.DAT{5a4f2cbf-9943-11ea-94c1-ac675d4e0f71}.TMContainer00000000000000000002.regtrans-ms NetHood OneDrive - Westpac New Zealand Limited Pictures Postman PowerCenter PowerCenterConfigInfo.md PrintHood Recent Saved Games Script.lock Searches SendTo Spark Course Files Spark Course Files.zip Spark_Course_Notes.txt~ Sql_Concepts_To_Learn.md Start Menu Sync Templates Videos WNZL QE - IT Test Control Standard V1.5A GOJira Sept2020.pptx clones dev htmltest.html index.html mcafee dlp quarantined files node_modules ntuser.dat.LOG1 ntuser.dat.LOG2 ntuser.ini ntuser.pol pip.ini scala source synclogs.log wiggly.py wsl_config cntlm is running
+Cntlm Proxy Is Running
+Pinging Git
+GIT ping Response 
+GIT ACCESS CHECK false
