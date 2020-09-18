@@ -8,7 +8,7 @@
 VERSION=0.1.0
 SUBJECT="Dotfile Sync Script"
 USAGE="Usage: remote_dotfiles_sync.sh -m args"
-LOGFILE=./synclogs.log
+LOGFILE=~/.dotfiles/synclogs.log
 
 # ------- Global Script Variables -------
 
