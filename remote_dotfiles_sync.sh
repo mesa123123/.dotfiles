@@ -130,13 +130,13 @@ function create_symlink()
 # Check if the cntlm proxy is running on client
 function check_if_at_work()
 {
-	echo $(service cntlm status) # >> $LOGFILE;
+	echo $(service cntlm status) >> $LOGFILE;
 }
 
 # Check if git access is available
 function git_access_check()
 {
-	PING_GIT=`wget -Sq https://github.com` # >> $LOGFILE
+	PING_GIT=`wget -Sq https://github.com` >> $LOGFILE
 	RESPONSE=($PING_GIT)
 	[[ ${RESPONSE[@]} =~ *"403"* ]] && echo false || echo true 		
 }
@@ -145,17 +145,16 @@ function git_access_check()
 # order to pull from any git files at the beginning and it seems that launching a browser does that
 function start_browser_proxy()
 {
-	echo "This function is called, why its not working is a mystery" # >> $LOGFILE
 	am_i_at_work=`check_if_at_work`
 	echo "$am_i_at_work"
 	if [[ $am_i_at_work == *"cntlm is running"* ]]; then
-		echo "Cntlm Proxy Is Running" # >> $LOGFILE
+		echo "Cntlm Proxy Is Running" >> $LOGFILE
 		GIT_ACCESS=`git_access_check`
-		echo "GIT ACCESS CHECK $GIT_ACCESS" # >> $LOGFILE
+		echo "GIT ACCESS CHECK $GIT_ACCESS" >> $LOGFILE
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
-			eval ${BROWSER} https://github.com
+			`eval ${BROWSER} https://github.com` >> $LOGFILE
 			# This just gives the browser time to sort things out	
 			sleep 5 
 		fi
@@ -170,8 +169,8 @@ function start_browser_proxy()
 if [[ "${MODE}" == "begin" ]]; then
 	# Sync the repo up to date	
 	start_browser_proxy
-	git -C ~/.dotfiles fetch # >> $LOGFILE
-	git -C ~/.dotfiles pull origin master -q # >> $LOGFILE
+	git -C ~/.dotfiles fetch >> $LOGFILE
+	git -C ~/.dotfiles pull origin master -q >> $LOGFILE
 	for i in "${TRACKEDFILESFORSYNC[@]}"
 	do
 		create_symlink $i
@@ -181,12 +180,12 @@ fi
 # move all changes that have been made during the session to the cloud
 if [[ "${MODE}" == "end" ]]; then
 	# Regular Git Push Routine	
-	git -C ~/.dotfiles add . # >> $LOGFILE
+	git -C ~/.dotfiles add . >> $LOGFILE
 	# DateTime Stamped Commit
 	commit_message="Sessions End $(date)"
-	echo $commit_message # >> $LOGFILE
-	git -C ~/.dotfiles commit -m "${commit_message}" # >> $LOGFILE
-	git -C ~/.dotfiles push origin master -q # >> $LOGFILE
+	echo $commit_message >> $LOGFILE
+	git -C ~/.dotfiles commit -m "${commit_message}" >> $LOGFILE
+	git -C ~/.dotfiles push origin master -q >> $LOGFILE
 fi
 
 # -------- End of Business Logic --------
