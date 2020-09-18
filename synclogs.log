@@ -317,3 +317,14 @@ Sessions End Sat Sep 19 00:10:02 NZST 2020
  5 files changed, 57 insertions(+), 3 deletions(-)
  create mode 100644 Script.lock
  create mode 100644 Sync
+Sessions End Sat Sep 19 00:26:52 NZST 2020
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   synclogs.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
