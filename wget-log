@@ -1,17 +1,17 @@
 Will not apply HSTS. The HSTS database must be a regular and non-world-writable file.
 ERROR: could not open HSTS store at '/home/m808752/.wget-hsts'. HSTS will be disabled.
 Spider mode enabled. Check if remote file exists.
---2020-09-18 17:53:32--  https://github.com/
+--2020-09-18 18:25:01--  https://github.com/
 Resolving localhost (localhost)... 127.0.0.1
 Connecting to localhost (localhost)|127.0.0.1|:3128... connected.
 Proxy request sent, awaiting response... 
   HTTP/1.1 200 OK
-  date: Fri, 18 Sep 2020 05:53:22 GMT
+  date: Fri, 18 Sep 2020 06:24:55 GMT
   content-type: text/html; charset=utf-8
   server: GitHub.com
   status: 200 OK
   vary: X-PJAX, Accept-Encoding, Accept, X-Requested-With, Accept-Encoding
-  etag: W/"9d6193300f3a5e1c53092a9c67675237"
+  etag: W/"3b46927d3a1d9a0c916313b8b75597be"
   cache-control: max-age=0, private, must-revalidate
   strict-transport-security: max-age=31536000; includeSubdomains; preload
   x-frame-options: deny
@@ -20,14 +20,15 @@ Proxy request sent, awaiting response...
   referrer-policy: origin-when-cross-origin, strict-origin-when-cross-origin
   expect-ct: max-age=2592000, report-uri="https://api.github.com/_private/browser/errors"
   Zontent-security-policy: default-src 'none'; base-uri 'self'; block-all-mixed-content; connect-src 'self' uploads.github.com www.githubstatus.com collector.githubapp.com api.github.com www.google-analytics.com github-cloud.s3.amazonaws.com github-production-repository-file-5c1aeb.s3.amazonaws.com github-production-upload-manifest-file-7fdce7.s3.amazonaws.com github-production-user-asset-6210df.s3.amazonaws.com cdn.optimizely.com logx.optimizely.com/v1/events wss://alive.github.com; font-src github.githubassets.com; form-action 'self' github.com gist.github.com; frame-ancestors 'none'; frame-src render.githubusercontent.com; img-src 'self' data: github.githubassets.com identicons.github.com collector.githubapp.com github-cloud.s3.amazonaws.com *.githubusercontent.com customer-stories-feed.github.com spotlights-feed.github.com; manifest-src 'self'; media-src 'none'; script-src github.githubassets.com; style-src 'unsafe-inline' github.githubassets.com; worker-src github.com/socket-worker.js gist.github.com/socket-worker.js
-  Set-Cookie: _gh_sess=galqbTOADu%2BEbCtlqkCrDraXKGsC%2Bku8nx4OADyLFuLRU%2B4QQW19djm0FnS6Cs6GHjJJp6TBybkpHBsd4qeVcRrPSVlWe3S7ygRkiyyxgd2totZHcMOXyonfVSy7aC2zpLIZxvRKmenw9wRzeMwxwioqrkO2mi8klCfCyS88RXcvzoyfLfjKVgjhX2%2FtWsvVom6gH6XwuO%2BIJ2rQ3SjZAcVbvyj7Ft6c1Pqcm7KWleMsel57Go6hCimucfNsCFP7GUbd21rDMtpeiZ%2Fs8cN6Cg%3D%3D--aXp5mbs3U39f12yv--BWS1DlLdJVeRdLE82X1DWA%3D%3D; Path=/; HttpOnly; Secure; SameSite=Lax
-  Set-Cookie: _octo=GH1.1.682926237.1600408412; Path=/; Domain=github.com; Expires=Sat, 18 Sep 2021 05:53:32 GMT; Secure; SameSite=Lax
-  Set-Cookie: logged_in=no; Path=/; Domain=github.com; Expires=Sat, 18 Sep 2021 05:53:32 GMT; HttpOnly; Secure; SameSite=Lax
+  Set-Cookie: _gh_sess=Sx3G9%2FcEHY%2B2xlnC1M0%2FU22b23FUib4e9fOJ9Ze2%2FVBDsvb3SJQJH8Nmt5NNUBHMqMZ2RjoBN43IzHS7N3jCpxxZBto6Aoov4Nr%2FY%2Bwcowl8Biba%2F5F76WsEB0%2FrcCq8Hu%2FEQqnI%2Fgny7OTB6SkuenTtYchfecnE84i3HsKQTbTiTLjF4dw%2FobeozWPt8spk8vBHPonCz2pT2nNLIztjNdHwxXi3kvIamnlWRlbcYfVZQMxeFJRepeXVIhgCZCuVrpA83jIPIAaxWW5Hu6vOUQ%3D%3D--5WwYKsO%2FC9ARIVbY--V%2F57eiTnbc3PlN%2F4EH0sPA%3D%3D; Path=/; HttpOnly; Secure; SameSite=Lax
+  Set-Cookie: _octo=GH1.1.1514109438.1600410302; Path=/; Domain=github.com; Expires=Sat, 18 Sep 2021 06:25:02 GMT; Secure; SameSite=Lax
+  Set-Cookie: logged_in=no; Path=/; Domain=github.com; Expires=Sat, 18 Sep 2021 06:25:02 GMT; HttpOnly; Secure; SameSite=Lax
   Accept-Ranges: bytes
   Connection: close
-  X-GitHub-Request-Id: 94F8:26F8:26C6D5:392225:5F644B5C
+  X-GitHub-Request-Id: 807C:62AD:28AC74:3BFEB3:5F6452BD
   Content-security-policy: default-src 'none'; base-uri 'self'; block-all-mixed-content; connect-src https://*.zscloud.net 'self' uploads.github.com www.githubstatus.com collector.githubapp.com api.github.com www.google-analytics.com github-cloud.s3.amazonaws.com github-production-repository-file-5c1aeb.s3.amazonaws.com github-production-upload-manifest-file-7fdce7.s3.amazonaws.com github-production-user-asset-6210df.s3.amazonaws.com cdn.optimizely.com logx.optimizely.com/v1/events wss://alive.github.com; font-src https://*.zscloud.net github.githubassets.com; form-action 'self' github.com gist.github.com; frame-ancestors 'none'; frame-src https://*.zscloud.net render.githubusercontent.com; img-src https://*.zscloud.net 'self' data: github.githubassets.com identicons.github.com collector.githubapp.com github-cloud.s3.amazonaws.com *.githubusercontent.com customer-stories-feed.github.com spotlights-feed.github.com; manifest-src https://*.zscloud.net 'self'; media-src 'none'; script-src https://*.zscloud.net github.githubassets.com; style-src https://*.zscloud.net 'unsafe-inline' github.githubassets.com; worker-src github.com/socket-worker.js gist.github.com/socket-worker.js;
 Length: unspecified [text/html]
 Remote file exists and could contain further links,
 but recursion is disabled -- not retrieving.
 
+/home/m808752/.dotfiles/synclogs.log: Scheme missing.
