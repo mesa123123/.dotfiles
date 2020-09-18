@@ -257,3 +257,58 @@ Cntlm Proxy Is Running
 Pinging Git
 GIT ping Response 200
 GIT ACCESS CHECK true
+Sessions End Fri Sep 18 23:45:18 NZST 2020
+[master 68fa5c4] Sessions End Fri Sep 18 23:45:18 NZST 2020
+ 3 files changed, 10 insertions(+)
+ delete mode 100644 Script.lock
+ delete mode 100644 Sync
+ * cntlm is running
+Cntlm Proxy Is Running
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running
+Pinging Git
+GIT ping Response 
+GIT ACCESS CHECK false
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 
+GIT ACCESS CHECK false
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true

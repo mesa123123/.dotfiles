@@ -229,7 +229,6 @@ fi
 # ---- Automated Shell Commands For Startup ----
 # Starting Proxy Services
 if [ "$USER" == "m808752" ]; then
-	echo "`service cntlm status`"
 	# If the service is already running don't start it up..	
 	if [[ "`service cntlm status`" == *"* cntlm is not running"* ]]; then
 		echo $WORK_PWD  | sudo -S service cntlm start

@@ -137,7 +137,7 @@ function check_if_at_work()
 function git_access_check()
 {
 	echo "Pinging Git" >> $LOGFILE
-	PING_GIT=`wget --spider -S "https://github.com" 2>&1 $LOGFILE | grep "HTTP/" | awk '{print $2}'`
+	PING_GIT=`wget --spider -Sq "https://github.com" 2>&1 | grep "HTTP/" | awk '{print $2}'` >> $LOGFILE
 	echo "GIT ping Response ${PING_GIT}" >> $LOGFILE
 	[[ ${PING_GIT} -eq 200 ]] && echo true || echo false
 }
@@ -149,7 +149,7 @@ function start_browser_proxy()
 	am_i_at_work=`check_if_at_work`
 	echo "$am_i_at_work" >> $LOGFILE
 	if [[ $am_i_at_work == *"cntlm is running"* ]]; then
-		echo "Cntlm Proxy Is Running" >> $LOGFILE
+		echo "Cntlm Proxy Is Running, Assuming you're at work" >> $LOGFILE
 		GIT_ACCESS=`git_access_check`
 		echo "GIT ACCESS CHECK $GIT_ACCESS" >> $LOGFILE
 		if [[ $GIT_ACCESS == false ]]; then	
