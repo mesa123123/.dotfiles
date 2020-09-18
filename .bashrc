@@ -98,10 +98,12 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # --------
 # ---- Ssh-Start ----
 # --------
-
-eval "$(ssh-agent -s)"	
-ssh-add ~/.ssh/id_rsa
-
+# First Check if you've already added the key, if not don't worry about it
+if [[ ! $(ssh-keygen -l -f ~/.ssh/id_rsa) ]]; then
+	echo "SSH Agent restarting"	
+	eval "$(ssh-agent -s)"	
+	ssh-add ~/.ssh/id_rsa
+fi
 # ---- End of Ssh-Start ----
 
 # --------
@@ -227,8 +229,10 @@ fi
 # ---- Automated Shell Commands For Startup ----
 # Starting Proxy Services
 if [ "$USER" == "m808752" ]; then
-	echo $WORK_PWD  | sudo -S service cntlm start
-	export START_UP=0
+	# If the service is already running don't start it up..	
+	if [[ $(service cntlm status) =~ *"cntlm is running"* ]]; then
+		echo $WORK_PWD  | sudo -S service cntlm start
+	fi
 fi
 
 # Sync up the dotfiles repos
