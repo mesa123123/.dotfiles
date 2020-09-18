@@ -138,9 +138,8 @@ function git_access_check()
 {
 	echo "Pinging Git" >> $LOGFILE
 	PING_GIT=`wget --spider -S "https://github.com" 2>&1 | grep "HTTP/" | awk '{print $2}'`
-	RESPONSE=$PING_GIT >> $LOGFILE
-	echo "GIT ping Response ${RESPONSE}" >> $LOGFILE
-	[[ ${RESPONSE[@]} =~ *"403"* ]] && echo true || echo false
+	echo "GIT ping Response ${PING_GIT}" >> $LOGFILE
+	[[ ${PING_GIT} -eq 200 ]] && echo true || echo false
 }
 
 # Because a proxy needs certain certs to connect to the internet there needs to be a cert refresh in
@@ -152,7 +151,6 @@ function start_browser_proxy()
 	if [[ $am_i_at_work == *"cntlm is running"* ]]; then
 		echo "Cntlm Proxy Is Running" >> $LOGFILE
 		GIT_ACCESS=`git_access_check`
-		echo "GIT ACCESS CHECK DONE" >> $LOGFILE
 		echo "GIT ACCESS CHECK $GIT_ACCESS" >> $LOGFILE
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
