@@ -138,6 +138,7 @@ function git_access_check()
 {
 	PING_GIT=`wget -Sq https://github.com` >> $LOGFILE
 	RESPONSE=($PING_GIT)
+	echo "$RESPONSE" >> $LOGFILE
 	[[ ${RESPONSE[@]} =~ *"403"* ]] && echo false || echo true 		
 }
 
