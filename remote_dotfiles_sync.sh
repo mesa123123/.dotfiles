@@ -133,31 +133,36 @@ function check_if_at_work()
 # Check if git access is available
 function git_access_check()
 {
-	PING_GIT=`wget -Sq https://github.com`
+	PING_GIT=`wget -Sq https://github.com` >> $LOGFILE
 	RESPONSE=($PING_GIT)
 	[[ ${RESPONSE[@]} =~ *"403"* ]] && echo true || echo false 		
 }
 
+# Because a proxy needs certain certs to connect to the internet there needs to be a cert refresh in
+# order to pull from any git files at the beginning and it seems that launching a browser does that
+function start_chrome_proxy()
+{
+	echo "This function is called, why its not working is a mystery" >> $LOGFILE
+	am_i_at_work=`check_if_at_work`
+	if [[ $am_i_at_work == *"cntlm is running"* ]]; then
+		echo "Cntlm Proxy Is Running" >> $LOGFILE
+		GIT_ACCESS=`git_access_check`
+		echo "GIT ACCESS CHECK $GIT_ACCESS" >> $LOGFILE
+		if [[ GIT_ACCESS == false ]]; then	
+			$(chrome https://github.com)
+			sleep 20
+		fi
+	fi
+}	
 
 # --------- End of Reuseable Methods --------
 
 # --------- Business Logic Starts Here -------
 
-# Because a proxy needs certain certs to connect to the internet there needs to be a cert refresh in
-# order to pull from any git files at the beginning
-
-am_i_at_work=`check_if_at_work`
-echo "$am_i_at_work"
-if [[ $am_i_at_work == *"cntlm is running"* ]]; then
-	echo "Cntlm Proxy Is Running" >> $LOGFILE
-	GIT_ACCESS=`git_access_check`
-	$(chrome https://github.com)
-	wait
-fi
-
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
 	# Sync the repo up to date	
+	start_chrome_proxy
 	git -C ~/.dotfiles fetch >> $LOGFILE
 	git -C ~/.dotfiles pull origin master -q >> $LOGFILE
 	for i in "${TRACKEDFILESFORSYNC[@]}"
@@ -165,7 +170,6 @@ if [[ "${MODE}" == "begin" ]]; then
 		create_symlink $i
 	done	
 fi
-
 
 # move all changes that have been made during the session to the cloud
 if [[ "${MODE}" == "end" ]]; then
