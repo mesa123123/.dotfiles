@@ -317,3 +317,11 @@ Sessions End Sat Sep 19 00:10:02 NZST 2020
  5 files changed, 57 insertions(+), 3 deletions(-)
  create mode 100644 Script.lock
  create mode 100644 Sync
+Sessions End Sat Sep 19 00:10:15 NZST 2020
+[master 3bdde77] Sessions End Sat Sep 19 00:10:15 NZST 2020
+ 1 file changed, 5 insertions(+)
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 
+GIT ACCESS CHECK false
