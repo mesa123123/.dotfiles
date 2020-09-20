@@ -157,7 +157,7 @@ function start_browser_proxy()
 			# around Zscaler?
 			eval ${BROWSER} https://github.com &
 			# This just gives the browser time to sort things out	
-			sleep 5 
+			sleep 10 
 		fi
 	fi
 }	
