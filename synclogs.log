@@ -354,3 +354,23 @@ Sessions End Sat Sep 19 00:47:48 NZST 2020
 
 
 >>>>>>> 67071195cc7774fafc5d913eae7065f51a817018
+Sessions End Sun Sep 20 14:34:31 NZST 2020
+[master dcc880f] Sessions End Sun Sep 20 14:34:31 NZST 2020
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 Script.lock
+ create mode 100644 Sync
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true

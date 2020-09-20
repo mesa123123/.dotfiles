@@ -16,7 +16,7 @@ function devhome()
 			ls $WINHOME/dev/Projects/
 		# if the arguement given is the name of a project go to that project folder	
 		else	
-			cd $WINHOME/dev/Projects/$1
+			cd $WINHOME/dev/Projects/"${1}"
 		fi
 	fi
 }
@@ -37,7 +37,7 @@ function learnhome()
 			ls $WINHOME/dev/Learning/
 		# if the arguement given is the name of a project go to that learning folder	
 		else	
-			cd $WINHOME/dev/Learning/$1
+			cd $WINHOME/dev/Learning/${1}
 		fi
 	fi
 }
