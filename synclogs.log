@@ -325,3 +325,13 @@ Cntlm Proxy Is Running, Assuming you're at work
 Pinging Git
 GIT ping Response 
 GIT ACCESS CHECK false
+Sessions End Sat Sep 19 12:15:39 NZST 2020
+[master 84343a7] Sessions End Sat Sep 19 12:15:39 NZST 2020
+ 3 files changed, 8 insertions(+)
+ delete mode 100644 Script.lock
+ delete mode 100644 Sync
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 403
+GIT ACCESS CHECK false
