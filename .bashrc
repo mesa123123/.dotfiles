@@ -239,6 +239,9 @@ fi
 
 # @todo; put in the ability to auto sync certain git repos
 
+# WSL Commands
+export DISPLAY=:0.0
+
 # Go to the User Dir in the Windows File System
 cd $WINHOME
 
