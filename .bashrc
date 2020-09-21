@@ -145,7 +145,8 @@ fi
 # ----  WSL Settings ----
 # ----
 # First Check if you are running WSL Environment or not
-WSL_CHECK=$([[ `cat /proc/sys/kernel/osrelease` == *"Microsoft"* ]] && echo "true" || echo "false")
+CATOSRELEASE=`cat /proc/sys/kernel/osrelease` 
+WSL_CHECK=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
 
 # Check WSL_VERSION by going through interop channels
 if [[ $WSL_CHECK == true ]]; then
