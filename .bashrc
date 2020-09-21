@@ -99,8 +99,10 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ---- Ssh-Start ----
 # --------
 # First Check if you've already added the key, if not don't worry about it
-eval "$(ssh-agent -s)"	
-ssh-add ~/.ssh/id_rsa
+if [[ $USER == "m808752" ]]; then
+	eval "$(ssh-agent -s)"	
+	ssh-add ~/.ssh/id_rsa
+fi
 # ---- End of Ssh-Start ----
 
 # --------
