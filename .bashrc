@@ -141,6 +141,21 @@ fi
 
 # ---- End Of Bash Configuration Files ----
 
+# ----
+# ----  WSL Settings ----
+# ----
+# First Check if you are running WSL Environment or not
+WSL_CHECK=$([[ `cat /proc/sys/kernel/osrelease` == *"Microsoft"* ]] && echo "true" || echo "false")
+
+# Check WSL_VERSION by going through interop channels
+if [[ $WSL_CHECK == true ]]; then
+	cmd.exe /C wsl -l -v > /dev/null
+	response=$?
+	[[ $response == 255 ]] && WSL_VERSION=1 || WSL_VERSION=2
+fi
+# ---- End of WSL Settings ---- 
+# ----
+
 # ---------
 # ---- Start Of Environment Variables -----
 # ---------
@@ -158,8 +173,18 @@ export PYSPARK_PYTHON="/usr/bin/python3"
 export VIM_INIT='source ~/.vim/.vimrc'
 export VIMINIT='source ~/.vim/.vimrc'
 export EDITOR='vim'
-export CODE_HOME="/mnt/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
-export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
+
+# Special WSL envvars that would just annoy a pure linux system
+if [[ ${WSL_CHECK} == true ]]; then
+	export CODE_HOME="/mnt/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
+	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
+	# Now stuff that differs between versions of WSL 
+	if [[ $WSL_VERSION -eq 1 ]]; then
+		export DOCKER_HOST="tcp://localhost:2375"
+	fi
+fi
+
+
 
 # Home User Environment Variables
 if [ "$USER" == "bowmanpete" ]; then
@@ -167,7 +192,7 @@ if [ "$USER" == "bowmanpete" ]; then
 	export EXERCISM_HOME="/home/$USER/.exercism"
 	export ANDROID_HOME="/home/$USER/Android/bin"
 	export SSL_CERT_DIR="/etc/ssl/certs"
-	export CODE_HOME='/mnt/c/Program Files/Microsoft\ VS\ Code/'
+	export CODE_HOME="/mnt/c/Program Files/Microsoft\ VS\ Code/"
 	# Adding Home User Variables to Path
 	export PATH=$PATH:$ANDROID_HOME/emulator
 	export PATH=$PATH:$ANDROID_HOME/tools
@@ -190,6 +215,10 @@ export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
 
+# Special WSL Paths for Interoperability
+if [[ $WSL_CHECK == true ]]; then
+	export PATH=$PATH:/mnt/c/Windows/System32
+fi
 # ---- End Of Environment Variables -----
 
 # --------
@@ -240,7 +269,10 @@ fi
 # @todo; put in the ability to auto sync certain git repos
 
 # WSL Commands
-export DISPLAY=:0.0
+if [[ $WSL_CHECK == true ]]; then
+	# If you're running wsl send the display to the virtual output	
+	export DISPLAY=:0.0
+fi
 
 # Go to the User Dir in the Windows File System
 cd $WINHOME
