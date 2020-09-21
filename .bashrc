@@ -99,8 +99,10 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # ---- Ssh-Start ----
 # --------
 # First Check if you've already added the key, if not don't worry about it
-eval "$(ssh-agent -s)"	
-ssh-add ~/.ssh/id_rsa
+if [[ $USER == "m808752" ]]; then
+	eval "$(ssh-agent -s)"	
+	ssh-add ~/.ssh/id_rsa
+fi
 # ---- End of Ssh-Start ----
 
 # --------
@@ -145,7 +147,8 @@ fi
 # ----  WSL Settings ----
 # ----
 # First Check if you are running WSL Environment or not
-WSL_CHECK=$([[ `cat /proc/sys/kernel/osrelease` == *"Microsoft"* ]] && echo "true" || echo "false")
+CATOSRELEASE=`cat /proc/sys/kernel/osrelease` 
+WSL_CHECK=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
 
 # Check WSL_VERSION by going through interop channels
 if [[ $WSL_CHECK == true ]]; then
@@ -271,7 +274,9 @@ fi
 # WSL Commands
 if [[ $WSL_CHECK == true ]]; then
 	# If you're running wsl send the display to the virtual output	
-	export DISPLAY=:0.0
+	export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+	export PULSE_SERVER=tcp:$(grep nameserver /etc/resolv.conf | awk '{print $2}');	
+	export LIBGL_ALWAYS_INDIRECT=1
 fi
 
 # Go to the User Dir in the Windows File System

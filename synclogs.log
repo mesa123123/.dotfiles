@@ -602,6 +602,7 @@ Cntlm Proxy Is Running, Assuming you're at work
 Pinging Git
 GIT ping Response 200
 GIT ACCESS CHECK true
+<<<<<<< HEAD
 Sessions End Mon Sep 21 18:14:50 NZST 2020
 [master 2165032] Sessions End Mon Sep 21 18:14:50 NZST 2020
  1 file changed, 8 insertions(+)
@@ -610,3 +611,85 @@ Cntlm Proxy Is Running, Assuming you're at work
 Pinging Git
 GIT ping Response 403
 GIT ACCESS CHECK false
+=======
+
+Sessions End Mon Sep 21 20:41:16 NZST 2020
+[master 2f73bc7] Sessions End Mon Sep 21 20:41:16 NZST 2020
+ 3 files changed, 1 insertion(+)
+ create mode 100644 Script.lock
+ create mode 100644 Sync
+
+
+
+
+
+
+
+Sessions End Mon Sep 21 20:57:17 NZST 2020
+[master aa5d400] Sessions End Mon Sep 21 20:57:17 NZST 2020
+ 4 files changed, 14 insertions(+), 1 deletion(-)
+ delete mode 100644 Script.lock
+ delete mode 100644 Sync
+
+Sessions End Mon Sep 21 21:03:24 NZST 2020
+[master 7d705ad] Sessions End Mon Sep 21 21:03:24 NZST 2020
+ 1 file changed, 6 insertions(+)
+
+
+Sessions End Mon Sep 21 21:14:19 NZST 2020
+[master e073cc0] Sessions End Mon Sep 21 21:14:19 NZST 2020
+ 1 file changed, 5 insertions(+)
+
+Sessions End Mon Sep 21 21:16:25 NZST 2020
+[master 18d98d7] Sessions End Mon Sep 21 21:16:25 NZST 2020
+ 1 file changed, 4 insertions(+)
+Sessions End Mon Sep 21 21:25:22 NZST 2020
+[master 7e10792] Sessions End Mon Sep 21 21:25:22 NZST 2020
+ 1 file changed, 3 insertions(+)
+
+
+Sessions End Mon Sep 21 23:31:48 NZST 2020
+[master 1f6a95f] Sessions End Mon Sep 21 23:31:48 NZST 2020
+ 1 file changed, 5 insertions(+)
+
+Sessions End Mon Sep 21 23:54:50 NZST 2020
+[master 7335b14] Sessions End Mon Sep 21 23:54:50 NZST 2020
+ 1 file changed, 4 insertions(+)
+
+
+Sessions End Mon Sep 21 23:57:57 NZST 2020
+[master 4e6d28d] Sessions End Mon Sep 21 23:57:57 NZST 2020
+ 1 file changed, 5 insertions(+)
+
+
+Sessions End Tue Sep 22 00:22:01 NZST 2020
+[master 0cb4a77] Sessions End Tue Sep 22 00:22:01 NZST 2020
+ 1 file changed, 5 insertions(+)
+
+Sessions End Tue Sep 22 00:25:53 NZST 2020
+[master a18991f] Sessions End Tue Sep 22 00:25:53 NZST 2020
+ 1 file changed, 4 insertions(+)
+Sessions End Tue Sep 22 00:29:28 NZST 2020
+[master 63f232e] Sessions End Tue Sep 22 00:29:28 NZST 2020
+ 1 file changed, 3 insertions(+)
+
+Sessions End Tue Sep 22 00:32:32 NZST 2020
+[master da55b2b] Sessions End Tue Sep 22 00:32:32 NZST 2020
+ 1 file changed, 4 insertions(+)
+
+
+Sessions End Tue Sep 22 00:40:34 NZST 2020
+[master 2529f8b] Sessions End Tue Sep 22 00:40:34 NZST 2020
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+Sessions End Tue Sep 22 00:48:22 NZST 2020
+[master 80d0d49] Sessions End Tue Sep 22 00:48:22 NZST 2020
+ 1 file changed, 3 insertions(+)
+
+
+
+Sessions End Tue Sep 22 01:01:40 NZST 2020
+[master 561ee21] Sessions End Tue Sep 22 01:01:40 NZST 2020
+ 2 files changed, 10 insertions(+), 2 deletions(-)
+
+
+>>>>>>> 1f0d411a3423be68f997c255dfa6f4a03cfb8a0d
