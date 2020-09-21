@@ -96,14 +96,6 @@ alias l='ls -CF'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # --------
-# ---- Ssh-Start ----
-# --------
-# First Check if you've already added the key, if not don't worry about it
-if [[ $USER == "m808752" ]]; then
-	eval "$(ssh-agent -s)"	
-	ssh-add ~/.ssh/id_rsa
-fi
-# ---- End of Ssh-Start ----
 
 # --------
 # ---- Bash Configuration Files ----
