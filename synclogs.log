@@ -602,3 +602,11 @@ Cntlm Proxy Is Running, Assuming you're at work
 Pinging Git
 GIT ping Response 200
 GIT ACCESS CHECK true
+Sessions End Mon Sep 21 18:14:50 NZST 2020
+[master 2165032] Sessions End Mon Sep 21 18:14:50 NZST 2020
+ 1 file changed, 8 insertions(+)
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 403
+GIT ACCESS CHECK false
