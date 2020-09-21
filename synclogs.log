@@ -472,3 +472,21 @@ Sessions End Mon Sep 21 01:38:39 NZST 2020
  2 files changed, 8 insertions(+)
 
 
+Sessions End Mon Sep 21 13:39:57 NZST 2020
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   synclogs.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
+ * cntlm is running
+Cntlm Proxy Is Running, Assuming you're at work
+Pinging Git
+GIT ping Response 200
+GIT ACCESS CHECK true
