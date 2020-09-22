@@ -2,7 +2,10 @@
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias ..="cd ../"
 alias winhome='cd $WINHOME'
+
+
 
 # Bash Config Files
 alias resetbash='source ~/.bashrc'
