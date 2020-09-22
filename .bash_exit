@@ -19,7 +19,7 @@ function timestamppush()
 	commit_message="Sessions End $(date)"
 	# Commit mnad Push
 	git -C "${1}" commit -m "${commit_message}"
-	git -C "${1}" push origin master
+	git -C "${1}" push -q origin master
 }
 	
 # ---------  Business Logic Begins Here --------- 
