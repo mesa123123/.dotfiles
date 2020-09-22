@@ -18,7 +18,7 @@ function timestamppush()
 	# DateTime Stamped Commit
 	commit_message="Sessions End $(date)"
 	# Commit mnad Push
-	git -C "${1}" commit -m "${commit_message}"
+	git -C "${1}" commit -m "${commit_message}" -q
 	git -C "${1}" push -q origin master
 }
 	
