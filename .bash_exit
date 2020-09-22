@@ -12,7 +12,6 @@ learning_working_directory="/mnt/c/Users/$USER/dev/learning"
 
 function timestamppush()
 {
-	echo "REMOTE: ${1}"
 	# Regular Git Push Routine
 	git -C "${1}" add . 
 	# DateTime Stamped Commit

@@ -144,9 +144,11 @@ WSL_CHECK=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "fal
 
 # Check WSL_VERSION by going through interop channels
 if [[ $WSL_CHECK == true ]]; then
+    cd /mnt/c/Users/		
 	cmd.exe /C wsl -l -v > /dev/null
 	response=$?
 	[[ $response == 255 ]] && WSL_VERSION=1 || WSL_VERSION=2
+	cd ~
 fi
 # ---- End of WSL Settings ---- 
 # ----
@@ -215,21 +217,6 @@ if [[ $WSL_CHECK == true ]]; then
 	export PATH=$PATH:/mnt/c/Windows/System32
 fi
 # ---- End Of Environment Variables -----
-
-# --------
-# ---- Client Specific Aliases ----
-# --------
-
-# WORKS ALIASES
-if [ "$USER" == "m808752" ]; then
-   alias jumpdevnode1='ssh -J gateway2 edcdevNode1'
-   alias jumpprodnode1='ssh -J gateway2 edcprodNode1'
-   alias jumpdevnode2='ssh -J gateway2 edcdevNode2'
-   alias jumpprodnode2='ssh -J gateway2 edcprodNode2'
-fi
-
-# ---- End of Client Specific Aliases ----
-
 
 # Work Proxy Settings
 if [ "$USER" == "m808752" ]; then
