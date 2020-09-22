@@ -258,6 +258,3 @@ if [[ $WSL_CHECK == true ]]; then
 	export LIBGL_ALWAYS_INDIRECT=1
 fi
 
-# Go to the User Dir in the Windows File System
-cd $WINHOME
-
