@@ -142,6 +142,11 @@ fi
 CATOSRELEASE=`cat /proc/sys/kernel/osrelease` 
 WSL_CHECK=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
 
+# Special WSL Paths for Interoperability
+if [[ $WSL_CHECK == true ]]; then
+	export PATH=$PATH:/mnt/c/Windows/System32
+fi
+
 # Check WSL_VERSION by going through interop channels
 if [[ $WSL_CHECK == true ]]; then
     cd /mnt/c/Users/		
@@ -212,10 +217,6 @@ export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
 
-# Special WSL Paths for Interoperability
-if [[ $WSL_CHECK == true ]]; then
-	export PATH=$PATH:/mnt/c/Windows/System32
-fi
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
