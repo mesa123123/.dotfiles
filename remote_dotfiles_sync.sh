@@ -181,7 +181,7 @@ fi
 # move all changes that have been made during the session to the cloud
 if [[ "${MODE}" == "end" ]]; then
 	# Get list of manually installed packages for current machine state:
-	apt-mark showmanual | sed -e 's/^[ \t]*//' | tr '\n' ' ' > ~/.dotfiles/package_list_$USER
+	apt-mark showmanual | sed -e 's/^[ \t]*//' | tr '\n' ' ' > ~/.dotfiles/client_package_list/package_list_$USER
 	# Regular Git Push Routine	
 	git -C ~/.dotfiles add . >> $LOGFILE
 	# DateTime Stamped Commit
