@@ -1,4 +1,0 @@
-{
-	// Enable Codelens, has something to do with code actions
-	"codeLens.enable": true
-}
