@@ -222,7 +222,7 @@ export PATH="$PATH:$CODE_HOME/bin"
 # Work Proxy Settings
 if [ "$USER" == "m808752" ]; then
 	export {http,https,ftp}_proxy="http://localhost:3128"
-	export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
+	export {HTTP,HTTPS,FTP}_PROXY="http://localhost:3128"
 	export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
 fi
 
