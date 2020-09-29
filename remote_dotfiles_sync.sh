@@ -155,9 +155,7 @@ function start_browser_proxy()
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
-			echo "Please refresh the browser and close it once github has been displayed"	
-			eval ${BROWSER} https://github.com
-			# This just gives the browser time to sort things out	
+			sleep 10
 		fi
 	fi
 }	
