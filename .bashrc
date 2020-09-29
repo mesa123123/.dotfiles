@@ -149,8 +149,7 @@ fi
 
 # Check WSL_VERSION by going through interop channels
 if [[ $WSL_CHECK == true ]]; then
-	cd /c/Users/
-	RESPONSE=$(cmd.exe \/C wsl -l -v)
+	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
 	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
 	cd ~
 fi
