@@ -144,15 +144,14 @@ WSL_CHECK=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "fal
 
 # Special WSL Paths for Interoperability
 if [[ $WSL_CHECK == true ]]; then
-	export PATH=$PATH:/mnt/c/Windows/System32
+	export PATH=$PATH:/c/Windows/System32
 fi
 
 # Check WSL_VERSION by going through interop channels
 if [[ $WSL_CHECK == true ]]; then
-    cd /mnt/c/Users/		
-	cmd.exe /C wsl -l -v > /dev/null
-	response=$?
-	[[ $response == 255 ]] && WSL_VERSION=1 || WSL_VERSION=2
+	cd /c/Users/
+	RESPONSE=$(cmd.exe \/C wsl -l -v)
+	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
 	cd ~
 fi
 # ---- End of WSL Settings ---- 
@@ -167,7 +166,7 @@ export PATH=$PATH:~/.local/bin
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"
-export WINHOME="/mnt/c/Users/$USER"
+export WINHOME="/c/Users/$USER"
 export SBT_HOME="/usr/bin/sbt"
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
@@ -178,10 +177,10 @@ export EDITOR='vim'
 
 # Special WSL envvars that would just annoy a pure linux system
 if [[ ${WSL_CHECK} == true ]]; then
-	export CODE_HOME="/mnt/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
+	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
 	# Now stuff that differs between versions of WSL 
-	if [[ $WSL_VERSION -eq 1 ]]; then
+	if [[ $WSL_VERSION == 1 ]]; then	
 		export DOCKER_HOST="tcp://localhost:2375"
 	fi
 fi
@@ -194,7 +193,7 @@ if [ "$USER" == "bowmanpete" ]; then
 	export EXERCISM_HOME="/home/$USER/.exercism"
 	export ANDROID_HOME="/home/$USER/Android/bin"
 	export SSL_CERT_DIR="/etc/ssl/certs"
-	export CODE_HOME="/mnt/c/Program Files/Microsoft\ VS\ Code/"
+	export CODE_HOME="/c/Program Files/Microsoft\ VS\ Code/"
 	# Adding Home User Variables to Path
 	export PATH=$PATH:$ANDROID_HOME/emulator
 	export PATH=$PATH:$ANDROID_HOME/tools
