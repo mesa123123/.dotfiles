@@ -252,8 +252,9 @@ fi
 # WSL Commands
 if [[ $WSL_CHECK == true ]]; then
 	# If you're running wsl send the display to the virtual output	
-	export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+	WIN_TEN_IP=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null)
+	export DISPLAY=$WIN_TEN_IP:0
 	export LIBGL_ALWAYS_INDIRECT=1
-	export PULSE_SERVER=tcp:$(grep nameserver /etc/resolv.conf | awk '{print $2}');	
+	export PULSE_SERVER=$WIN_TEN_IP
 fi
 
