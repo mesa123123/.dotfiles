@@ -155,7 +155,7 @@ function start_browser_proxy()
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
-			$BROWSER https://github.com
+			$BROWSER https://github.com;
 		fi
 	fi
 }	
