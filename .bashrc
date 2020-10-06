@@ -218,11 +218,8 @@ export PATH="$PATH:$CODE_HOME/bin"
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
-if [ "$USER" == "m808752" ]; then
-	export {http,https,ftp}_proxy="http://localhost:3128"
-	export {HTTP,HTTPS,FTP}_PROXY="http://localhost:3128"
-	export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
-fi
+# if [ "$USER" == "m808752" ]; then
+# fi
 
 # Powerline Setup
 if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
@@ -235,12 +232,12 @@ fi
 
 # ---- Automated Shell Commands For Startup ----
 # Starting Proxy Services
-if [ "$USER" == "m808752" ]; then
-	# If the service is already running don't start it up..	
-	if [[ "`service cntlm status`" == *"* cntlm is not running"* ]]; then
-		echo $WORK_PWD  | sudo -S service cntlm start
-	fi
-fi
+# if [ "$USER" == "m808752" ]; then
+# 	# If the service is already running don't start it up..	
+# 	if [[ "`service cntlm status`" == *"* cntlm is not running"* ]]; then
+# 		echo $WORK_PWD  | sudo -S service cntlm start
+# 	fi
+# fi
 
 # Sync up the dotfiles repos
 if [ -f ~/.dotfiles/remote_dotfiles_sync.sh ]; then
