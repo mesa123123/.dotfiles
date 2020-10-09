@@ -218,8 +218,11 @@ export PATH="$PATH:$CODE_HOME/bin"
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
-# if [ "$USER" == "m808752" ]; then
-# fi
+if [ "$USER" == "m808752" ] && [[ ${WSL_CHECK} == true ]]; then
+	export {http,https,ftp}_proxy="http://localhost:3128"
+	export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
+	export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
+fi
 
 # Powerline Setup
 if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
