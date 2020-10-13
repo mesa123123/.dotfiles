@@ -5,8 +5,6 @@ alias l='ls -CF'
 alias ..="cd ../"
 alias winhome='cd $WINHOME'
 
-
-
 # Bash Config Files
 alias resetbash='source ~/.bashrc'
 alias editbash='vim ~/.bashrc && source ~/.bashrc'
@@ -25,8 +23,10 @@ alias chrome="/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.ex
 alias gnpm='sudo npm -g --proxy=false'
 alias unpm='npm --proxy=false'
 alias spip='sudo pip3'
+alias prpy='pipenv run python'
 
 # Screen Commands
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
+
 
