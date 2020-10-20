@@ -17,7 +17,8 @@ TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".
 
 # In order to get around a proxy sometimes you gotta start the browser, ergo you need to know where
 # your browser is
-BROWSER="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+BROWSERCHROME="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+BROWSERBRAVE="/c/Users/Peter\ Bowman/AppData/Local/BraveSoftware/Brave-Browser/Application/brave.exe"
 # ------- End of Global Script Variables -------
 
 # -------- Script Running LOCK ---------
@@ -155,7 +156,12 @@ function start_browser_proxy()
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
-			"$BROWSER" https://github.com;
+			if [[ $USER == m808752 ]]; then	
+				$BROWSER = $BROWSERBRAVE;
+			else
+				$BROWSER = $BROWSERCHROME;
+			fi
+		"$BROWSER" https://github.com;
 		fi
 	fi
 }	
