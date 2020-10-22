@@ -162,7 +162,7 @@ fi
 
 # Universal Environment Variables
 export PATH=$PATH:~/.local/bin
-export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"
 export WINHOME="/c/Users/$USER"
@@ -193,6 +193,7 @@ if [ "$USER" == "bowmanpete" ]; then
 	export ANDROID_HOME="/home/$USER/Android/bin"
 	export SSL_CERT_DIR="/etc/ssl/certs"
 	export CODE_HOME="/c/Program Files/Microsoft\ VS\ Code/"
+	export HADOOP_HOME=/usr/local/hadoop
 	# Adding Home User Variables to Path
 	export PATH=$PATH:$ANDROID_HOME/emulator
 	export PATH=$PATH:$ANDROID_HOME/tools
@@ -200,6 +201,8 @@ if [ "$USER" == "bowmanpete" ]; then
 	export PATH=$PATH:$ANDROID_HOME/platform-tools
 	export PATH=$PATH:/home/$USER/android-studio/bin
 	export PATH=$PATH:$EXERCISM_HOME/
+	export PATH=$PATH:$HADOOP_HOME/bin
+	
 fi
 
 # Work Environment Variables
