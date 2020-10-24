@@ -29,4 +29,5 @@ alias prpy='pipenv run python'
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
 
-
+# WSL Only Commands
+alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
