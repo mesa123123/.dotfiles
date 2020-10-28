@@ -202,7 +202,8 @@ if [ "$USER" == "bowmanpete" ]; then
 	export PATH=$PATH:/home/$USER/android-studio/bin
 	export PATH=$PATH:$EXERCISM_HOME/
 	export PATH=$PATH:$HADOOP_HOME/bin
-	
+	# Environment Variable Modifiers
+	# export JAVA_OPTS="$JAVA_OPTS -Djava.awt.headless=true"
 fi
 
 # Work Environment Variables
@@ -217,6 +218,7 @@ export PATH=${PATH}:${SCALA_HOME}/bin
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
+
 
 # ---- End Of Environment Variables -----
 
