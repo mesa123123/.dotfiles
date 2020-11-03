@@ -157,8 +157,6 @@ function start_browser_proxy()
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
 			if [[ $USER == m808752 ]]; then	
-				$BROWSER = "$BROWSERBRAVE";
-			else
 				$BROWSER = "$BROWSERCHROME";
 			fi
 		"$BROWSER" https://github.com;
