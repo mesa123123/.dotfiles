@@ -17,7 +17,7 @@ TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".
 
 # In order to get around a proxy sometimes you gotta start the browser, ergo you need to know where
 # your browser is
-BROWSER="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+BROWSERCHROME="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
 BROWSERBRAVE="/c/Users/$USER/AppData/Local/BraveSoftware/Brave-Browser/Application/brave.exe"
 # ------- End of Global Script Variables -------
 
@@ -94,6 +94,17 @@ function create_subfolders()
 	done
 }
 
+# This sets the browser for the client
+function set_browser()
+{
+	if [ "$USER" == "M808752" ]; then
+		BROWSER=$BROWSERBRAVE
+	else
+		BROWSER=$BROWSERCHROME
+	fi
+	echo "$BROWSER"
+}
+
 # This function takes the previous dotfiles, and puts them into the .dotfilesbackup folder, then adds the folders from the local repo to the clients environment
 function create_symlink()
 {
@@ -156,6 +167,7 @@ function start_browser_proxy()
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
+			BROWSER=`set_browser`
 			"$BROWSER" https://github.com;
 		fi
 	fi
