@@ -97,7 +97,7 @@ function create_subfolders()
 # This sets the browser for the client
 function set_browser()
 {
-	if [ "$USER" == "M808752" ]; then
+	if [ "$USER" == "m808752" ]; then
 		BROWSER=$BROWSERBRAVE
 	else
 		BROWSER=$BROWSERCHROME
