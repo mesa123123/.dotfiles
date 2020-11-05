@@ -202,6 +202,7 @@ if [ "$USER" == "bowmanpete" ]; then
 	export PATH=$PATH:/home/$USER/android-studio/bin
 	export PATH=$PATH:$EXERCISM_HOME/
 	export PATH=$PATH:$HADOOP_HOME/bin
+	export PATH=$PATH:$CODE_HOME/bin
 	# Environment Variable Modifiers
 	# export JAVA_OPTS="$JAVA_OPTS -Djava.awt.headless=true"
 fi
