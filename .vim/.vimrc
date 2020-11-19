@@ -2,19 +2,23 @@
 set nocompatible
 
 " Plugins Load
-call plug#begin('/home/m808752/.vim/pack/my_plugins/start')
+call plug#begin('/home/bowmanpete/.vim/pack/my_plugins/start')
 
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'yggdroot/indentline'
 Plug 'hallison/vim-markdown'
 Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
+Plug 'klen/python-mode'
 Plug 'alfredodeza/pytest.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvie/vim-flake8'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
+Plug 'tpope/vim-fugitive'
 Plug 'luochen1990/rainbow'
+Plug 'scrooloose/syntastic'
+Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'sirver/ultisnips'
@@ -25,8 +29,7 @@ call plug#end()
 set number
 let python_highlight_all=1
 syntax on
-set tabstop=4
-set shiftwidth=4
+set linebreak
 set autoindent
 set nofoldenable
 set encoding=UTF-8
@@ -38,12 +41,39 @@ filetype plugin indent on
 set termguicolors
 set t_Co=25
 colorscheme onehalfdark
+
+"	Tabstop & Shiftwidth
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+" Language Specific Settings
+" ------------------------------"
+
+"   Language C++
+au FileType cpp setlocal et ts=2 sw=2
+
+" Language Python
+let g:pymode_python = 'python3'
+au FileType python setlocal et ts=4 sw=4 sts=4
+
 " NerdTree Options 
 let g:NERDTreeWinPos="right"
 let g:NERDTreeWinSize=60
+let NERDTreeShowLineNumbers=1
+" make sure relative line numbers are used
+autocmd FileType nerdtree setlocal relativenumber
 
-" Lightline Options
-let g:lightline={ 'colorscheme': 'onehalfdark', 'active': { 'left': [ [ 'mode', 'paste'], [ 'cocstatus', 'readonly', 'filename', 'modified' ] ] }, 'component_function': { 'cocstatus':'coc#status' }, } 
+
+" Lightline Configuration
+"--------------------------- "
+" coc options for lightline
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+
+"       Lightline Options"
+let g:lightline = { 'colorscheme': 'onehalfdark', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ] }, 'component_function': { 'gitbranch': 'FugitiveHead', 'cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction' }, }
 
 " Lightline Coc Config
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
@@ -195,9 +225,6 @@ nnoremap <silent> <space>tb :<C-u>CocCommand metals.tvp metalsBuild<CR>
 nnoremap <silent> <space>tf :<C-u>CocCommand metals.revealInTreeView metalsPackages<CR
 
 " ------------------------------------------- "
-
-" Line Wrapping setup
-set tw=100
 
 " Tabs Remapping
 map <C-t><up> :tabr<cr>
