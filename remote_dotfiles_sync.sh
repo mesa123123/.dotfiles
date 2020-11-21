@@ -13,8 +13,7 @@ LOGFILE=~/.dotfiles/synclogs.log
 # ------- Global Script Variables -------
 
 declare -a TRACKEDFILESFORSYNC
-TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf",
-	".vim/.vimrc")
+TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf", ".vim/.vimrc")
 
 # In order to get around a proxy sometimes you gotta start the browser, ergo you need to know where
 # your browser is

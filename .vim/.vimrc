@@ -61,6 +61,7 @@ au FileType python setlocal et ts=4 sw=4 sts=4
 let g:NERDTreeWinPos="right"
 let g:NERDTreeWinSize=60
 let NERDTreeShowLineNumbers=1
+let NERDTreeShowHidden=1
 " make sure relative line numbers are used
 autocmd FileType nerdtree setlocal relativenumber
 
