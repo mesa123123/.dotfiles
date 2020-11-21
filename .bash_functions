@@ -42,8 +42,26 @@ function learnhome()
 	fi
 }
 
+# Function for launching a tmux session for development projects
+function devmux() 
+{
+    if [ $# -eq 0 ]; then
+        echo "Please enter one of the following:"
+        ls $WINHOME/dev/Projects/
+    else
+        tmux new-session -d -s Development
+        tmux rename-window -t 0 Development
+        tmux split-window -v 
+        tmux resize-pane -t1 -D 30
+        tmux setw synchronize-panes on  C-m 
+        tmux send-keys -t0 devhome Space ${1} Enter 
+        tmux setw synchronize-panes off
+        tmux select-pane -t 0
+        tmux send-keys 'vim' C-m 
+        tmux attach-session -t Development:0
+    fi
+}    
 # export the functions to the shell session
 export -f devhome
 export -f learnhome
-
-# @bug devhome can't take a string as an arguement
+export -f devmux
