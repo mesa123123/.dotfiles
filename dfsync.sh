@@ -13,7 +13,7 @@ LOGFILE=~/.dotfiles/synclogs.log
 # ------- Global Script Variables -------
 
 declare -a TRACKEDFILESFORSYNC
-TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf", ".vim/.vimrc")
+TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf" ".vim/.vimrc")
 
 # In order to get around a proxy sometimes you gotta start the browser, ergo you need to know where
 # your browser is
@@ -44,7 +44,7 @@ fi
 # --------- Help Text ---------
 HELP_MESSAGE="Proper uses of this scripts are:\n\nSwitch -m\n\tbegin:\n\t\tsets up the dotfiles for the client\n\tend:\n\t\tsync up changes to the dotfiles to the github repo"
 
-if [[ "$1" == "help" || "$1" == "--h" ]]; then
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
 	echo -e "${HELP_MESSAGE}"
 	exit 0;
 fi
