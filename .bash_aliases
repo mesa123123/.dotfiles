@@ -13,6 +13,7 @@ alias editfuncs="vim ~/.bash_functions && source ~/.bash_functions"
 alias editaptsource='sudo vim /etc/apt/sources.list'
 alias editexit="vim ~/.bash_exit && source ~/.bashrc"
 alias editvim="vim ~/.vim/.vimrc"
+alias edittmux="vim ~/.tmux.conf"
 
 # Package Management
 alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
