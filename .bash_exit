@@ -24,6 +24,6 @@ function timestamppush()
 # ---------  Business Logic Begins Here --------- 
 timestamppush ${learning_working_directory}
 
-~/.dotfiles/remote_dotfiles_sync.sh -m end
+~/.dotfiles/dfsync.sh -m end
 
 pause "...Exit tasks are complete, please press any key to leave shell"
