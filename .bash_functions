@@ -52,12 +52,11 @@ function devmux()
         tmux new-session -d -s Development
         tmux rename-window -t 0 Development
         tmux split-window -v 
-        tmux resize-pane -t1 -D 30
-        tmux setw synchronize-panes on  C-m 
         tmux send-keys -t0 devhome Space ${1} Enter 
-        tmux setw synchronize-panes off
-        tmux select-pane -t 0
-        tmux send-keys 'vim' C-m 
+        tmux send-keys -t0 'vim' Enter 
+        tmux select-pane -t 1
+        tmux send-keys -t1 devhome Space ${1} Enter
+        tmux send-keys 'clear' Enter
         tmux attach-session -t Development:0
     fi
 }    
