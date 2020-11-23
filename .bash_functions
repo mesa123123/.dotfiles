@@ -43,7 +43,7 @@ function learnhome()
 }
 
 # Function for launching a tmux session for development projects
-function devmux() 
+function dvx() 
 {
     if [ $# -eq 0 ]; then
         echo "Please enter one of the following:"
