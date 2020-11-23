@@ -2,7 +2,7 @@
 set nocompatible
 
 " Plugins Load
-call plug#begin('/home/bowmanpete/.vim/pack/my_plugins/start')
+call plug#begin('/home/$USER/.vim/pack/my_plugins/start')
 
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
