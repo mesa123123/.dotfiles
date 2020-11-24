@@ -63,4 +63,4 @@ function dvx()
 # export the functions to the shell session
 export -f devhome
 export -f learnhome
-export -f devmux
+export -f dvx
