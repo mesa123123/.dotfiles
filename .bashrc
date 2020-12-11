@@ -249,8 +249,9 @@ if [ "$USER" == "m808752" ]; then
 fi
 
 # Sync up the dotfiles repos
-if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ]; then
+if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ]; then
 	~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log &
+    echo "Executed DotFiles Pull"
 fi
 
 # @todo; put in the ability to auto sync certain git repos
