@@ -22,12 +22,7 @@ function timestamppush()
 }
 	
 # ---------  Business Logic Begins Here --------- 
-:w
-
-
-
-q
-if [ -z "${TMUX}" ]; # && [ $SHLVL < 2 ];
+if [ -z "${TMUX}" ] && [ -z "${PIPENV_ACTIVE}" ];
 then
     timestamppush ${learning_working_directory}
     ~/.dotfiles/dfsync.sh -m end
