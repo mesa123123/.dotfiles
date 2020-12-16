@@ -49,6 +49,7 @@ function dvx()
         echo "Please enter one of the following:"
         ls $WINHOME/dev/Projects/
     else
+        PIPFILELOC=$WINHOME/dev/projects/${1}/Pipfile
         tmux new-session -d -s Development
         tmux rename-window -t 0 Development
         tmux split-window -v 
@@ -56,6 +57,11 @@ function dvx()
         tmux send-keys -t0 'vim' Enter 
         tmux select-pane -t 1
         tmux send-keys -t1 devhome Space ${1} Enter
+        if [[ -f $PIPFILELOC ]]; then
+            tmux send-keys -t1 pipenv Space shell Enter
+            tmux send-keys -t1 pipenv Space install Enter
+            tmux send-keys -t1 devhome Space ${1} Enter
+        fi
         tmux send-keys 'clear' Enter
         tmux attach-session -t Development:0
     fi
