@@ -43,6 +43,21 @@ function learnhome()
 }
 
 # Function for launching a tmux session for development projects
+# DvxSendKeys
+# DESC:  
+# ARGS: $@ (optional): 
+# OUTS: 
+function DvxSendKeys()
+{
+    PIPFILELOC=$WINHOME/dev/projects/${1}/Pipfile
+    devhome ${1}
+    if [[ -f $PIPFILELOC ]]; then
+       pipenv install 
+       pipenv shell devhome ${1} && clear
+    fi
+}
+
+
 function dvx() 
 {
     if [ $# -eq 0 ]; then
@@ -56,16 +71,10 @@ function dvx()
         tmux send-keys -t0 devhome Space ${1} Enter 
         tmux send-keys -t0 'vim' Enter 
         tmux select-pane -t 1
-        tmux send-keys -t1 devhome Space ${1} Enter
-        if [[ -f $PIPFILELOC ]]; then
-            tmux send-keys -t1 pipenv Space shell Enter
-            tmux send-keys -t1 pipenv Space install Enter
-            tmux send-keys -t1 devhome Space ${1} Enter
-        fi
-        tmux send-keys 'clear' Enter
-        tmux attach-session -t Development:0
+        tmux send-keys -t1 DvxSendKeys Space ${1} Enter
+        tmux attach-session -t Development:0 -c $WINHOME/dev/Projects/"${1}"
     fi
-}    
+}
 # export the functions to the shell session
 export -f devhome
 export -f learnhome
