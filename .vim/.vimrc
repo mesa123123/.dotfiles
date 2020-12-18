@@ -22,6 +22,8 @@ Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'sirver/ultisnips'
+Plug 'tyru/open-browser.vim'
+
 
 call plug#end()
 
@@ -58,6 +60,8 @@ let g:pymode_python = 'python3'
 let g:pymode_rope = 0
 au FileType python setlocal et ts=4 sw=4 sts=4
 
+" ----------------
+
 " NerdTree Options 
 let g:NERDTreeWinPos="right"
 let g:NERDTreeWinSize=60
@@ -65,7 +69,8 @@ let NERDTreeShowLineNumbers=1
 let NERDTreeShowHidden=1
 " make sure relative line numbers are used
 autocmd FileType nerdtree setlocal relativenumber
-
+" Remap the open and close to C-n
+map <C-n> :NERDTreeToggle<CR>
 
 " Lightline Configuration
 "--------------------------- "
@@ -79,6 +84,8 @@ let g:lightline = { 'colorscheme': 'onehalfdark', 'active': { 'left': [ [ 'mode'
 
 " Lightline Coc Config
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+
+" ----------------
 
 " Devicons Enablement
 let g:webdevicons_enable_airline_statusline=1
@@ -119,7 +126,7 @@ au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other
 " plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ pumvisible() ? "\<C-o>" :
       \ <SID>check_back_space() ? "\<TAB>" :
 	  \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
@@ -233,10 +240,6 @@ map <C-t><up> :tabr<cr>
 map <C-t><down> :tabl<cr>
 map <C-t><left> :tabp<cr>
 map <C-t><right> :tabn<cr>
-
-" NERDTREE remap
-" For some reason I have to put this last?
-map <C-n> :NERDTreeToggle<CR>
 
 " ----------------------END OF VIMRC--------------------- "
 

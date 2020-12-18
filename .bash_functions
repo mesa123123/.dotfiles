@@ -75,6 +75,8 @@ function dvx()
         tmux attach-session -t Development:0 -c $WINHOME/dev/Projects/"${1}"
     fi
 }
+
+
 # export the functions to the shell session
 export -f devhome
 export -f learnhome
