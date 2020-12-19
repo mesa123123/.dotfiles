@@ -140,15 +140,16 @@ fi
 # ----
 # First Check if you are running WSL Environment or not
 CATOSRELEASE=`cat /proc/sys/kernel/osrelease` 
-WSL_CHECK=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
+# Create and export the WSLON variable to the environment
+export WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
 
 # Special WSL Paths for Interoperability
-if [[ $WSL_CHECK == true ]]; then
+if [[ $WSLON == true ]]; then
 	export PATH=$PATH:/c/Windows/System32
 fi
 
 # Check WSL_VERSION by going through interop channels
-if [[ $WSL_CHECK == true ]]; then
+if [[ $WSLON == true ]]; then
 	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
 	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
 	cd ~
@@ -176,7 +177,7 @@ export VIMINIT='source ~/.vim/.vimrc'
 export EDITOR='vim'
 
 # Special WSL envvars that would just annoy a pure linux system
-if [[ ${WSL_CHECK} == true ]]; then
+if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
 	# Now stuff that differs between versions of WSL 
@@ -225,7 +226,7 @@ export PATH="$PATH:$CODE_HOME/bin"
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
-if [ "$USER" == "m808752" ] && [[ ${WSL_CHECK} == true ]]; then
+if [ "$USER" == "m808752" ] && [[ ${WSLON} == true ]]; then
 	export {http,https,ftp}_proxy="http://localhost:3128"
 	export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
 	export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
@@ -249,16 +250,23 @@ if [ "$USER" == "m808752" ]; then
 	fi
 fi
 
-# Sync up the dotfiles repos
+# Configure .dotfiles
 if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ]; then
-	~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log &
+    # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
+    # windows so the client needs to know what to add to the path and what not to in order properly 
+    # configure dotfiles on the client
+    if [[ $WSLON == true ]]; then
+        ~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log && export PATH="$PATH:~/.wslbin" &
+    else
+        ~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log &
+    fi
     echo "Executed DotFiles Pull"
 fi
 
 # @todo; put in the ability to auto sync certain git repos
 
 # WSL Commands
-if [[ $WSL_CHECK == true ]]; then
+if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	
 	export WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
 	export DISPLAY="$WSL2IP":0.0

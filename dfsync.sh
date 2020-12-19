@@ -15,6 +15,12 @@ LOGFILE=~/.dotfiles/synclogs.log
 declare -a TRACKEDFILESFORSYNC
 TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf" ".vim/.vimrc")
 
+# If its wsl add the wslbin directory too, the bashrc already has functionality to sort out the wsl_on variable
+if [[ $WSLON == true ]]; then
+    WSLBINDIR=".wslbin/"
+    WSLBINFILES=($(ls "$WSLBINDIR"*))
+fi
+
 # In order to get around a proxy sometimes you gotta start the browser, ergo you need to know where
 # your browser is
 BROWSERCHROME="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
@@ -183,10 +189,14 @@ if [[ "${MODE}" == "begin" ]]; then
 	start_browser_proxy >> $LOGFILE
 	git -C ~/.dotfiles fetch >> $LOGFILE;
 	git -C ~/.dotfiles pull origin master -q >> $LOGFILE;
-	for i in "${TRACKEDFILESFORSYNC[@]}"
-	do
-		create_symlink $i
-	done	
+	# Sync up all the tracked dotfiles
+    for i in "${TRACKEDFILESFORSYNC[@]}"; do create_symlink $i; done
+    # If the wslbin variable is active
+    if [[ -n "${WSLBINDIR}" ]]; then
+        # Create Symlinks for those scripts too 
+        echo "I FUCKING GOT HERE" 
+        for i in "${WSLBINFILES[@]}"; do create_symlink $i; done 
+    fi
 fi
 
 # move all changes that have been made during the session to the cloud
