@@ -273,7 +273,6 @@ fi
 # @todo; put in the ability to auto sync certain git repos
 
 # Set the xdg-open to whatever the browser variable is
-echo "The Browser is: $BROWSER"
 
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
