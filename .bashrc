@@ -150,6 +150,8 @@ export WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "
 # Special WSL Paths for Interoperability
 if [[ $WSLON == true ]]; then
 	export PATH=$PATH:/c/Windows/System32
+    export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
+    export PATH=$PATH:$POWERSHELL_HOME
 fi
 
 # Check WSL_VERSION by going through interop channels
