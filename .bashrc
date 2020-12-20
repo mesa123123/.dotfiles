@@ -135,6 +135,10 @@ fi
 
 # ---- End Of Bash Configuration Files ----
 
+# ----------- Revert Path back to the PROFILE output as bashrc tends to be run more than once ------------------------------
+if [[ -n "$PROFILE_PATH" ]]; then
+    export PATH=$PROFILE_PATH
+fi
 # ----
 # ----  WSL Settings ----
 # ----
@@ -256,7 +260,9 @@ if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ]; then
     # windows so the client needs to know what to add to the path and what not to in order properly 
     # configure dotfiles on the client
     if [[ $WSLON == true ]]; then
-        ~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log && export PATH="$PATH:~/.wslbin" &
+        export PATH="$PATH:~/.wslbin"
+        ~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log &
+
     else
         ~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log &
     fi

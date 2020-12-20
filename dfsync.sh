@@ -189,12 +189,15 @@ if [[ "${MODE}" == "begin" ]]; then
 	start_browser_proxy >> $LOGFILE
 	git -C ~/.dotfiles fetch >> $LOGFILE;
 	git -C ~/.dotfiles pull origin master -q >> $LOGFILE;
+    # To stop the editing of all of these dotfiles from getting too out of hand
+    if $(cat .profile | grep "export PROFILE_PATH=\$PATH"); then
+        echo "export PROFILE_PATH=\$PATH" >> ~/.profile
+    fi
 	# Sync up all the tracked dotfiles
     for i in "${TRACKEDFILESFORSYNC[@]}"; do create_symlink $i; done
     # If the wslbin variable is active
     if [[ -n "${WSLBINDIR}" ]]; then
         # Create Symlinks for those scripts too 
-        echo "I FUCKING GOT HERE" 
         for i in "${WSLBINFILES[@]}"; do create_symlink $i; done 
     fi
 fi
