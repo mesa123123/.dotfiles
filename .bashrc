@@ -272,10 +272,8 @@ fi
 
 # @todo; put in the ability to auto sync certain git repos
 
-# Browser setup for xdg-open
-if [[ $WSLON == true  ]] && [[ "$USER" == "M808752" ]]; then
-    export BROWSER="C:/Users/M808752/AppData/Roaming/Microsoft/Windows/Start\ Menu/Programs" 
-fi
+# Set the xdg-open to whatever the browser variable is
+echo "The Browser is: $BROWSER"
 
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
