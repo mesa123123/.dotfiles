@@ -20,7 +20,7 @@ alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
 
 #  Programmes etc.
 alias svim='sudo vim'
-alias chrome="/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
+alias chrome="/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
 alias gnpm='sudo npm -g --proxy=false'
 alias unpm='npm --proxy=false'
 alias spip='sudo pip3'

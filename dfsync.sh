@@ -191,6 +191,8 @@ if [[ "${MODE}" == "begin" ]]; then
 	git -C ~/.dotfiles pull origin master -q >> $LOGFILE;
     # To stop the editing of all of these dotfiles from getting too out of hand
     if $(cat .profile | grep "export PROFILE_PATH=\$PATH"); then
+        continue
+    else
         echo "export PROFILE_PATH=\$PATH" >> ~/.profile
     fi
 	# Sync up all the tracked dotfiles

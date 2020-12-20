@@ -139,9 +139,8 @@ fi
 if [[ -n "$PROFILE_PATH" ]]; then
     export PATH=$PROFILE_PATH
 fi
-# ----
+
 # ----  WSL Settings ----
-# ----
 # First Check if you are running WSL Environment or not
 CATOSRELEASE=`cat /proc/sys/kernel/osrelease` 
 # Create and export the WSLON variable to the environment
@@ -150,6 +149,7 @@ export WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "
 # Special WSL Paths for Interoperability
 if [[ $WSLON == true ]]; then
 	export PATH=$PATH:/c/Windows/System32
+    # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
     export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
     export PATH=$PATH:$POWERSHELL_HOME
 fi
@@ -268,16 +268,21 @@ if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ]; then
     else
         ~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log &
     fi
-    echo "Executed DotFiles Pull"
 fi
 
 # @todo; put in the ability to auto sync certain git repos
 
-# WSL Commands
+# Browser setup for xdg-open
+if [[ $WSLON == true  ]]; then
+    export BROWSER= 
+else
+
+fi
+
+# WSL Display Commands
 if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	
 	export WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
 	export DISPLAY="$WSL2IP":0.0
 	export PULSE_SERVER=tcp:"$WSL2IP"
 fi
-
