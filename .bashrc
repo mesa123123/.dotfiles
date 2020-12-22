@@ -172,7 +172,6 @@ export PATH=$PATH:~/.local/bin
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"
-export WINHOME="/c/Users/$USER"
 export SBT_HOME="/usr/bin/sbt"
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
@@ -186,6 +185,8 @@ export EDITOR='vim'
 if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
+    export WINHOME="/c/Users/$USER"
+    export LEARNHOME="$WINHOME/dev/learning/"
 	# Now stuff that differs between versions of WSL 
 	if [[ $WSL_VERSION == 1 ]]; then	
 		export DOCKER_HOST="tcp://localhost:2375"
@@ -263,14 +264,11 @@ if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ]; then
     # configure dotfiles on the client
     if [[ $WSLON == true ]]; then
         export PATH="$PATH:~/.wslbin"
-        ~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log &
-
+        [ -f ~/.repos ] && ~/.dotfiles/dfsync.sh -m begin -r yes >> ~/.dotfiles/synclogs.log || ~/.dotfiles/dfsync.sh -m begin -r no >> ~/.dotfiles/synclogs.log &
     else
-        ~/.dotfiles/dfsync.sh -m begin >> ~/.dotfiles/synclogs.log &
+        [ -f ~/.repos ] && ~/.dotfiles/dfsync.sh -m begin -r yes >> ~/.dotfiles/synclogs.log || ~/.dotfiles/dfsync.sh -m begin -r no >> ~/.dotfiles/synclogs.log &
     fi
 fi
-
-# @todo; put in the ability to auto sync certain git repos
 
 # Set the xdg-open to whatever the browser variable is
 

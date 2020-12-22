@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# -----------
+# [Author] Peter Bowman 
+# [Summary] A Script that is part of dotfiles, it defines a list of gitrepos that I want updated on all of my clients
+# -----------
+
+
+# ----/
+# ----------- Global Script Variables ------------------
+# ----/
+
+
+# ----------- Version Subject Usage --------------------
+
+VERSION=1.0.0
+SUBJECT="A Script that is part of dotfiles, it defines a list of gitrepos that I want updated on all of my clients"
+
+# ----/
+# ----------- Script Functions -------------------------
+# ----/
+# Docstrings to accompany the start of each script
+# DESC: Parameter parser
+# ARGS: $@ (optional): Arguments provided to the script
+# OUTS: Variables indicating command-line parameters and options
+# ----/
+
+# Check if the cntlm proxy is running on client
+function check_if_at_work()
+{
+	echo "`service cntlm status`"
+}
+
+# Check if git access is available >> $LOGFILE
+function git_access_check()
+{
+	echo "Pinging Git" >> $LOGFILE
+	PING_GIT=`wget --spider -Sq "https://github.com" 2>&1 | grep "HTTP/" | awk '{print $2}'` >> $LOGFILE
+	echo "GIT ping Response ${PING_GIT}" >> $LOGFILE
+	[[ ${PING_GIT} -eq 200 ]] && echo true || echo false
+}
+
+# Because a proxy needs certain certs to connect to the internet there needs to be a cert refresh in
+# order to pull from any git files at the beginning and it seems that launching a browser does that
+function start_browser_proxy()
+{
+	am_i_at_work=`check_if_at_work`
+	echo "$am_i_at_work" >> $LOGFILE
+	if [[ $am_i_at_work == *"cntlm is running"* ]]; then
+		echo "Cntlm Proxy Is Running, Assuming you're at work" >> $LOGFILE
+		GIT_ACCESS=`git_access_check`
+		echo "GIT ACCESS CHECK $GIT_ACCESS" >> $LOGFILE
+		if [[ $GIT_ACCESS == false ]]; then	
+			# This command starts the browser in github, somehow the browser saying its cool gets
+			# around Zscaler?
+			BROWSER=`set_browser`
+			"$BROWSER" https://github.com;
+		fi
+	fi
+}	
+
+# NAME: PullRepo
+# DESC: Fetches and Pulls a repo that I want updated
+# ARGS: $@ (optional): 1, Path to Git Repo; 2, Remote Repo Name; 3, Remote Branch Name;
+# OUTS: None
+function PullRepo()
+{
+	git -C $1 fetch >> $LOGFILE;
+	git -C $1 pull $2 $3 -q >> $LOGFILE;
+}
+
+# ----------- Script Functions End ---------------------
+
+
+start_browser_proxy >> $LOGFILE
+for REPO in ${GITREPOS[@]}; do
+    echo $REPO
+done
+
+
+# ----/
+# ----------- Script Business Logic --------------------
+# ----/
+
+
+
+# ----/
+# ----------- Script Exit ------------------------------
+# ----/
+
+exit 0;

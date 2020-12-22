@@ -4,6 +4,8 @@ alias la='ls -A'
 alias l='ls -CF'
 alias ..="cd ../"
 alias winhome='cd $WINHOME'
+alias learnhome='cd $LEARNHOME'
+alias dothome='cd ~/.dotfiles'
 
 # Bash Config Files
 alias resetbash='source ~/.bashrc'

@@ -69,6 +69,11 @@ case $key in
 	shift # past argument
 	shift # past value
 	;;
+    -r|-repo)
+    REPOS="$2"
+	shift # past argument
+	shift # past value
+    ;;
 # All other switches
 	*)
 	POSITIONAL+=("$1") # save it in an array for later
@@ -177,7 +182,45 @@ function start_browser_proxy()
 			"$BROWSER" https://github.com;
 		fi
 	fi
-}	
+}
+
+# NAME: PullRepo
+# DESC: Fetches and Pulls a repo that I want updated
+# ARGS: $@ (optional): 1, Path to Git Repo; 2, Remote Repo Name; 3, Remote Branch Name;
+# OUTS: None
+function PullRepo()
+{
+	git -C "{$1}" fetch >> $LOGFILE;
+	git -C "{$1}" pull "{$2}" "{$3}" -q >> $LOGFILE;
+}
+
+# NAME: timestamppush
+# DESC: Pushes repos that I want updated on all clients to push back to the cloud at the end of the session
+# ARGS: $@ (optional):  1, Path to git repo; 2, Remote Repo Name; 3, Remote Branch Name; 
+# OUTS: 
+function timeStampPush()
+{
+	# Regular Git Push Routine
+	git -C "${1}" add . >> $LOGFILE
+	# DateTime Stamped Commit
+	commit_message="Sessions End $(date)" >> $LOGFILE
+	# Commit mnad Push
+	git -C "${1}" commit -m "${commit_message}" -q >> $LOGFILE
+	git -C "${1}" push -q "${2}" "${3}" >> $LOGFILE
+}
+
+# NAME: getRepoInfo
+# DESC: Takes Repo file and puts in the form of an assocaite array 
+# ARGS: $@ (optional): None
+# OUTS: List of Lists containing: 1, repo path; 2, Remote Repo Name (e.g. origin); 3, Remote Branch Name;
+function getRepoInfo()
+{
+  # Declare an Array for the repos
+  # Read ~/.repo file line by line
+  # For each line put it onto the end of the array
+  # Return the Array
+  echo "TODO THIS FUNCTION"
+}
 
 # --------- End of Reuseable Methods --------
 
@@ -185,10 +228,10 @@ function start_browser_proxy()
 
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
-	# Sync the repo up to date	
+	# Check Github can be accessed 
 	start_browser_proxy >> $LOGFILE
-	git -C ~/.dotfiles fetch >> $LOGFILE;
-	git -C ~/.dotfiles pull origin master -q >> $LOGFILE;
+    # Pull the dotfiles Repo
+	pullRepo ~/.dotfiles origin master -q 
     # To stop the editing of all of these dotfiles from getting too out of hand
     PROFILE_PATH_PRESENT=$(cat ~/.profile | grep "export PROFILE_PATH=\$PATH");
     if [ -z "$PROFILE_PATH_PRESENT" ]; then
@@ -201,19 +244,30 @@ if [[ "${MODE}" == "begin" ]]; then
         # Create Symlinks for those scripts too 
         for i in "${WSLBINFILES[@]}"; do create_symlink $i; done 
     fi
+    # if there are other repos that need to be synced up then pull them too
+    if [[ "${REPOS}" == "true" ]]; then
+        REPOLIST=getRepoInfo
+        for REPO in ${REPOSLIST[@]}; do
+            declare -A REPOArr=($REPO) 
+            pullRepo "${REPOArr[1]}" "${REPOArr[2]}" "${REPOArr[3]}"
+        done
+    fi    
 fi
 
 # move all changes that have been made during the session to the cloud
 if [[ "${MODE}" == "end" ]]; then
 	# Get list of manually installed packages for current machine state:
 	apt-mark showmanual | sed -e 's/^[ \t]*//' | tr '\n' ' ' > ~/.dotfiles/client_package_list/package_list_$USER
-	# Regular Git Push Routine	
-	git -C ~/.dotfiles add . >> $LOGFILE
-	# DateTime Stamped Commit
-	commit_message="Sessions End $(date)"
-	echo $commit_message >> $LOGFILE
-	git -C ~/.dotfiles commit -m "${commit_message}" >> $LOGFILE
-	git -C ~/.dotfiles push origin master -q >> $LOGFILE
+    # Push Dotfiles
+    timeStampPush ~/.dotfiles origin master 
+    # Push All Other Git Repos
+    if [[ "${REPOS}" == "true" ]]; then
+        REPOLIST=getRepoInfo
+        for REPO in ${REPOSLIST[@]}; do
+            declare -A REPOArr=($REPO) 
+            timeStampPush "${REPOArr[1]}" "${REPOArr[2]}" "${REPOArr[3]}"
+        done
+    fi    
 fi
 
 # -------- End of Business Logic --------
