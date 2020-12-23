@@ -68,21 +68,21 @@ function dvx()
     if [ $# -eq 0 ]; then
         echo "Please enter one of the following:"
         ls ~/dev/Projects/
-    else
-        if [[! -d ~/dev/Projects/"${1}" ]]; then
-            makeDevDir $1
-        fi
-        wait
-        tmux new-session -d -s Development
-        tmux rename-window -t 0 Development
-        tmux split-window -v 
-        tmux send-keys -t0 devhome Space ${1} Enter 
-        tmux send-keys -t0 'vim' Enter 
-        tmux select-pane -t 1
-        tmux send-keys -t1 DvxSendKeys Space ${1} Enter
-        tmux wait-for command-finished
-        tmux attach-session -t Development:0 -c ~/dev/Projects/"${1}"
+        exit 1;
     fi
+    if [[! -d ~/dev/Projects/"${1}" ]]; then
+            makeDevDir $1
+    fi
+    wait
+    tmux new-session -d -s Development
+    tmux rename-window -t 0 Development
+    tmux split-window -v 
+    tmux send-keys -t0 devhome Space ${1} Enter 
+    tmux send-keys -t0 'vim' Enter 
+    tmux select-pane -t 1
+    tmux send-keys -t1 DvxSendKeys Space ${1} Enter
+    tmux wait-for command-finished
+    tmux attach-session -t Development:0 -c ~/dev/Projects/"${1}"
 }
 
 
