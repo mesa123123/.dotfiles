@@ -32,7 +32,7 @@ function devhome()
     wsldevcheck
     # If no arguement is given simply go to the dev/projects home folder
 	if [ -z "$1" ]; then
-		echo "Not a current project, please enter one of the following:"	
+		echo "No project named, please enter one of the following:"	
 		ls ~/dev/Projects
         echo "Or enter name of new project"
 	# If I enter the word go, it just goes to the folder	
@@ -40,7 +40,7 @@ function devhome()
 		cd ~/dev/
 	else
 		# If the arguement given is show, print out the list of project folders
-		if [ "$1" == "show" ]; then	
+		if [[ "$1" == "show" || "$1" == "list" ]]; then	
 			ls ~/dev/Projects/
 		# if the arguement given is the name of a project go to that project folder	
 		else
