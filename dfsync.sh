@@ -188,10 +188,10 @@ function start_browser_proxy()
 # DESC: Fetches and Pulls a repo that I want updated
 # ARGS: $@ (optional): 1, Path to Git Repo; 2, Remote Repo Name; 3, Remote Branch Name;
 # OUTS: None
-function PullRepo()
+function pullRepo()
 {
-	git -C "{$1}" fetch >> $LOGFILE;
-	git -C "{$1}" pull "{$2}" "{$3}" -q >> $LOGFILE;
+	git -C "${1}" fetch >> $LOGFILE;
+	git -C "${1}" pull "${2}" "${3}" -q >> $LOGFILE;
 }
 
 # NAME: timestamppush
