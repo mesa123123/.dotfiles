@@ -21,8 +21,6 @@ function makeDevDir() {
         echo "(y/n)"
         [ "${REPOFY}" == "y" ] && git init ~/dev/projects/"${1}"
         cd ~/dev/projects/"${1}"
-    else 
-        exit 0;
     fi
 }
 
