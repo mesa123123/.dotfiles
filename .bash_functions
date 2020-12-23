@@ -80,7 +80,6 @@ function dvx()
     tmux send-keys -t0 'vim' Enter 
     tmux select-pane -t 1
     tmux send-keys -t1 DvxSendKeys Space ${1} Enter
-    tmux wait-for command-finished
     tmux attach-session -t Development:0 -c ~/dev/Projects/"${1}"
 }
 
