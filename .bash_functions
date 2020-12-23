@@ -70,7 +70,7 @@ function dvx()
         ls ~/dev/Projects/
         exit 1;
     fi
-    if [[! -d ~/dev/Projects/"${1}" ]]; then
+    if [[ ! -d ~/dev/Projects/"${1}" ]]; then
             makeDevDir $1
     fi
     wait
