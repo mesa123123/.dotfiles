@@ -22,7 +22,6 @@ Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'sirver/ultisnips'
-Plug 'tyru/open-browser.vim'
 
 
 call plug#end()

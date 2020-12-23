@@ -21,7 +21,9 @@ function makeDevDir() {
         echo "(y/n)"
         [ "${REPOFY}" == "y" ] && git init ~/dev/projects/"${1}"
         cd ~/dev/projects/"${1}"
-    fi
+   else
+       return 0;
+   fi
 }
 
 # Function to open a certain development project from the windows dev file
@@ -66,7 +68,7 @@ function dvx()
     if [ $# -eq 0 ]; then
         echo "Please enter one of the following:"
         ls ~/dev/Projects/
-        exit 1;
+        return 1;
     fi
     if [[ ! -d ~/dev/Projects/"${1}" ]]; then
             makeDevDir $1
