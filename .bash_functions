@@ -73,7 +73,6 @@ function dvx()
     if [[ ! -d ~/dev/Projects/"${1}" ]]; then
             makeDevDir $1
     fi
-    wait
     tmux new-session -d -s Development
     tmux rename-window -t 0 Development
     tmux split-window -v 
