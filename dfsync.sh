@@ -190,7 +190,6 @@ function start_browser_proxy()
 # OUTS: None
 function pullRepo()
 {
-    echo "Still here$1 $2 $3"
 	git -C $1 fetch >> $LOGFILE;
 	git -C $1 pull $2 $3 -q >> $LOGFILE;
 }
@@ -220,8 +219,8 @@ function getRepoInfo()
   while IFS= read -r line; do
     # For each line echo it out to the array calling it 
       if [[ ! "$line" == "#"* ]]; then
-          NEWITEM="$line"
-          echo $NEWITEM | sed 's/ /,/g' 
+          NEWITEM="${line}"
+          echo $NEWITEM | sed 's/ /,/g' | envsubst
       fi
   done < $1
 }
@@ -235,7 +234,7 @@ if [[ "${MODE}" == "begin" ]]; then
 	# Check Github can be accessed 
 	start_browser_proxy >> $LOGFILE
     # Pull the dotfiles Repo
-	pullRepo ~/.dotfiles origin master -q 
+	pullRepo $HOME/.dotfiles origin master -q 
     # To stop the editing of all of these dotfiles from getting too out of hand
     PROFILE_PATH_PRESENT=$(cat ~/.profile | grep "export PROFILE_PATH=\$PATH");
     if [ -z "$PROFILE_PATH_PRESENT" ]; then
@@ -254,8 +253,8 @@ if [[ "${MODE}" == "begin" ]]; then
             REPOLIST=( $(getRepoInfo "$HOME/.repos") )
             for REPO in ${REPOLIST[@]}; do
                 REPOArr=( $(echo "${REPO}" | sed 's/,/ /g') )
-                pullRepo ${REPOArr[1]} ${REPOArr[2]} ${REPOArr[3]}
-                echo "Repo Pulled ${REPOArr[0]}" >> $LOGFILE
+                REPODIR="${REPOArr[1]}"
+                pullRepo $REPODIR ${REPOArr[2]} ${REPOArr[3]} && echo "Repo Pulled ${REPOArr[0]}" >> $LOGFILE
             done
         else
             echo "REPOS NOT SYNCED, YOU NEED TO CREATE A REPOS FILE!" >> $LOGFILE
@@ -276,8 +275,7 @@ if [[ "${MODE}" == "end" ]]; then
             REPOLIST=( $(getRepoInfo "$HOME/.repos") )
             for REPO in ${REPOLIST[@]}; do
                 REPOArr=( $(echo "${REPO}" | sed 's/,/ /g'i) )
-                timeStampPush "${REPOArr[2]}" "${REPOArr[3]}" "${REPOArr[4]}"
-                echo "Repo Pulled ${REPOArr[1]}" >> $LOGFILE
+                timeStampPush "${REPOArr[2]}" "${REPOArr[3]}" "${REPOArr[4]}" && echo "Repo Pulled ${REPOArr[1]}" >> $LOGFILE 
             done
         else
             echo "REPOS NOT SYNCED, YOU NEED TO CREATE A REPOS FILE!" >> $LOGFILE
