@@ -7,7 +7,7 @@ call plug#begin('/home/$USER/.vim/pack/my_plugins/start')
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'yggdroot/indentline'
-Plug 'hallison/vim-markdown'
+Plug 'plasticboy/vim-markdown'
 Plug 'klen/python-mode'
 Plug 'alfredodeza/pytest.vim'
 Plug 'altercation/vim-colors-solarized'
@@ -90,9 +90,10 @@ let g:webdevicons_enable_airline_statusline=1
 let g:webdevicons_enable_airline_tabline=1
 
 " Markdown Syntax Highlighting
-let g:vim_markdown_conceal_code_blocks = 0
-let g:vim_markdown_fenced_languages = ['python=py', 'javascript=js', 'json=json', 'viml=vim', 'bash=sh', 'ini=dosini']
+let g:vim_markdown_fenced_languages = ['csharp=cs', 'json=javascript']
 let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_conceal = 0
 
 "Rainbow Brackets Options
 let g:rainbow_active=1
