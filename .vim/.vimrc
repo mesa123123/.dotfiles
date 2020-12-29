@@ -8,7 +8,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'yggdroot/indentline'
 Plug 'hallison/vim-markdown'
-Plug 'suan/vim-instant-markdown', {'for': 'markdown'}
 Plug 'klen/python-mode'
 Plug 'alfredodeza/pytest.vim'
 Plug 'altercation/vim-colors-solarized'
@@ -90,8 +89,10 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 let g:webdevicons_enable_airline_statusline=1
 let g:webdevicons_enable_airline_tabline=1
 
-" Instant Markdown Preview Options
-let g:instant_markdown_python=1
+" Markdown Syntax Highlighting
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_fenced_languages = ['python=py', 'javascript=js', 'json=json', 'viml=vim', 'bash=sh', 'ini=dosini']
+let g:vim_markdown_folding_disabled = 1
 
 "Rainbow Brackets Options
 let g:rainbow_active=1
