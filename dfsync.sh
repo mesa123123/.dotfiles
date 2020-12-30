@@ -248,7 +248,7 @@ if [[ "${MODE}" == "begin" ]]; then
         for i in "${WSLBINFILES[@]}"; do create_symlink $i; done 
     fi
     # if there are other repos that need to be synced up then pull them too
-    if [[ "${REPOS}" == "true" ]]; then
+    if [[ "${REPOS}" == "yes" ]]; then
         if [[ -f ~/.repos ]]; then
             REPOLIST=( $(getRepoInfo "$HOME/.repos") )
             for REPO in ${REPOLIST[@]}; do
@@ -270,7 +270,7 @@ if [[ "${MODE}" == "end" ]]; then
     # Push Dotfiles
     timeStampPush ~/.dotfiles origin master 
     # Push All Other Git Repos
-    if [[ "${REPOS}" == "true" ]]; then
+    if [[ "${REPOS}" == "yes" ]]; then
         if [[ -f ~/.repos ]]; then
             REPOLIST=( $(getRepoInfo "$HOME/.repos") )
             for REPO in ${REPOLIST[@]}; do
