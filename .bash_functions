@@ -22,7 +22,8 @@ function makeDevDir() {
         [ "${REPOFY}" == "y" ] && git init ~/dev/projects/"${1}"
         cd ~/dev/projects/"${1}"
    else
-       exit 1;
+       echo "Project not created"
+       return 1;
    fi
 }
 
@@ -45,7 +46,9 @@ function devhome()
 		# if the arguement given is the name of a project go to that project folder	
 		else
             [ -d ~/dev/Projects/"${1}" ] && cd ~/dev/Projects/"${1}" || makeDevDir $1
-            
+            if [[ $? == 1 ]]; then 
+                return 1;
+            fi
 		fi
 	fi
 }
@@ -72,8 +75,9 @@ function dvx()
     fi
     if [[ ! -d ~/dev/Projects/"${1}" ]]; then
         makeDevDir $1
-        if [[ makeDir == 1 ]]; then
-            exit 1;
+        if [[ $? == 1 ]]; then
+            echo "Project not created, exiting"
+            return 1;
         fi
     fi
     tmux new-session -d -s Development
