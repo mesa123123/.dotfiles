@@ -16,13 +16,13 @@ function makeDevDir() {
    # If yes, create folder and git repo
    if [ "${ANSWER}" == "y" ]; then 
         mkdir ~/dev/projects/"${1}"
-        echo "Iniatlize Git Repo?"
+        echo "Project Folder Created, Iniatlize Git Repo?"
         read REPOFY
         echo "(y/n)"
         [ "${REPOFY}" == "y" ] && git init ~/dev/projects/"${1}"
         cd ~/dev/projects/"${1}"
    else
-       return 0;
+       exit 1;
    fi
 }
 
@@ -71,7 +71,10 @@ function dvx()
         return 1;
     fi
     if [[ ! -d ~/dev/Projects/"${1}" ]]; then
-            makeDevDir $1
+        makeDevDir $1
+        if [[ makeDir == 1 ]]; then
+            exit 1;
+        fi
     fi
     tmux new-session -d -s Development
     tmux rename-window -t 0 Development
