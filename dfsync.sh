@@ -153,7 +153,7 @@ function create_symlink()
 # Check if the cntlm proxy is running on client
 function check_if_at_work()
 {
-	echo "`service cntlm status`"
+	echo "`service cntlm status`" >> $LOGFILE
 }
 
 # Check if git access is available >> $LOGFILE
