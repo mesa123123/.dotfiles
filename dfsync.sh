@@ -169,7 +169,7 @@ function git_access_check()
 # order to pull from any git files at the beginning and it seems that launching a browser does that
 function start_browser_proxy()
 {
-	am_i_at_work=`check_if_at_work`
+	am_i_at_work=`check_if_at_work` >> $LOGFILE
 	echo "$am_i_at_work" >> $LOGFILE
 	if [[ $am_i_at_work == *"cntlm is running"* ]]; then
 		echo "Cntlm Proxy Is Running, Assuming you're at work" >> $LOGFILE
