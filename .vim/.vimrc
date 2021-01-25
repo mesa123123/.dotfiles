@@ -61,6 +61,8 @@ au FileType python setlocal et ts=4 sw=4 sts=4
 "Language Markdown
 au FileType markdown setlocal ts=2 sw=2 sts=2
 
+" Set .draft files to Markdown
+au BufRead,BufNewFile *.draft set filetype=markdown
 " ----------------
 
 " NerdTree Options 
