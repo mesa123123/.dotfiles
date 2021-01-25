@@ -154,6 +154,7 @@ function create_symlink()
 function check_if_at_work()
 {
 	echo "`service cntlm status`" >> $LOGFILE
+	echo "`service cntlm status`" 
 }
 
 # Check if git access is available >> $LOGFILE
@@ -171,10 +172,11 @@ function start_browser_proxy()
 {
 	am_i_at_work=`check_if_at_work` >> $LOGFILE
 	echo "$am_i_at_work" >> $LOGFILE
-	if [[ $am_i_at_work == *"cntlm is running"* ]]; then
+	if [[ "$am_i_at_work" == *"cntlm is running"* ]]; then
 		echo "Cntlm Proxy Is Running, Assuming you're at work" >> $LOGFILE
 		GIT_ACCESS=`git_access_check`
 		echo "GIT ACCESS CHECK $GIT_ACCESS" >> $LOGFILE
+        echo "GIT ACCESS CHECK $GIT_ACCESS"
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
