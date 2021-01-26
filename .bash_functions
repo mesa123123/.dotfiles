@@ -54,13 +54,13 @@ function devhome()
 }
 
 # Encapsulates a set of commands for one of the tmux development panes in a function of its own
+# Probably should be able to sort this out for more environments other than those named "env"
 function DvxSendKeys()
 {
-    PIPFILELOC=~/dev/projects/${1}/Pipfile
+    ENVPRESENT=~/dev/projects/${1}/env
     devhome ${1}
-    if [[ -f $PIPFILELOC ]]; then
-       pipenv install 
-       pipenv shell devhome ${1} && clear
+    if [[ -d $ENVPRESENT ]]; then
+       source $ENVPRESENT/bin/activate
     fi
 }
 
