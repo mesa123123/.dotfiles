@@ -186,6 +186,9 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
 " Formatting selected code.
 xmap <leader>f <Plug>(coc-format-selected)
 nmap <leader>f <Plug>(coc-format-selected)
