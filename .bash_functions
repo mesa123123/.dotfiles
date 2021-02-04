@@ -83,11 +83,13 @@ function dvx()
     tmux new-session -d -s Development
     tmux rename-window -t 0 Development
     tmux split-window -v 
-    tmux send-keys -t0 devhome Space ${1} Enter 
-    tmux send-keys -t0 'vim' Enter 
     tmux select-pane -t 1
     tmux send-keys -t1 DvxSendKeys Space ${1} Enter
+    tmux send-keys -t0 DvxSendKeys Space ${1} Enter
+    tmux send-keys -t0 'vim' Enter 
+    tmux send-keys -t1 'clear' Enter
     tmux attach-session -t Development:0 -c ~/dev/Projects/"${1}"
+
 }
 
 
