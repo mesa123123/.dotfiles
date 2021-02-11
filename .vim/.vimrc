@@ -62,9 +62,15 @@ au FileType python setlocal et ts=4 sw=4 sts=4
 "Language Markdown
 au FileType markdown setlocal ts=2 sw=2 sts=2
 au FileType markdown setlocal spell spelllang=en_gb
+" Markdown Syntax Highlighting
+let g:vim_markdown_fenced_languages = ['csharp=cs', 'json=javascript']
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_conceal = 0
 
 " Set .draft files to Markdown
 au BufRead,BufNewFile *.draft set filetype=markdown
+
 " ----------------
 
 " NerdTree Options 
@@ -96,11 +102,6 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 let g:webdevicons_enable_airline_statusline=1
 let g:webdevicons_enable_airline_tabline=1
 
-" Markdown Syntax Highlighting
-let g:vim_markdown_fenced_languages = ['csharp=cs', 'json=javascript']
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_conceal_code_blocks = 0
-let g:vim_markdown_conceal = 0
 
 "Rainbow Brackets Options
 let g:rainbow_active=1
@@ -140,11 +141,11 @@ else
 endif
 
 " Use tab for trigger completion with characters ahead and navigate. NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin before putting this into your config.
-inoremap <silent><expr> <c-@>
+inoremap <silent><expr> <c-j>
     \ pumvisible() ? "\<C-n>" :
     \ <SID>check_back_space() ? "\<TAB>" :
     \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><c-k> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() 
@@ -190,8 +191,7 @@ nmap <leader>f <Plug>(coc-format-selected)
 augroup mygroup
 autocmd!
     " Setup formatexpr specified filetype(s).
-    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-
+    autocmd FileType typescript,json,markdown setl formatexpr=CocAction('formatSelected')
     " Update signature help on jump placeholder.
     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end

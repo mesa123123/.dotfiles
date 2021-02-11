@@ -1,0 +1,41 @@
+snippet noteatomic "Creates a New Atomic Note" b
+# $1
+
+
+__TAGS:__
+#$1 
+
+__References__ 
+$2
+endsnippet
+
+snippet linkmd "Creates a New Link"
+[$1](<$2> "$3")
+endsnippet
+
+snippet notesuper "Creates a Super/Contents Note" b
+# $1
+
+
+
+__TAGS:__
+#$1
+
+_References_
+$2
+
+endsnippet
+
+snippet notebacklinkedatomic "Creates a New Atomic Note" b
+# $1
+
+___BackLinks___
+_ [$3](<./$3.md>) _
+
+__ TAGS: __
+#$1
+
+__References__ 
+$2
+
+endsnippet

@@ -1,5 +1,34 @@
 {
-	"http.proxy": "http://localhost:3128",	
-	"python.jediEnabled": false,
-	"codeLens.enable": true	
+    "suggest.numberSelect": true,
+    // Enable Codelens, has something to do with code actions
+    "codeLens.enable": true,
+    "languageserver": {
+        "ccls": {
+            "command": "ccls",
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ],
+            "rootPatterns": [
+                ".ccls",
+                "compile_commands.json",
+                ".vim/",
+                ".git/",
+                ".hg/"
+            ],
+            "initializationOptions": {
+                "cache": {
+                    "directory": "/tmp/ccls"
+                },
+                "client": {
+                    "snippetSupport": true
+                }
+            }
+        }
+    },
+    "javascript.suggestionActions.enabled": false,
+    "coc.preferences.extensionUpdateCheck": "daily",
+    "python.jediEnabled": true
 }
