@@ -20,7 +20,6 @@ Plug 'luochen1990/rainbow'
 Plug 'scrooloose/syntastic'
 Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'sirver/ultisnips'
 
 
@@ -57,7 +56,9 @@ au FileType cpp setlocal et ts=2 sw=2
 " Language Python
 let g:pymode_python = 'python3'
 let g:pymode_rope = 0
+let g:pymode_lint_on_write = 0
 au FileType python setlocal et ts=4 sw=4 sts=4
+
 
 "Language Markdown
 au FileType markdown setlocal ts=2 sw=2 sts=2
