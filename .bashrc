@@ -274,7 +274,11 @@ fi
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	
-	export WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
-	export DISPLAY="$WSL2IP":0.0
+    export WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
+    if [ "${WSL_VERSION}" == 2 ]]; then
+        export DISPLAY="$WSL2IP":0.0
+    else 
+        export DISPLAY="127.0.0.1:0.0"
+    fi
 	export PULSE_SERVER=tcp:"$WSL2IP"
 fi
