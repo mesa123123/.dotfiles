@@ -8,7 +8,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'yggdroot/indentline'
 Plug 'plasticboy/vim-markdown'
-Plug 'klen/python-mode'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'alfredodeza/pytest.vim'
 Plug 'mfukar/robotframework-vim'
 Plug 'altercation/vim-colors-solarized'
@@ -54,7 +54,6 @@ set expandtab
 au FileType cpp setlocal et ts=2 sw=2
 
 " Language Python
-let g:pymode_python = 'python3'
 let g:pymode_rope = 0
 let g:pymode_lint = 0
 let g:pymode_lint_on_write = 0

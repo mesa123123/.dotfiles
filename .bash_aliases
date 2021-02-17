@@ -34,3 +34,9 @@ alias cls='clear'
 
 # WSL Only Commands
 alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
+
+# Selenium Commands
+if [ -f "/usr/local/bin/seleniumServer.jar" ]; then
+   alias seleniumServer="java -jar /usr/local/bin/seleniumServer.jar"
+fi
+

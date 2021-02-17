@@ -229,7 +229,6 @@ export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
 
-
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
