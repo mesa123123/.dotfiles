@@ -45,5 +45,5 @@ if [ "$WSLON" == "true" ]; then
         alias chrome='/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
     fi
 else
-    alias chrome='google-chome'
+    alias chrome='google-chrome'
 fi
