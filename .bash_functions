@@ -2,14 +2,14 @@
 
 function wsldevcheck() {
 	if [ "${WSLON}" == "true" ]; then
-        [[ ! -d ~/dev  ]] && ln -s $WINHOME/dev ~/dev
+        [[ ! -d ~/dev  ]] && ln -s "$WINHOME"/dev ~/dev
     fi
 }
 
 # A function to make a directory for a new project if it isn't already made, only used by other functions
 function makeDevDir() {
    # Prompt User on Non-existent Directory and ask if they want to create it
-   echo "Project ${1} doesn't currently exist, create project?"
+   echo "Project "${1}" doesn't currently exist, create project?"
    echo "(y/n)"
    # Store User Input in Variable
    read ANSWER
@@ -32,20 +32,20 @@ function devhome()
 {
     wsldevcheck
     # If no arguement is given simply go to the dev/projects home folder
-	if [ -z "$1" ]; then
+	if [[ -z "$1" ]]; then
 		echo "No project named, please enter one of the following:"	
 		ls ~/dev/Projects
         echo "Or enter name of new project"
 	# If I enter the word go, it just goes to the folder	
-	elif [ "$1" == "go" ]; then
-		cd ~/dev/
+	elif [[ "$1" == "go" ]]; then
+		cd ~/dev/ || exit;
 	else
 		# If the arguement given is show, print out the list of project folders
 		if [[ "$1" == "show" || "$1" == "list" ]]; then	
 			ls ~/dev/Projects/
 		# if the arguement given is the name of a project go to that project folder	
 		else
-            [ -d ~/dev/Projects/"${1}" ] && cd ~/dev/Projects/"${1}" || makeDevDir $1
+            if [ -d ~/dev/Projects/"${1}" ]; then cd ~/dev/Projects/"${1}" || exit; else makeDevDir "$1"; fi
             if [[ $? == 1 ]]; then 
                 return 1;
             fi
@@ -57,10 +57,10 @@ function devhome()
 # Probably should be able to sort this out for more environments other than those named "env"
 function DvxSendKeys()
 {
-    ENVPRESENT=~/dev/projects/${1}/env
-    devhome ${1}
+    ENVPRESENT=~/dev/projects/"${1}"/env
+    devhome "${1}"
     if [[ -d $ENVPRESENT ]]; then
-       source $ENVPRESENT/bin/activate
+       source "$ENVPRESENT"/bin/activate
     fi
 }
 
@@ -68,13 +68,13 @@ function DvxSendKeys()
 function dvx() 
 {
     wsldevcheck
-    if [ $# -eq 0 ]; then
+    if [[ $# -eq 0 ]]; then
         echo "Please enter one of the following:"
         ls ~/dev/Projects/
         return 1;
     fi
     if [[ ! -d ~/dev/Projects/"${1}" ]]; then
-        makeDevDir $1
+        makeDevDir "${1}"
         if [[ $? == 1 ]]; then
             echo "Project not created, exiting"
             return 1;
@@ -84,8 +84,8 @@ function dvx()
     tmux rename-window -t 0 Development
     tmux split-window -v 
     tmux select-pane -t 1
-    tmux send-keys -t1 DvxSendKeys Space ${1} Enter
-    tmux send-keys -t0 DvxSendKeys Space ${1} Enter
+    tmux send-keys -t1 DvxSendKeys Space "${1}" Enter
+    tmux send-keys -t0 DvxSendKeys Space "${1}" Enter
     tmux send-keys -t0 'vim' Enter 
     tmux send-keys -t1 'clear' Enter
     tmux attach-session -t Development:0 -c ~/dev/Projects/"${1}"

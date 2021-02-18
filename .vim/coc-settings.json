@@ -26,12 +26,24 @@
                     "snippetSupport": true
                 }
             }
+        },
+        "bash": {
+            "command": "bash-language-server",
+            "args": [
+                "start"
+            ],
+            "filetypes": [
+                "sh"
+            ],
+            "ignoredRootPaths": [
+                "~"
+            ]
         }
     },
     "javascript.suggestionActions.enabled": false,
     "coc.preferences.extensionUpdateCheck": "daily",
     "python.jediEnabled": true,
     "markdownlint.config": {
-       "line-length": false
+        "line-length": false
     }
 }

@@ -22,9 +22,7 @@ alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
 
 #  Programmes etc.
 alias svim='sudo vim'
-alias chrome="/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe"
-alias gnpm='sudo npm -g --proxy=false'
-alias unpm='npm --proxy=false'
+alias gnpm='sudo npm -g'
 alias spip='sudo pip3'
 alias prpy='pipenv run python'
 
@@ -39,4 +37,13 @@ alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
 if [ -f "/usr/local/bin/seleniumServer.jar" ]; then
    alias seleniumServer="java -jar /usr/local/bin/seleniumServer.jar"
 fi
-
+# Fiddily Chrome WSL Stuff
+if [ "$WSLON" == "true" ]; then
+    if [ "$USER" == "m808752" ]; then
+        alias chrome='google-chrome --proxy-server="http://localhost:3128"'
+    else    
+        alias chrome='/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
+    fi
+else
+    alias chrome='google-chome'
+fi

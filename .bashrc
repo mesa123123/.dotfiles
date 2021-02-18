@@ -142,9 +142,10 @@ fi
 
 # ----  WSL Settings ----
 # First Check if you are running WSL Environment or not
-CATOSRELEASE=`cat /proc/sys/kernel/osrelease` 
+CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
-export WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
+WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
+export WSLON
 
 # Special WSL Paths for Interoperability
 if [[ $WSLON == true ]]; then
@@ -158,7 +159,7 @@ fi
 if [[ $WSLON == true ]]; then
 	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
 	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
-	cd ~
+	cd ~ || exit;
 fi
 # ---- End of WSL Settings ---- 
 # ----
@@ -241,9 +242,9 @@ fi
 # Powerline Setup
 if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
 	  powerline-daemon -q
-	    POWERLINE_BASH_CONTINUATION=1
-	      POWERLINE_BASH_SELECT=1
-	        source /usr/share/powerline/bindings/bash/powerline.sh
+      POWERLINE_BASH_CONTINUATION=1
+      POWERLINE_BASH_SELECT=1
+	  source /usr/share/powerline/bindings/bash/powerline.sh
 fi
 
 
@@ -251,8 +252,8 @@ fi
 # Starting Proxy Services
 if [ "$USER" == "m808752" ]; then
 	# If the service is already running don't start it up..	
-	if [[ "`service cntlm status`" == *"* cntlm is not running"* ]]; then
-		echo $WORK_PWD  | sudo -S service cntlm start
+	if [[ "$(service cntlm status)" == *"* cntlm is not running"* ]]; then
+		echo "$WORK_PWD"  | sudo -S service cntlm start
 	fi
 fi
 
@@ -274,8 +275,9 @@ fi
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	
-    export WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
-    if [ "${WSL_VERSION}" == 2 ]]; then
+    WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
+    export WSL2IP
+    if [ "${WSL_VERSION}" == 2 ]; then
         export DISPLAY="$WSL2IP":0.0
     else 
         export DISPLAY="127.0.0.1:0.0"

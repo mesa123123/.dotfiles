@@ -22,7 +22,6 @@ Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sirver/ultisnips'
 
-
 call plug#end()
 
 "	Options Setting
@@ -72,6 +71,8 @@ let g:vim_markdown_conceal = 0
 
 " Set .draft files to Markdown
 au BufRead,BufNewFile *.draft set filetype=markdown
+
+
 
 " ----------------
 
