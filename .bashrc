@@ -255,6 +255,8 @@ if [ "$USER" == "m808752" ]; then
 	if [[ "$(service cntlm status)" == *"* cntlm is not running"* ]]; then
 		echo "$WORK_PWD"  | sudo -S service cntlm start
 	fi
+    if [ "${WSL_VERSION}" == 2 ]; then
+        echo "$WORK_PWD" | sudo -S echo "${WORK_NAMESERVERS}" >> /etc/resolv.conf
 fi
 
 # Configure .dotfiles
