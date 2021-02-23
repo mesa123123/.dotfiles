@@ -159,7 +159,11 @@ fi
 if [[ $WSLON == true ]]; then
 	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
 	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
-	cd ~ || exit;
+    if [[ $WSL_VERSION == 2 ]]; then
+        export WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
+        echo "I did export the WSLIP variable"
+    fi
+    cd ~ || exit;
 fi
 # ---- End of WSL Settings ---- 
 # ----
@@ -191,7 +195,7 @@ if [[ ${WSLON} == true ]]; then
 	# Now stuff that differs between versions of WSL 
 	if [[ $WSL_VERSION == 1 ]]; then	
 		export DOCKER_HOST="tcp://localhost:2375"
-	fi
+    fi
 fi
 
 
@@ -234,9 +238,15 @@ export PATH="$PATH:$CODE_HOME/bin"
 
 # Work Proxy Settings
 if [ "$USER" == "m808752" ] && [[ ${WSLON} == true ]]; then
-	export {http,https,ftp}_proxy="http://localhost:3128"
-	export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
-	export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
+    if [[ $WSL_VERSION == 1 ]]; then
+        export {http,https,ftp}_proxy="http://localhost:3128"
+	    export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
+	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
+    elif [[ $WSL_VERSION == 2 ]]; then
+        export {http,https,ftp}_proxy="http://${WSL2IP}:3128"
+	    export {HTTP,HTTPS,FTP}_proxy="http://${WSL2IP}:3128"
+	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=${WSL2IP} -Dhttp.proxyPort=3128 -Dhttps.proxyHost=${WSL2IP} -Dhttps.proxyPort=3128"
+    fi	
 fi
 
 # Powerline Setup
@@ -255,9 +265,6 @@ if [ "$USER" == "m808752" ]; then
 	if [[ "$(service cntlm status)" == *"* cntlm is not running"* ]]; then
 		echo "$WORK_PWD"  | sudo -S service cntlm start
 	fi
-   # if [ "${WSL_VERSION}" == 2 ]; then
-   #     echo "$WORK_PWD" | sudo -S echo "${WORK_NAMESERVERS}" >> /etc/resolv.conf
-   # fi
 fi
 
 # Configure .dotfiles
@@ -278,13 +285,11 @@ fi
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	
-    WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
-    export WSL2IP
     if [ "${WSL_VERSION}" == 2 ]; then
         export DISPLAY="$WSL2IP":0.0
+	    export PULSE_SERVER=tcp:"$WSL2IP"
     else 
         export DISPLAY="127.0.0.1:0.0"
     fi
-	export PULSE_SERVER=tcp:"$WSL2IP"
 fi
 
