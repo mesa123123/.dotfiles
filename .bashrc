@@ -239,13 +239,15 @@ export PATH="$PATH:$CODE_HOME/bin"
 # Work Proxy Settings
 if [ "$USER" == "m808752" ] && [[ ${WSLON} == true ]]; then
     if [[ $WSL_VERSION == 1 ]]; then
-        export {http,https,ftp}_proxy="http://localhost:3128"
-	    export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
-	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
+        # export {http,https,ftp}_proxy="http://localhost:3128"
+	    # export {HTTP,HTTPS,FTP}_proxy="http://localhost:3128"
+	    # export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
+        echo "1"
     elif [[ $WSL_VERSION == 2 ]]; then
-        export {http,https,ftp}_proxy="http://${WSL2IP}:3128"
-	    export {HTTP,HTTPS,FTP}_proxy="http://${WSL2IP}:3128"
-	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=${WSL2IP} -Dhttp.proxyPort=3128 -Dhttps.proxyHost=${WSL2IP} -Dhttps.proxyPort=3128"
+        # export {http,https,ftp}_proxy="http://${WSL2IP}:3128"
+	    # export {HTTP,HTTPS,FTP}_proxy="http://${WSL2IP}:3128"
+	    # export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=${WSL2IP} -Dhttp.proxyPort=3128 -Dhttps.proxyHost=${WSL2IP} -Dhttps.proxyPort=3128"
+        echo "2"
     fi	
 fi
 
@@ -263,7 +265,8 @@ fi
 if [ "$USER" == "m808752" ]; then
 	# If the service is already running don't start it up..	
 	if [[ "$(service cntlm status)" == *"* cntlm is not running"* ]]; then
-		echo "$WORK_PWD"  | sudo -S service cntlm start
+	# 	echo "$WORK_PWD"  | sudo -S service cntlm start
+        echo "Cntlm Is Here"
 	fi
 fi
 
