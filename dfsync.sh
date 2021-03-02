@@ -107,17 +107,6 @@ function create_subfolders()
 	done
 }
 
-# This sets the browser for the client
-function set_browser()
-{
-	if [ "$USER" == "m808752" ]; then
-		BROWSER=$BROWSERBRAVE
-	else
-		BROWSER=$BROWSERCHROME
-	fi
-	echo "$BROWSER"
-}
-
 # This function takes the previous dotfiles, and puts them into the .dotfilesbackup folder, then adds the folders from the local repo to the clients environment
 function create_symlink()
 {
@@ -182,7 +171,7 @@ function start_browser_proxy()
 		if [[ $GIT_ACCESS == false ]]; then	
 			# This command starts the browser in github, somehow the browser saying its cool gets
 			# around Zscaler?
-			BROWSER=`set_browser`
+			BROWSER=$BROWSERCHROME
 			"$BROWSER" https://github.com;
 		fi
 	fi
