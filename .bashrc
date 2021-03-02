@@ -269,7 +269,7 @@ if [ "$USER" == "m808752" ]; then
 fi
 
 # Configure .dotfiles
-if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ]; then
+if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
     # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
     # windows so the client needs to know what to add to the path and what not to in order properly 
     # configure dotfiles on the client
@@ -281,8 +281,12 @@ if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ]; then
     fi
 fi
 
-# Set the xdg-open to whatever the browser variable is
-
+# IF I'm running on virtual box I need a custom screen size implemented
+VirtualScreenCheck=$(xrandr | grep 'Virtual-1');
+if [[ "${VirtualScreenCheck}" == *"Virtual-1"* ]]; then
+    newscreen Virtual-1 "1904x1050_60.00" 
+    xrandr --output Virtual-1 --mode "\"1904x1050_60.00\""
+fi
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	

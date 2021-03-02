@@ -1,6 +1,9 @@
 " Set No Compatible allows Coc to work for some weird reason?
 set nocompatible
 
+" set the mapleader
+let mapleader = "\\"
+
 " Plugins Load
 call plug#begin('/home/$USER/.vim/pack/my_plugins/start')
 
@@ -45,6 +48,10 @@ colorscheme onehalfdark
 set tabstop=4
 set shiftwidth=4
 set expandtab
+
+" Terminal Alias and Keyboard Settings
+cabbrev bterm bo term
+nnoremap <silent><leader>t :execute "bo term"<CR> 
 
 " Language Specific Settings
 " ------------------------------"

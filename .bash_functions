@@ -92,7 +92,18 @@ function dvx()
 
 }
 
+function newscreen()
+{
+  XRANDROUTPUT=$(xrandr)
+  if [[  "${XRANDROUTPUT}" == *"${2}"* ]]; then
+      echo "There is already a screen resolution of this size"
+  else
+      xrandr --newmode "\"${2}\"" 166.00  1904 2024 2224 2544 1050 1053 1063 1089 -hsync +vsync
+      xrandr --addmode $1 "\"${2}\""
+  fi
+}
 
 # export the functions to the shell session
 export -f devhome
 export -f dvx
+export -f newscreen
