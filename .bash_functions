@@ -103,6 +103,11 @@ function newscreen()
   fi
 }
 
+function stenv() {
+    source env/bin/activate
+    clear
+}
+
 # export the functions to the shell session
 export -f devhome
 export -f dvx

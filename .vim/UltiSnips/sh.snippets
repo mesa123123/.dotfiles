@@ -1,14 +1,3 @@
-snippet shellfunction "A docstring for shell functions" b
-# $1
-# DESC: $2 
-# ARGS: $@ (optional): $3
-# OUTS: $4
-function $1()
-{
-
-}
-endsnippet
-
 snippet shelltemplate "A Baseline Template for Shell Files" b
 #!/bin/bash
 
@@ -107,5 +96,25 @@ endsnippet
 
 snippet shellsubtitle "The notation for a custom subtitle" b
 # ----------- $1 ------------------------------
+endsnippet
+
+snippet shellfunction "A docstring for shell functions" b
+# $1
+# DESC: $2 
+# ARGS: $@ (optional): $3
+# OUTS: $4
+function $1()
+{
+
+}
+endsnippet
+
+snippet logfile "A setup for defining a log location" b
+# Remove Previous Output File
+if [ -f ./output.output ]; then
+    rm ./output.output
+fi
+# Send all Outputs Timestamped To The Output Tmp File
+exec 3>&1 4>&2 >./output.output 2>&1
 endsnippet
 		

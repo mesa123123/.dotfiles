@@ -8,7 +8,8 @@ let mapleader = "\\"
 call plug#begin('/home/$USER/.vim/pack/my_plugins/start')
 
 Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdtree'
+Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'yggdroot/indentline'
 Plug 'plasticboy/vim-markdown'
 Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
@@ -36,6 +37,9 @@ set autoindent
 set nofoldenable
 set encoding=UTF-8
 set noshowmode
+set splitbelow
+
+" Set up FileType functionality
 filetype on
 filetype plugin indent on
 
@@ -59,6 +63,7 @@ nnoremap <silent><leader>t :execute "bo term"<CR><c-\><c-n>:res-10<CR>icls<CR>
 tnoremap <silent><leader>t <c-\><c-n>:q<CR>
 " Exit Terminal Completely
 tnoremap <silent><leader>q exit<CR>
+
 " Language Specific Settings
 " ------------------------------"
 
@@ -76,6 +81,7 @@ au FileType python setlocal et ts=4 sw=4 sts=4
 "Language Markdown
 au FileType markdown setlocal ts=2 sw=2 sts=2
 au FileType markdown setlocal spell spelllang=en_gb
+au FileType markdown inoremap <TAB> <C-t>
 " Markdown Syntax Highlighting
 let g:vim_markdown_fenced_languages = ['csharp=cs', 'json=javascript']
 let g:vim_markdown_folding_disabled = 1
@@ -90,10 +96,13 @@ au BufRead,BufNewFile *.draft set filetype=markdown
 " ----------------
 
 " NerdTree Options 
+"--------------------------- "
 let g:NERDTreeWinPos="right"
-let g:NERDTreeWinSize=60
+let g:NERDTreeWinSize=45
 let NERDTreeShowLineNumbers=1
 let NERDTreeShowHidden=1
+" NerdTree Git Plugin Symbols
+let g:NERDTreeGitStatusUseNerdFonts = 1
 " make sure relative line numbers are used
 autocmd FileType nerdtree setlocal relativenumber
 " Remap the open and close to C-n
@@ -129,7 +138,7 @@ if exists("g:loaded_webdevicons")
 " status line updates
 set laststatus=2
 
-
+" --------------------------------------------"
 " COC Options
 " --------------------------------------------"
 " TextEdit might fail if hidden is not set.
@@ -302,6 +311,14 @@ function! s:Bclose(bang, buffer)
 endfunction
 command! -bang -complete=buffer -nargs=? Bclose call <SID>Bclose(<q-bang>, <q-args>)
 nnoremap <silent> <Leader>bd :Bclose<CR>
+
+" -------------------------------- 
+" General  Mappings
+" --------------------------------
+
+" Remap Visual and Insert mode to use Normal Modes Tab Rules
+inoremap >> <c-t>
+inoremap << <c-d>
 
 " ----------------------END OF VIMRC--------------------- "
 
