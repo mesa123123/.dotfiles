@@ -49,10 +49,16 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+" Terminal Settings
+" ------------------------------"
 " Terminal Alias and Keyboard Settings
 cabbrev bterm bo term
-nnoremap <silent><leader>t :execute "bo term"<CR> 
-
+" Open Terminal 
+nnoremap <silent><leader>t :execute "bo term"<CR><c-\><c-n>:res-10<CR>icls<CR>
+" Hide Terminal
+tnoremap <silent><leader>t <c-\><c-n>:q<CR>
+" Exit Terminal Completely
+tnoremap <silent><leader>q exit<CR>
 " Language Specific Settings
 " ------------------------------"
 
