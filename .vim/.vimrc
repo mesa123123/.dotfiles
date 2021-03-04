@@ -53,17 +53,28 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+" --------------------------------"
 " Terminal Settings
-" ------------------------------"
+" --------------------------------"
+"  VSCode Terminal Behaviour
+"  ----
 " Terminal Alias and Keyboard Settings
 cabbrev bterm bo term
-" Open Terminal 
-nnoremap <silent><leader>t :execute "bo term"<CR><c-\><c-n>:res-10<CR>icls<CR>
+" Open Terminal if Terminal has previously been opened then open the
+" previously opened Terminal
+function TerminalBufferNumbers()
+    return filter(map(getbufinfo(), 'v:val.bufnr'), 'getbufvar(v:val,"&buftype") is# "terminal"')
+endfunction
+nnoremap <silent><expr><leader>t empty(TerminalBufferNumbers())  ? 
+            \ ':execute "bo term"<CR><c-\><c-n>:res-10<CR>icls<CR>' : 
+            \ ':let ntbn = TerminalBufferNumbers()[0]<CR>:exe "sbuffer".ntbn<CR>:res-10<CR>i' 
 " Hide Terminal
 tnoremap <silent><leader>t <c-\><c-n>:q<CR>
 " Exit Terminal Completely
 tnoremap <silent><leader>q exit<CR>
+" ----------------
 
+" ------------------------------"
 " Language Specific Settings
 " ------------------------------"
 
@@ -90,13 +101,12 @@ let g:vim_markdown_conceal = 0
 
 " Set .draft files to Markdown
 au BufRead,BufNewFile *.draft set filetype=markdown
-
-
-
 " ----------------
 
+"--------------------------- "
 " NerdTree Options 
 "--------------------------- "
+
 let g:NERDTreeWinPos="right"
 let g:NERDTreeWinSize=45
 let NERDTreeShowLineNumbers=1
@@ -107,15 +117,18 @@ let g:NERDTreeGitStatusUseNerdFonts = 1
 autocmd FileType nerdtree setlocal relativenumber
 " Remap the open and close to C-n
 map <C-n> :NERDTreeToggle<CR>
+" ----------------
 
+"--------------------------- "
 " Lightline Configuration
 "--------------------------- "
+
 " coc options for lightline
 function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
 endfunction
 
-"       Lightline Options"
+" Lightline Options
 let g:lightline = { 'colorscheme': 'onehalfdark', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ] }, 'component_function': { 'gitbranch': 'FugitiveHead', 'cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction' }, }
 
 " Lightline Coc Config
@@ -141,6 +154,8 @@ set laststatus=2
 " --------------------------------------------"
 " COC Options
 " --------------------------------------------"
+" Recommended Options
+" --------
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -235,10 +250,9 @@ map <C-t><j> :tabl<cr>
 map <C-t><l> :tabp<cr>
 map <C-t><h> :tabn<cr>
 
-" ------------------------------------------
-
-" ------------ BClose Command -------------- "
-
+" ------------------------------------------"
+" BClose Command "
+" ------------------------------------------"
 " Delete Buffer while keeping window layout (don't close buffer's windows).
 " Version 2008-11-18 from http://vim.wikia.com/wiki/VimTip165
 if v:version < 700 || exists('loaded_bclose') || &cp
@@ -312,11 +326,12 @@ endfunction
 command! -bang -complete=buffer -nargs=? Bclose call <SID>Bclose(<q-bang>, <q-args>)
 nnoremap <silent> <Leader>bd :Bclose<CR>
 
-" -------------------------------- 
+" --------------------------------"
 " General  Mappings
-" --------------------------------
+" --------------------------------"
 
 " Remap Visual and Insert mode to use Normal Modes Tab Rules
+" --------
 inoremap >> <c-t>
 inoremap << <c-d>
 
