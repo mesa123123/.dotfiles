@@ -335,5 +335,17 @@ nnoremap <silent> <Leader>bd :Bclose<CR>
 inoremap >> <c-t>
 inoremap << <c-d>
 
+" Map Movement Keys to Ctrl hjlk in Terminal, and Command Modes
+" --------
+tnoremap <c-h> <Left>
+tnoremap <c-h> <Left>
+tnoremap <c-j> <Down>
+tnoremap <c-k> <Up>
+cnoremap <c-l> <Right>
+cnoremap <c-j> <Down>
+cnoremap <c-k> <Up>
+cnoremap <c-l> <Right>
+" ----------------
+
 " ----------------------END OF VIMRC--------------------- "
 
