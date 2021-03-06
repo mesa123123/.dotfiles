@@ -4,7 +4,8 @@ set nocompatible
 " set the mapleader
 let mapleader = "\\"
 
-" Plugins Load
+" Load Plugings
+" --------
 call plug#begin('/home/$USER/.vim/pack/my_plugins/start')
 
 Plug 'itchyny/lightline.vim'
@@ -28,7 +29,12 @@ Plug 'sirver/ultisnips'
 
 call plug#end()
 
-"	Options Setting
+" ----------------
+
+" --------------------------------"
+" General Options Setting
+" --------------------------------"
+
 set number
 let python_highlight_all=1
 syntax on
@@ -52,6 +58,9 @@ colorscheme onehalfdark
 set tabstop=4
 set shiftwidth=4
 set expandtab
+
+" ----------------
+
 
 " --------------------------------"
 " Terminal Settings
@@ -103,6 +112,49 @@ let g:vim_markdown_conceal = 0
 au BufRead,BufNewFile *.draft set filetype=markdown
 " ----------------
 
+" --------------------------------"
+" General  Mappings
+" --------------------------------"
+
+" Remap Visual and Insert mode to use Normal Modes Tab Rules
+" --------
+inoremap >> <c-t>
+inoremap << <c-d>
+
+" Map Movement Keys to Ctrl hjlk in Terminal, and Command Modes
+" --------
+tnoremap <c-h> <Left>
+tnoremap <c-h> <Left>
+tnoremap <c-j> <Down>
+tnoremap <c-k> <Up>
+cnoremap <c-l> <Right>
+cnoremap <c-j> <Down>
+cnoremap <c-k> <Up>
+cnoremap <c-l> <Right>
+
+" Tabs Remapping
+map <C-t><k> :tabr<cr>
+map <C-t><j> :tabl<cr>
+map <C-t><l> :tabp<cr>
+map <C-t><h> :tabn<cr>
+
+" Tmux Pane Resizing
+" --------
+" Terminal
+tnoremap <c-a><c-j>  <c-\><c-n>:res-1<CR>i
+tnoremap <c-a><c-k>  <c-\><c-n>:res+1<CR>i
+" Insert
+inoremap <c-a><c-j>  :res-1<CR>
+inoremap <c-a><c-k>  :res+1<CR>
+" Command
+cnoremap <c-a><c-j>  :res-1<CR>
+cnoremap <c-a><c-k>  :res+1<CR>
+" Normal
+nnoremap <c-a><c-j>  :res-1<CR>
+nnoremap <c-a><c-k>  :res+1<CR>
+
+" ----------------
+
 "--------------------------- "
 " NerdTree Options 
 "--------------------------- "
@@ -117,6 +169,7 @@ let g:NERDTreeGitStatusUseNerdFonts = 1
 autocmd FileType nerdtree setlocal relativenumber
 " Remap the open and close to C-n
 map <C-n> :NERDTreeToggle<CR>
+
 " ----------------
 
 "--------------------------- "
@@ -240,15 +293,8 @@ augroup end
 " Example: `<leader>aap` for current paragraph
 xmap <leader>a <Plug>(coc-codeaction-selected)
 nmap <leader>a <Plug>(coc-codeaction-selected)
+" ----------------
 
-
-" ------------------------------------------- "
-
-" Tabs Remapping
-map <C-t><k> :tabr<cr>
-map <C-t><j> :tabl<cr>
-map <C-t><l> :tabp<cr>
-map <C-t><h> :tabn<cr>
 
 " ------------------------------------------"
 " BClose Command "
@@ -326,26 +372,6 @@ endfunction
 command! -bang -complete=buffer -nargs=? Bclose call <SID>Bclose(<q-bang>, <q-args>)
 nnoremap <silent> <Leader>bd :Bclose<CR>
 
-" --------------------------------"
-" General  Mappings
-" --------------------------------"
-
-" Remap Visual and Insert mode to use Normal Modes Tab Rules
-" --------
-inoremap >> <c-t>
-inoremap << <c-d>
-
-" Map Movement Keys to Ctrl hjlk in Terminal, and Command Modes
-" --------
-tnoremap <c-h> <Left>
-tnoremap <c-h> <Left>
-tnoremap <c-j> <Down>
-tnoremap <c-k> <Up>
-cnoremap <c-l> <Right>
-cnoremap <c-j> <Down>
-cnoremap <c-k> <Up>
-cnoremap <c-l> <Right>
-" ----------------
 
 " ----------------------END OF VIMRC--------------------- "
 
