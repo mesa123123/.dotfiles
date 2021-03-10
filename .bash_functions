@@ -38,7 +38,13 @@ function devhome()
         echo "Or enter name of new project"
 	# If I enter the word go, it just goes to the folder	
 	elif [[ "$1" == "go" ]]; then
-		cd ~/dev/ || exit;
+        echo "To Projects? (y/n)"
+        read PROJECTS
+        if [[ "${PROJECTS}" == "y" ]]; then
+            cd ~/dev/projects/
+        else    
+            cd ~/dev/ || exit;
+        fi
 	else
 		# If the arguement given is show, print out the list of project folders
 		if [[ "$1" == "show" || "$1" == "list" ]]; then	
