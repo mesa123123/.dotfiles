@@ -9,8 +9,26 @@ __References__
 $2
 endsnippet
 
+snippet notebacklinkedatomic "Creates a New Atomic Note with backlink" b
+# $1
+
+___BackLinks___
+_ [$3](<./$3.md>) _
+
+__ TAGS: __
+#$1
+
+__References__ 
+$2
+
+endsnippet
+
 snippet linkmd "Creates a New Link"
-[$1](<$2> "$3")
+[$1](<$2.md> "$2")
+endsnippet
+
+snippet linkseemore "Creates a See More Section" b
+__See More:__ [$1](<$2.md> "$2")
 endsnippet
 
 snippet imagemd "Creates an Image Link" b
@@ -30,16 +48,12 @@ $2
 
 endsnippet
 
-snippet notebacklinkedatomic "Creates a New Atomic Note" b
-# $1
+snippet notesuperatomicsection "Creates a section for an atomic note that childs a super note" b
 
-___BackLinks___
-_ [$3](<./$3.md>) _
+## $1
 
-__ TAGS: __
-#$1
-
-__References__ 
 $2
 
+__See More:__ [$3](<$4.md> "$4")
 endsnippet
+
