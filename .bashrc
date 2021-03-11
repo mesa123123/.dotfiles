@@ -172,6 +172,7 @@ fi
 # ---------
 
 # Universal Environment Variables
+export PATH=$PATH:~/local/bin
 export PATH=$PATH:~/.local/bin
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 export SCALA_HOME=/usr/share/scala
@@ -190,14 +191,11 @@ if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
     export WINHOME="/c/Users/$USER"
-    export LEARNHOME="$WINHOME/dev/learning/"
 	# Now stuff that differs between versions of WSL 
 	if [[ $WSL_VERSION == 1 ]]; then	
 		export DOCKER_HOST="tcp://localhost:2375"
     fi
 fi
-
-
 
 # Home User Environment Variables
 if [ "$USER" == "bowmanpete" ]; then
@@ -221,8 +219,14 @@ if [ "$USER" == "bowmanpete" ]; then
 fi
 
 # Work Environment Variables
-if [ "$USER" == "m808752" ]; then
+if [ "$USER" == "m808752" ] || [ "$USER" == "M808752" ]; then
 	export POLYNOTEHOME="/opt/polynote"
+    export AIRFLOW_HOME="/opt/airflow"
+    if [[ ${WSLON} == true ]]; then
+        export LEARNHOME="$WINHOME/dev/learning/"
+    else
+        export LEARNHOME="/home/${USER}/dev/learning/"
+    fi
 fi
 
 # Appending Variables Variables to Path
@@ -263,7 +267,7 @@ fi
 
 # ---- Automated Shell Commands For Startup ----
 # Starting Proxy Services
-if [ "$USER" == "m808752" ]; then
+if [ "$USER" == "m808752" ] && [ "${WSLON}" == "true" ]; then
 	# If the service is already running don't start it up..	
 	if [[ "$(service cntlm status)" == *"* cntlm is not running"* ]]; then
 		echo "$WORK_PWD"  | sudo -S service cntlm start
