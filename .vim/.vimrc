@@ -91,7 +91,9 @@ tnoremap <silent><leader>q exit<CR>
 au FileType cpp setlocal et ts=2 sw=2
 
 " Language Python
-let g:pymode_rope = 0
+let g:pymode_rope = 1
+let g:pymode_rope_goto_definition_bind = '<c-c>g'
+let g:pymode_rope_goto_definition_cmd = 'new'
 let g:pymode_lint = 0
 let g:pymode_lint_on_write = 0
 let g:pymode_lint_on_fly = 0
