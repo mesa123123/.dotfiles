@@ -143,17 +143,17 @@ map <C-t><h> :tabn<cr>
 " Tmux Pane Resizing
 " --------
 " Terminal
-tnoremap <c-a><c-j>  <c-\><c-n>:res-1<CR>i
-tnoremap <c-a><c-k>  <c-\><c-n>:res+1<CR>i
+tnoremap <c-a><c-j>  <c-\><c-n>:res-5<CR>i
+tnoremap <c-a><c-k>  <c-\><c-n>:res+5<CR>i
 " Insert
-inoremap <c-a><c-j>  :res-1<CR>
-inoremap <c-a><c-k>  :res+1<CR>
+inoremap <c-a><c-j>  :res-5<CR>
+inoremap <c-a><c-k>  :res+5<CR>
 " Command
-cnoremap <c-a><c-j>  :res-1<CR>
-cnoremap <c-a><c-k>  :res+1<CR>
+cnoremap <c-a><c-j>  :res-5<CR>
+cnoremap <c-a><c-k>  :res+5<CR>
 " Normal
-nnoremap <c-a><c-j>  :res-1<CR>
-nnoremap <c-a><c-k>  :res+1<CR>
+nnoremap <c-a><c-j>  :res-5<CR>
+nnoremap <c-a><c-k>  :res+5<CR>
 
 " ----------------
 
