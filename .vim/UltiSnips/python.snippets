@@ -3,12 +3,12 @@ snippet testsuite "Add the bones of a new testsuite"
 import pytest
 import os
 # import the function under test
-import [module_under_test] as [module_short_name] 
+import $1 as $2 
 
-class Suite_[function_under_test]:
+class Suite_$3:
     '''
     [Summary]:
-    This class tests the [function_under_test] function the test cases are as follows:
+    This class tests the $3 function the test cases are as follows:
         [Happy Path]: [description] 
         [test_case_name]: [description] 
     '''
@@ -17,7 +17,7 @@ class Suite_[function_under_test]:
     @pytest.fixture(scope="class") 
     def class_fixture(self):
         # Before each tests do the following , this gives a universal variable to the test_data etc.
-        self.data_directory = [test_data_directory] 
+        self.data_directory = $4 
         print("setup, method called")
         yield self 
         print("teardown code running")
@@ -40,11 +40,11 @@ class Suite_[function_under_test]:
 endsnippet
 
 snippet newtestcase "Adds an extra test to the bottom of the test suite"
-def test_[test_case_name](self): 
+def test_$1(self): 
 	'''
-		[Given] - 
-		[When] - 
-		[Then] - 
+		[Given] - $2
+		[When] - $3
+		[Then] - $4
 	'''
 	pass
 endsnippet
