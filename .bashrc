@@ -186,7 +186,7 @@ export VIM_INIT='source ~/.vim/.vimrc'
 export VIMINIT='source ~/.vim/.vimrc'
 
 # VIM or NEOVIM?
-if [[ $(dpkg-query -W -f="${Status}" neovim 2>/dev/null | grep -c "ok installed") == *"1"* ]]; then
+if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
     alias vim="nvim"
     export EDITOR='nvim'
 else
