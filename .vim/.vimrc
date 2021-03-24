@@ -1,3 +1,17 @@
+" --------------------------------"
+" Neovim Specific Settings
+" --------------------------------"
+" remap Esc back to vim default for terminal 
+if has('nvim')
+    tnoremap <Esc> <C-\><C-n>
+endif
+
+" ----------------
+
+" --------------------------------"
+" General Settings
+" --------------------------------"
+
 " Set No Compatible allows Coc to work for some weird reason?
 set nocompatible
 

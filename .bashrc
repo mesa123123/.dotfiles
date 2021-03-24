@@ -184,7 +184,14 @@ export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
 export VIM_INIT='source ~/.vim/.vimrc'
 export VIMINIT='source ~/.vim/.vimrc'
-export EDITOR='vim'
+
+# VIM or NEOVIM?
+if [[ $(dpkg-query -W -f="${Status}" neovim 2>/dev/null | grep -c "ok installed") == *"1"* ]]; then
+    alias vim="nvim"
+    export EDITOR='nvim'
+else
+    export EDITOR='vim'
+fi
 
 # Special WSL envvars that would just annoy a pure linux system
 if [[ ${WSLON} == true ]]; then
