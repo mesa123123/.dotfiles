@@ -33,7 +33,7 @@ class Suite_$3:
     def test_[test_case_name](self, class_fixture): 
        	'''
 			[Given] - 
-			[When] - 
+			[When] - This data is passed as an arguement to the function
 			[Then] - 
 		'''
 		pass
@@ -43,8 +43,18 @@ snippet newtestcase "Adds an extra test to the bottom of the test suite"
 def test_$1(self): 
 	'''
 		[Given] - $2
-		[When] - $3
-		[Then] - $4
+		[When] - This data is passed as an arguement to the function
+		[Then] - $3
+	'''
+	pass
+endsnippet
+
+snippet deftestcase "Adds an extra test to the bottom of the test suite"
+def test_$1(self): 
+	'''
+		[Given] - $2
+		[When] - This data is passed as an arguement to the function
+		[Then] - $3
 	'''
 	pass
 endsnippet
