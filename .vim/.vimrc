@@ -40,7 +40,9 @@ call plug#end()
 " --------------------------------"
 if has('nvim')
     " remap Esc back to vim default for terminal 
-    tnoremap <Esc> <C-\><C-n>
+    tnoremap <Esc> <C-\><C-n> 
+    " remap the pane movements
+    tnoremap <c-w> <c-\><c-n><c-w>
     " point to UltiSnipsHome
     let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
     
@@ -231,8 +233,11 @@ autocmd FileType nerdtree setlocal relativenumber
 map <C-n> :NERDTreeToggle<CR>
 " Terminal Commands, autoswitch focussed pane and then switch to nerdtree,
 " assumes the terminal is horizontally split and on the bottom
-tnoremap <C-n> <c-w>k :NERDTreeToggle<CR>
-
+if has('nvim')
+    tnoremap <C-n> <C-\><C-n><c-w>k :NERDTreeToggle<CR>
+else
+    tnoremap <C-n> <c-w>k :NERDTreeToggle<CR>
+endif
 " ----------------
 
 "--------------------------- "
