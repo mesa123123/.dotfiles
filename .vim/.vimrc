@@ -1,15 +1,5 @@
 " --------------------------------"
-" Neovim Specific Settings
-" --------------------------------"
-" remap Esc back to vim default for terminal 
-if has('nvim')
-    tnoremap <Esc> <C-\><C-n>
-endif
-
-" ----------------
-
-" --------------------------------"
-" General Settings
+" Priority Settings
 " --------------------------------"
 
 " Set No Compatible allows Coc to work for some weird reason?
@@ -46,12 +36,25 @@ call plug#end()
 " ----------------
 
 " --------------------------------"
+" Neovim Specific Settings
+" --------------------------------"
+if has('nvim')
+    " remap Esc back to vim default for terminal 
+    tnoremap <Esc> <C-\><C-n>
+    " point to UltiSnipsHome
+    let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
+    
+endif
+" ----------------
+
+" --------------------------------"
 " General Options Setting
 " --------------------------------"
-
+" Line Numbers On
 set number
-let python_highlight_all=1
+" Language Syntax On
 syntax on
+let python_highlight_all=1
 set linebreak
 set autoindent
 set nofoldenable
@@ -84,7 +87,7 @@ if exists("g:loaded_webdevicons")
       call webdevicons#refresh()
   endif
 
-" status line updates
+" Status Line Updates
 set laststatus=2
 
 " ----------------
@@ -95,14 +98,18 @@ set laststatus=2
 "  VSCode Terminal Behaviour
 "  ----
 " Terminal Alias and Keyboard Settings
-cabbrev bterm bo term
+if has('nvim')
+    cabbrev bterm below new<CR>:terminal
+else
+    cabbrev bterm bo term
+endif
 " Open Terminal if Terminal has previously been opened then open the
 " previously opened Terminal
 function TerminalBufferNumbers()
     return filter(map(getbufinfo(), 'v:val.bufnr'), 'getbufvar(v:val,"&buftype") is# "terminal"')
 endfunction
-nnoremap <silent><expr><leader>t empty(TerminalBufferNumbers())  ? 
-            \ ':execute "bo term"<CR><c-\><c-n>:res-10<CR>icls<CR>' : 
+nmap <silent><expr><leader>t empty(TerminalBufferNumbers())  ? 
+            \ ':bterm<CR><c-\><c-n>:res-10<CR>icls<CR>' : 
             \ ':let ntbn = TerminalBufferNumbers()[0]<CR>:exe "sbuffer".ntbn<CR>:res-10<CR>i' 
 " Hide Terminal
 tnoremap <silent><leader>t <c-\><c-n>:q<CR>
@@ -114,10 +121,10 @@ tnoremap <silent><leader>q exit<CR>
 " Language Specific Settings
 " ------------------------------"
 
-"   Language C++
+" C++ Language 
 au FileType cpp setlocal et ts=2 sw=2
 
-" Language Python
+" Python Language
 let g:pymode_rope = 1
 let g:pymode_rope_goto_definition_bind = '<c-c>g'
 let g:pymode_rope_goto_definition_cmd = 'new'
@@ -127,7 +134,8 @@ let g:pymode_lint_on_fly = 0
 au FileType python setlocal et ts=4 sw=4 sts=4
 
 
-"Language Markdown
+" Markdown
+" --------
 au FileType markdown setlocal ts=2 sw=2 sts=2
 au FileType markdown setlocal spell spelllang=en_gb
 au FileType markdown inoremap <TAB> <C-t>
@@ -136,14 +144,22 @@ let g:vim_markdown_fenced_languages = ['csharp=cs', 'json=javascript']
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_conceal = 0
-
 " Set .draft files to Markdown
 au BufRead,BufNewFile *.draft set filetype=markdown
+
+" HCL Language
+au BufRead,BufNewFile *.hcl set filetype=ini
+
+
 " ----------------
 
 " --------------------------------"
 " General  Mappings
 " --------------------------------"
+
+" When the enter key is pressed it takes away the highlighting in from the
+" last text search
+nnoremap <silent><CR> :nohlsearch<CR><CR>
 
 " Remap Visual and Insert mode to use Normal Modes Tab Rules
 " --------
@@ -195,6 +211,10 @@ tnoremap <c-b>s <c-w>k :ls<CR>:b<Space>
 tnoremap <c-b>d <c-w>k :ls<CR>:bd<Space>
 " ----------------
 
+" UltiSnipsEdit Command
+" --------
+nnoremap <leader>se :UltiSnipsEdit<CR>
+
 "--------------------------- "
 " NerdTree Options 
 "--------------------------- "
@@ -239,50 +259,40 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " --------
 " TextEdit might fail if hidden is not set.
 set hidden
-
 " Some servers have issues with backup files, see #649.
 set nobackup
 set nowritebackup
-
 " Give more space for displaying messages.
 set cmdheight=2
-
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
 set updatetime=200
-
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
-
 " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
-if has("patch-8.1.1564")
+if has("patch-8.1.1564")   
     " Recently vim can merge signcolumn and number column into one
     set signcolumn=number
 else
     set signcolumn=yes
 endif
-
 " Use tab for trigger completion with characters ahead and navigate. NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin before putting this into your config.
 inoremap <silent><expr> <c-l>
     \ pumvisible() ? "\<C-n>" :
     \ <SID>check_back_space() ? "\<TAB>" :
     \ coc#refresh()
 inoremap <expr><c-h> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 " Make <CR> auto-select the first completion item and notify coc.nvim to format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() 
             \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
@@ -295,10 +305,8 @@ function! s:show_documentation()
         execute '!' . &keywordprg . " " . expand('<cword>')
     endif
 endfunction
-
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
-
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 

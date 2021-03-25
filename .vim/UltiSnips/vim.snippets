@@ -14,3 +14,13 @@ snippet sectionend "Visual End Of Section" b
 " ----------------
 
 endsnippet
+
+snippet nnor "Normal Mode Remapping" b
+nnoremap ${1:Shortcut Key} ${2:Actual Key}
+endsnippet
+
+snippet remapall "Normal Mode Remapping" b
+nnoremap ${1:Shortcut Key} ${2:Actual Key}
+inoremap ${1:Shortcut Key} ${2:Actual Key}
+tnoremap ${1:Shortcut Key} ${2:Actual Key}
+endsnippet

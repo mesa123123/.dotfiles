@@ -1,0 +1,21 @@
+snippet templatemasking "Template: Masking for Airflow Dags" b
+mask "$1" {
+schedule = "@$2"
+source_path = "$3",
+depends_on = ["$4"]
+target_path = "$5",
+tables = []
+}
+endsnippet
+
+snippet templatemaskingrule "Template: A Masking Rule for an Airflow DAG" b
+table = "$1",
+mask_rules = 
+[
+{
+function = "$2",
+columns = ["$3"],
+record_audit =$4 
+}
+]}
+endsnippet
