@@ -24,12 +24,13 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvie/vim-flake8'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
-Plug 'tpope/vim-fugitive'
 Plug 'luochen1990/rainbow'
 Plug 'scrooloose/syntastic'
 Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sirver/ultisnips'
+Plug 'itchyny/vim-gitbranch'
+Plug 'mechatroner/rainbow_csv'
 
 call plug#end()
 
@@ -179,26 +180,42 @@ cnoremap <c-j> <Down>
 cnoremap <c-k> <Up>
 cnoremap <c-l> <Right>
 
-" Tabs Remapping
-map <C-t><k> :tabr<cr>
-map <C-t><j> :tabl<cr>
-map <C-t><l> :tabp<cr>
-map <C-t><h> :tabn<cr>
+" Tab Control
+" --------
+" Navigation
+map <C-t>k :tabr<cr>
+map <C-t>j :tabl<cr>
+map <C-t>l :tabp<cr>
+map <C-t>h :tabn<cr>
+" Close Current Tab
+map <C-t>c :tabc<cr>
+" Close all other Tabs
+map <C-t>o :tabo<cr>
+" New Tab - note n is already used as a search text tool and cannot be mapped
+map <C-t><c-n> :tabnew<cr>
 
 " Tmux Pane Resizing
 " --------
 " Terminal
 tnoremap <c-a><c-j>  <c-\><c-n>:res-5<CR>i
 tnoremap <c-a><c-k>  <c-\><c-n>:res+5<CR>i
+tnoremap <c-a><c-h>  <c-\><c-n>:vertical resize -5<CR>i
+tnoremap <c-a><c-l>  <c-\><c-n>:vertical resize +5<CR>i
 " Insert
 inoremap <c-a><c-j>  :res-5<CR>
 inoremap <c-a><c-k>  :res+5<CR>
+inoremap <c-a><c-h>  <c-\><c-n>:vertical resize -5<CR>i
+inoremap <c-a><c-l>  <c-\><c-n>:vertical resize +5<CR>i
 " Command
 cnoremap <c-a><c-j>  :res-5<CR>
 cnoremap <c-a><c-k>  :res+5<CR>
+cnoremap <c-a><c-h>  <c-\><c-n>:vertical resize -5<CR>i
+cnoremap <c-a><c-l>  <c-\><c-n>:vertical resize +5<CR>i
 " Normal
 nnoremap <c-a><c-j>  :res-5<CR>
 nnoremap <c-a><c-k>  :res+5<CR>
+nnoremap <c-a><c-h>  <c-\><c-n>:vertical resize -5<CR>i
+nnoremap <c-a><c-l>  <c-\><c-n>:vertical resize +5<CR>i
 
 " Buffer Switch & Delete
 " --------
@@ -250,7 +267,7 @@ function! CocCurrentFunction()
 endfunction
 
 " Lightline Options
-let g:lightline = { 'colorscheme': 'onehalfdark', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ] }, 'component_function': { 'gitbranch': 'FugitiveHead', 'cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction' }, }
+let g:lightline = { 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'gitbranch' ], [ 'cocstatus', 'currentfunction', 'filename' ] ], 'right': [ [ 'lineinfo' ], [ 'fileencoding', 'fileformat', 'filetype' ] ]  }, 'component_function': { 'gitbranch': 'gitbranch#name','cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction' }, }
 
 " Lightline Coc Config
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
