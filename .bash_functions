@@ -110,8 +110,19 @@ function newscreen()
 }
 
 function stenv() {
-    source env/bin/activate
-    clear
+    ENVFILE=env/bin/activate
+    BINFILE=bin/activate
+    if [ -f "${ENVFILE}" ]; then
+        source ./env/bin/activate
+        pip3 install wheel pynvim
+        clear
+    elif [ -f "${BINFILE}" ]; then
+        source ./bin/activate
+        pip3 install wheel pynvim
+        clear
+    else
+        echo "Can't find an unamed or env-named virtualenvironment"
+    fi
 }
 
 # export the functions to the shell session

@@ -21,11 +21,11 @@ Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'alfredodeza/pytest.vim'
 Plug 'mfukar/robotframework-vim'
 Plug 'altercation/vim-colors-solarized'
-Plug 'ryanoasis/vim-devicons'
+Plug 'ryanoasis/vim-webdevicons'
 Plug 'nvie/vim-flake8'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'luochen1990/rainbow'
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
 Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sirver/ultisnips'
@@ -79,10 +79,6 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-" Devicons Enablement
-let g:webdevicons_enable_airline_statusline=1
-let g:webdevicons_enable_airline_tabline=1
-
 "Rainbow Brackets Options
 let g:rainbow_active=1
 
@@ -92,6 +88,13 @@ if exists("g:loaded_webdevicons")
 
 " Status Line Updates
 set laststatus=2
+
+" Web Dev Icons Settings
+" --------
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 
 " ----------------
 
@@ -242,6 +245,7 @@ let g:NERDTreeWinPos="right"
 let g:NERDTreeWinSize=45
 let NERDTreeShowLineNumbers=1
 let NERDTreeShowHidden=1
+
 " NerdTree Git Plugin Symbols
 let g:NERDTreeGitStatusUseNerdFonts = 1
 " make sure relative line numbers are used
@@ -261,16 +265,29 @@ endif
 " Lightline Configuration
 "--------------------------- "
 
+" Lightline functions
+" --------
 " coc options for lightline
 function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
 endfunction
 
-" Lightline Options
-let g:lightline = { 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'gitbranch' ], [ 'cocstatus', 'currentfunction', 'filename' ] ], 'right': [ [ 'lineinfo' ], [ 'fileencoding', 'fileformat', 'filetype' ] ]  }, 'component_function': { 'gitbranch': 'gitbranch#name','cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction' }, }
+" DevIcon FileType
+function! DeviconsFileType()
+    return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfunction
+
+" DevIcon FileFormat
+function! MyFileformat()
+    return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+endfunction
+
+" Lightline Configuration
+let g:lightline = { 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'gitbranch' ], [ 'cocstatus', 'currentfunction', 'filename' ] ], 'right': [ [ 'lineinfo' ], [ 'fileencoding', 'fileformat', 'filetype' ] ]  }, 'component_function': { 'gitbranch': 'gitbranch#name','cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction', 'filetype': 'DeviconsFileType', 'fileformat': 'DeviconsFileFormat' }, }
 
 " Lightline Coc Config
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+
 
 " ----------------
 
