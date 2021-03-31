@@ -278,7 +278,7 @@ function! DeviconsFileType()
 endfunction
 
 " DevIcon FileFormat
-function! MyFileformat()
+function! DeviconsFileFormat()
     return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
 
