@@ -188,8 +188,8 @@ cnoremap <c-l> <Right>
 " Navigation
 map <C-t>k :tabr<cr>
 map <C-t>j :tabl<cr>
-map <C-t>l :tabp<cr>
-map <C-t>h :tabn<cr>
+map <C-t>l :tabn<cr>
+map <C-t>h :tabp<cr>
 " Close Current Tab
 map <C-t>c :tabc<cr>
 " Close all other Tabs
