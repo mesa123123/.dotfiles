@@ -105,7 +105,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 "  ----
 " Terminal Alias and Keyboard Settings
 if has('nvim')
-    cabbrev bterm below new<CR>:terminal
+    cabbrev bterm below new<CR>:terminal 
 else
     cabbrev bterm bo term
 endif
@@ -118,9 +118,16 @@ nmap <silent><expr><leader>t empty(TerminalBufferNumbers())  ?
             \ ':bterm<CR><c-\><c-n>:res-10<CR>icls<CR>' : 
             \ ':let ntbn = TerminalBufferNumbers()[0]<CR>:exe "sbuffer".ntbn<CR>:res-10<CR>i' 
 " Hide Terminal
+if has('nvim')
+    tnoremap <ESC> <c-\><c-n>:q<CR> 
+endif
 tnoremap <silent><leader>t <c-\><c-n>:q<CR>
 " Exit Terminal Completely
-tnoremap <silent><leader>q exit<CR>
+if has('nvim')
+    tnoremap <silent><leader>q exit<CR><CR>
+else
+    tnoremap <silent><leader>q exit<CR>
+endif
 " ----------------
 
 " ------------------------------"
