@@ -1,10 +1,10 @@
 " --------------------------------"
 " Priority Settings
 " --------------------------------"
-
 " Set No Compatible allows Coc to work for some weird reason?
 set nocompatible
-
+" set the current directory to a variable
+let g:cwd = getcwd()
 " set the mapleader
 let mapleader = "\\"
 
@@ -64,7 +64,6 @@ set nofoldenable
 set encoding=UTF-8
 set noshowmode
 set splitbelow
-
 " Set up FileType functionality
 filetype on
 filetype plugin indent on
@@ -115,7 +114,7 @@ function TerminalBufferNumbers()
     return filter(map(getbufinfo(), 'v:val.bufnr'), 'getbufvar(v:val,"&buftype") is# "terminal"')
 endfunction
 nmap <silent><expr><leader>t empty(TerminalBufferNumbers())  ? 
-            \ ':bterm<CR><c-\><c-n>:res-10<CR>icls<CR>' : 
+            \ ':bterm<CR><c-\><c-n>:res-10<CR>icls && cd ' . g:cwd . '<CR>' : 
             \ ':let ntbn = TerminalBufferNumbers()[0]<CR>:exe "sbuffer".ntbn<CR>:res-10<CR>i' 
 " Hide Terminal
 if has('nvim')

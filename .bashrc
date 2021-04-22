@@ -201,6 +201,7 @@ if [[ ${WSLON} == true ]]; then
 	# Now stuff that differs between versions of WSL 
 	if [[ $WSL_VERSION == 1 ]]; then	
 		export DOCKER_HOST="tcp://localhost:2375"
+        export BROWSER="explorer.exe"
     fi
 fi
 
@@ -273,7 +274,7 @@ fi
 
 
 # ---- Automated Shell Commands For Startup ----
-# Starting Proxy Services
+# Starting Proxy Services If I'm at work
 if [ "$USER" == "m808752" ] && [ "${WSLON}" == "true" ]; then
 	# If the service is already running don't start it up..	
 	if [[ "$(service cntlm status)" == *"* cntlm is not running"* ]]; then
@@ -294,12 +295,6 @@ if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "
     fi
 fi
 
-# IF I'm running on virtual box I need a custom screen size implemented
-VirtualScreenCheck=$(xrandr | grep 'Virtual-1');
-if [[ "${VirtualScreenCheck}" == *"Virtual-1"* ]]; then
-    newscreen Virtual-1 "1904x1050_60.00" 
-    xrandr --output Virtual-1 --mode "\"1904x1050_60.00\""
-fi
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	
@@ -307,8 +302,10 @@ if [[ $WSLON == true ]]; then
         export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
         export LIBGL_ALWAYS_INDIRECT=1
         echo "$WORK_PWD" | sudo /etc/init.d/dbus start &> /dev/null 
-    else 
-        export DISPLAY="127.0.0.1:0.0"
+    else
+        export DISPLAY=127.0.0.1:0.0
     fi
 fi
+
+
 
