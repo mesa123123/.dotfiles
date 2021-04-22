@@ -23,6 +23,7 @@ alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y'
 #  Programmes etc.
 alias svim='sudo vim'
 alias gnpm='sudo npm -g'
+alias pip='pip3'
 alias spip='sudo pip3'
 alias prpy='pipenv run python'
 
