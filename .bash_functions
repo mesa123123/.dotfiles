@@ -129,3 +129,4 @@ function stenv() {
 export -f devhome
 export -f dvx
 export -f newscreen
+export -f stenv
