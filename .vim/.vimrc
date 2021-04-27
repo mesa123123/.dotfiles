@@ -25,12 +25,12 @@ Plug 'ryanoasis/vim-webdevicons'
 Plug 'nvie/vim-flake8'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'luochen1990/rainbow'
-" Plug 'scrooloose/syntastic'
 Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sirver/ultisnips'
 Plug 'itchyny/vim-gitbranch'
 Plug 'mechatroner/rainbow_csv'
+Plug 'ekialinin/dockerfile.vim'
 
 call plug#end()
 
