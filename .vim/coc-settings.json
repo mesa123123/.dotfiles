@@ -1,6 +1,7 @@
 {
     "suggest.numberSelect": true,
     // Enable Codelens, has something to do with code actions
+    "http.proxyStrictSSL": false,
     "codeLens.enable": true,
     "languageserver": {
         "ccls": {
