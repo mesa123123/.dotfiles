@@ -42,7 +42,9 @@
     },
     "javascript.suggestionActions.enabled": false,
     "coc.preferences.extensionUpdateCheck": "daily",
-    "python.jediEnabled": true,
+    "pyright.enable": true,
+    "python.linting.pylintCategorySeverity.warning": "Information",
+    "python.linting.pycodestyleCategorySeverity.E": "Information",
     "markdownlint.config": {
         "line-length": false
     }

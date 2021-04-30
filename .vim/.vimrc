@@ -7,6 +7,9 @@ set nocompatible
 let g:cwd = getcwd()
 " set the mapleader
 let mapleader = "\\"
+" --------------------------------"
+" Plugin Loading and Settings
+" --------------------------------"
 
 " Load Plugings
 " --------
@@ -33,8 +36,14 @@ Plug 'mechatroner/rainbow_csv'
 Plug 'ekialinin/dockerfile.vim'
 
 call plug#end()
+" Plugin Settings
+" --------
+let g:plug_timeout = 120
+let g:plug_retries = 5
+let g:plug_threads = 32
 
 " ----------------
+
 
 " --------------------------------"
 " Neovim Specific Settings
