@@ -12,12 +12,12 @@ function makeDevDir() {
    echo "Project "${1}" doesn't currently exist, create project?"
    echo "(y/n)"
    # Store User Input in Variable
-   read ANSWER
+   read -r ANSWER
    # If yes, create folder and git repo
    if [ "${ANSWER}" == "y" ]; then 
         mkdir ~/dev/projects/"${1}"
         echo "Project Folder Created, Iniatlize Git Repo?"
-        read REPOFY
+        read -r REPOFY
         echo "(y/n)"
         [ "${REPOFY}" == "y" ] && git init ~/dev/projects/"${1}"
         cd ~/dev/projects/"${1}"
@@ -30,18 +30,28 @@ function makeDevDir() {
 # Function to open a certain development project from the windows dev file
 function devhome()
 {
+    # If theres no link to the dev folder on windows, link it 
     wsldevcheck
     # If no arguement is given simply go to the dev/projects home folder
 	if [[ -z "$1" ]]; then
 		echo "No project named, please enter one of the following:"	
 		ls ~/dev/Projects
-        echo "Or enter name of new project"
+        echo "or use -m to create new name of new project"
+	#  if i use the cmd switch -m then i can create a new project
+    elif [[ "$1" == "-m" ]]; then 
+        if [[ -z "$2" ]]; then
+            echo "no new project named, please enter name of new project"
+            read -r PROJECT_NAME
+            makeDevDir "${PROJECT_NAME}"    
+        else
+            makeDevDir "$2" 
+        fi
 	# If I enter the word go, it just goes to the folder	
-	elif [[ "$1" == "go" ]]; then
+    elif [[ "$1" == "go" ]]; then
         echo "To Projects? (y/n)"
-        read PROJECTS
+        read -r PROJECTS
         if [[ "${PROJECTS}" == "y" ]]; then
-            cd ~/dev/projects/
+            cd ~/dev/projects/ || exit;
         else    
             cd ~/dev/ || exit;
         fi
@@ -51,7 +61,7 @@ function devhome()
 			ls ~/dev/Projects/
 		# if the arguement given is the name of a project go to that project folder	
 		else
-            if [ -d ~/dev/Projects/"${1}" ]; then cd ~/dev/Projects/"${1}" || exit; else makeDevDir "$1"; fi
+            if [ -d ~/dev/Projects/"${1}" ]; then cd ~/dev/Projects/"${1}" || exit; else echo "No project named ${1} please enter the name of a valid project or use command line switch -m to create one"; fi
             if [[ $? == 1 ]]; then 
                 return 1;
             fi
