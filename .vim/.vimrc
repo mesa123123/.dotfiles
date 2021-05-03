@@ -33,7 +33,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sirver/ultisnips'
 Plug 'itchyny/vim-gitbranch'
 Plug 'mechatroner/rainbow_csv'
-Plug 'ekialinin/dockerfile.vim'
+Plug 'ekalinin/Dockerfile.vim'
 
 call plug#end()
 " Plugin Settings
