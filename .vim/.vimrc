@@ -154,6 +154,8 @@ let g:pymode_lint_on_write = 0
 let g:pymode_lint_on_fly = 0
 au FileType python setlocal et ts=4 sw=4 sts=4
 
+" JenkinsFile
+au BufNewFile,BufRead Jenkinsfile set filetype=groovy
 
 " Markdown
 " --------
