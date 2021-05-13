@@ -136,6 +136,10 @@ if has('nvim')
 else
     tnoremap <silent><leader>q exit<CR>
 endif
+
+" Get rid of terminal line numbers
+" --------
+autocmd TermOpen * setlocal nonumber norelativenumber
 " ----------------
 
 " ------------------------------"
