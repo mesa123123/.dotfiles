@@ -232,6 +232,7 @@ if [ "$USER" == "m808752" ] || [ "$USER" == "M808752" ]; then
     export AIRFLOW_HOME="/opt/airflow"
     export GEM_HOME="/home/$USER/.ruby"
     export PATH="$PATH:$GEM_HOME/bin"
+    export PATH="$PATH:$(which solargraph)"
     if [[ ${WSLON} == true ]]; then
         export LEARNHOME="$WINHOME/dev/learning/"
     else

@@ -48,5 +48,6 @@
     "python.linting.pycodestyleCategorySeverity.E": "Information",
     "markdownlint.config": {
         "line-length": false
-    }
+    },
+    "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph"
 }
