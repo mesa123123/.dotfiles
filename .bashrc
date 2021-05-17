@@ -230,6 +230,8 @@ fi
 if [ "$USER" == "m808752" ] || [ "$USER" == "M808752" ]; then
 	export POLYNOTEHOME="/opt/polynote"
     export AIRFLOW_HOME="/opt/airflow"
+    export GEM_HOME="/home/$USER/.ruby"
+    export PATH="$PATH:$GEM_HOME/bin"
     if [[ ${WSLON} == true ]]; then
         export LEARNHOME="$WINHOME/dev/learning/"
     else
