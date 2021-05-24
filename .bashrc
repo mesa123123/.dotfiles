@@ -222,6 +222,8 @@ if [ "$USER" == "bowmanpete" ]; then
 	export PATH=$PATH:$EXERCISM_HOME/
 	export PATH=$PATH:$HADOOP_HOME/bin
 	export PATH=$PATH:$CODE_HOME/bin
+    # Chef Setup adds chef workstation stuff to the environment variables
+    eval "$(chef shell-init bash)"
 	# Environment Variable Modifiers
 	# export JAVA_OPTS="$JAVA_OPTS -Djava.awt.headless=true"
 fi
@@ -231,8 +233,6 @@ if [ "$USER" == "m808752" ] || [ "$USER" == "M808752" ]; then
 	export POLYNOTEHOME="/opt/polynote"
     export AIRFLOW_HOME="/opt/airflow"
     export GEM_HOME="/home/$USER/.ruby"
-    export PATH="$PATH:$GEM_HOME/bin"
-    export PATH="$PATH:$(which solargraph)"
     if [[ ${WSLON} == true ]]; then
         export LEARNHOME="$WINHOME/dev/learning/"
     else
@@ -247,7 +247,8 @@ export PATH=${PATH}:${SCALA_HOME}/bin
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
-
+export PATH="$PATH:$GEM_HOME/bin"
+export PATH="$PATH:$(which solargraph)"
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
