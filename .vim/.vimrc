@@ -20,7 +20,7 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'yggdroot/indentline'
 Plug 'plasticboy/vim-markdown'
-Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'alfredodeza/pytest.vim'
 Plug 'mfukar/robotframework-vim'
 Plug 'altercation/vim-colors-solarized'
@@ -34,6 +34,7 @@ Plug 'sirver/ultisnips'
 Plug 'itchyny/vim-gitbranch'
 Plug 'mechatroner/rainbow_csv'
 Plug 'ekalinin/Dockerfile.vim'
+Plug 'arzg/vim-rust-syntax-ext'
 
 call plug#end()
 " Plugin Settings
