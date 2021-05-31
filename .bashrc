@@ -313,3 +313,4 @@ fi
 
 
 
+. "$HOME/.cargo/env"
