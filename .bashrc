@@ -226,6 +226,8 @@ if [ "$USER" == "bowmanpete" ]; then
     eval "$(chef shell-init bash)"
 	# Environment Variable Modifiers
 	# export JAVA_OPTS="$JAVA_OPTS -Djava.awt.headless=true"
+    # Setup Rust Variables
+    . "$HOME/.cargo/env"
 fi
 
 # Work Environment Variables
@@ -311,6 +313,3 @@ if [[ $WSLON == true ]]; then
     fi
 fi
 
-
-
-. "$HOME/.cargo/env"
