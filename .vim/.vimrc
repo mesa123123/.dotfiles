@@ -35,6 +35,7 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'mechatroner/rainbow_csv'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'rust-lang/rust.vim'
+Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
 
 call plug#end()
