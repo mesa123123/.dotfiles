@@ -7,6 +7,8 @@ set nocompatible
 let g:cwd = getcwd()
 " set the mapleader
 let mapleader = "\\"
+" Set Coc_Config_Home
+let g:coc_config_home = '/home/$USER/.vim/'
 " --------------------------------"
 " Plugin Loading and Settings
 " --------------------------------"
@@ -316,7 +318,7 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " ----------------
 
 " --------------------------------------------"
-" COC Options
+" Coc Options
 " --------------------------------------------"
 " Recommended Options
 " --------
