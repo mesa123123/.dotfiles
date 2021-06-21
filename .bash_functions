@@ -135,6 +135,7 @@ function stenv() {
     fi
 }
 
+
 # export the functions to the shell session
 export -f devhome
 export -f dvx

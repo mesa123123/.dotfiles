@@ -114,9 +114,10 @@ function create_symlink()
 	# Put the named file in a variable
 	FILEARG=${1}
 	# Filter out subfolders and create them if necessary, this means checking the arguement for the character `/` meaning there is a subfolder structure
-	if [[ "$FILEARG" == *"\/"* ]]; then
-		create_subfolders $FILEARG
-	fi
+	#TODO
+    # if [[ "$FILEARG" == *"\/"* ]]; then
+	# 	create_subfolders $FILEARG
+	# fi
 	# Create a variable that has the relative path to home
 	FILEFORSYNC=~/$FILEARG
 	# Check if the file exists on the client	

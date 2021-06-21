@@ -26,7 +26,7 @@ alias gnpm='sudo npm -g'
 alias pip='pip3'
 alias spip='sudo pip3'
 alias prpy='pipenv run python'
-
+alias bat='batcat'
 # Screen Commands
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
@@ -47,4 +47,16 @@ if [ "$WSLON" == "true" ]; then
     fi
 else
     alias chrome='google-chrome'
+fi
+
+# --------
+# Fancy Commands
+# --------
+# If batcat is installed use that instead of cat
+if [[ "$(dpkg-query -W -f='${Status} ${Version}\n' bat)" == *"ok"* ]]; then
+    alias cat='batcat'
+fi
+# If bottom is installed use that
+if [[ "$(dpkg-query -W -f='${Status} ${Version}\n' bottom)" == *"ok"* ]]; then
+    alias top='btm'
 fi
