@@ -18,8 +18,7 @@ alias editvim="vim ~/.vim/.vimrc"
 alias edittmux="vim ~/.tmux.conf"
 
 # Package Management
-alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 python -m pip --verbose install && python -m pip install pip --upgrade --verbose && sudo npm -g update'
-
+alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo npm -g update'
 #  Programmes etc.
 alias svim='sudo vim'
 alias gnpm='sudo npm -g'
