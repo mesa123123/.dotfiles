@@ -184,7 +184,7 @@ export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
 export VIM_INIT='source ~/.vim/.vimrc'
 export VIMINIT='source ~/.vim/.vimrc'
-
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 # VIM or NEOVIM?
 if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
     alias vim="nvim"
@@ -253,6 +253,8 @@ export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
 export PATH="$PATH:$GEM_HOME/bin"
 export PATH="$PATH:$(which solargraph)"
+export PATH="$PATH:/c/Program Files/Oracle/VirtualBox"
+
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
