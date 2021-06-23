@@ -228,6 +228,8 @@ if [ "$USER" == "bowmanpete" ]; then
 	# export JAVA_OPTS="$JAVA_OPTS -Djava.awt.headless=true"
     # Setup Rust Variables
     . "$HOME/.cargo/env"
+    # No LEARNHOME variable in home dir 
+    export LEARNHOME="/home/${USER}/dev/learning/"
 fi
 
 # Work Environment Variables
