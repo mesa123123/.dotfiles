@@ -12,6 +12,7 @@ alias resetbash='source ~/.bashrc'
 alias editbash='vim ~/.bashrc && source ~/.bashrc'
 alias editalias='vim ~/.bash_aliases && source ~/.bash_aliases'
 alias editfuncs="vim ~/.bash_functions && source ~/.bash_functions"
+alias editsecs="vim ~/.bash_secrets && source ~/.bash_secrets"
 alias editaptsource='sudo vim /etc/apt/sources.list'
 alias editexit="vim ~/.bash_exit && source ~/.bash_exit"
 alias editvim="vim ~/.vim/.vimrc"
@@ -25,7 +26,6 @@ alias gnpm='sudo npm -g'
 alias pip='pip3'
 alias spip='sudo pip3'
 alias prpy='pipenv run python'
-alias bat='batcat'
 # Screen Commands
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
@@ -55,7 +55,11 @@ fi
 if [[ "$(dpkg-query -W -f='${Status} ${Version}\n' bat)" == *"ok"* ]]; then
     alias cat='batcat'
 fi
-# If bottom is installed use that
+# If bottom is installed use that use that instead of top
 if [[ "$(dpkg-query -W -f='${Status} ${Version}\n' bottom)" == *"ok"* ]]; then
     alias top='btm'
+fi
+# If tldr is installed use that instead of man
+if [[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]]; then
+    alias man='tldr'
 fi

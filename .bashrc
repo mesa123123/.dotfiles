@@ -135,6 +135,12 @@ fi
 
 # ---- End Of Bash Configuration Files ----
 
+# ---- Function that adds text to files if they are not currently there ----
+configadd() {
+    grep -qxF "${2}" $1 || echo "${2}" >> $1
+}
+
+
 # ----------- Revert Path back to the PROFILE output as bashrc tends to be run more than once ------------------------------
 if [[ -n "$PROFILE_PATH" ]]; then
     export PATH=$PROFILE_PATH
@@ -178,13 +184,23 @@ export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"
 export SBT_HOME="/usr/bin/sbt"
+export CARGO_HOME="/home/$USER/.cargo"
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
 export VIM_INIT='source ~/.vim/.vimrc'
 export VIMINIT='source ~/.vim/.vimrc'
+# Helps Vagrant along...
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
+# Add Rust Environments
+. "$HOME/.cargo/env"
+
+# Chef Setup adds chef workstation stuff to the environment variables
+eval "$(chef shell-init bash)"
+
 # VIM or NEOVIM?
 if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
     alias vim="nvim"
@@ -216,18 +232,12 @@ if [ "$USER" == "bowmanpete" ]; then
 	# Adding Home User Variables to Path
 	export PATH=$PATH:$ANDROID_HOME/emulator
 	export PATH=$PATH:$ANDROID_HOME/tools
-	export PATH=$PATH:$ANDROID_HOME/tools/bin
+	export PATH=$PATH:$ANDROID_1OME/tools/bin
 	export PATH=$PATH:$ANDROID_HOME/platform-tools
 	export PATH=$PATH:/home/$USER/android-studio/bin
 	export PATH=$PATH:$EXERCISM_HOME/
 	export PATH=$PATH:$HADOOP_HOME/bin
 	export PATH=$PATH:$CODE_HOME/bin
-    # Chef Setup adds chef workstation stuff to the environment variables
-    eval "$(chef shell-init bash)"
-	# Environment Variable Modifiers
-	# export JAVA_OPTS="$JAVA_OPTS -Djava.awt.headless=true"
-    # Setup Rust Variables
-    . "$HOME/.cargo/env"
     # No LEARNHOME variable in home dir 
     export LEARNHOME="/home/${USER}/dev/learning/"
 fi
@@ -272,6 +282,9 @@ if [ "$USER" == "m808752" ] && [[ ${WSLON} == true ]]; then
 	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=${WSL2IP} -Dhttp.proxyPort=3128 -Dhttps.proxyHost=${WSL2IP} -Dhttps.proxyPort=3128"
         echo "2"
     fi	
+    # Rust Proxies
+    configadd $CARGO_HOME/config.toml "[http]"
+    configadd $CARGO_HOME/config.toml "proxy = \"localhost:3130\""
 fi
 
 # Powerline Setup

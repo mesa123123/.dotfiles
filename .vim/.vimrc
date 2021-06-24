@@ -41,6 +41,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
 
 call plug#end()
+
 " Plugin Settings
 " --------
 let g:plug_timeout = 120
@@ -49,6 +50,12 @@ let g:plug_threads = 32
 
 " ----------------
 
+" --------------------------------"
+" Configure Vimrc from Vim
+" --------------------------------"
+cabbrev editvim e ~/.vim/.vimrc
+cabbrev updatevim source ~/.vim/.vimrc
+" ----------------
 
 " --------------------------------"
 " Neovim Specific Settings
@@ -182,6 +189,11 @@ au BufRead,BufNewFile *.draft set filetype=markdown
 " HCL Language
 au BufRead,BufNewFile *.hcl set filetype=ini
 
+" Vagrant Files
+augroup vagrant
+  au!
+  au BufRead,BufNewFile Vagrantfile set filetype=ruby
+augroup END
 
 " ----------------
 
