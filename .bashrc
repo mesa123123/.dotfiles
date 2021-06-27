@@ -96,6 +96,9 @@ alias l='ls -CF'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # --------
+# Rust Environment has to be added here as this will allow the fancy unix commands to load properly
+# Add Rust Environments
+. "$HOME/.cargo/env"
 
 # --------
 # ---- Bash Configuration Files ----
@@ -197,8 +200,6 @@ export VIMINIT='source ~/.vim/.vimrc'
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
-# Add Rust Environments
-. "$HOME/.cargo/env"
 
 # Chef Setup adds chef workstation stuff to the environment variables
 eval "$(chef shell-init bash)"
