@@ -199,7 +199,7 @@ export VIMINIT='source ~/.vim/.vimrc'
 # Helps Vagrant along...
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-
+export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/bowmanpete/dev/"
 
 # Chef Setup adds chef workstation stuff to the environment variables
 eval "$(chef shell-init bash)"
