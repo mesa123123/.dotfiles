@@ -51,6 +51,10 @@ fi
 # --------
 # Fancy Commands
 # --------
+if [[ $WSLON == "true" ]]; then
+    alias cmd="$CMD_HOME"
+fi
+
 # If batcat is installed use that instead of cat
 if [[ "$(dpkg-query -W -f='${Status} ${Version}\n' bat)" == *"ok"* ]]; then
     alias cat='batcat'

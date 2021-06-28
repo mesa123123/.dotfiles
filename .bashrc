@@ -96,9 +96,30 @@ alias l='ls -CF'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # --------
+# ---- Environment Configs ----
+# --------
+
+# ----  WSL Settings ----
+# First Check if you are running WSL Environment or not
+CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
+# Create and export the WSLON variable to the environment
+WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
+export WSLON
+# Special WSL Paths for Interoperability
+if [[ $WSLON == true ]]; then
+	export PATH=$PATH:/c/Windows/System32/
+    export CMD_HOME="/c/Windows/System32/cmd.exe"
+    export PATH=$PATH:$CMD_HOME
+    # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
+    export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
+    export PATH=$PATH:$POWERSHELL_HOME
+fi
+# ---- Rust Env ----
 # Rust Environment has to be added here as this will allow the fancy unix commands to load properly
 # Add Rust Environments
 . "$HOME/.cargo/env"
+
+# --------
 
 # --------
 # ---- Bash Configuration Files ----
@@ -149,23 +170,6 @@ if [[ -n "$PROFILE_PATH" ]]; then
     export PATH=$PROFILE_PATH
 fi
 
-# ----  WSL Settings ----
-# First Check if you are running WSL Environment or not
-CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
-# Create and export the WSLON variable to the environment
-WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
-export WSLON
-
-# Special WSL Paths for Interoperability
-if [[ $WSLON == true ]]; then
-	export PATH=$PATH:/c/Windows/System32/
-    export CMD_HOME="/c/Windows/System32/cmd.exe"
-    export PATH=$PATH:$CMD_HOME
-    # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
-    export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
-    export PATH=$PATH:$POWERSHELL_HOME
-fi
-
 # Check WSL_VERSION by going through interop channels
 if [[ $WSLON == true ]]; then
 	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
@@ -199,7 +203,7 @@ export VIMINIT='source ~/.vim/.vimrc'
 # Helps Vagrant along...
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/bowmanpete/VirtualBox VMs"
+export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
 
 # Chef Setup adds chef workstation stuff to the environment variables
 eval "$(chef shell-init bash)"
