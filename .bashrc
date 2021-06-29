@@ -96,8 +96,13 @@ alias l='ls -CF'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # --------
-# ---- Environment Configs ----
+# ---- Priority Environment Configs ----
 # --------
+
+# ----------- PROFILE Revert ------------------------------
+if [[ -n "$PROFILE_PATH" ]]; then
+    export PATH=$PROFILE_PATH
+fi
 
 # ----  WSL Settings ----
 # First Check if you are running WSL Environment or not
@@ -106,13 +111,16 @@ CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
 WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
 export WSLON
 # Special WSL Paths for Interoperability
-if [[ $WSLON == true ]]; then
+if [[ ${WSLON} == "true" ]]; then
 	export PATH=$PATH:"/c/Windows/System32"
     export CMD_HOME="/c/Windows/System32/cmd.exe"
     # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
     export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
     export PATH=$PATH:$POWERSHELL_HOME
 fi
+# ---- End of WSL Settings ---- 
+# ----
+
 # ---- Rust Env ----
 # Rust Environment has to be added here as this will allow the fancy unix commands to load properly
 # Add Rust Environments
@@ -163,11 +171,6 @@ configadd() {
     grep -qxF "${2}" $1 || echo "${2}" >> $1
 }
 
-
-# ----------- Revert Path back to the PROFILE output as bashrc tends to be run more than once ------------------------------
-if [[ -n "$PROFILE_PATH" ]]; then
-    export PATH=$PROFILE_PATH
-fi
 
 # Check WSL_VERSION by going through interop channels
 if [[ $WSLON == true ]]; then

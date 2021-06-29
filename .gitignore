@@ -1,6 +1,2 @@
 node_modules/	
 *.log
-.config/
-!.config/powerline/*
-!.config/coc/*
-
