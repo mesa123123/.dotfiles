@@ -112,7 +112,7 @@ WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
 export WSLON
 # Special WSL Paths for Interoperability
 if [[ ${WSLON} == "true" ]]; then
-	export PATH=$PATH:"/c/Windows/System32"
+	export PATH=$PATH:"/c/Windows/System32/"
     export CMD_HOME="/c/Windows/System32/cmd.exe"
     # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
     export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
