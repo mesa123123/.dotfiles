@@ -20,6 +20,8 @@ if [[ $WSLON == true ]] && [[ -f "./wslbin/*" ]]; then
     WSLBINFILES=($(ls "$WSLBINDIR"*))
 fi
 
+SOURCEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # In order to get around a proxy sometimes you gotta start the browser, ergo you need to know where
 # your browser is
 BROWSERCHROME="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
@@ -139,12 +141,12 @@ function create_symlink()
 		else
 			mv /home/$USER/${1} /home/$USER/.dotfilesbackup/${1}
 			# Then create a symlink file from this repo	
-		    ln -s $(pwd)/$FILEARG "${FILEFORSYNC}"
+		    ln -s "${SOURCEDIR}/$FILEARG" "${FILEFORSYNC}"
 		fi
 	# If the file doesn't current exist on the client	
 	else
 		# Create the symlink
-		ln -s $(pwd)/$FILEARG "${FILEFORSYNC}"
+		ln -s "${SOURCEDIR}/$FILEARG" "${FILEFORSYNC}"
 	fi
 }
 
