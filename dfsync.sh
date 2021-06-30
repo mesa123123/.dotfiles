@@ -109,8 +109,12 @@ function create_symlink()
 {
 	# If not, create a dotfiles backup directory (if not already created) 
 	if [ ! -d ~/.dotfilesbackup ]; then
-			mkdir ~/.dotfilesbackup
+        mkdir ~/.dotfilesbackup
 	fi
+    # Apparently we have to clone the whole damn file tree -_-
+    if [ ! -d ~/.dotfilesbackup/.vim ]; then
+        mkdir ~/.dotfilesbackup/.vim
+    fi
 	# Put the named file in a variable
 	FILEARG=${1}
     # Create a relative link in the home directory
@@ -124,13 +128,13 @@ function create_symlink()
        FILEFORSYNC=~/$FILEARG
     fi
 	# Check if the file exists on the client	
-	if [ -f "${FILEFORSYNC}" ]; then
+	if [ -f "${FILEFORSYNC}" ] || [ -d "${FILEFORSYNC}" ]; then
 		# Check if its not already a symlink to this repo
 		if [ -L "${FILEFORSYNC}" ]; then
 			# If yes, do nothing	
 			return 
 		else
-			mv ${FILEFORSYNC} ~/.dotfilesbackup/$1
+			mv /home/$USER/${1} ~/.dotfilesbackup/${1}
 			# Then create a symlink file from this repo	
 		    ln -s $(pwd)/$FILEARG "${FILEFORSYNC}"
 		fi
