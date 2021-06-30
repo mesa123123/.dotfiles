@@ -128,9 +128,8 @@ function create_symlink()
        FILEFORSYNC="/home/$USER/$(IFS="/";echo "${fileArr[*]}";IFS=$' \t\n')/"
     else
         # Regular Files should be all good
-       FILEFORSYNC=~/$FILEARG
+       FILEFORSYNC="/home/${USER}/${FILEARG}"
     fi
-    echo "${FILEFORSYNC} ${FILEARG}"
 	# Check if the file exists on the client	
 	if [ -f "${FILEFORSYNC}" ] || [ -d "${FILEFORSYNC}" ]; then
 		# Check if its not already a symlink to this repo
@@ -138,7 +137,7 @@ function create_symlink()
 			# If yes, do nothing	
 			return 
 		else
-			mv /home/$USER/${1} ~/.dotfilesbackup/${1}
+			mv /home/$USER/${1} /home/$USER/.dotfilesbackup/${1}
 			# Then create a symlink file from this repo	
 		    ln -s $(pwd)/$FILEARG "${FILEFORSYNC}"
 		fi
