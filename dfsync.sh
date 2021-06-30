@@ -13,7 +13,7 @@ LOGFILE=~/.dotfiles/synclogs.log
 # ------- Global Script Variables -------
 
 declare -a TRACKEDFILESFORSYNC
-TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf" ".vim/.vimrc" ".config/coc/extensions/package.json" ".vim/coc-settings.json" ".vim/UltiSnips/" ".vim/spell/" ".config/nvim/")
+TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf" ".vim/.vimrc" ".config/coc/extensions/package.json" ".vim/coc-settings.json" ".vim/UltiSnips" ".vim/spell" ".config/nvim")
 # If its wsl add the wslbin directory too, the bashrc already has functionality to sort out the wsl_on variable
 if [[ $WSLON == true ]] && [[ -f "./wslbin/*" ]]; then
     WSLBINDIR=".wslbin/"
@@ -113,15 +113,18 @@ function create_symlink()
 	fi
 	# Put the named file in a variable
 	FILEARG=${1}
-	# Filter out subfolders and create them if necessary, this means checking the arguement for the character `/` meaning there is a subfolder structure
-	#TODO
-    # if [[ "$FILEARG" == *"\/"* ]]; then
-	# 	create_subfolders $FILEARG
-	# fi
-	# Create a variable that has the relative path to home
-	FILEFORSYNC=~/$FILEARG
+    # Create a relative link in the home directory
+    if [ -d "${FILEARG}" ]; then
+        # If the file for sync is a folder then remove the last part of the relative home link, for some reason this is a quirk with the ln -s command. There's likely a better way to do this but I can't be bothered learning about string manipulation in shell right now...
+       IFS="/" read -r -a fileArr <<< ${FILEARG}
+       unset fileArr[${#fileArr[@]}-1];
+       FILEFORSYNC="/home/$USER/$(IFS="/";echo "${fileArr[*]}";IFS=$' \t\n')/"
+    else
+        # Regular Files should be all good
+       FILEFORSYNC=~/$FILEARG
+    fi
 	# Check if the file exists on the client	
-	if [ -f ${FILEFORSYNC} ]; then
+	if [ -f "${FILEFORSYNC}" ]; then
 		# Check if its not already a symlink to this repo
 		if [ -L "${FILEFORSYNC}" ]; then
 			# If yes, do nothing	
@@ -129,12 +132,12 @@ function create_symlink()
 		else
 			mv ${FILEFORSYNC} ~/.dotfilesbackup/$1
 			# Then create a symlink file from this repo	
-			ln -s $(pwd)/$FILEARG ${FILEFORSYNC}
+		    ln -s $(pwd)/$FILEARG "${FILEFORSYNC}"
 		fi
 	# If the file doesn't current exist on the client	
 	else
 		# Create the symlink
-		ln -s $(pwd)/$FILEARG ${FILEFORSYNC}
+		ln -s $(pwd)/$FILEARG "${FILEFORSYNC}"
 	fi
 }
 
