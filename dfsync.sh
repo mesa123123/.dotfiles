@@ -115,6 +115,9 @@ function create_symlink()
     if [ ! -d ~/.dotfilesbackup/.vim ]; then
         mkdir ~/.dotfilesbackup/.vim
     fi
+    if [ ! -d ~/.dotfilesbackup/.config ]; then
+        mkdir ~/.dotfilesbackup/.config
+    fi
 	# Put the named file in a variable
 	FILEARG=${1}
     # Create a relative link in the home directory
@@ -127,6 +130,7 @@ function create_symlink()
         # Regular Files should be all good
        FILEFORSYNC=~/$FILEARG
     fi
+    echo "${FILEFORSYNC} ${FILEARG}"
 	# Check if the file exists on the client	
 	if [ -f "${FILEFORSYNC}" ] || [ -d "${FILEFORSYNC}" ]; then
 		# Check if its not already a symlink to this repo
