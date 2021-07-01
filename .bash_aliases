@@ -26,6 +26,7 @@ alias gnpm='sudo npm -g'
 alias pip='pip3'
 alias spip='sudo pip3'
 alias prpy='pipenv run python'
+alias dotsync='~/.dotfiles/dfsync.sh -m begin -r no'
 # Screen Commands
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
