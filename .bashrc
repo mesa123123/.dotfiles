@@ -315,17 +315,17 @@ if [ "$USER" == "m808752" ] && [ "${WSLON}" == "true" ]; then
 fi
 
 # Configure .dotfiles
-if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
-    # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
-    # windows so the client needs to know what to add to the path and what not to in order properly 
-    # configure dotfiles on the client
-    if [[ $WSLON == true ]]; then
-        export PATH="$PATH:~/.wslbin"
-        [ -f ~/.repos ] && ~/.dotfiles/dfsync.sh -m begin -r yes >> ~/.dotfiles/synclogs.log || ~/.dotfiles/dfsync.sh -m begin -r no >> ~/.dotfiles/synclogs.log &
-    else
-        [ -f ~/.repos ] && ~/.dotfiles/dfsync.sh -m begin -r yes >> ~/.dotfiles/synclogs.log || ~/.dotfiles/dfsync.sh -m begin -r no >> ~/.dotfiles/synclogs.log &
-    fi
-fi
+# if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
+#     # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
+#     # windows so the client needs to know what to add to the path and what not to in order properly 
+#     # configure dotfiles on the client
+#     if [[ $WSLON == true ]]; then
+#         export PATH="$PATH:~/.wslbin"
+#         [ -f ~/.repos ] && ~/.dotfiles/dfsync.sh -m begin -r yes >> ~/.dotfiles/synclogs.log || ~/.dotfiles/dfsync.sh -m begin -r no >> ~/.dotfiles/synclogs.log &
+#     else
+#         [ -f ~/.repos ] && ~/.dotfiles/dfsync.sh -m begin -r yes >> ~/.dotfiles/synclogs.log || ~/.dotfiles/dfsync.sh -m begin -r no >> ~/.dotfiles/synclogs.log &
+#     fi
+# fi
 
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
