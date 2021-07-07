@@ -1,5 +1,5 @@
-# ~/.profile: executed by the command interpreter for login shells.
-# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# $HOME/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if $HOME/.bash_profile or $HOME/.bash_login
 # exists.
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
@@ -16,17 +16,29 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
+# SET EDITOR
+# VIM or NEOVIM?
+if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
+    alias vim="nvim"
+    export EDITOR='nvim'
+else
+    export EDITOR='vim'
+fi
 
+# WSL Check - Note the bash rc exports the env variable
+CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
+# Create and export the WSLON variable to the environment
+WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
 # Configure .dotfiles
-if [ -f ~/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
+if [ -f $HOME/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
     # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
     # windows so the client needs to know what to add to the path and what not to in order properly 
     # configure dotfiles on the client
     if [[ $WSLON == true ]]; then
-        export PATH="$PATH:~/.wslbin"
-        [ -f ~/.repos ] && ~/.dotfiles/dfsync.sh -m begin -r yes >> ~/.dotfiles/synclogs.log || ~/.dotfiles/dfsync.sh -m begin -r no >> ~/.dotfiles/synclogs.log &
+        export PATH="$PATH:$HOME/.wslbin"
+        [ -f $HOME/.repos ] && $HOME/.dotfiles/dfsync.sh -m begin -r yes >> $HOME/.dotfiles/synclogs.log || $HOME/.dotfiles/dfsync.sh -m begin -r no >> $HOME/.dotfiles/synclogs.log &
     else
-        [ -f ~/.repos ] && ~/.dotfiles/dfsync.sh -m begin -r yes >> ~/.dotfiles/synclogs.log || ~/.dotfiles/dfsync.sh -m begin -r no >> ~/.dotfiles/synclogs.log &
+        [ -f $HOME/.repos ] && $HOME/.dotfiles/dfsync.sh -m begin -r yes >> $HOME/.dotfiles/synclogs.log || $HOME/.dotfiles/dfsync.sh -m begin -r no >> $HOME/.dotfiles/synclogs.log &
     fi
 fi
 
@@ -46,7 +58,7 @@ export PROFILE_PATH=$PATH
 if [ $USER == "m808752" ] && [ -z "${TMUX}" ]; then
 	WSLMOUNT=c
 	eval "$(ssh-agent -s)"
-  	ssh-add ~/.ssh/id_rsa
+  	ssh-add $HOME/.ssh/id_rsa
     ssh-add /$WSLMOUNT/users/$USER/.ssh/id_rsa
 fi
 

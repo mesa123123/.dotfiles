@@ -210,14 +210,6 @@ export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs
 # Chef Setup adds chef workstation stuff to the environment variables
 eval "$(chef shell-init bash)"
 
-# VIM or NEOVIM?
-if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
-    alias vim="nvim"
-    export EDITOR='nvim'
-else
-    export EDITOR='vim'
-fi
-
 # Special WSL envvars that would just annoy a pure linux system
 if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
