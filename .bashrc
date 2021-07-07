@@ -200,11 +200,8 @@ export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
-
-# Helps Vagrant along...
-export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
+export SSL_CERT_DIR=/usr/local/share/ca-certificates
 
 # Chef Setup adds chef workstation stuff to the environment variables
 eval "$(chef shell-init bash)"
@@ -219,6 +216,9 @@ if [[ ${WSLON} == true ]]; then
 		export DOCKER_HOST="tcp://localhost:2375"
         export BROWSER="explorer.exe"
     fi
+    # Helps Vagrant along...
+    export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+    export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
 fi
 
 # Editor Settings VIM or NEOVIM?
@@ -235,7 +235,6 @@ if [ "$USER" == "bowmanpete" ]; then
 	# User Environment Vars for Home PC	
 	export EXERCISM_HOME="/home/$USER/.exercism"
 	export ANDROID_HOME="/home/$USER/Android/bin"
-	export SSL_CERT_DIR="/etc/ssl/certs"
 	export CODE_HOME="/c/Program Files/Microsoft\ VS\ Code/"
 	export HADOOP_HOME=/usr/local/hadoop
 	# Adding Home User Variables to Path

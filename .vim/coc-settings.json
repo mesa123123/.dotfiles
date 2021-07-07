@@ -49,5 +49,6 @@
     "markdownlint.config": {
         "line-length": false
     },
-    "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph"
+    "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph",
+    "yaml.schemaStore.url": ""
 }
