@@ -30,6 +30,7 @@ alias dotsync='~/.dotfiles/dfsync.sh -m begin -r no'
 if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
     alias vim='nvim'
     alias svim='sudo nvim'
+    alias oldvim='\vim'
 else
     alias svim='sudo vim'
 fi
