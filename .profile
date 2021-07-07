@@ -16,15 +16,6 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-# SET EDITOR
-# VIM or NEOVIM?
-if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
-    alias vim="nvim"
-    export EDITOR='nvim'
-else
-    export EDITOR='vim'
-fi
-
 # WSL Check - Note the bash rc exports the env variable
 CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment

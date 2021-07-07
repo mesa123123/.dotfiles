@@ -21,12 +21,18 @@ alias edittmux="vim ~/.tmux.conf"
 # Package Management
 alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && sudo npm -g update'
 #  Programmes etc.
-alias svim='sudo vim'
 alias gnpm='sudo npm -g'
 alias pip='pip3'
 alias spip='sudo pip3'
 alias prpy='pipenv run python'
 alias dotsync='~/.dotfiles/dfsync.sh -m begin -r no'
+#Fiddily Vim Stuff
+if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
+    alias vim='nvim'
+    alias svim='sudo nvim'
+else
+    alias svim='sudo vim'
+fi
 # Screen Commands
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
