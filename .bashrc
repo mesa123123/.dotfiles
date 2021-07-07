@@ -200,6 +200,7 @@ export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
+
 # Helps Vagrant along...
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
@@ -218,6 +219,15 @@ if [[ ${WSLON} == true ]]; then
 		export DOCKER_HOST="tcp://localhost:2375"
         export BROWSER="explorer.exe"
     fi
+fi
+
+# Editor Settings VIM or NEOVIM?
+if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
+    export EDITOR=nvim
+    export VIMINIT='source /home/$USER/.config/nvim/init.vim'
+else
+    export EDITOR=vim
+    export VIMINIT='source /home/$USER/.vim/.vimrc'
 fi
 
 # Home User Environment Variables
@@ -254,7 +264,7 @@ if [ "$USER" == "m808752" ] || [ "$USER" == "M808752" ]; then
 fi
 
 # Appending Variables Variables to Path
-export PATH="$JAVA_HOME/bin:$PATH"
+Export PATH="$JAVA_HOME/bin:$PATH"
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=${PATH}:${SCALA_HOME}/bin
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"

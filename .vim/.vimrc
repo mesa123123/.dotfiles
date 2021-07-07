@@ -151,7 +151,9 @@ endif
 
 " Get rid of terminal line numbers
 " --------
-autocmd TermOpen * setlocal nonumber norelativenumber
+if has('nvim')
+    autocmd TermOpen * setlocal nonumber norelativenumber
+endif
 " ----------------
 
 " ------------------------------"
