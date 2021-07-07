@@ -264,7 +264,7 @@ if [ "$USER" == "m808752" ] || [ "$USER" == "M808752" ]; then
 fi
 
 # Appending Variables Variables to Path
-Export PATH="$JAVA_HOME/bin:$PATH"
+export PATH="$JAVA_HOME/bin:$PATH"
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=${PATH}:${SCALA_HOME}/bin
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
