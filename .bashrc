@@ -200,8 +200,6 @@ export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
-export VIM_INIT='source ~/.vim/.vimrc'
-export VIMINIT='source ~/.vim/.vimrc'
 # Helps Vagrant along...
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
