@@ -39,6 +39,7 @@ Plug 'ekalinin/Dockerfile.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
+" Plug 'codota/tabnine-vim'
 
 call plug#end()
 

@@ -75,3 +75,11 @@ fi
 if [[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]]; then
     alias man='tldr'
 fi
+# If du-dust is installed use that instead
+if [[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]]; then
+    alias du='dust'
+fi
+# If Gping is about use that instead of ping
+if [[ "$(apt-cache pkgnames gping | grep "gping")" == *"gping"* ]]; then
+    alias ping='gping'
+fi
