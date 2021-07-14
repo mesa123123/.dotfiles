@@ -177,7 +177,7 @@ if [[ $WSLON == true ]]; then
 	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
 	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
     if [[ $WSL_VERSION == 2 ]]; then
-        export WSL2IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
+        export WINIP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
     fi
     cd ~ || exit;
 fi
@@ -215,10 +215,10 @@ if [[ ${WSLON} == true ]]; then
 	if [[ $WSL_VERSION == 1 ]]; then	
 		export DOCKER_HOST="tcp://localhost:2375"
         export BROWSER="explorer.exe"
+        # Helps Vagrant along...
+        export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+        export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
     fi
-    # Helps Vagrant along...
-    export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
-    export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
 fi
 
 # Editor Settings VIM or NEOVIM?
