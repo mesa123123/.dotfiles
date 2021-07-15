@@ -284,10 +284,13 @@ if [ "$USER" == "m808752" ] && [[ ${WSLON} == true ]]; then
         # Set the git config proxy
         git config --global http.proxy http://localhost:3130
         git config --global https.proxy http://localhost:3130
+        # Set the vagrant repos
+        export {VAGRANT_HTTP,VAGRANT_HTTPS,VAGRANT_FTP}_PROXY="http://localhost:3130"
     elif [[ $WSL_VERSION == 2 ]]; then
-        export {http,https,ftp}_proxy="http://${WSL2IP}:3128"
-	    export {HTTP,HTTPS,FTP}_proxy="http://${WSL2IP}:3128"
-	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=${WSL2IP} -Dhttp.proxyPort=3128 -Dhttps.proxyHost=${WSL2IP} -Dhttps.proxyPort=3128"
+        export {http,https,ftp}_proxy="http://${WINIP}:3128"
+	    export {HTTP,HTTPS,FTP}_PROXY="http://${WINIP}:3128"
+        export {VAGRANT_HTTP,VAGRANT_HTTPS,VAGRANT_FTP}_PROXY="http://${WINIP}:3130"
+	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=${WINIP} -Dhttp.proxyPort=3128 -Dhttps.proxyHost=${WINIP} -Dhttps.proxyPort=3128"
         echo "2"
     fi	
     # Rust Proxies
