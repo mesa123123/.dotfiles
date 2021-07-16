@@ -200,8 +200,9 @@ export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
-export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+export CURL_CA_BUNDLE=/etc/ssl/certs/ca-bundle.pem
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
+export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
 # Chef Setup adds chef workstation stuff to the environment variables
 eval "$(chef shell-init bash)"
