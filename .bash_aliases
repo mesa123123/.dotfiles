@@ -68,7 +68,7 @@ if [[ "$(dpkg-query -W -f='${Status} ${Version}\n' bat)" == *"ok"* ]]; then
     alias cat='batcat'
 fi
 # If bottom is installed use that use that instead of top
-if [[ "$(dpkg-query -W -f='${Status} ${Version}\n' bottom)" == *"ok"* ]]; then
+if [[ "$(cargo install --list | grep "bottom")" == *"bottom"* ]]; then
     alias top='btm'
 fi
 # If tldr is installed use that instead of man

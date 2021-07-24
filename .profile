@@ -50,7 +50,6 @@ if [ $USER == "m808752" ] && [ -z "${TMUX}" ]; then
 	WSLMOUNT=c
 	eval "$(ssh-agent -s)"
   	ssh-add $HOME/.ssh/id_rsa
-    ssh-add /$WSLMOUNT/users/$USER/.ssh/id_rsa
 fi
 
 . "$HOME/.cargo/env"
