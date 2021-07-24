@@ -9,6 +9,7 @@
     "coc-rls": ">=1.1.6",
     "coc-sh": ">=0.6.0",
     "coc-solargraph": ">=1.2.1",
+    "coc-tsserver": ">=1.0.0",
     "coc-toml": ">=1.1.0",
     "coc-ultisnips": ">=1.2.3",
     "coc-word": ">=1.2.2",
