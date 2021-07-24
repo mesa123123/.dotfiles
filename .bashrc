@@ -125,6 +125,12 @@ fi
 # Rust Environment has to be added here as this will allow the fancy unix commands to load properly
 # Add Rust Environments
 . "$HOME/.cargo/env"
+# ---- Node Env ----
+# Putting Node here will help similar for node configs to load properly
+[ ! -d /home/$USER/.npm-global ] && mkdir /home/$USER/.npm-global
+export NPM_CONFIG_PREFIX=~/.npm-global
+
+
 
 # --------
 
@@ -273,7 +279,7 @@ export PATH="$PATH:$CODE_HOME/bin"
 export PATH="$PATH:$GEM_HOME/bin"
 export PATH="$PATH:$(which solargraph)"
 export PATH="$PATH:/c/Program Files/Oracle/VirtualBox"
-
+export PATH="$PATH:$NPM_CONFIG_PREFIX"
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
@@ -328,4 +334,3 @@ if [[ $WSLON == true ]]; then
         export DISPLAY=127.0.0.1:0.0
     fi
 fi
-
