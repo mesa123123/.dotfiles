@@ -29,10 +29,8 @@
             }
         },
         "bash": {
-            "command": "bash-language-server",
-            "args": [
-                "start"
-            ],
+            "command": "npx",
+            "args": ["bash-language-server", "start"],
             "filetypes": [
                 "sh"
             ],

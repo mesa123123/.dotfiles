@@ -335,6 +335,9 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " --------------------------------------------"
 " Coc Options
 " --------------------------------------------"
+" Global Extensions
+" --------
+let g:coc_global_extensions = ['coc-css', 'coc-docker', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-pyright', 'coc-rls', 'coc-solargraph', 'coc-toml', 'coc-tsserver', 'coc-ultisnips', 'coc-word', 'coc-yaml', 'coc-git' ]
 " Recommended Options
 " --------
 " TextEdit might fail if hidden is not set.
