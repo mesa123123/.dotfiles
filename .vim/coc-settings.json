@@ -45,7 +45,8 @@
     "python.linting.pylintCategorySeverity.warning": "Information",
     "python.linting.pycodestyleCategorySeverity.E": "Information",
     "markdownlint.config": {
-        "line-length": false
+        "line-length": false,
+        "MD007": { "indent": 4 }
     },
     "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph",
     "yaml.schemaStore.url": ""
