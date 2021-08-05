@@ -160,6 +160,11 @@ endif
 " ------------------------------"
 " Language Specific Settings
 " ------------------------------"
+function RunMermaidPreview()
+    execute '!/home/$USER/dev/projects/vimmermaid/stap.sh &'
+endfunction
+au BufNewFile,BufRead *.mermaid set filetype=mermaid
+au Filetype mermaid call RunMermaidPreview()
 
 " C++ Language 
 au FileType cpp setlocal et ts=2 sw=2
