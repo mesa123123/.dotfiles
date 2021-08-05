@@ -127,8 +127,8 @@ fi
 . "$HOME/.cargo/env"
 # ---- Node Env ----
 # Putting Node here will help similar for node configs to load properly
-[ ! -d /home/$USER/.npm-global ] && mkdir /home/$USER/.npm-global
-export NPM_CONFIG_PREFIX=~/.npm-global
+[ ! -d /home/$USER/.npm-global ] && mkdir /home/$USER/.npm-global 
+export NPM_CONFIG_PREFIX=/home/$USER/.npm-global
 
 
 
@@ -279,7 +279,7 @@ export PATH="$PATH:$CODE_HOME/bin"
 export PATH="$PATH:$GEM_HOME/bin"
 export PATH="$PATH:$(which solargraph)"
 export PATH="$PATH:/c/Program Files/Oracle/VirtualBox"
-export PATH="$PATH:$NPM_CONFIG_PREFIX"
+export PATH="$PATH:$NPM_CONFIG_PREFIX/bin"
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
