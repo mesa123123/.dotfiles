@@ -31,7 +31,6 @@ Plug 'nvie/vim-flake8'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'luochen1990/rainbow'
 Plug 'derekwyatt/vim-scala'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sirver/ultisnips'
 Plug 'itchyny/vim-gitbranch'
 Plug 'mechatroner/rainbow_csv'
@@ -39,7 +38,9 @@ Plug 'ekalinin/Dockerfile.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
-" Plug 'codota/tabnine-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" COC Plugins that are being fiddly
+Plug 'iamcco/coc-svg'
 call plug#end()
 
 " Plugin Settings
@@ -341,7 +342,7 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " --------------------------------------------"
 " Global Extensions
 " --------
-let g:coc_global_extensions = ['coc-css', 'coc-docker', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-pyright', 'coc-rls', 'coc-solargraph', 'coc-toml', 'coc-tsserver', 'coc-ultisnips', 'coc-word', 'coc-yaml', 'coc-git', 'coc-svg']
+let g:coc_global_extensions = ['coc-css', 'coc-docker', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-pyright', 'coc-rls', 'coc-solargraph', 'coc-toml', 'coc-tsserver', 'coc-ultisnips', 'coc-word', 'coc-yaml', 'coc-git']
 " Recommended Options
 " --------
 " TextEdit might fail if hidden is not set.

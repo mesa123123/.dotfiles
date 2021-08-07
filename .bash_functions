@@ -135,9 +135,13 @@ function stenv() {
     fi
 }
 
+function cocfinstall() {
+    npm install $1 --ignore-scripts --no-lockfile --production --legacy-peer-deps
+}
 
 # export the functions to the shell session
 export -f devhome
 export -f dvx
 export -f newscreen
 export -f stenv
+export -f cocfinstall
