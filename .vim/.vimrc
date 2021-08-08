@@ -39,8 +39,6 @@ Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" COC Plugins that are being fiddly
-Plug 'iamcco/coc-svg'
 call plug#end()
 
 " Plugin Settings
