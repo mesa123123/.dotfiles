@@ -60,8 +60,8 @@ cabbrev updatevim source ~/.vim/.vimrc
 " Neovim Specific Settings
 " --------------------------------"
 if has('nvim')
-    " remap Esc back to vim default for terminal 
-    tnoremap <Esc> <C-\><C-n> 
+    " remap Esc back to trigger normal mode in terminal 
+    tnoremap <Esc> <c-\><c-n>
     " remap the pane movements
     tnoremap <c-w> <c-\><c-n><c-w>
     " point to UltiSnipsHome
@@ -137,9 +137,6 @@ nmap <silent><expr><leader>t empty(TerminalBufferNumbers())  ?
             \ ':bterm<CR><c-\><c-n>:res-10<CR>icls && cd ' . g:cwd . '<CR>' : 
             \ ':let ntbn = TerminalBufferNumbers()[0]<CR>:exe "sbuffer".ntbn<CR>:res-10<CR>i' 
 " Hide Terminal
-if has('nvim')
-    tnoremap <ESC> <c-\><c-n>:q<CR> 
-endif
 tnoremap <silent><leader>t <c-\><c-n>:q<CR>
 " Exit Terminal Completely
 if has('nvim')
@@ -338,6 +335,9 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " --------------------------------------------"
 " Coc Options
 " --------------------------------------------"
+" Coc-Command Abbreviation
+" --------
+cabbrev ccc CocCommand
 " Global Extensions
 " --------
 let g:coc_global_extensions = ['coc-css', 'coc-docker', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-pyright', 'coc-rls', 'coc-solargraph', 'coc-toml', 'coc-tsserver', 'coc-ultisnips', 'coc-word', 'coc-yaml', 'coc-git']
