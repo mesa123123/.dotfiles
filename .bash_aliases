@@ -58,6 +58,12 @@ else
     alias chrome='google-chrome'
 fi
 
+# Chromium Stuff
+if [[ $(dpkg-query -l chromium-browser 2>/dev/null | grep -c "chromium-browser") == 1 ]]; then
+    alias chrome='chromium-browser'
+else
+    alias chrome='chromium'
+fi
 # --------
 # Fancy Commands
 # --------
