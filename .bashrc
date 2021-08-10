@@ -163,6 +163,7 @@ fi
 # Load Client Sensitive Data 
 if [ -f ~/.bash_secrets ]; then
 	. ~/.bash_secrets
+    alias editsecrets='vim ~/.bash_secrets && source ~/.bash_secrets'
 fi
 
 # Define the on_exit functions
