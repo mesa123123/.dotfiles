@@ -9,7 +9,7 @@
     "coc-pyright": ">=1.1.159",
     "coc-rls": ">=1.1.6",
     "coc-solargraph": ">=1.2.2",
-    "coc-svg": ">=0.0.13",
+    "coc-svg": "^0.0.13",
     "coc-toml": ">=1.1.0",
     "coc-tsserver": ">=1.8.3",
     "coc-ultisnips": ">=1.2.3",

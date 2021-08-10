@@ -34,6 +34,8 @@ if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
 else
     alias svim='sudo vim'
 fi
+# Fiddly Coc Stuff
+alias cocnpm='npm i --ignore-scripts --no-lockfile --production --legacy-peer-deps'
 # Screen Commands
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
