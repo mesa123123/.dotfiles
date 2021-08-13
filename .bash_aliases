@@ -72,8 +72,12 @@ if [[ $WSLON == "true" ]]; then
 fi
 
 # If batcat is installed use that instead of cat
-if [[ "$(dpkg-query -W -f='${Status} ${Version}\n' bat)" == *"ok"* ]]; then
-    alias cat='batcat'
+if [[ $(dpkg-query -l bat 2>/dev/null | grep -c "bat") == 1 ]]; then
+        alias cat='bat'
+fi
+# Some Systems call it batcat so i have to account for that :(
+if [[ $(dpkg-query -l batcat 2>/dev/null | grep -c "batcat") == 1 ]]; then
+        alias cat='batcat'
 fi
 # If bottom is installed use that use that instead of top
 if [[ "$(cargo install --list | grep "bottom")" == *"bottom"* ]]; then
