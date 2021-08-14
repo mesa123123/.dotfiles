@@ -1,8 +1,0 @@
-{
-  "commands": {
-    "%2Fmnt%2Fc%2FUsers%2FM808752%2Fdev%2FProjects%2Fdelta-scripts": [
-      "python.setinterpreter",
-      "python.setInterpreter"
-    ]
-  }
-}
