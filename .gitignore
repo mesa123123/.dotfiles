@@ -1,7 +1,7 @@
 node_modules/	
 *.log
 .config/
-!.config/coc/extensions/package.jason
+!.config/coc/extensions/package.json
 !.config/coc/nvim/
 !.config/coc/powerline/
 !.config/coc/inkscape/
