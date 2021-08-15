@@ -35,7 +35,7 @@ function devhome()
     # If no arguement is given simply go to the dev/projects home folder
 	if [[ -z "$1" ]]; then
 		echo "No project named, please enter one of the following:"	
-		ls ~/dev/Projects
+		ls ~/dev/projects
         echo "or use -m to create new name of new project"
 	#  if i use the cmd switch -m then i can create a new project
     elif [[ "$1" == "-m" ]]; then 
@@ -58,10 +58,10 @@ function devhome()
 	else
 		# If the arguement given is show, print out the list of project folders
 		if [[ "$1" == "show" || "$1" == "list" ]]; then	
-			ls ~/dev/Projects/
+			ls ~/dev/projects/
 		# if the arguement given is the name of a project go to that project folder	
 		else
-            if [ -d ~/dev/Projects/"${1}" ]; then cd ~/dev/Projects/"${1}" || exit; else echo "No project named ${1} please enter the name of a valid project or use command line switch -m to create one"; fi
+            if [ -d ~/dev/projects/"${1}" ]; then cd ~/dev/projects/"${1}" || exit; else echo "No project named ${1} please enter the name of a valid project or use command line switch -m to create one"; fi
             if [[ $? == 1 ]]; then 
                 return 1;
             fi
