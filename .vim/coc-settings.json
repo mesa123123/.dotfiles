@@ -49,5 +49,5 @@
         "MD007": { "indent": 4 }
     },
     "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph",
-    "yaml.schemaStore.url": ""
+    "yaml.schemaStore.url": "",
 }
