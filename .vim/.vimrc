@@ -64,6 +64,8 @@ if has('nvim')
     tnoremap <Esc> <c-\><c-n>
     " remap the pane movements
     tnoremap <c-w> <c-\><c-n><c-w>
+    " remap the tab movements 
+    tnoremap <c-t> <c-\><c-n><c-t>
     " point to UltiSnipsHome
     let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
     
