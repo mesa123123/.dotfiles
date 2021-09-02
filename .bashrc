@@ -329,7 +329,7 @@ if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	
     if [ "${WSL_VERSION}" == 2 ]; then
         export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
-        export LIBGL_ALWAYS_INDIRECT=0
+        export LIBGL_ALWAYS_INDIRECT=1
     else
         export DISPLAY=127.0.0.1:0.0
     fi
