@@ -91,7 +91,13 @@ fi
 if [[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]]; then
     alias du='dust'
 fi
+# If Broot is installed map it to the br command
+if [[ "$(cargo install --list | grep "broot")" == *"broot"* ]]; then
+    alias broot='br'
+    alias tree='br'
+fi
 # If Gping is about use that instead of ping
 if [[ "$(apt-cache pkgnames gping | grep "gping")" == *"gping"* ]]; then
     alias ping='gping'
 fi
+

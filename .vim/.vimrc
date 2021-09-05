@@ -22,7 +22,6 @@ Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'yggdroot/indentline'
 Plug 'plasticboy/vim-markdown'
-" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 Plug 'alfredodeza/pytest.vim'
 Plug 'mfukar/robotframework-vim'
 Plug 'altercation/vim-colors-solarized'
@@ -39,6 +38,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 call plug#end()
 
 " Plugin Settings
@@ -295,6 +295,9 @@ let g:NERDTreeGitStatusUseNerdFonts = 1
 autocmd FileType nerdtree setlocal relativenumber
 " Remap the open and close to C-n
 map <C-n> :NERDTreeToggle<CR>
+" Remap Root Settings for simpler Root Control
+let NERDTreeMapChangeRoot='l'
+let NERDTreeMapUpdir='h'
 " Terminal Commands, autoswitch focussed pane and then switch to nerdtree,
 " assumes the terminal is horizontally split and on the bottom
 if has('nvim')
