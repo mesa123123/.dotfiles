@@ -14,6 +14,6 @@
     "coc-tsserver": ">=1.8.6",
     "coc-ultisnips": "*",
     "coc-word": "*",
-    "coc-yaml": "*"
+    "coc-yaml": ">=1.4.2"
   }
 }

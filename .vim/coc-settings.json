@@ -1,5 +1,5 @@
 {
-    "suggest.numberSelect": true,
+    "suggest.numberSelect": false,
     // Enable Codelens, has something to do with code actions
     "http.proxyStrictSSL": false,
     "codeLens.enable": true,
@@ -49,5 +49,5 @@
         "MD007": { "indent": 4 }
     },
     "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph",
-    "yaml.schemaStore.url": "",
+    "yaml.schemaStore.url": ""
 }

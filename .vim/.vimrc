@@ -330,8 +330,6 @@ let g:lightline = { 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mo
 
 " Lightline Coc Config
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-
-
 " ----------------
 
 " --------------------------------------------"
