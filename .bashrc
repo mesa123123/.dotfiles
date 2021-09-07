@@ -228,6 +228,7 @@ if [[ ${WSLON} == true ]]; then
     # Helps Vagrant along...
     export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
     export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
+    export VAGRANT_WSL_DISABLE_VAGRANT_HOME='true'
 fi
 
 # Editor Settings VIM or NEOVIM?
