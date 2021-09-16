@@ -8,8 +8,6 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 # Because you'll need to add /usr to the path variable this needs to be there
-echo $PATH >> /home/bowmanpete/output.output
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
