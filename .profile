@@ -44,8 +44,6 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-export PROFILE_PATH="${PATH}"
-
 if [ $USER == "m808752" ] && [ -z "${TMUX}" ]; then
 	WSLMOUNT=c
 	eval "$(ssh-agent -s)"
@@ -53,3 +51,4 @@ if [ $USER == "m808752" ] && [ -z "${TMUX}" ]; then
 fi
 
 . "$HOME/.cargo/env"
+export PROFILE_PATH=$PATH

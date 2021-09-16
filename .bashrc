@@ -100,8 +100,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # --------
 
 # ----------- PROFILE Revert ------------------------------
-echo $PROFILE_PATH >> /home/bowmanpete/output.output
-if [[ -z "$PROFILE_PATH" ]]; then
+echo "PROFILE_PATH is ${PROFILE_PATH}" >> /home/bowmanpete/output.output
+if [[ ! -z "$PROFILE_PATH" ]]; then
     export PATH=$PROFILE_PATH
 fi
 
