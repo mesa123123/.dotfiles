@@ -7,15 +7,6 @@
 # the default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
-# Because you'll need to add /usr to the path variable this needs to be there
-
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
-fi
 
 # WSL Check - Note the bash rc exports the env variable
 CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
@@ -52,3 +43,13 @@ fi
 
 . "$HOME/.cargo/env"
 export PROFILE_PATH=$PATH
+# BASH RC LOAD
+# ---------------- 
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+	. "$HOME/.bashrc"
+    fi
+fi
