@@ -7,7 +7,7 @@
 # the default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
-echo $PATH >> output.output
+echo $PATH >> /home/bowmanpete/output.output
 # Because you'll need to add /usr to the path variable this needs to be there
 if [ -d "/usr/bin" ] ; then
     PATH="/usr/bin:$PATH"
