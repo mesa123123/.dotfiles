@@ -44,6 +44,11 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Because you'll need to add /usr to the path variable this needs to be there
+if [ -d "/usr/bin" ] ; then
+    PATH="/usr/bin:$PATH"
+fi
+
 export PROFILE_PATH=$PATH 
 
 if [ $USER == "m808752" ] && [ -z "${TMUX}" ]; then
