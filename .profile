@@ -8,10 +8,14 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
+# Force terminal type
+export TERMINFO="/usr/share/terminfo"
+
 # WSL Check - Note the bash rc exports the env variable
 CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
 WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
+
 # Configure .dotfiles
 if [ -f $HOME/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
     # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
@@ -43,6 +47,7 @@ fi
 
 . "$HOME/.cargo/env"
 export PROFILE_PATH=$PATH
+
 # BASH RC LOAD
 # ---------------- 
 

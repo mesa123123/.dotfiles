@@ -72,11 +72,15 @@ if [[ $WSLON == "true" ]]; then
 fi
 
 # If batcat is installed use that instead of cat
-if [[ $(dpkg-query -l bat 2>/dev/null | grep -c "bat") == 1 ]]; then
-    if [[ $(lsb_release -a | grep -c "Ubuntu 18") == 1 ]]; then  
-        alias cat='bat'
-    else
-        alias cat='batcat'
+if [[ "$(cargo install --list | grep "bat")" == *"bat"* ]]; then
+    alias cat='bat'
+else
+    if [[ $(dpkg-query -l bat 2>/dev/null | grep -c "bat") == 1 ]]; then
+        if [[ $(lsb_release -a | grep -c "Ubuntu 18") == 1 ]]; then  
+            alias cat='bat'
+        else
+            alias cat='batcat'
+        fi
     fi
 fi
 # If bottom is installed use that use that instead of top

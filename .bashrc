@@ -212,8 +212,7 @@ export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
-# Chef Setup adds chef workstation stuff to the environment variables
-eval "$(chef shell-init bash)"
+# Chef Setup adds chef workstation stuff to the environment variables as it tends to break a lot of stuff with the terminals, its best to only use chef when its needed
 
 # Special WSL envvars that would just annoy a pure linux system
 if [[ ${WSLON} == true ]]; then
@@ -282,6 +281,21 @@ export PATH="$PATH:$GEM_HOME/bin"
 export PATH="$PATH:$(which solargraph)"
 export PATH="$PATH:/c/Program Files/Oracle/VirtualBox"
 export PATH="$PATH:$NPM_CONFIG_PREFIX/bin"
+
+
+# Chef Setup adds chef workstation stuff to the environment variables as it tends to break a lot of stuff with the terminals, its best to only use chef when its needed
+export PATH="$PATH:/opt/chef-workstation/bin:/home/peter/.chefdk/gem/ruby/2.7.0/bin:/opt/chef-workstation/embedded/bin:/opt/chef-workstation/gitbin"
+export GEM_ROOT="/opt/chef-workstation/embedded/lib/ruby/gems/2.7.0"
+export GEM_HOME="/home/peter/.chefdk/gem/ruby/2.7.0"
+export GEM_PATH="/home/peter/.chefdk/gem/ruby/2.7.0:/opt/chef-workstation/embedded/lib/ruby/gems/2.7.0"
+_chef_comp() {
+    local COMMANDS="exec env gem generate shell-init install update push push-archive show-policy diff export clean-policy-revisions clean-policy-cookbooks delete-policy-group delete-policy undelete describe-cookbook provision"
+    COMPREPLY=($(compgen -W "$COMMANDS" -- ${COMP_WORDS[COMP_CWORD]} ))
+}
+complete -F _chef_comp chef
+
+
+
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
