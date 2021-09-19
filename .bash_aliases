@@ -105,3 +105,7 @@ if [[ "$(apt-cache pkgnames gping | grep "gping")" == *"gping"* ]]; then
     alias ping='gping'
 fi
 
+# Certain Terminals get fiddily with TERM settings so this gets around it for kitty at least
+if [[ "${TERM}" == *"kitty"* ]]; then
+    alias ssh="kitty +kitten ssh"
+fi
