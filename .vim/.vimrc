@@ -37,7 +37,7 @@ Plug 'ekalinin/Dockerfile.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'},
 
 call plug#end()
 
