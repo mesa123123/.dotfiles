@@ -56,7 +56,6 @@ if [ -f $HOME/.bash_secrets ]; then
 fi
 
 if [ -f $HOME/.profile_secrets ]; then
-    echo "CAT OUTPUT: $(cat /c/Users/m808752/HELLOWORLD.txt)"
 	. $HOME/.profile_secrets
     alias editsecrets='vim $HOME/.profile_secrets && source $HOME/.profile_secrets'
 fi
