@@ -8,15 +8,11 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# Force terminal type
+# Force terminal type info
 export TERMINFO="/usr/share/terminfo"
 
-# WSL Check - Note the bash rc exports the env variable
-CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
-# Create and export the WSLON variable to the environment
-WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
-
-# Load Client Spectific
+# Load Client Spectific Files
+# ---------------- 
 if [ -f $HOME/.bash_secrets ]; then
     mv $HOME/.bash_secrets $HOME/.profile_secrets
 fi
@@ -25,6 +21,22 @@ if [ -f $HOME/.profile_secrets ]; then
 	. $HOME/.profile_secrets
     alias editsecrets='vim $HOME/.profile_secrets && source $HOME/.profile_secrets'
 fi
+
+# ----  WSL Settings ----
+# WSL Check - Note the bash rc exports the env variable
+CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
+# Create and export the WSLON variable to the environment
+WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
+export WSLON
+# Special WSL Paths for Interoperability in cmd lines
+if [[ ${WSLON} == "true" ]]; then
+	export PATH=$PATH:"/c/Windows/System32/"
+    export CMD_HOME="/c/Windows/System32/cmd.exe"
+    # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
+    export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
+    export PATH=$PATH:$POWERSHELL_HOME
+fi
+# ---- End of WSL Settings ---- 
 
 # Configure .dotfiles
 if [ -f $HOME/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
@@ -58,7 +70,7 @@ fi
 . "$HOME/.cargo/env"
 export PROFILE_PATH=$PATH
 
-# BASH RC LOAD
+# Load Bash Specifics
 # ---------------- 
 
 # if running bash
