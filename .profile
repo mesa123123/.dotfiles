@@ -63,7 +63,7 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 # Because quite a few early modules in the unix stack now require rust, add them earlier on than the bashrc
-. $HOME/.cargo/bin
+. $HOME/.cargo/env
 
 # Save the Profile Path Here
 export PROFILE_PATH=$PATH
