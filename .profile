@@ -16,6 +16,16 @@ CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
 WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
 
+# Load Client Spectific
+if [ -f $HOME/.bash_secrets ]; then
+    mv $HOME/.bash_secrets $HOME/.profile_secrets
+fi
+
+if [ -f $HOME/.profile_secrets ]; then
+	. $HOME/.profile_secrets
+    alias editsecrets='vim $HOME/.profile_secrets && source $HOME/.profile_secrets'
+fi
+
 # Configure .dotfiles
 if [ -f $HOME/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
     # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
