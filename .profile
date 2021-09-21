@@ -26,6 +26,14 @@ if [[ ${WSLON} == "true" ]]; then
     export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
     export PATH=$PATH:$POWERSHELL_HOME
 fi
+# Check WSL_VERSION by going through interop channels
+if [[ $WSLON == true ]]; then
+	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
+	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
+    if [[ $WSL_VERSION == 2 ]]; then
+        export WINIP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
+    fi
+fi
 # ---- End of WSL Settings ---- 
 
 # Configure .dotfiles
@@ -48,7 +56,7 @@ if [ -f $HOME/.bash_secrets ]; then
 fi
 
 if [ -f $HOME/.profile_secrets ]; then
-    echo "path: ${PATH}"
+    echo "CAT OUTPUT: $(cat /c/Users/m808752/HELLOWORLD.txt)"
 	. $HOME/.profile_secrets
     alias editsecrets='vim $HOME/.profile_secrets && source $HOME/.profile_secrets'
 fi

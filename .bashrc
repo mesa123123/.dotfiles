@@ -184,7 +184,6 @@ export SPARK_HOME="/opt/spark"
 export SBT_HOME="/usr/bin/sbt"
 export CARGO_HOME="/home/$USER/.cargo"
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
-export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
@@ -198,12 +197,13 @@ if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
     export WINHOME="/c/Users/$USER"
+    export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 	# Now stuff that differs between versions of WSL 
 	if [[ $WSL_VERSION == 1 ]]; then	
 		export DOCKER_HOST="tcp://localhost:2375"
         export BROWSER="explorer.exe"
     fi
-    # Helps Vagrant along...
+    # Helps Vagrant along though Vagrant is messy at best over wsl so avoid unless using wsl 1
     export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
     export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
 fi
