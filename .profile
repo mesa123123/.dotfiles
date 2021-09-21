@@ -48,6 +48,7 @@ if [ -f $HOME/.bash_secrets ]; then
 fi
 
 if [ -f $HOME/.profile_secrets ]; then
+    echo "path: ${PATH}"
 	. $HOME/.profile_secrets
     alias editsecrets='vim $HOME/.profile_secrets && source $HOME/.profile_secrets'
 fi
