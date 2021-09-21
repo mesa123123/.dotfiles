@@ -11,18 +11,8 @@
 # Force terminal type info
 export TERMINFO="/usr/share/terminfo"
 
-# Load Client Spectific Files
-# ---------------- 
-if [ -f $HOME/.bash_secrets ]; then
-    mv $HOME/.bash_secrets $HOME/.profile_secrets
-fi
-
-if [ -f $HOME/.profile_secrets ]; then
-	. $HOME/.profile_secrets
-    alias editsecrets='vim $HOME/.profile_secrets && source $HOME/.profile_secrets'
-fi
-
-# ----  WSL Settings ----
+# WSL System Interop Setttings
+# ----------------
 # WSL Check - Note the bash rc exports the env variable
 CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
@@ -50,6 +40,18 @@ if [ -f $HOME/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ 
         [ -f $HOME/.repos ] && $HOME/.dotfiles/dfsync.sh -m begin -r yes >> $HOME/.dotfiles/synclogs.log || $HOME/.dotfiles/dfsync.sh -m begin -r no >> $HOME/.dotfiles/synclogs.log &
     fi
 fi
+
+# Load Client Spectific Files
+# ---------------- 
+if [ -f $HOME/.bash_secrets ]; then
+    mv $HOME/.bash_secrets $HOME/.profile_secrets
+fi
+
+if [ -f $HOME/.profile_secrets ]; then
+	. $HOME/.profile_secrets
+    alias editsecrets='vim $HOME/.profile_secrets && source $HOME/.profile_secrets'
+fi
+
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
