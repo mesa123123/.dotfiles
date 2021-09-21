@@ -10,7 +10,10 @@
 
 # Force terminal type info
 export TERMINFO="/usr/share/terminfo"
-
+# Client Specific Settings
+if [ -f $HOME/.profile_secrets ]; then
+	. $HOME/.profile_secrets
+fi
 # WSL System Interop Setttings
 # ----------------
 # WSL Check - Note the bash rc exports the env variable
@@ -49,18 +52,6 @@ if [ -f $HOME/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ 
     fi
 fi
 
-# Load Client Spectific Files
-# ---------------- 
-if [ -f $HOME/.bash_secrets ]; then
-    mv $HOME/.bash_secrets $HOME/.profile_secrets
-fi
-
-if [ -f $HOME/.profile_secrets ]; then
-	. $HOME/.profile_secrets
-    alias editsecrets='vim $HOME/.profile_secrets && source $HOME/.profile_secrets'
-fi
-
-
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
@@ -71,13 +62,10 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ $USER == "m808752" ] && [ -z "${TMUX}" ]; then
-	WSLMOUNT=c
-	eval "$(ssh-agent -s)"
-  	ssh-add $HOME/.ssh/id_rsa
-fi
+# Because quite a few early modules in the unix stack now require rust, add them earlier on than the bashrc
+. $HOME/.cargo/bin
 
-. "$HOME/.cargo/env"
+# Save the Profile Path Here
 export PROFILE_PATH=$PATH
 
 # Load Bash Specifics
