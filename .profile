@@ -8,10 +8,37 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
+# Force terminal type info
+export TERMINFO="/usr/share/terminfo"
+# Client Specific Settings
+if [ -f $HOME/.profile_secrets ]; then
+	. $HOME/.profile_secrets
+fi
+# WSL System Interop Setttings
+# ----------------
 # WSL Check - Note the bash rc exports the env variable
 CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
 WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
+export WSLON
+# Special WSL Paths for Interoperability in cmd lines
+if [[ ${WSLON} == "true" ]]; then
+	export PATH=$PATH:"/c/Windows/System32/"
+    export CMD_HOME="/c/Windows/System32/cmd.exe"
+    # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
+    export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
+    export PATH=$PATH:$POWERSHELL_HOME
+fi
+# Check WSL_VERSION by going through interop channels
+if [[ $WSLON == true ]]; then
+	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
+	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
+    if [[ $WSL_VERSION == 2 ]]; then
+        export WINIP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
+    fi
+fi
+# ---- End of WSL Settings ---- 
+
 # Configure .dotfiles
 if [ -f $HOME/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
     # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
@@ -35,15 +62,13 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-if [ $USER == "m808752" ] && [ -z "${TMUX}" ]; then
-	WSLMOUNT=c
-	eval "$(ssh-agent -s)"
-  	ssh-add $HOME/.ssh/id_rsa
-fi
+# Because quite a few early modules in the unix stack now require rust, add them earlier on than the bashrc
+. $HOME/.cargo/env
 
-. "$HOME/.cargo/env"
+# Save the Profile Path Here
 export PROFILE_PATH=$PATH
-# BASH RC LOAD
+
+# Load Bash Specifics
 # ---------------- 
 
 # if running bash

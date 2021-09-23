@@ -28,19 +28,6 @@ BROWSERCHROME="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
 BROWSERBRAVE="/c/Users/$USER/AppData/Local/BraveSoftware/Brave-Browser/Application/brave.exe"
 # ------- End of Global Script Variables -------
 
-# -------- Script Running LOCK ---------
-LOCKFILE=/tmp/${SUBJECT}.lock
-
-if [ -f "$LOCKFILE" ]; then
-	echo "Script is already running"
-	exit
-fi
-
-trap "rm -f $LOCKFILE" EXIT
-touch $LOCKFILE
-# --------- End Of Script Running Lock -------
-
-
 # -------- Null Switches Method ------
 if [ $# == 0 ]; then 
 	echo $USAGE

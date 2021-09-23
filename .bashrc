@@ -104,27 +104,6 @@ if [[ ! -z "$PROFILE_PATH" ]]; then
     export PATH=$PROFILE_PATH
 fi
 
-# ----  WSL Settings ----
-# First Check if you are running WSL Environment or not
-CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
-# Create and export the WSLON variable to the environment
-WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
-export WSLON
-# Special WSL Paths for Interoperability
-if [[ ${WSLON} == "true" ]]; then
-	export PATH=$PATH:"/c/Windows/System32/"
-    export CMD_HOME="/c/Windows/System32/cmd.exe"
-    # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
-    export POWERSHELL_HOME="/c/Windows/System32/WindowsPowerShell/v1.0"
-    export PATH=$PATH:$POWERSHELL_HOME
-fi
-# ---- End of WSL Settings ---- 
-# ----
-
-# ---- Rust Env ----
-# Rust Environment has to be added here as this will allow the fancy unix commands to load properly
-# Add Rust Environments
-. "$HOME/.cargo/env"
 # ---- Node Env ----
 # Putting Node here will help similar for node configs to load properly
 [ ! -d /home/$USER/.npm-global ] && mkdir /home/$USER/.npm-global 
@@ -205,27 +184,26 @@ export SPARK_HOME="/opt/spark"
 export SBT_HOME="/usr/bin/sbt"
 export CARGO_HOME="/home/$USER/.cargo"
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
-export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
-# Chef Setup adds chef workstation stuff to the environment variables
-eval "$(chef shell-init bash)"
+# Chef Setup adds chef workstation stuff to the environment variables as it tends to break a lot of stuff with the terminals, its best to only use chef when its needed
 
 # Special WSL envvars that would just annoy a pure linux system
 if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
     export WINHOME="/c/Users/$USER"
+    export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 	# Now stuff that differs between versions of WSL 
 	if [[ $WSL_VERSION == 1 ]]; then	
 		export DOCKER_HOST="tcp://localhost:2375"
         export BROWSER="explorer.exe"
     fi
-    # Helps Vagrant along...
+    # Helps Vagrant along though Vagrant is messy at best over wsl so avoid unless using wsl 1
     export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
     export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
 fi
@@ -282,6 +260,21 @@ export PATH="$PATH:$GEM_HOME/bin"
 export PATH="$PATH:$(which solargraph)"
 export PATH="$PATH:/c/Program Files/Oracle/VirtualBox"
 export PATH="$PATH:$NPM_CONFIG_PREFIX/bin"
+
+
+# Chef Setup adds chef workstation stuff to the environment variables as it tends to break a lot of stuff with the terminals, its best to only use chef when its needed
+export PATH="$PATH:/opt/chef-workstation/bin:/home/peter/.chefdk/gem/ruby/2.7.0/bin:/opt/chef-workstation/embedded/bin:/opt/chef-workstation/gitbin"
+export GEM_ROOT="/opt/chef-workstation/embedded/lib/ruby/gems/2.7.0"
+export GEM_HOME="/home/peter/.chefdk/gem/ruby/2.7.0"
+export GEM_PATH="/home/peter/.chefdk/gem/ruby/2.7.0:/opt/chef-workstation/embedded/lib/ruby/gems/2.7.0"
+_chef_comp() {
+    local COMMANDS="exec env gem generate shell-init install update push push-archive show-policy diff export clean-policy-revisions clean-policy-cookbooks delete-policy-group delete-policy undelete describe-cookbook provision"
+    COMPREPLY=($(compgen -W "$COMMANDS" -- ${COMP_WORDS[COMP_CWORD]} ))
+}
+complete -F _chef_comp chef
+
+
+
 # ---- End Of Environment Variables -----
 
 # Work Proxy Settings
