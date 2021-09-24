@@ -1,8 +1,20 @@
 {
-    "suggest.numberSelect": false,
+    "suggest.numberSelect": true,
     // Enable Codelens, has something to do with code actions
     "http.proxyStrictSSL": false,
     "codeLens.enable": true,
+    "javascript.suggestionActions.enabled": false,
+    "coc.preferences.extensionUpdateCheck": "daily",
+    "pyright.enable": true,
+    "python.linting.pylintCategorySeverity.warning": "Information",
+    "python.linting.pycodestyleCategorySeverity.E": "Information",
+    "markdownlint.config": {
+        "line-length": false,
+        "MD007": { "indent": 4 }
+    },
+    "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph",
+    "yaml.schemaStore.url": ""
+    //Language Server Settings
     "languageserver": {
         "ccls": {
             "command": "ccls",
@@ -39,15 +51,4 @@
             ]
         }
     },
-    "javascript.suggestionActions.enabled": false,
-    "coc.preferences.extensionUpdateCheck": "daily",
-    "pyright.enable": true,
-    "python.linting.pylintCategorySeverity.warning": "Information",
-    "python.linting.pycodestyleCategorySeverity.E": "Information",
-    "markdownlint.config": {
-        "line-length": false,
-        "MD007": { "indent": 4 }
-    },
-    "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph",
-    "yaml.schemaStore.url": ""
 }
