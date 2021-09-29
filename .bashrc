@@ -330,3 +330,5 @@ if [[ $WSLON == true ]]; then
 fi
 
 . "$HOME/.cargo/env"
+
+source /home/bowmanpete/.config/broot/launcher/bash/br
