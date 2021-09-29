@@ -14,4 +14,7 @@
       <value type="string" value="xfce4-settings-helper"/>
     </property>
   </property>
+  <property name="plugin" type="empty">
+    <property name="log-display-limit" type="int" value="7"/>
+  </property>
 </channel>

@@ -45,14 +45,14 @@
         <property name="workspace0" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="/usr/share/xfce4/backdrops/xubuntu-artful.png"/>
+          <property name="last-image" type="string" value="/usr/share/xfce4/backdrops/wallpaper.jpg"/>
         </property>
       </property>
       <property name="monitoreDP-1-1" type="empty">
         <property name="workspace0" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="/usr/share/xfce4/backdrops/xubuntu-artful.png"/>
+          <property name="last-image" type="string" value="/usr/share/xfce4/backdrops/wallpaper.jpg"/>
         </property>
       </property>
     </property>
