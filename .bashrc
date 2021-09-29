@@ -329,3 +329,4 @@ if [[ $WSLON == true ]]; then
     fi
 fi
 
+. "$HOME/.cargo/env"
