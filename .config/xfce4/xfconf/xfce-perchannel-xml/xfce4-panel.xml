@@ -17,6 +17,7 @@
         <value type="int" value="7"/>
         <value type="int" value="8"/>
         <value type="int" value="12"/>
+        <value type="int" value="3"/>
       </property>
       <property name="background-style" type="uint" value="1"/>
       <property name="size" type="uint" value="45"/>
@@ -85,6 +86,10 @@
     </property>
     <property name="plugin-15" type="string" value="separator">
       <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-3" type="string" value="launcher">
+      <property name="items" type="array">
+      </property>
     </property>
   </property>
   <property name="configver" type="int" value="2"/>
