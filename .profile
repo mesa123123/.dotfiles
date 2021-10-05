@@ -40,15 +40,15 @@ fi
 # ---- End of WSL Settings ---- 
 
 # Configure .dotfiles
-if [ -f $HOME/.dotfiles/dfsync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
-    # The dfsync and the bashrc have to work together as there are scripts that allow wsl to work alongside
+if [ -f $HOME/.dotfiles/sync.sh ] && [ -z "${TMUX}" ] && [ $SHLVL == 1 ] && [ -z "${VIMRUNTIME}" ]; then
+    # The sync and the bashrc have to work together as there are scripts that allow wsl to work alongside
     # windows so the client needs to know what to add to the path and what not to in order properly 
     # configure dotfiles on the client
     if [[ $WSLON == true ]]; then
         export PATH="$PATH:$HOME/.wslbin"
-        [ -f $HOME/.repos ] && $HOME/.dotfiles/dfsync.sh -m begin -r yes >> $HOME/.dotfiles/synclogs.log || $HOME/.dotfiles/dfsync.sh -m begin -r no >> $HOME/.dotfiles/synclogs.log &
+        [ -f $HOME/.repos ] && $HOME/.dotfiles/sync.sh -m begin -r yes >> $HOME/.dotfiles/synclogs.log || $HOME/.dotfiles/sync.sh -m begin -r no >> $HOME/.dotfiles/synclogs.log &
     else
-        [ -f $HOME/.repos ] && $HOME/.dotfiles/dfsync.sh -m begin -r yes >> $HOME/.dotfiles/synclogs.log || $HOME/.dotfiles/dfsync.sh -m begin -r no >> $HOME/.dotfiles/synclogs.log &
+        [ -f $HOME/.repos ] && $HOME/.dotfiles/sync.sh -m begin -r yes >> $HOME/.dotfiles/synclogs.log || $HOME/.dotfiles/sync.sh -m begin -r no >> $HOME/.dotfiles/synclogs.log &
     fi
 fi
 
