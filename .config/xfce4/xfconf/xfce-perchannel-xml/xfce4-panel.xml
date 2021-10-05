@@ -5,22 +5,24 @@
     <property name="panel-0" type="empty">
       <property name="position" type="string" value="p=2;x=1898;y=540"/>
       <property name="length" type="uint" value="100"/>
-      <property name="position-locked" type="bool" value="true"/>
+      <property name="position-locked" type="bool" value="false"/>
       <property name="plugin-ids" type="array">
         <value type="int" value="1"/>
         <value type="int" value="6"/>
+        <value type="int" value="15"/>
         <value type="int" value="3"/>
+        <value type="int" value="11"/>
         <value type="int" value="9"/>
+        <value type="int" value="13"/>
         <value type="int" value="10"/>
         <value type="int" value="2"/>
         <value type="int" value="5"/>
         <value type="int" value="7"/>
         <value type="int" value="8"/>
-        <value type="int" value="11"/>
         <value type="int" value="12"/>
       </property>
       <property name="background-style" type="uint" value="1"/>
-      <property name="size" type="uint" value="35"/>
+      <property name="size" type="uint" value="45"/>
       <property name="length-adjust" type="bool" value="true"/>
       <property name="span-monitors" type="bool" value="false"/>
       <property name="mode" type="uint" value="1"/>
@@ -98,6 +100,12 @@
       <property name="items" type="array">
         <value type="string" value="16330068515.desktop"/>
       </property>
+    </property>
+    <property name="plugin-13" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-15" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
     </property>
   </property>
   <property name="configver" type="int" value="2"/>
