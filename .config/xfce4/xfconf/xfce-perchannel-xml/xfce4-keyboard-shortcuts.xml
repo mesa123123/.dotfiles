@@ -164,7 +164,6 @@
       <property name="&lt;Primary&gt;F9" type="string" value="workspace_9_key"/>
       <property name="&lt;Alt&gt;Tab" type="string" value="cycle_windows_key"/>
       <property name="Left" type="string" value="left_key"/>
-      <property name="&lt;Super&gt;Up" type="string" value="tile_up_key"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;Right" type="string" value="right_workspace_key"/>
       <property name="&lt;Alt&gt;F6" type="string" value="maximize_vert_key"/>
       <property name="&lt;Primary&gt;F11" type="string" value="workspace_11_key"/>

@@ -328,5 +328,3 @@ if [[ $WSLON == true ]]; then
         export DISPLAY=127.0.0.1:0.0
     fi
 fi
-
-source /home/bowmanpete/.config/broot/launcher/bash/br
