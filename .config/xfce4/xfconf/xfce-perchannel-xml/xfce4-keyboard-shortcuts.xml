@@ -178,7 +178,6 @@
       <property name="&lt;Primary&gt;F4" type="string" value="workspace_4_key"/>
       <property name="&lt;Primary&gt;F12" type="string" value="workspace_12_key"/>
       <property name="Up" type="string" value="up_key"/>
-      <property name="&lt;Super&gt;Up" type="string" value="maximize_window_key"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;KP_6" type="string" value="move_window_workspace_6_key"/>
       <property name="&lt;Super&gt;KP_1" type="string" value="tile_down_left_key"/>
       <property name="&lt;Alt&gt;F11" type="string" value="fullscreen_key"/>
@@ -205,6 +204,7 @@
       <property name="&lt;Super&gt;KP_3" type="string" value="tile_down_right_key"/>
       <property name="&lt;Primary&gt;F1" type="string" value="workspace_1_key"/>
       <property name="override" type="bool" value="true"/>
+      <property name="&lt;Super&gt;Up" type="string" value="maximize_window_key"/>
     </property>
   </property>
   <property name="providers" type="array">
