@@ -25,6 +25,6 @@ function timestamppush()
 if [ -z "${TMUX}" ] && [ -z "${PIPENV_ACTIVE}" ] && [ -z "${VIMRUNTIME}" ];
 then
     timestamppush ${learning_working_directory}
-    ~/.dotfiles/dfsync.sh -m end -r no
+    ~/.dotfiles/sync.sh -m end -r no
     pause "...Exit tasks are complete, please press any key to leave shell"
 fi
