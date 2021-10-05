@@ -10,11 +10,8 @@
         <value type="int" value="1"/>
         <value type="int" value="6"/>
         <value type="int" value="15"/>
-        <value type="int" value="3"/>
         <value type="int" value="11"/>
-        <value type="int" value="9"/>
         <value type="int" value="13"/>
-        <value type="int" value="10"/>
         <value type="int" value="2"/>
         <value type="int" value="5"/>
         <value type="int" value="7"/>
@@ -79,28 +76,9 @@
       <property name="digital-format" type="string" value="%d %b, %H:%M"/>
       <property name="mode" type="uint" value="2"/>
     </property>
-    <property name="plugin-3" type="string" value="launcher">
-      <property name="items" type="array">
-        <value type="string" value="16330065421.desktop"/>
-      </property>
-      <property name="show-label" type="bool" value="false"/>
-      <property name="arrow-position" type="uint" value="4"/>
-      <property name="move-first" type="bool" value="false"/>
-      <property name="disable-tooltips" type="bool" value="false"/>
-    </property>
     <property name="plugin-6" type="string" value="separator">
       <property name="style" type="uint" value="0"/>
       <property name="expand" type="bool" value="false"/>
-    </property>
-    <property name="plugin-9" type="string" value="launcher">
-      <property name="items" type="array">
-        <value type="string" value="16330068354.desktop"/>
-      </property>
-    </property>
-    <property name="plugin-10" type="string" value="launcher">
-      <property name="items" type="array">
-        <value type="string" value="16330068515.desktop"/>
-      </property>
     </property>
     <property name="plugin-13" type="string" value="separator">
       <property name="style" type="uint" value="0"/>

@@ -123,10 +123,10 @@ function newscreen()
 # Environment Variable Settings
 # ----------------
 # The kitty terminal doesn't behave too nicelty 
-function standardizeterm() {
+function standardterm() {
     [[ ! $TERM == *"xterm-256color"* ]] && export TERM=xterm-256color || export TERM=${1}
 }
-alias kitterm="standardizeterm() xterm-kitty"
+alias kitterm="standardterm xterm-kitty"
 # Python Environments Activation
 function stenv() {
     ENVFILE=env/bin/activate
@@ -154,4 +154,4 @@ export -f dvx
 export -f newscreen
 export -f stenv
 export -f cocfinstall
-export -f standardizeterm
+export -f standardterm
