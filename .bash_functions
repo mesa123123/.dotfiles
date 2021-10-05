@@ -51,9 +51,9 @@ function devhome()
         echo "To Projects? (y/n)"
         read -r PROJECTS
         if [[ "${PROJECTS}" == "y" ]]; then
-            cd ~/dev/projects/ || exit;
+            cd ~/dev/projects/;
         else    
-            cd ~/dev/ || exit;
+            cd ~/dev/;
         fi
 	else
 		# If the arguement given is show, print out the list of project folders
