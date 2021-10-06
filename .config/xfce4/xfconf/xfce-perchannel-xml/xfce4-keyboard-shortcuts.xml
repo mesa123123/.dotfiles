@@ -76,6 +76,8 @@
       <property name="&lt;Super&gt;x" type="string" value="xfce4-session-logout"/>
       <property name="&lt;Super&gt;e" type="string" value="exo-open --launch FileManager"/>
       <property name="&lt;Super&gt;s" type="string" value="xfce4-appfinder"/>
+      <property name="&lt;Shift&gt;&lt;Super&gt;Right" type="string" value="/usr/local/sbin/move-to-next-monitor"/>
+      <property name="&lt;Shift&gt;&lt;Super&gt;Left" type="string" value="/usr/local/sbin/move-to-next-monitor"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
