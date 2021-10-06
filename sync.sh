@@ -138,50 +138,7 @@ function create_symlink()
 }
 
 
-# Check if the cntlm proxy is running on client
-function check_if_at_work()
-{
-	echo "`service cntlm status`" >> $LOGFILE
-	echo "`service cntlm status`" 
-}
-
-# Check if git access is available >> $LOGFILE
-function git_access_check()
-{
-	echo "Pinging Git" >> $LOGFILE
-	PING_GIT=`wget --spider -Sq "https://github.com" 2>&1 | grep "HTTP/" | awk '{print $2}'` >> $LOGFILE
-	echo "GIT ping Response ${PING_GIT}" >> $LOGFILE
-	[[ ${PING_GIT} -eq 200 ]] && echo true || echo false
-}
-
-# Because a proxy needs certain certs to connect to the internet there needs to be a cert refresh in
-# order to pull from any git files at the beginning and it seems that launching a browser does that
-function start_browser_proxy()
-{
-	am_i_at_work=`check_if_at_work` >> $LOGFILE
-	echo "$am_i_at_work" >> $LOGFILE
-	if [[ "$am_i_at_work" == *"cntlm is running"* ]]; then
-		echo "Cntlm Proxy Is Running, Assuming you're at work" >> $LOGFILE
-		GIT_ACCESS=`git_access_check`
-		echo "GIT ACCESS CHECK $GIT_ACCESS" >> $LOGFILE
-        echo "GIT ACCESS CHECK $GIT_ACCESS"
-		if [[ $GIT_ACCESS == false ]]; then	
-			# This command starts the browser in github, somehow the browser saying its cool gets
-			# around Zscaler?
-            if [[ $USER == *"m808752"* ]]; then
-			    BROWSER=$BROWSERBRAVE
-            else
-                BROWSER=$BROWSERCHROME
-            fi
-			"$BROWSER" https://github.com;
-		fi
-	fi
-}
-
-# NAME: PullRepo
-# DESC: Fetches and Pulls a repo that I want updated
-# ARGS: $@ (optional): 1, Path to Git Repo; 2, Remote Repo Name; 3, Remote Branch Name;
-# OUTS: None
+# Pull Repo functions for start of session
 function pullRepo()
 {
 	git -C $1 fetch >> $LOGFILE;
@@ -225,10 +182,8 @@ function getRepoInfo()
 
 # Sync all changes from other clients when things start up
 if [[ "${MODE}" == "begin" ]]; then
-	# Check Github can be accessed 
-	start_browser_proxy >> $LOGFILE
-    # Pull the dotfiles Repo
-	pullRepo $HOME/.dotfiles origin master -q 
+	# Pull the current repo
+    pullRepo $HOME/.dotfiles origin main -q 
     # To stop the editing of all of these dotfiles from getting too out of hand
     PROFILE_PATH_PRESENT=$(cat ~/.profile | grep "export PROFILE_PATH=\$PATH");
     if [ -z "$PROFILE_PATH_PRESENT" ]; then
@@ -262,7 +217,7 @@ if [[ "${MODE}" == "end" ]]; then
 	# Get list of manually installed packages for current machine state:
 	apt-mark showmanual | sed -e 's/^[ \t]*//' | tr '\n' ' ' > ~/.dotfiles/client_package_list/package_list_$USER
     # Push Dotfiles
-    timeStampPush ~/.dotfiles origin master 
+    timeStampPush ~/.dotfiles origin main 
     # Push All Other Git Repos
     if [[ "${REPOS}" == "yes" ]]; then
         if [[ -f ~/.repos ]]; then
