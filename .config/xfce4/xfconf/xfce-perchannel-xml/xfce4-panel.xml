@@ -4,7 +4,7 @@
   <property name="panels" type="array">
     <value type="int" value="0"/>
     <property name="panel-0" type="empty">
-      <property name="position" type="string" value="p=9;x=810;y=16"/>
+      <property name="position" type="string" value="p=6;x=2560;y=16"/>
       <property name="length" type="uint" value="100"/>
       <property name="position-locked" type="bool" value="true"/>
       <property name="plugin-ids" type="array">
@@ -23,9 +23,9 @@
       <property name="mode" type="uint" value="0"/>
       <property name="autohide-behavior" type="uint" value="1"/>
       <property name="background-rgba" type="array">
-        <value type="double" value="0.000000"/>
-        <value type="double" value="0.000000"/>
-        <value type="double" value="0.000000"/>
+        <value type="double" value="0.254902"/>
+        <value type="double" value="0.254902"/>
+        <value type="double" value="0.254902"/>
         <value type="double" value="1.000000"/>
       </property>
       <property name="icon-size" type="uint" value="0"/>
@@ -52,7 +52,9 @@
     <property name="plugin-17" type="string" value="separator">
       <property name="style" type="uint" value="0"/>
     </property>
-    <property name="plugin-20" type="string" value="separator"/>
+    <property name="plugin-20" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
     <property name="plugin-21" type="string" value="systray">
       <property name="names-ordered" type="array">
         <value type="string" value="redshift-gtk"/>
