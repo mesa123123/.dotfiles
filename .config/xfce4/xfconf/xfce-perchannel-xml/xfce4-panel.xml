@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <channel name="xfce4-panel" version="1.0">
-  <property name="panels" type="uint" value="1">
+  <property name="panels" type="array">
+    <value type="int" value="0"/>
+    <value type="int" value="1"/>
     <property name="panel-0" type="empty">
       <property name="position" type="string" value="p=2;x=1898;y=540"/>
       <property name="length" type="uint" value="100"/>
@@ -26,6 +28,10 @@
       <property name="icon-size" type="uint" value="0"/>
       <property name="background-image" type="string" value="/usr/share/xfce4/backdrops/xubuntu-artful.png"/>
       <property name="nrows" type="uint" value="1"/>
+    </property>
+    <property name="panel-1" type="empty">
+      <property name="position" type="string" value="p=12;x=2860;y=1055"/>
+      <property name="size" type="uint" value="48"/>
     </property>
   </property>
   <property name="plugins" type="empty">
