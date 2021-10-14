@@ -5,32 +5,37 @@
     <value type="int" value="0"/>
     <value type="int" value="1"/>
     <property name="panel-0" type="empty">
-      <property name="position" type="string" value="p=2;x=1898;y=540"/>
-      <property name="length" type="uint" value="100"/>
+      <property name="position" type="string" value="p=0;x=2561;y=26"/>
+      <property name="length" type="uint" value="90"/>
       <property name="position-locked" type="bool" value="true"/>
       <property name="plugin-ids" type="array">
+        <value type="int" value="17"/>
         <value type="int" value="2"/>
         <value type="int" value="12"/>
         <value type="int" value="9"/>
+        <value type="int" value="13"/>
+        <value type="int" value="16"/>
       </property>
       <property name="background-style" type="uint" value="1"/>
-      <property name="size" type="uint" value="25"/>
+      <property name="size" type="uint" value="30"/>
       <property name="length-adjust" type="bool" value="true"/>
       <property name="span-monitors" type="bool" value="false"/>
       <property name="mode" type="uint" value="0"/>
-      <property name="autohide-behavior" type="uint" value="0"/>
+      <property name="autohide-behavior" type="uint" value="1"/>
       <property name="background-rgba" type="array">
-        <value type="double" value="0.254902"/>
-        <value type="double" value="0.254902"/>
-        <value type="double" value="0.254902"/>
+        <value type="double" value="0.000000"/>
+        <value type="double" value="0.000000"/>
+        <value type="double" value="0.000000"/>
         <value type="double" value="1.000000"/>
       </property>
       <property name="icon-size" type="uint" value="0"/>
       <property name="background-image" type="string" value="/usr/share/xfce4/backdrops/xubuntu-artful.png"/>
       <property name="nrows" type="uint" value="1"/>
+      <property name="enter-opacity" type="uint" value="75"/>
+      <property name="leave-opacity" type="uint" value="75"/>
     </property>
     <property name="panel-1" type="empty">
-      <property name="position" type="string" value="p=12;x=2860;y=1055"/>
+      <property name="position" type="string" value="p=10;x=2563;y=1049"/>
       <property name="size" type="uint" value="60"/>
       <property name="enter-opacity" type="uint" value="100"/>
       <property name="leave-opacity" type="uint" value="100"/>
@@ -45,14 +50,16 @@
         <value type="int" value="4"/>
         <value type="int" value="11"/>
         <value type="int" value="5"/>
+        <value type="int" value="19"/>
+        <value type="int" value="18"/>
         <value type="int" value="7"/>
       </property>
       <property name="background-style" type="uint" value="1"/>
       <property name="background-rgba" type="array">
-        <value type="double" value="0.750000"/>
-        <value type="double" value="0.250000"/>
-        <value type="double" value="0.250000"/>
         <value type="double" value="0.000000"/>
+        <value type="double" value="0.000000"/>
+        <value type="double" value="0.000000"/>
+        <value type="double" value="0.264407"/>
       </property>
       <property name="autohide-behavior" type="uint" value="1"/>
     </property>
@@ -106,6 +113,17 @@
       <property name="style" type="uint" value="0"/>
     </property>
     <property name="plugin-11" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-13" type="string" value="power-manager-plugin"/>
+    <property name="plugin-16" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-17" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-18" type="string" value="thunar-tpa"/>
+    <property name="plugin-19" type="string" value="separator">
       <property name="style" type="uint" value="0"/>
     </property>
   </property>
