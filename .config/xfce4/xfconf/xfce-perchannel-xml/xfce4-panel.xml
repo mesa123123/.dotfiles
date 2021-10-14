@@ -54,6 +54,7 @@
         <value type="double" value="0.250000"/>
         <value type="double" value="0.000000"/>
       </property>
+      <property name="autohide-behavior" type="uint" value="1"/>
     </property>
   </property>
   <property name="plugins" type="empty">
