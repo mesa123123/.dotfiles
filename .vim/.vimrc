@@ -418,8 +418,8 @@ augroup end
 
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
-xmap <leader>a <Plug>(coc-codeaction-selected)
-nmap <leader>a <Plug>(coc-codeaction-selected)
+xmap g= <Plug>(coc-codeaction-selected)<CR>
+nmap g= <Plug>(coc-codeaction-selected)<CR>
 " ----------------
 
 " ----------------------END OF VIMRC--------------------- "
