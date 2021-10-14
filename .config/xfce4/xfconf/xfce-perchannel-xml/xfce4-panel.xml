@@ -83,6 +83,7 @@
       <property name="items" type="array">
         <value type="string" value="16342057732.desktop"/>
       </property>
+      <property name="disable-tooltips" type="bool" value="false"/>
     </property>
     <property name="plugin-4" type="string" value="launcher">
       <property name="items" type="array">
