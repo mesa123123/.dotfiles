@@ -63,8 +63,6 @@
       <property name="show-frame" type="bool" value="false"/>
       <property name="square-icons" type="bool" value="true"/>
       <property name="names-hidden" type="array">
-        <value type="string" value="bluetooth active
-&lt;b&gt;3 active connections&lt;/b&gt;"/>
         <value type="string" value="redshift-gtk"/>
       </property>
       <property name="size-max" type="uint" value="15"/>
