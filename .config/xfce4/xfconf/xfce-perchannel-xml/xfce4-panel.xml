@@ -4,8 +4,8 @@
   <property name="panels" type="array">
     <value type="int" value="0"/>
     <property name="panel-0" type="empty">
-      <property name="position" type="string" value="p=0;x=2561;y=26"/>
-      <property name="length" type="uint" value="90"/>
+      <property name="position" type="string" value="p=9;x=810;y=16"/>
+      <property name="length" type="uint" value="100"/>
       <property name="position-locked" type="bool" value="true"/>
       <property name="plugin-ids" type="array">
         <value type="int" value="17"/>

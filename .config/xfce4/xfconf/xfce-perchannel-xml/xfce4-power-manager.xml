@@ -12,7 +12,7 @@
     <property name="dpms-on-ac-off" type="empty"/>
     <property name="dpms-on-battery-sleep" type="empty"/>
     <property name="dpms-on-battery-off" type="empty"/>
-    <property name="show-panel-label" type="int" value="0"/>
+    <property name="show-panel-label" type="int" value="3"/>
     <property name="inactivity-sleep-mode-on-ac" type="empty"/>
     <property name="inactivity-sleep-mode-on-battery" type="empty"/>
     <property name="show-tray-icon" type="bool" value="false"/>
