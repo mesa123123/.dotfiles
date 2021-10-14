@@ -57,9 +57,11 @@
     </property>
     <property name="plugin-21" type="string" value="systray">
       <property name="names-ordered" type="array">
+        <value type="string" value="update-notifier"/>
+        <value type="string" value="blueman-tray"/>
+        <value type="string" value="networkmanager applet"/>
         <value type="string" value="redshift-gtk"/>
-        <value type="string" value="bluetooth active
-&lt;b&gt;3 active connections&lt;/b&gt;"/>
+        <value type="string" value="bluetooth active &lt;b&gt;3 active connections&lt;/b&gt;"/>
         <value type="string" value="network"/>
       </property>
       <property name="show-frame" type="bool" value="false"/>
