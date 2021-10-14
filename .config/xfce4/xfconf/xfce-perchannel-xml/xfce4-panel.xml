@@ -21,7 +21,7 @@
       <property name="background-style" type="uint" value="1"/>
       <property name="size" type="uint" value="25"/>
       <property name="length-adjust" type="bool" value="true"/>
-      <property name="span-monitors" type="bool" value="true"/>
+      <property name="span-monitors" type="bool" value="false"/>
       <property name="mode" type="uint" value="0"/>
       <property name="autohide-behavior" type="uint" value="0"/>
       <property name="background-rgba" type="array">
@@ -59,6 +59,8 @@
     </property>
     <property name="plugin-21" type="string" value="systray">
       <property name="names-ordered" type="array">
+        <value type="string" value="bluetooth active
+&lt;b&gt;2 active connections&lt;/b&gt;"/>
         <value type="string" value="update-notifier"/>
         <value type="string" value="blueman-tray"/>
         <value type="string" value="networkmanager applet"/>
