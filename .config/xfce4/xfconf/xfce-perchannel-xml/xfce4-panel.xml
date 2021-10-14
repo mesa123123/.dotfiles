@@ -9,19 +9,21 @@
       <property name="position-locked" type="bool" value="true"/>
       <property name="plugin-ids" type="array">
         <value type="int" value="17"/>
-        <value type="int" value="21"/>
+        <value type="int" value="13"/>
+        <value type="int" value="2"/>
+        <value type="int" value="1"/>
         <value type="int" value="16"/>
         <value type="int" value="12"/>
         <value type="int" value="9"/>
-        <value type="int" value="13"/>
         <value type="int" value="20"/>
+        <value type="int" value="21"/>
       </property>
       <property name="background-style" type="uint" value="1"/>
-      <property name="size" type="uint" value="30"/>
+      <property name="size" type="uint" value="25"/>
       <property name="length-adjust" type="bool" value="true"/>
-      <property name="span-monitors" type="bool" value="false"/>
+      <property name="span-monitors" type="bool" value="true"/>
       <property name="mode" type="uint" value="0"/>
-      <property name="autohide-behavior" type="uint" value="1"/>
+      <property name="autohide-behavior" type="uint" value="0"/>
       <property name="background-rgba" type="array">
         <value type="double" value="0.254902"/>
         <value type="double" value="0.254902"/>
@@ -70,6 +72,12 @@
         <value type="string" value="redshift-gtk"/>
       </property>
       <property name="size-max" type="uint" value="15"/>
+    </property>
+    <property name="plugin-1" type="string" value="pulseaudio">
+      <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
+    </property>
+    <property name="plugin-2" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
     </property>
   </property>
   <property name="configver" type="int" value="2"/>
