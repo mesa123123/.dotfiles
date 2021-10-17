@@ -21,7 +21,7 @@ alias edittmux="vim ~/.tmux.conf"
 # Package Management
 alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm -g update'
 #  Programmes etc.
-alias gnpm='sudo npm -g'
+alias gnpm='npm -g'
 alias pip='pip3'
 alias spip='sudo pip3'
 alias prpy='pipenv run python'
