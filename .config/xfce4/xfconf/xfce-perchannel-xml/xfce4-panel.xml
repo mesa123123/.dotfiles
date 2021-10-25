@@ -41,7 +41,7 @@
   <property name="plugins" type="empty">
     <property name="plugin-1" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chromium.instance6053"/>
+      <property name="mpris-players" type="string" value="chromium.instance4233;chromium.instance6053"/>
     </property>
     <property name="plugin-12" type="string" value="clock">
       <property name="digital-format" type="string" value="%d %b, %H:%M"/>
@@ -66,6 +66,8 @@
         <value type="string" value="redshift-gtk"/>
       </property>
       <property name="names-ordered" type="array">
+        <value type="string" value="bluetooth active
+&lt;b&gt;3 active connections&lt;/b&gt;"/>
         <value type="string" value="bluetooth active &lt;b&gt;2 active connections&lt;/b&gt;"/>
         <value type="string" value="update-notifier"/>
         <value type="string" value="blueman-tray"/>
