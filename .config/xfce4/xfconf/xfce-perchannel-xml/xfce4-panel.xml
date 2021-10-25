@@ -5,7 +5,7 @@
   <property name="panels" type="array">
     <value type="int" value="0"/>
     <property name="panel-0" type="empty">
-      <property name="autohide-behavior" type="uint" value="0"/>
+      <property name="autohide-behavior" type="uint" value="1"/>
       <property name="background-image" type="string" value="/usr/share/xfce4/backdrops/xubuntu-artful.png"/>
       <property name="background-rgba" type="array">
         <value type="double" value="0.254902"/>
@@ -66,8 +66,7 @@
         <value type="string" value="redshift-gtk"/>
       </property>
       <property name="names-ordered" type="array">
-        <value type="string" value="bluetooth active
-&lt;b&gt;3 active connections&lt;/b&gt;"/>
+        <value type="string" value="bluetooth active &lt;b&gt;3 active connections&lt;/b&gt;"/>
         <value type="string" value="bluetooth active &lt;b&gt;2 active connections&lt;/b&gt;"/>
         <value type="string" value="update-notifier"/>
         <value type="string" value="blueman-tray"/>
