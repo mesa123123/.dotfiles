@@ -40,6 +40,8 @@ Plug 'arzg/vim-rust-syntax-ext'
 Plug 'junegunn/goyo.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'fladson/vim-kitty', {'branch': 'main'}
+Plug 'takac/vim-hardtime'
+Plug 'purescript-contrib/purescript-vim'
 
 call plug#end()
 
@@ -118,6 +120,10 @@ let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1
 let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+
+" Hardtime on
+" --------
+let g:hardtime_default_on = 1
 
 " ----------------
 
