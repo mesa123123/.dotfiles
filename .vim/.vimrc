@@ -42,6 +42,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'fladson/vim-kitty', {'branch': 'main'}
 Plug 'takac/vim-hardtime'
 Plug 'purescript-contrib/purescript-vim'
+Plug 'hashivim/vim-terraform'
+Plug 'hashivim/vim-vagrant'
 
 call plug#end()
 
