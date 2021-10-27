@@ -43,3 +43,5 @@ VirtualBox's
 VMs
 subdir
 metadata
+bootloader
+RHEL
