@@ -44,7 +44,7 @@ Plug 'takac/vim-hardtime'
 Plug 'purescript-contrib/purescript-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'hashivim/vim-vagrant'
-Plug 'neovimhaskell/haskell-vim'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
