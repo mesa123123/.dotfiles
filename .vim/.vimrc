@@ -45,6 +45,7 @@ Plug 'purescript-contrib/purescript-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'hashivim/vim-vagrant'
 Plug 'tpope/vim-fugitive'
+Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
