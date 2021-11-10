@@ -237,17 +237,6 @@ if [ "$USER" == "bowmanpete" ]; then
     export LEARNHOME="/home/${USER}/dev/learning/"
 fi
 
-# Work Environment Variables
-if [ "$USER" == "m808752" ] || [ "$USER" == "M808752" ]; then
-	export POLYNOTEHOME="/opt/polynote"
-    export AIRFLOW_HOME="/opt/airflow"
-    export GEM_HOME="/home/$USER/.ruby"
-    if [[ ${WSLON} == true ]]; then
-        export LEARNHOME="$WINHOME/dev/learning/"
-    else
-        export LEARNHOME="/home/${USER}/dev/learning/"
-    fi
-fi
 
 # Appending Variables Variables to Path
 export PATH="$JAVA_HOME/bin:$PATH"
@@ -263,10 +252,10 @@ export PATH="$PATH:$NPM_CONFIG_PREFIX/bin"
 
 
 # Chef Setup adds chef workstation stuff to the environment variables as it tends to break a lot of stuff with the terminals, its best to only use chef when its needed
-export PATH="$PATH:/opt/chef-workstation/bin:/home/peter/.chefdk/gem/ruby/2.7.0/bin:/opt/chef-workstation/embedded/bin:/opt/chef-workstation/gitbin"
+export PATH="$PATH:/opt/chef-workstation/bin:/home/${USER}/.chefdk/gem/ruby/2.7.0/bin:/opt/chef-workstation/embedded/bin:/opt/chef-workstation/gitbin"
 export GEM_ROOT="/opt/chef-workstation/embedded/lib/ruby/gems/2.7.0"
-export GEM_HOME="/home/peter/.chefdk/gem/ruby/2.7.0"
-export GEM_PATH="/home/peter/.chefdk/gem/ruby/2.7.0:/opt/chef-workstation/embedded/lib/ruby/gems/2.7.0"
+export GEM_HOME="/home/${USER}/.chefdk/gem/ruby/2.5.0"
+export GEM_PATH="/home/${USER}/.chefdk/gem/ruby/2.5.0:/opt/chef-workstation/embedded/lib/ruby/gems/2.5.0"
 _chef_comp() {
     local COMMANDS="exec env gem generate shell-init install update push push-archive show-policy diff export clean-policy-revisions clean-policy-cookbooks delete-policy-group delete-policy undelete describe-cookbook provision"
     COMPREPLY=($(compgen -W "$COMMANDS" -- ${COMP_WORDS[COMP_CWORD]} ))
@@ -276,29 +265,6 @@ complete -F _chef_comp chef
 
 
 # ---- End Of Environment Variables -----
-
-# Work Proxy Settings
-if [ "$USER" == "m808752" ] && [[ ${WSLON} == true ]]; then
-    if [[ $WSL_VERSION == 1 ]]; then
-        export {http,https,ftp}_proxy="http://localhost:3130"
-	    export {HTTP,HTTPS,FTP}_PROXY="http://localhost:3130"
-	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=localhost -Dhttp.proxyPort=3128 -Dhttps.proxyHost=localhost -Dhttps.proxyPort=3128"
-        # Set the git config proxy
-        git config --global http.proxy http://localhost:3130
-        git config --global https.proxy http://localhost:3130
-        # Set the vagrant repos
-        export {VAGRANT_HTTP,VAGRANT_HTTPS,VAGRANT_FTP}_PROXY="http://localhost:3130"
-    elif [[ $WSL_VERSION == 2 ]]; then
-        export {http,https,ftp}_proxy="http://${WINIP}:3128"
-	    export {HTTP,HTTPS,FTP}_PROXY="http://${WINIP}:3128"
-        export {VAGRANT_HTTP,VAGRANT_HTTPS,VAGRANT_FTP}_PROXY="http://${WINIP}:3130"
-	    export JAVA_OPTS="$JAVA_OPTS -Dhttp.proxyHost=${WINIP} -Dhttp.proxyPort=3128 -Dhttps.proxyHost=${WINIP} -Dhttps.proxyPort=3128"
-        echo "2"
-    fi	
-    # Rust Proxies
-    configadd $CARGO_HOME/config.toml "[http]"
-    configadd $CARGO_HOME/config.toml "proxy = \"localhost:3130\""
-fi
 
 # Powerline Setup
 if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
@@ -310,13 +276,6 @@ fi
 
 
 # ---- Automated Shell Commands For Startup ----
-# Starting Proxy Services If I'm at work
-if [ "$USER" == "m808752" ] && [ "${WSLON}" == "true" ]; then
-	# If the service is already running don't start it up..	
-	if [[ "$(service cntlm status)" == *"* cntlm is not running"* ]]; then
-		echo "$WORK_PWD"  | sudo -S service cntlm start
-	fi
-fi
 
 # WSL Display Commands
 if [[ $WSLON == true ]]; then

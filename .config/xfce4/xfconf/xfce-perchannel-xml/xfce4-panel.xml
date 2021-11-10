@@ -66,6 +66,10 @@
         <value type="string" value="redshift-gtk"/>
       </property>
       <property name="names-ordered" type="array">
+        <value type="string" value="bluetooth enabled
+&lt;b&gt;2 active connections&lt;/b&gt;"/>
+        <value type="string" value="bluetooth active
+&lt;b&gt;2 active connections&lt;/b&gt;"/>
         <value type="string" value="bluetooth active &lt;b&gt;3 active connections&lt;/b&gt;"/>
         <value type="string" value="bluetooth active &lt;b&gt;2 active connections&lt;/b&gt;"/>
         <value type="string" value="update-notifier"/>

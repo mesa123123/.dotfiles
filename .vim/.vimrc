@@ -118,6 +118,11 @@ if exists("g:loaded_webdevicons")
 " Status Line Updates
 set laststatus=2
 
+" Hardtime On
+let g:hardtime_default_on = 1
+let g:hardtime_showing = 1
+let g:hardime_allow_different_key = 1
+
 " Web Dev Icons Settings
 " --------
 let g:webdevicons_enable = 1
@@ -431,6 +436,12 @@ augroup end
 xmap g= <Plug>(coc-codeaction-selected)<CR>
 nmap g= <Plug>(coc-codeaction-selected)<CR>
 " ----------------
+
+" Allow WorkSpace Specific RCs
+set exrc
+set secure
+
+
 
 " ----------------------END OF VIMRC--------------------- "
 
