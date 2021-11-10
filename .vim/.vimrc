@@ -437,9 +437,8 @@ nmap g= <Plug>(coc-codeaction-selected)<CR>
 " ----------------
 
 " Allow WorkSpace Specific RCs
-set exrc
-set secure
-
-
+if filereadable("./vimwsrc")
+    source ./vimwsrc
+endif
 
 " ----------------------END OF VIMRC--------------------- "
