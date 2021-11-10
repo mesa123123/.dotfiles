@@ -45,7 +45,6 @@ Plug 'purescript-contrib/purescript-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'hashivim/vim-vagrant'
 Plug 'tpope/vim-fugitive'
-Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
@@ -130,9 +129,9 @@ let g:webdevicons_enable_nerdtree = 1
 let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 
-" Hardtime on
+" Vimwiki Global Syntax Off
 " --------
-let g:hardtime_default_on = 1
+let g:vimwiki_global_ext = 0
 
 " ----------------
 
@@ -444,4 +443,3 @@ set secure
 
 
 " ----------------------END OF VIMRC--------------------- "
-
