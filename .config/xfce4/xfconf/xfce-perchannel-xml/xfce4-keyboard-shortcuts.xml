@@ -17,12 +17,19 @@
       <property name="&lt;Super&gt;p" type="empty"/>
       <property name="&lt;Primary&gt;Escape" type="empty"/>
       <property name="XF86WWW" type="empty"/>
+      <property name="HomePage" type="empty"/>
       <property name="XF86Mail" type="empty"/>
       <property name="Print" type="empty"/>
-      <property name="&lt;Super&gt;l" type="empty"/>
-      <property name="&lt;Primary&gt;&lt;Alt&gt;Escape" type="empty"/>
       <property name="&lt;Alt&gt;Print" type="empty"/>
       <property name="&lt;Shift&gt;Print" type="empty"/>
+      <property name="&lt;Super&gt;e" type="empty"/>
+      <property name="&lt;Primary&gt;&lt;Alt&gt;f" type="empty"/>
+      <property name="&lt;Primary&gt;&lt;Alt&gt;Escape" type="empty"/>
+      <property name="&lt;Primary&gt;&lt;Shift&gt;Escape" type="empty"/>
+      <property name="&lt;Super&gt;r" type="empty">
+        <property name="startup-notify" type="empty"/>
+      </property>
+      <property name="&lt;Super&gt;l" type="empty"/>
       <property name="XF86HomePage" type="empty"/>
       <property name="&lt;Super&gt;w" type="empty"/>
       <property name="&lt;Super&gt;m" type="empty"/>
@@ -30,8 +37,6 @@
       <property name="&lt;Super&gt;f" type="empty"/>
       <property name="&lt;Super&gt;F1" type="empty"/>
       <property name="&lt;Super&gt;t" type="empty"/>
-      <property name="&lt;Super&gt;r" type="empty"/>
-      <property name="&lt;Super&gt;e" type="empty"/>
       <property name="XF86Calculator" type="empty"/>
       <property name="XF86Music" type="empty"/>
       <property name="&lt;Super&gt;1" type="empty"/>
@@ -75,10 +80,10 @@
       <property name="&lt;Super&gt;3" type="string" value="exo-open --launch FileManager"/>
       <property name="&lt;Super&gt;x" type="string" value="xfce4-session-logout"/>
       <property name="&lt;Super&gt;e" type="string" value="exo-open --launch FileManager"/>
-      <property name="&lt;Super&gt;s" type="string" value="xfce4-appfinder"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;Right" type="string" value="/usr/local/sbin/move-to-next-monitor"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;Left" type="string" value="/usr/local/sbin/move-to-next-monitor"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;s" type="string" value="flameshot gui"/>
+      <property name="&lt;Super&gt;s" type="string" value="xfce4-appfinder --collapsed"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
@@ -135,6 +140,14 @@
       <property name="&lt;Primary&gt;F10" type="empty"/>
       <property name="&lt;Primary&gt;F11" type="empty"/>
       <property name="&lt;Primary&gt;F12" type="empty"/>
+      <property name="&lt;Super&gt;KP_Left" type="empty"/>
+      <property name="&lt;Super&gt;KP_Right" type="empty"/>
+      <property name="&lt;Super&gt;KP_Up" type="empty"/>
+      <property name="&lt;Super&gt;KP_Down" type="empty"/>
+      <property name="&lt;Super&gt;KP_Page_Up" type="empty"/>
+      <property name="&lt;Super&gt;KP_Home" type="empty"/>
+      <property name="&lt;Super&gt;KP_End" type="empty"/>
+      <property name="&lt;Super&gt;KP_Next" type="empty"/>
       <property name="&lt;Alt&gt;F5" type="empty"/>
       <property name="&lt;Super&gt;KP_1" type="empty"/>
       <property name="&lt;Super&gt;Down" type="empty"/>

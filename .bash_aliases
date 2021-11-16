@@ -40,8 +40,8 @@ alias cocnpm='npm i --ignore-scripts --no-lockfile --production --legacy-peer-de
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
 
-# WSL Only Commands
-alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
+# Application Commands
+alias bluetooth="blueman-manager"
 
 # Selenium Commands
 if [ -f "/usr/local/bin/seleniumServer.jar" ]; then
@@ -64,6 +64,10 @@ if [[ $(dpkg-query -l chromium-browser 2>/dev/null | grep -c "chromium-browser")
 else
     alias chrome='chromium'
 fi
+
+# WSL Only Commands
+alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
+
 # --------
 # Fancy Commands
 # --------
