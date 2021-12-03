@@ -359,7 +359,7 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 cabbrev ccc CocCommand
 " Global Extensions
 " --------
-let g:coc_global_extensions = ['coc-css', 'coc-docker', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-pyright', 'coc-solargraph', 'coc-toml', 'coc-tsserver', 'coc-ultisnips', 'coc-word', 'coc-yaml', 'coc-git', 'coc-rls']
+let g:coc_global_extensions = ['coc-css', 'coc-docker', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-pyright', 'coc-solargraph', 'coc-toml', 'coc-tsserver', 'coc-ultisnips', 'coc-word', 'coc-yaml', 'coc-git', 'coc-rls', 'coc-go']
 " Recommended Options
 " --------
 " TextEdit might fail if hidden is not set.
@@ -434,6 +434,10 @@ augroup end
 " Example: `<leader>aap` for current paragraph
 xmap g= <Plug>(coc-codeaction-selected)<CR>
 nmap g= <Plug>(coc-codeaction-selected)<CR>
+
+" Adding Auto Import Resolution
+autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+
 " ----------------
 
 " Allow WorkSpace Specific RCs

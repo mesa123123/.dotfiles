@@ -10,11 +10,13 @@
     "python.linting.pycodestyleCategorySeverity.E": "Information",
     "markdownlint.config": {
         "line-length": false,
-        "MD007": { "indent": 4 },
+        "MD007": {
+            "indent": 4
+        },
         "MD038": false
     },
     "solargraph.commandPath": "/home/$USER/.ruby/bin/solargraph",
-    "yaml.schemaStore.url": ""
+    "yaml.schemaStore.url": "",
     //Language Server Settings
     "languageserver": {
         "ccls": {
@@ -43,13 +45,31 @@
         },
         "bash": {
             "command": "npx",
-            "args": ["bash-language-server", "start"],
+            "args": [
+                "bash-language-server",
+                "start"
+            ],
             "filetypes": [
                 "sh"
             ],
             "ignoredRootPaths": [
                 "~"
             ]
+        },
+        "golang": {
+            "command": "gopls",
+            "rootPatterns": [
+                "go.mod",
+                ".vim/",
+                ".git/",
+                ".hg/"
+            ],
+            "filetypes": [
+                "go"
+            ],
+            "initializationOptions": {
+                "usePlaceholders": true
+            }
         }
-    },
+    }
 }
