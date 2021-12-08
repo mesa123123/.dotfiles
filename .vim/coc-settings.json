@@ -8,6 +8,7 @@
     "pyright.enable": true,
     "python.linting.pylintCategorySeverity.warning": "Information",
     "python.linting.pycodestyleCategorySeverity.E": "Information",
+    "omnisharp.version": "v1.37.3",
     "markdownlint.config": {
         "line-length": false,
         "MD007": {
