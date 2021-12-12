@@ -44,6 +44,14 @@
                 }
             }
         },
+        "terraform": {
+            "command": "terraform-lsp",
+            "filetypes": [
+                "terraform",
+                ".tf"
+            ],
+            "initializationOptions": {}
+        },
         "bash": {
             "command": "npx",
             "args": [

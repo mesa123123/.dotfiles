@@ -178,6 +178,7 @@ fi
 # Universal Environment Variables
 export PATH=$PATH:~/local/bin
 export PATH=$PATH:~/.local/bin
+export PATH=$PATH:~/lsp
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"
@@ -287,3 +288,5 @@ if [[ $WSLON == true ]]; then
         export DISPLAY=127.0.0.1:0.0
     fi
 fi
+
+complete -C /usr/bin/terraform terraform
