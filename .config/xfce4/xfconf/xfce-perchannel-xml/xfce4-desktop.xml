@@ -129,8 +129,11 @@
       </property>
     </property>
   </property>
+  <property name="desktop-menu" type="empty">
+    <property name="show" type="empty"/>
+  </property>
   <property name="last" type="empty">
-    <property name="window-width" type="int" value="708"/>
+    <property name="window-width" type="int" value="773"/>
     <property name="window-height" type="int" value="590"/>
   </property>
 </channel>

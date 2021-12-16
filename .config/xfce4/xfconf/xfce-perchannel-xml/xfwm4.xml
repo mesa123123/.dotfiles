@@ -63,8 +63,8 @@
     <property name="focus_hint" type="bool" value="true"/>
     <property name="frame_border_top" type="int" value="0"/>
     <property name="horiz_scroll_opacity" type="bool" value="false"/>
-    <property name="inactive_opacity" type="int" value="65"/>
-    <property name="move_opacity" type="int" value="89"/>
+    <property name="inactive_opacity" type="int" value="100"/>
+    <property name="move_opacity" type="int" value="80"/>
     <property name="placement_ratio" type="int" value="20"/>
     <property name="popup_opacity" type="int" value="100"/>
     <property name="prevent_focus_stealing" type="bool" value="false"/>
