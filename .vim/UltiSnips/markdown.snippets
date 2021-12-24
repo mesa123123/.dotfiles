@@ -2,11 +2,10 @@ snippet noteatomic "Creates a New Atomic Note" b
 # $1
 
 
-__TAGS:__
-#$1 
+[//]: # Tags
 
-__References__
-$2
+[//]: # References
+[$2Link]: $3
 endsnippet
 
 snippet notecourse "Creates Notes That I've Jotted Down Whilst Reviewing Learning Material" b
@@ -16,10 +15,11 @@ snippet notecourse "Creates Notes That I've Jotted Down Whilst Reviewing Learnin
 
 ## Questions
 
-__TAGS:__
 
-__References__
-_ [$2]($3) _
+[//]: # Tags
+
+[//]: # References
+[$2Link]: $3
 endsnippet
 
 snippet notebacklinkedatomic "Creates a New Atomic Note with backlink" b
@@ -28,16 +28,15 @@ snippet notebacklinkedatomic "Creates a New Atomic Note with backlink" b
 ___BackLinks___
 _ [$3](<./$3.md>) _
 
-__ TAGS: __
-#$1
 
-__References__
-$2
+[//]: # Tags
 
+[//]: # References
+[$2Link]: $3
 endsnippet
 
 snippet linkmd "Creates a New Link"
-[$1](<$2.md> "$2")
+[$1]: $2
 endsnippet
 
 snippet linkseemore "Creates a See More Section" b
@@ -53,12 +52,11 @@ snippet notesuper "Creates a Super/Contents Note" b
 
 
 
-__TAGS:__
-#$1
 
-_References_
-$2
+[//]: # Tags
 
+[//]: # References
+[$2Link]: $3
 endsnippet
 
 snippet notesuperatomicsection "Creates a section for an atomic note that childs a super note" b

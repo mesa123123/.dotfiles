@@ -125,7 +125,7 @@ function cocfinstall() {
 }
 
 # Touchpad control on ubuntu
-function touchpadToggle() {
+function tpt() {
     if synclient | grep --quiet 'TouchpadOff             = 0'; then
       synclient TouchpadOff=1
       notify-send Touchpad Disabled
