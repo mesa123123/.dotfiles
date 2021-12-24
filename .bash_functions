@@ -119,6 +119,21 @@ function newscreen()
   fi
 }
 
+# CocFunction for installing
+function cocfinstall() {
+    npm install $1 --ignore-scripts --no-lockfile --production --legacy-peer-deps
+}
+
+# Touchpad control on ubuntu
+function touchpadToggle() {
+    if synclient | grep --quiet 'TouchpadOff             = 0'; then
+      synclient TouchpadOff=1
+      notify-send Touchpad Disabled
+    else
+      synclient TouchpadOff=0
+      notify-send Touchpad Enabled
+    fi
+}
 
 # Environment Variable Settings
 # ----------------
@@ -142,10 +157,6 @@ function stenv() {
     else
         echo "Can't find an unamed or env-named virtualenvironment"
     fi
-}
-
-function cocfinstall() {
-    npm install $1 --ignore-scripts --no-lockfile --production --legacy-peer-deps
 }
 
 # export the functions to the shell session
