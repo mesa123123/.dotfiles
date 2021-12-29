@@ -29,12 +29,13 @@
         <value type="int" value="16"/>
         <value type="int" value="12"/>
         <value type="int" value="9"/>
+        <value type="int" value="4"/>
+        <value type="int" value="3"/>
         <value type="int" value="20"/>
         <value type="int" value="21"/>
-        <value type="int" value="3"/>
       </property>
       <property name="position" type="string" value="p=6;x=2560;y=16"/>
-      <property name="position-locked" type="bool" value="false"/>
+      <property name="position-locked" type="bool" value="true"/>
       <property name="size" type="uint" value="25"/>
       <property name="span-monitors" type="bool" value="false"/>
     </property>
@@ -61,6 +62,7 @@
     </property>
     <property name="plugin-20" type="string" value="separator">
       <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="false"/>
     </property>
     <property name="plugin-21" type="string" value="systray">
       <property name="names-hidden" type="array">
@@ -96,9 +98,17 @@
       </property>
     </property>
     <property name="plugin-9" type="string" value="separator">
+      <property name="expand" type="bool" value="false"/>
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-3" type="string" value="pager">
+      <property name="rows" type="uint" value="1"/>
+      <property name="miniature-view" type="bool" value="false"/>
+      <property name="numbering" type="bool" value="false"/>
+    </property>
+    <property name="plugin-4" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>
     </property>
-    <property name="plugin-3" type="string" value="pager"/>
   </property>
 </channel>
