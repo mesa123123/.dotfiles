@@ -12,7 +12,7 @@
     "markdownlint.config": {
         "line-length": false,
         "MD007": {
-            "indent": 4
+            "indent": 2
         },
         "MD038": false,
         "MD034": false
