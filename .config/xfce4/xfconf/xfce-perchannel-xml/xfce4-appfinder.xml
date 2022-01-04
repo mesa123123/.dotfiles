@@ -40,7 +40,7 @@
       <property name="type" type="int" value="0"/>
     </property>
     <property name="action-6" type="empty">
-      <property name="pattern" type="string" value="bluetooth"/>
+      <property name="pattern" type="string" value="bluet"/>
       <property name="command" type="string" value="blueman-manager"/>
     </property>
     <property name="action-7" type="empty">

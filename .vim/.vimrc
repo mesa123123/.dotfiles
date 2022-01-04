@@ -183,14 +183,8 @@ au Filetype mermaid call RunMermaidPreview()
 " C++ Language 
 au FileType cpp setlocal et ts=2 sw=2
 
-" Python Language
-let g:pymode_rope = 0
-let g:pymode_rope_goto_definition_bind = '<c-c>g'
-let g:pymode_rope_goto_definition_cmd = 'new'
-let g:pymode_lint = 0
-let g:pymode_lint_on_write = 0
-let g:pymode_lint_on_fly = 0
-au FileType python setlocal et ts=4 sw=4 sts=4
+" HCL Language
+au BufRead,BufNewFile *.hcl set filetype=ini
 
 " JenkinsFile
 au BufNewFile,BufRead Jenkinsfile set filetype=groovy
@@ -208,8 +202,17 @@ let g:vim_markdown_conceal = 0
 " Set .draft files to Markdown
 au BufRead,BufNewFile *.draft set filetype=markdown
 
-" HCL Language
-au BufRead,BufNewFile *.hcl set filetype=ini
+" Python Language
+let g:pymode_rope = 0
+let g:pymode_rope_goto_definition_bind = '<c-c>g'
+let g:pymode_rope_goto_definition_cmd = 'new'
+let g:pymode_lint = 0
+let g:pymode_lint_on_write = 0
+let g:pymode_lint_on_fly = 0
+au FileType python setlocal et ts=4 sw=4 sts=4
+
+" Typescript Settings
+au FileType typescript setlocal ts=2 sw=2 sts=2
 
 " Vagrant Files
 augroup vagrant
