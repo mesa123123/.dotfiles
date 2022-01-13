@@ -2,7 +2,10 @@ snippet describejest "Create a Describe in Jest" b
 describe("$1", () => { $2 } )
 endsnippet
 
-
 snippet itjest "Create an IT test in jest" b
 it("$1", () => { $2 })
+endsnippet
+
+snippet expectjest "Create an expect assertion in jest" b
+expect(($1) => { $2 }).$3
 endsnippet
