@@ -1,4 +1,5 @@
 WebBrowser=brave-browser
 TerminalEmulator=custom-TerminalEmulator
 TerminalEmulatorDismissed=true
+WebBrowserDismissed=true
 
