@@ -15,7 +15,7 @@
     "coc-solargraph": ">=1.2.3",
     "coc-svg": ">=0.0.13",
     "coc-toml": ">=1.1.0",
-    "coc-tsserver": ">=1.9.8",
+    "coc-tsserver": ">=1.9.9",
     "coc-ultisnips": ">=1.2.3",
     "coc-word": ">=1.2.2",
     "coc-xml": ">=1.14.1",
