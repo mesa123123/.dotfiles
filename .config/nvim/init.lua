@@ -3,28 +3,32 @@
 --------------------------------
 -- Set the config path
 vim.g["config_path"] = "~/config/nvim"
--- Set the Current Directory to a variable
-vim.g.cwd = vim.cmd('! pwd')
 -- Set the mapleader
 vim.g["mapleader"] = "\\"
--- Set vim api and cmd to variables - easier for syntax shite
+
+-- Vim options and api to variables
 ----------------
-local cmd = vim.cmd
-local api = vim.api
-local fn = vim.fn
+local cmd = vim.cmd -- vim commands
+local api = vim.api -- vim api (I'm not sure what this does)
+local fn = vim.fn -- vim functions
+local g = vim.g -- global variables
+local opt = vim.opt -- vim options
+local gopt = vim.o -- global options
+local bopt = vim.bo -- buffer options
+local wopt = vim.wo -- window options
 
 --------------------------------
 -- Plugin Loading and Settings
 --------------------------------
 -- Install Packer and Sync if required (vim-plug was going to be more complicated and I'm lazy)
 ----------------
-local packer_install_path = '~/config/nvim/autoload/packer.nvim'
-if fn.empty(fn.glob(packer_install_path)) > 0 then
+local install_path = fn.stdpath('data')..'/site/pack/packer/opt/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
     -- Clone packer and install
-    api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim '..packer_install_path..' --depth=1')
+    api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim '..install_path..' --depth=1')
 end
 -- Load Packer
-cmd [[packadd packer.nvim]]
+vim.cmd [[packadd packer.nvim]]
 -- Load Plugins
 ----------------
 require("packer").startup(function()
@@ -81,43 +85,37 @@ cmd [[cabbrev updatevim source ~/.vim/.vimrc]]
 -- General Options Setting
 --------------------------------
 -- Line Numbers On
-cmd [[set number]]
--- Language Syntax On
-cmd [[syntax enable]]
+opt.number = true
 -- Filetype Enable
 cmd [[
 filetype on
 filetype plugin indent on
 ]]
 -- Other Enconding and Formatting settings
-cmd [[
-set linebreak
-set autoindent
-set nofoldenable
-set encoding=UTF-8
-set noshowmode
-set splitbelow
-]]
+opt.linebreak = true
+opt.autoindent = true
+cmd 'set nofoldenable'
+opt.encoding = 'UTF-8'
+cmd 'set noshowmode'
+opt.splitbelow = true
 -- Color Scheme Options
 ----------------
--- set termguicolors
--- set t_Co=25
--- colorscheme onehalfdark
--- 
--- "	Tabstop & Shiftwidth
--- set tabstop=4
--- set shiftwidth=4
--- set expandtab
--- 
--- "Rainbow Brackets Options
+opt.termguicolors = true
+cmd 'set t_Co=25'
+cmd 'colorscheme onehalfdark'
+-- Tabstop & Shiftwidth
+opt.tabstop= 4
+opt.shiftwidth= 4
+opt.expandtab = true
+-- Rainbow Brackets Options
 -- let g:rainbow_active=1
 -- 
 -- if exists("g:loaded_webdevicons")
 --       call webdevicons#refresh()
 --   endif
 -- 
--- " Status Line Updates
--- set laststatus=2
+-- Status Line Updates
+opt.laststatus = 2
 -- 
 -- " Hardtime On
 -- let g:hardtime_default_on = 1
