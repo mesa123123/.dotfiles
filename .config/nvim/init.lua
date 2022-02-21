@@ -1,4 +1,4 @@
---------------------------------
+---------------------------------
 -- Priority Settings
 --------------------------------
 -- Set the config path
@@ -35,16 +35,12 @@ require("packer").startup(function()
     -- Packer can manage itself as an optional plugin
     use {"wbthomason/packer.nvim", opt = true}
     -- Colors and Themes and UI
-    use {"altercation/vim-colors-solarized"}
-    use {"raynoasis/vim-webdevicons"}
-    use {"sonph/onehalf", options = {rtp = '/vim'}}
-    use {"fladson/vimkitty", options = {branch = 'main'}}
-    -- Lightline and related plugins
-    use {"itchny/lightline.vim"}
-    use {"itchny/git-branch"}
+    use {'ii14/onedark.nvim'}
+    -- New Dev Icons Please
+    use {'kyazdani42/nvim-web-devicons'}
+    -- NEED A NEW LIGHTLINE
     -- NerdTree and related plugins
     use {"preservim/nerdtree"}
-    use {"Xuyunanp/nerdtree-git-plugin"}
     -- Hardtime
     use {"takac/vim-hardtime"}
     -- IndentLine
@@ -53,24 +49,20 @@ require("packer").startup(function()
     use {"L3MON4D3/LuaSnip"}
     -- Language Server Protocol this uses syntax etc to help coding
     use {"neovim/nvim-lspconfig"}
+    -- Help with the installaiton of lsps
     use {"williamboman/nvim-lsp-installer"}
     -- Autocompletion
     use {"hrsh7th/nvim-cmp"} -- Autocompletion plugin
     use {"hrsh7th/cmp-nvim-lsp"} -- LSP source for nvim-cmp
-    use {"hrshth/cmp-buffer"} -- Autocompletion from the buffer
-    use {"hrsh7th/cmp-path"}
+    use {"hrsh7th/cmp-buffer"} -- Autocompletion from the buffer
+    use {"hrsh7th/cmp-path"} -- Auocompletion for path strings
     use {"saadparwaiz1/cmp_luasnip"} -- Autocompletion from the lanuguages snippets
-    -- Syntax Highlighting Etc.
-    use {"arzg/vim-rust-syntax-ext"}
-    use {"sheerun/vim-polygot"}
     -- Zen Mode
     use {"junegunn/goyo.vim"}
     -- Markdown Helpers
     use {"plasticboy/vim-markdown"}
     -- Git Helper
     use {"tpope/vim-fugitive"}
-    -- Rainbow Csv
-    use {"mechatroner/rainbow_csv"}
     -- AutoUpdate Plugins on open
     require('packer').sync() 
 end)
@@ -78,8 +70,8 @@ end)
 --------------------------------
 -- Configure Vimrc from Vim
 --------------------------------
-cmd [[cabbrev editvim e ~/.vim/.vimrc]]
-cmd [[cabbrev updatevim source ~/.vim/.vimrc]]
+cmd [[cabbrev editvim e ~/.config/nvim/init.lua]]
+cmd [[cabbrev updatevim source ~/.config/nvim/init.lua]]
 
 --------------------------------
 -- General Options Setting
@@ -98,11 +90,13 @@ cmd 'set nofoldenable'
 opt.encoding = 'UTF-8'
 cmd 'set noshowmode'
 opt.splitbelow = true
+
+--------------------------------
 -- Color Scheme Options
-----------------
+--------------------------------
 opt.termguicolors = true
 cmd 'set t_Co=25'
-cmd 'colorscheme onehalfdark'
+cmd 'colorscheme onedark'
 -- Tabstop & Shiftwidth
 opt.tabstop= 4
 opt.shiftwidth= 4
@@ -110,9 +104,8 @@ opt.expandtab = true
 -- Rainbow Brackets Options
 -- let g:rainbow_active=1
 -- 
--- if exists("g:loaded_webdevicons")
---       call webdevicons#refresh()
---   endif
+-- Load Webdevicons
+require'nvim-web-devicons'.setup { default = true }
 -- 
 -- Status Line Updates
 opt.laststatus = 2
@@ -314,7 +307,8 @@ opt.laststatus = 2
 -- " make sure relative line numbers are used
 -- autocmd FileType nerdtree setlocal relativenumber
 -- " Remap the open and close to C-n
--- map <C-n> :NERDTreeToggle<CR>
+-- Let Ctrl-n toggle NERDTree
+api.nvim_set_keymap('', '<C-n>', ':NERDTreeToggle<CR>', {})
 -- " Remap Root Settings for simpler Root Control
 -- let NERDTreeMapChangeRoot='l'
 -- let NERDTreeMapUpdir='h'
