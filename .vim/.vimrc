@@ -349,7 +349,7 @@ function! DeviconsFileFormat()
 endfunction
 
 " Lightline Configuration
-let g:lightline = { 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'gitbranch' ], [ 'cocstatus', 'currentfunction', 'filename' ] ], 'right': [ [ 'lineinfo' ], [ 'fileencoding', 'fileformat', 'filetype' ] ]  }, 'component_function': { 'gitbranch': 'gitbranch#name','cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction', 'filetype': 'DeviconsFileType', 'fileformat': 'DeviconsFileFormat' }, }
+let g:lightline = { 'mode_map' : { 'n':'N', 'i':'I', 'R':'R', 'v':'V', 'V':'VL', "\<C-v>":'VB', 'c':'C', 's':'S', 'S':'SL', "\<C-s>":'SB', 't':'T' }, 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'gitbranch' ], [ 'cocstatus', 'filename' ] ], 'right': [ [ 'lineinfo' ], [ 'fileencoding', 'filetype' ] ]  }, 'component_function': { 'gitbranch': 'gitbranch#name','cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction', 'filetype': 'DeviconsFileType', 'fileformat': 'DeviconsFileFormat' }, }
 
 " Lightline Coc Config
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()

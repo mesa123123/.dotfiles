@@ -9,16 +9,16 @@
     "coc-markdownlint": ">=1.12.4",
     "coc-markmap": ">=0.6.0",
     "coc-omnisharp": ">=0.0.28",
-    "coc-prettier": ">=9.2.1",
-    "coc-pyright": ">=1.1.215",
+    "coc-prettier": ">=9.2.2",
+    "coc-pyright": ">=1.1.220",
     "coc-rls": ">=1.1.6",
     "coc-solargraph": ">=1.2.3",
     "coc-svg": ">=0.0.13",
     "coc-toml": ">=1.1.0",
-    "coc-tsserver": ">=1.9.9",
+    "coc-tsserver": ">=1.9.12",
     "coc-ultisnips": ">=1.2.3",
     "coc-word": ">=1.2.2",
     "coc-xml": ">=1.14.1",
-    "coc-yaml": ">=1.6.1"
+    "coc-yaml": ">=1.7.4"
   }
 }
