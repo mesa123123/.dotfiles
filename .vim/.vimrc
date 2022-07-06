@@ -45,6 +45,8 @@ Plug 'purescript-contrib/purescript-vim'
 Plug 'hashivim/vim-terraform'
 Plug 'hashivim/vim-vagrant'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'pappasam/nvim-repl'
 
 call plug#end()
 
@@ -118,7 +120,6 @@ if exists("g:loaded_webdevicons")
 set laststatus=2
 
 " Hardtime On
-let g:hardtime_default_on = 1
 let g:hardtime_showing = 1
 let g:hardime_allow_different_key = 1
 let g:hardtime_showmsg = 1
