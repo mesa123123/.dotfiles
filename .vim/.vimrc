@@ -47,6 +47,9 @@ Plug 'hashivim/vim-vagrant'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'pappasam/nvim-repl'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'beeender/Comrade'
+
 
 call plug#end()
 
@@ -355,6 +358,20 @@ let g:lightline = { 'mode_map' : { 'n':'N', 'i':'I', 'R':'R', 'v':'V', 'V':'VL',
 " Lightline Coc Config
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " ----------------
+
+" Use Deoplete for Intellij Sync
+" --------
+let g:deoplete#enable_at_startup=1
+
+" --------------------------------"
+" Plugin Options and Mappings
+" --------------------------------"
+
+
+
+
+
+" --------------------------------
 
 " --------------------------------------------"
 " Coc Options
