@@ -178,20 +178,25 @@ fi
 # Universal Environment Variables
 export PATH=$PATH:~/local/bin
 export PATH=$PATH:~/.local/bin
+# Language Servcer Protocol
 export PATH=$PATH:~/lsp
+# JAVA
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+export JAVA_OPTS='-XX:+IgnoreUnrecognizedVMOptions --add-modules java.se.ee'
+# SCALA
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"
 export SBT_HOME="/usr/bin/sbt"
+# RUST
 export CARGO_HOME="/home/$USER/.cargo"
+# PYTHON
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
+# CURL
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-
-# Chef Setup adds chef workstation stuff to the environment variables as it tends to break a lot of stuff with the terminals, its best to only use chef when its needed
 
 # Special WSL envvars that would just annoy a pure linux system
 if [[ ${WSLON} == true ]]; then
@@ -224,7 +229,6 @@ if [ "$USER" == "bowmanpete" ]; then
 	export EXERCISM_HOME="/home/$USER/.exercism"
 	export ANDROID_HOME="/usr/lib/android-sdk"
     export ANDROID_SDK="/usr/lib/android-sdk"
-    export SDKMANAGER_OPTS='"-Dcom.android.sdklib.toolsdir=$APP_HOME" -XX:+IgnoreUnrecognizedVMOptions --add-modules java.se.ee'
 	# Adding Home User Variables to Path
 	export PATH=$PATH:$ANDROID_HOME/platform-tools
     export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/tools/bin
