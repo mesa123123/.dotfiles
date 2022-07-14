@@ -1,5 +1,4 @@
-TerminalEmulator=custom-TerminalEmulator
-TerminalEmulatorDismissed=true
+TerminalEmulator=debian-x-terminal-emulator
 WebBrowserDismissed=true
-
 WebBrowser=google-chrome
+
