@@ -230,6 +230,7 @@ if [ "$USER" == "bowmanpete" ]; then
 	# Adding Home User Variables to Path
 	export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
     export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin
+	export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
 	export PATH=$PATH:$EXERCISM_HOME/
 	export PATH=$PATH:$HADOOP_HOME/bin
 	export PATH=$PATH:$CODE_HOME/bin

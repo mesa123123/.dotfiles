@@ -37,17 +37,25 @@ Plug 'ryanoasis/vim-webdevicons'
 Plug 'nvie/vim-flake8'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'luochen1990/rainbow'
-Plug 'derekwyatt/vim-scala'
-Plug 'sirver/ultisnips'
-Plug 'itchyny/vim-gitbranch'
 Plug 'mechatroner/rainbow_csv'
+" Languages
+" --------
+Plug 'derekwyatt/vim-scala'
+Plug 'itchyny/vim-gitbranch'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
 Plug 'chrisbra/csv.vim'
+" Dart/Flutter
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
+" ----
+" Snippets
+Plug 'sirver/ultisnips'
 Plug 'junegunn/vim-easy-align'
 Plug 'takac/vim-hardtime'
+" AutoComplete Etc.
 Plug 'neoclide/coc.nvim'
 " Database Workbench
 Plug 'tpope/vim-dadbod'
