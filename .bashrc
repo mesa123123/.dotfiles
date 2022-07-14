@@ -226,11 +226,10 @@ fi
 if [ "$USER" == "bowmanpete" ]; then
 	# User Environment Vars for Home PC	
 	export EXERCISM_HOME="/home/$USER/.exercism"
-	export ANDROID_HOME="/usr/lib/android-sdk"
-    export ANDROID_SDK="/usr/lib/android-sdk"
+	export ANDROID_SDK_ROOT="/usr/lib/android-sdk"
 	# Adding Home User Variables to Path
-	export PATH=$PATH:$ANDROID_HOME/platform-tools
-    export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/tools/bin
+	export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+    export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin
 	export PATH=$PATH:$EXERCISM_HOME/
 	export PATH=$PATH:$HADOOP_HOME/bin
 	export PATH=$PATH:$CODE_HOME/bin
