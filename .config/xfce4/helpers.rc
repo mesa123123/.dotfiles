@@ -1,4 +1,4 @@
-TerminalEmulator=xterm
+TerminalEmulator=xfce4-terminal
 WebBrowserDismissed=true
 WebBrowser=google-chrome
 
