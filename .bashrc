@@ -222,15 +222,12 @@ fi
 if [ "$USER" == "bowmanpete" ]; then
 	# User Environment Vars for Home PC	
 	export EXERCISM_HOME="/home/$USER/.exercism"
-	export ANDROID_HOME="/home/$USER/Android/bin"
-	export CODE_HOME="/c/Program Files/Microsoft\ VS\ Code/"
-	export HADOOP_HOME=/usr/local/hadoop
+	export ANDROID_HOME="/usr/lib/android-sdk"
+    export ANDROID_SDK="/usr/lib/android-sdk"
+    export SDKMANAGER_OPTS='"-Dcom.android.sdklib.toolsdir=$APP_HOME" -XX:+IgnoreUnrecognizedVMOptions --add-modules java.se.ee'
 	# Adding Home User Variables to Path
-	export PATH=$PATH:$ANDROID_HOME/emulator
-	export PATH=$PATH:$ANDROID_HOME/tools
-	export PATH=$PATH:$ANDROID_1OME/tools/bin
 	export PATH=$PATH:$ANDROID_HOME/platform-tools
-	export PATH=$PATH:/home/$USER/android-studio/bin
+    export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/tools/bin
 	export PATH=$PATH:$EXERCISM_HOME/
 	export PATH=$PATH:$HADOOP_HOME/bin
 	export PATH=$PATH:$CODE_HOME/bin
