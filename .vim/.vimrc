@@ -63,7 +63,7 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 " Working with Kitty
 Plug 'fladson/vim-kitty', {'branch': 'main'}
 "Nvim Repo
-Plug 'pappasam/nvim-repl'
+Plug 'hkupty/iron.nvim'
 " Nvim Telescope
 if has('nvim')
     Plug 'nvim-lua/plenary.nvim'
@@ -111,16 +111,28 @@ endif
 " --------------------------------"
 " General Options Setting
 " --------------------------------"
+
 "  Status Line Always On (This is essentially an enum)
 set laststatus=2
+
+" Status Line Updates
+set laststatus=2
+
 " Line Numbers On
 set nu
+
 " Auto-toggle Hybrid Numbering Based Focus Window
 augroup numbertoggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
 augroup END
+
+"	Tabstop & Shiftwidth
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
 " Language Syntax On
 syntax on
 let python_highlight_all=1
@@ -129,13 +141,18 @@ set autoindent
 set nofoldenable
 set encoding=UTF-8
 set noshowmode
+
 " Split Settings
 set splitbelow
 set splitright
 nnoremap <c-w>v :vnew<CR>
+
 " Set up FileType functionality
 filetype on
 filetype plugin indent on
+
+" Color Schemes and Themes
+" --------
 
 "	Color Scheme Options
 if has('macunix')
@@ -147,32 +164,12 @@ endif
 set t_Co=25
 colorscheme onehalfdark
 
-"	Tabstop & Shiftwidth
-set tabstop=4
-set shiftwidth=4
-set expandtab
-
-"Rainbow Brackets Options
+"Rainbow Brackets
 let g:rainbow_active=1
 
 if exists("g:loaded_webdevicons")
       call webdevicons#refresh()
   endif
-
-" Status Line Updates
-set laststatus=2
-
-" Hardtime On
-let g:hardtime_showing = 1
-let g:hardime_allow_different_key = 1
-let g:hardtime_showmsg = 1
-
-" Page Scroll Speed ++
-" --------
-nnoremap <C-e> 5<C-e>
-nnoremap <C-y> 5<C-y>
-vnoremap <C-e> 5<C-e>
-vnoremap <C-y> 5<C-y>
 
 " Web Dev Icons Settings
 " --------
@@ -180,6 +177,24 @@ let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1
 let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+
+" Hardtime On
+let g:hardtime_showing = 1
+let g:hardime_allow_different_key = 1
+let g:hardtime_showmsg = 1
+
+" Movement
+" --------
+
+" Page Scroll Speed ++
+nnoremap <C-e> 5<C-e>
+nnoremap <C-y> 5<C-y>
+vnoremap <C-e> 5<C-e>
+vnoremap <C-y> 5<C-y>
+
+" Begining & End of line in Normal mode
+noremap H ^
+noremap L g_
 
 " ----------------
 
@@ -369,6 +384,8 @@ command Jiracsv :call MakeJira()
 " Terminal : <leader>t & <leader> q
 " Testing - Ultest : <leader>x (T is being used for the terminal)
 " Code Alignment - EasyAlign : <leader>e
+" REPL - Iron.nvim: <leader>r
+" AutoComplete and Diagnostics - coc.nvim: <leader>c
 
 " --------------------------------"
 " UltiSnips Options
@@ -441,7 +458,7 @@ function! LightlineVirtualEnv()
 endfunction
 
 
-" Lightline Configuration
+" Configuration
 let g:lightline = { 'mode_map' : { 'n':'N', 'i':'I','R':'R', 'vb':'V', 'V':'VL', "\<C-v>":'VB', 't':'T', 'c':'X' }, 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'virtualenv', 'gitbranch', 'filename' ]], 'right': [ [ 'lineinfo' ], [ 'filetype', 'fileencoding' ] ]  }, 'component_function': { 'filename': 'LightlineTruncatedFileName', 'gitbranch': 'LightlineGitBranchName', 'filetype': 'DeviconsFileType', 'fileformat': 'DeviconsFileFormat', 'virtualenv': 'LightlineVirtualEnv' }, }
 
 " --------------------------------"
@@ -482,6 +499,56 @@ nnoremap <silent> <leader>du :DBUIToggle<CR>
 nnoremap <silent> <leader>df :DBUIFindBuffer<CR>
 nnoremap <silent> <leader>dr :DBUIRenameBuffer<CR>
 nnoremap <silent> <leader>dl :DBUILastQueryInfo<CR>
+
+" --------------------------------"
+" REPL - Iron.nvim
+" --------------------------------"
+
+if has('nvim')
+    lua << EOF
+       iron = require("iron.core")
+       iron.setup {
+           -- Options
+           -- --------
+           config = {
+               should_map_plug = false,
+               scratch_repl = true,
+               repl_definition = {
+                   sh = { command = { "bash" } },
+                   python = { command  = { "python3" } },
+                   scala = { command  = { "scala" } },
+                   lua = { command = { "lua" } }
+               },
+               repl_open_cmd = require('iron.view').curry.right(40),
+            },
+           -- Mappings    
+           -- --------
+           keymaps = {
+               send_motion = "<leader>rc", -- repl command
+               visual_send = "<leader>rc", -- repl command (visual mode)
+               send_file = "<leader>rf", -- repl file
+               send_line = "<leader>rl", -- repl line
+               send_mark = "<leader>rms", -- repl mark send
+               mark_motion = "<leader>rmm", -- repl mark motion
+               mark_visual = "<leader>rmm", -- repl mark motion (visual mode)
+               remove_mark = "<leader>rmr", -- repl mark remove
+               cr = "<leader>r<CR>", -- send a <CR> to the repl
+               interrupt = "<leader>rs", -- repl stop
+               exit = "<leader>rq", -- repl quit
+               clear = "<leader>rc", -- repl clear
+           },
+       }
+EOF
+
+    " Mappings
+    " --------
+    nnoremap <silent> <leader>ro :IronRepl<CR>
+
+endif
+
+
+
+
 
 " --------------------------------"
 " Editor Config Commands
