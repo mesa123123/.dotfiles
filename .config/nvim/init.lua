@@ -1,13 +1,16 @@
----------------------------------
+--------------------------------
 -- Priority Settings
 --------------------------------
 -- Set the config path
 vim.g["config_path"] = "~/config/nvim"
 -- Set the mapleader
 vim.g["mapleader"] = "\\"
+-- Set Coc_Config_Home
+vim.g["coc_config_home"] = '/home/$USER/.vim/'
 
+--------------------------------
 -- Vim options and api to variables
-----------------
+--------------------------------
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
@@ -34,38 +37,75 @@ vim.cmd [[packadd packer.nvim]]
 require("packer").startup(function()
     -- Packer can manage itself as an optional plugin
     use {"wbthomason/packer.nvim", opt = true}
-    -- Colors and Themes and UI
-    use {'ii14/onedark.nvim'}
-    -- New Dev Icons Please
-    use {'kyazdani42/nvim-web-devicons'}
-    -- NEED A NEW LIGHTLINE
-    -- NerdTree and related plugins
-    use {"preservim/nerdtree"}
-    -- Hardtime
-    use {"takac/vim-hardtime"}
-    -- IndentLine
-    use {"yggdroot/indentline"}
-    -- Snippets Extensions - RIP ULtiSnips
-    use {"L3MON4D3/LuaSnip"}
-    -- Language Server Protocol this uses syntax etc to help coding
-    use {"neovim/nvim-lspconfig"}
-    -- Help with the installaiton of lsps
-    use {"williamboman/nvim-lsp-installer"}
-    -- Autocompletion
-    use {"hrsh7th/nvim-cmp"} -- Autocompletion plugin
-    use {"hrsh7th/cmp-nvim-lsp"} -- LSP source for nvim-cmp
-    use {"hrsh7th/cmp-buffer"} -- Autocompletion from the buffer
-    use {"hrsh7th/cmp-path"} -- Auocompletion for path strings
-    use {"saadparwaiz1/cmp_luasnip"} -- Autocompletion from the lanuguages snippets
-    -- Zen Mode
-    use {"junegunn/goyo.vim"}
-    -- Markdown Helpers
-    use {"plasticboy/vim-markdown"}
-    -- Git Helper
-    use {"tpope/vim-fugitive"}
+    -- Testing Plugins
+    use 'nvim-lua/plenary.nvim'
+    use 'nvim-treesitter/nvim-treesitter'
+    use 'antoinemadec/FixCursorHold.nvim'
+    use 'nvim-neotest/neotest'
+    use 'nvim-neotest/neotest-python'
+    use 'tpope/vim-cucumber'
+    -- File System and Plugins
+    use 'preservim/nerdtree'
+    use 'Xuyuanp/nerdtree-git-plugin'
+    use 'yggdroot/indentline'
+    use 'tpope/vim-fugitive'
+    use 'editorconfig/editorconfig-vim'
+    use 'plasticboy/vim-markdown'
+    -- Colors and Themes
+    use 'itchyny/lightline.vim'
+    use 'altercation/vim-colors-solarized'
+    use 'ryanoasis/vim-webdevicons'
+    use 'nvie/vim-flake8'
+    use {"sonph/onehalf", rtp = "vim/"}
+    use 'luochen1990/rainbow'
+    use 'mechatroner/rainbow_csv'
+    -- Languages --------
+    use 'itchyny/vim-gitbranch'
+    use 'ekalinin/Dockerfile.vim'
+    use 'rust-lang/rust.vim'
+    use 'sheerun/vim-polyglot'
+    use 'arzg/vim-rust-syntax-ext'
+    use 'chrisbra/csv.vim'
+    -- Dart/Flutter
+    use 'dart-lang/dart-vim-plugin'
+    use 'thosakwe/vim-flutter'
+    -- Snippets
+    -- ----
+    use 'junegunn/vim-easy-align'
+    use 'takac/vim-hardtime'
+    -- AutoComplete Etc.
+    use 'neoclide/coc.nvim'
+    -- Database Workbench
+    use 'tpope/vim-dadbod'
+    use 'kristijanhusak/vim-dadbod-ui'
+    -- Working with Kitty
+    use {"fladson/vim-kitty", branch = "main"}
+    -- Nvim Repl
+    use 'hkupty/iron.nvim'
+    -- Nvim Telescope
+    use 'nvim-lua/plenary.nvim'
+    use 'nvim-telescope/telescope.nvim'
+
+-- Language Server Protocol
+--------
+use 'neovim/nvim-lspconfig'
+--Help with the installation of lsps
+use 'willamboman/nvim-lsp-installer'
+-- Autocompletion
+use 'hrsh7th/cmp-nvim-lsp'
+use 'hrsh7th/cmp_luasnip'
+use 'hrsh7th/cmp-path'
+use 'hrsh7th/cmp-buffer'
+-- Snippets
+use 'L3MMON4D3/luahsnip'
+-- DevIcons
+use 'nvim-web-devicons'
+-- Themes
+use 'ii14/onedark.nvim'
+
     -- AutoUpdate Plugins on open
-    require('packer').sync() 
-end)
+    require("packer").sync() 
+    end)
 
 --------------------------------
 -- Configure Vimrc from Vim
