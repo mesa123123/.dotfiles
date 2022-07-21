@@ -16,34 +16,59 @@ let g:coc_config_home = '/home/$USER/.vim/'
 " Load Plugings
 " --------
 call plug#begin('/home/$USER/.vim/pack/my_plugins/start')
-
-Plug 'itchyny/lightline.vim'
+" Testing Plugins
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'antoinemadec/FixCursorHold.nvim'
+Plug 'nvim-neotest/neotest'
+Plug 'nvim-neotest/neotest-python'
+Plug 'tpope/vim-cucumber'
+" File System and Plugins
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'yggdroot/indentline'
+Plug 'tpope/vim-fugitive'
+Plug 'editorconfig/editorconfig-vim'
 Plug 'plasticboy/vim-markdown'
-Plug 'alfredodeza/pytest.vim'
+" Colors and Themes
+Plug 'itchyny/lightline.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'ryanoasis/vim-webdevicons'
 Plug 'nvie/vim-flake8'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 Plug 'luochen1990/rainbow'
-Plug 'derekwyatt/vim-scala'
-Plug 'sirver/ultisnips'
-Plug 'itchyny/vim-gitbranch'
 Plug 'mechatroner/rainbow_csv'
+" Languages
+" --------
+Plug 'derekwyatt/vim-scala'
+Plug 'itchyny/vim-gitbranch'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'sheerun/vim-polyglot'
 Plug 'arzg/vim-rust-syntax-ext'
-Plug 'junegunn/goyo.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'fladson/vim-kitty', {'branch': 'main'}
+Plug 'chrisbra/csv.vim'
+" Dart/Flutter
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'thosakwe/vim-flutter'
+" ----
+" Snippets
+Plug 'sirver/ultisnips'
+Plug 'junegunn/vim-easy-align'
 Plug 'takac/vim-hardtime'
-Plug 'purescript-contrib/purescript-vim'
-Plug 'hashivim/vim-terraform'
-Plug 'hashivim/vim-vagrant'
-Plug 'tpope/vim-fugitive'
+" AutoComplete Etc.
+Plug 'neoclide/coc.nvim'
+" Database Workbench
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
+" Working with Kitty
+Plug 'fladson/vim-kitty', {'branch': 'main'}
+"Nvim Repo
+Plug 'hkupty/iron.nvim'
+" Nvim Telescope
+if has('nvim')
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+endif
 
 call plug#end()
 
@@ -54,6 +79,11 @@ let g:plug_retries = 5
 let g:plug_threads = 32
 
 " ----------------
+
+" Python Config
+" --------
+" Python Settings
+let g:python3_host_prog = '/usr/bin/python3'
 
 " --------------------------------"
 " Configure Vimrc from Vim
@@ -81,8 +111,28 @@ endif
 " --------------------------------"
 " General Options Setting
 " --------------------------------"
+
+"  Status Line Always On (This is essentially an enum)
+set laststatus=2
+
+" Status Line Updates
+set laststatus=2
+
 " Line Numbers On
-set number
+set nu
+
+" Auto-toggle Hybrid Numbering Based Focus Window
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+augroup END
+
+"	Tabstop & Shiftwidth
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
 " Language Syntax On
 syntax on
 let python_highlight_all=1
@@ -91,36 +141,35 @@ set autoindent
 set nofoldenable
 set encoding=UTF-8
 set noshowmode
+
+" Split Settings
 set splitbelow
+set splitright
+nnoremap <c-w>v :vnew<CR>
+
 " Set up FileType functionality
 filetype on
 filetype plugin indent on
 
+" Color Schemes and Themes
+" --------
+
 "	Color Scheme Options
-set termguicolors
+if has('macunix')
+    set notermguicolors
+else 
+    set termguicolors
+endif
+
 set t_Co=25
 colorscheme onehalfdark
 
-"	Tabstop & Shiftwidth
-set tabstop=4
-set shiftwidth=4
-set expandtab
-
-"Rainbow Brackets Options
+"Rainbow Brackets
 let g:rainbow_active=1
 
 if exists("g:loaded_webdevicons")
       call webdevicons#refresh()
   endif
-
-" Status Line Updates
-set laststatus=2
-
-" Hardtime On
-let g:hardtime_default_on = 1
-let g:hardtime_showing = 1
-let g:hardime_allow_different_key = 1
-let g:hardtime_showmsg = 1
 
 " Web Dev Icons Settings
 " --------
@@ -129,9 +178,23 @@ let g:webdevicons_enable_nerdtree = 1
 let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 
-" Vimwiki Global Syntax Off
+" Hardtime On
+let g:hardtime_showing = 1
+let g:hardime_allow_different_key = 1
+let g:hardtime_showmsg = 1
+
+" Movement
 " --------
-let g:vimwiki_global_ext = 0
+
+" Page Scroll Speed ++
+nnoremap <C-e> 5<C-e>
+nnoremap <C-y> 5<C-y>
+vnoremap <C-e> 5<C-e>
+vnoremap <C-y> 5<C-y>
+
+" Begining & End of line in Normal mode
+noremap H ^
+noremap L g_
 
 " ----------------
 
@@ -182,6 +245,15 @@ au Filetype mermaid call RunMermaidPreview()
 " C++ Language 
 au FileType cpp setlocal et ts=2 sw=2
 
+" Python Language
+let g:pymode_rope = 0
+let g:pymode_rope_goto_definition_bind = '<c-c>g'
+let g:pymode_rope_goto_definition_cmd = 'new'
+let g:pymode_lint = 0
+let g:pymode_lint_on_write = 0
+let g:pymode_lint_on_fly = 0
+au FileType python setlocal et ts=4 sw=4 sts=4
+
 " HCL Language
 au BufRead,BufNewFile *.hcl set filetype=ini
 
@@ -200,15 +272,6 @@ let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_conceal = 0
 " Set .draft files to Markdown
 au BufRead,BufNewFile *.draft set filetype=markdown
-
-" Python Language
-let g:pymode_rope = 0
-let g:pymode_rope_goto_definition_bind = '<c-c>g'
-let g:pymode_rope_goto_definition_cmd = 'new'
-let g:pymode_lint = 0
-let g:pymode_lint_on_write = 0
-let g:pymode_lint_on_fly = 0
-au FileType python setlocal et ts=4 sw=4 sts=4
 
 " Typescript Settings
 au FileType typescript setlocal ts=2 sw=2 sts=2
@@ -295,6 +358,39 @@ tnoremap <c-b>s <c-w>k :ls<CR>:b<Space>
 tnoremap <c-b>d <c-w>k :ls<CR>:bd<Space>
 " ----------------
 
+" --------------------------------"
+" Custom Commands
+" --------------------------------"
+
+" Jira Csv 
+" --------
+function! MakeJira()
+    set filetype=csv
+    normal iProject,Summary,Issue Type,Issue Key,Description,Acceptance Criteria,Lables,Story Link
+endfunction
+
+command Jiracsv :call MakeJira()
+
+" ----------------------------------------"
+" Leader Remappings, Plugin Commands
+" ----------------------------------------"
+" Note: I often will use <leader> remappings as a way to distinguish between
+" plugins in order to segregate commands.
+" This follows the conventions <leader>{plugin key}{command key}
+" I've listed already use leader commands here
+" Telescope Nvim: <leader>f
+" Database - DadBod: : <leader>d
+" Snippets - UltiSnips : <leader>s
+" Terminal : <leader>t & <leader> q
+" Testing - Ultest : <leader>x (T is being used for the terminal)
+" Code Alignment - EasyAlign : <leader>e
+" REPL - Iron.nvim: <leader>r
+" AutoComplete and Diagnostics - coc.nvim: <leader>c
+
+" --------------------------------"
+" UltiSnips Options
+" --------------------------------"
+
 " UltiSnipsEdit Command
 " --------
 nnoremap <leader>se :UltiSnipsEdit<CR>
@@ -330,13 +426,6 @@ endif
 " Lightline Configuration
 "--------------------------- "
 
-" Lightline functions
-" --------
-" coc options for lightline
-function! CocCurrentFunction()
-    return get(b:, 'coc_current_function', '')
-endfunction
-
 " DevIcon FileType
 function! DeviconsFileType()
     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
@@ -347,105 +436,145 @@ function! DeviconsFileFormat()
     return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
 
-" Lightline Configuration
-let g:lightline = { 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'gitbranch' ], [ 'cocstatus', 'currentfunction', 'filename' ] ], 'right': [ [ 'lineinfo' ], [ 'fileencoding', 'fileformat', 'filetype' ] ]  }, 'component_function': { 'gitbranch': 'gitbranch#name','cocstatus': 'coc#status', 'currentfunction': 'CocCurrentFunction', 'filetype': 'DeviconsFileType', 'fileformat': 'DeviconsFileFormat' }, }
-
-" Lightline Coc Config
-autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-" ----------------
-
-" --------------------------------------------"
-" Coc Options
-" --------------------------------------------"
-" Coc-Command Abbreviation
-" --------
-cabbrev ccc CocCommand
-" Global Extensions
-" --------
-let g:coc_global_extensions = ['coc-css', 'coc-docker', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-pyright', 'coc-solargraph', 'coc-toml', 'coc-tsserver', 'coc-ultisnips', 'coc-word', 'coc-yaml', 'coc-git', 'coc-rls', 'coc-go', 'coc-omnisharp']
-" Recommended Options
-" --------
-" TextEdit might fail if hidden is not set.
-set hidden
-" Some servers have issues with backup files, see #649.
-set nobackup
-set nowritebackup
-" Give more space for displaying messages.
-set cmdheight=2
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience.
-set updatetime=200
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
-" Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
-if has("patch-8.1.1564")   
-    " Recently vim can merge signcolumn and number column into one
-    set signcolumn=number
-else
-    set signcolumn=yes
-endif
-" Use tab for trigger completion with characters ahead and navigate. NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin before putting this into your config.
-inoremap <silent><expr> <c-l>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ coc#refresh()
-inoremap <expr><c-h> pumvisible() ? "\<C-p>" : "\<C-h>"
-" Make <CR> auto-select the first completion item and notify coc.nvim to format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() 
-            \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    elseif (coc#rpc#ready())
-        call CocActionAsync('doHover')
-    else
-        execute '!' . &keywordprg . " " . expand('<cword>')
-    endif
+" Turn Filename Into FilePath
+function! LightlineTruncatedFileName()
+    let l:filePath = expand('%')
+    return winwidth(0) > 100 ? l:filePath : pathshorten(l:filePath)
 endfunction
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
 
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
+" Shorten Branch Name If Necessary
+function! LightlineGitBranchName()
+    let l:gitbranch = gitbranch#name()
+    return winwidth(0) > 100 ? l:gitbranch : join(split(l:gitbranch, "-")[-3:], "-")
+endfunction
 
-" Formatting selected code.
-xmap <leader>f <Plug>(coc-format-selected)
-nmap <leader>f <Plug>(coc-format-selected)
+function! LightlineVirtualEnv()
+    if ($VIRTUAL_ENV != "")
+        let l:virtualenv = split($VIRTUAL_ENV,"/")[-1:][0]
+    else
+        let l:virtualenv = ""
+    endif
+    return l:virtualenv
+endfunction
 
-augroup mygroup
-autocmd!
-    " Setup formatexpr specified filetype(s).
-    autocmd FileType typescript,json,markdown setl formatexpr=CocAction('formatSelected')
-    " Update signature help on jump placeholder.
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
 
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap g= <Plug>(coc-codeaction-selected)<CR>
-nmap g= <Plug>(coc-codeaction-selected)<CR>
+" Configuration
+let g:lightline = { 'mode_map' : { 'n':'N', 'i':'I','R':'R', 'vb':'V', 'V':'VL', "\<C-v>":'VB', 't':'T', 'c':'X' }, 'colorscheme': 'Tomorrow_Night', 'active': { 'left': [ [ 'mode', 'paste' ], [ 'virtualenv', 'gitbranch', 'filename' ]], 'right': [ [ 'lineinfo' ], [ 'filetype', 'fileencoding' ] ]  }, 'component_function': { 'filename': 'LightlineTruncatedFileName', 'gitbranch': 'LightlineGitBranchName', 'filetype': 'DeviconsFileType', 'fileformat': 'DeviconsFileFormat', 'virtualenv': 'LightlineVirtualEnv' }, }
 
-" Adding Auto Import Resolution
-autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+" --------------------------------"
+" Telescope Settings (Neovim Only)
+" --------------------------------"
+
+if has('nvim')
+    " Find files using Telescope command-line sugar.
+    nnoremap <leader>ff <cmd>Telescope find_files<cr>
+    nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+    nnoremap <leader>fb <cmd>Telescope buffers<cr>
+    nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+endif
+
+" --------------------------------"
+" Easy Align
+" --------------------------------"
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap <leader>e <Plug>(EasyAlign)<CR>
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap <leader>e <Plug>(EasyAlign)<CR>
 
 " ----------------
+
+" --------------------------------"
+" Database Commands - DadBod
+" --------------------------------"
+
+" Options
+" --------
+let g:db_ui_save_location = '~/.config/db_ui'
+let g:dd_ui_use_nerd_fonts = 1
+
+" Mappings
+" --------
+nnoremap <silent> <leader>du :DBUIToggle<CR>
+nnoremap <silent> <leader>df :DBUIFindBuffer<CR>
+nnoremap <silent> <leader>dr :DBUIRenameBuffer<CR>
+nnoremap <silent> <leader>dl :DBUILastQueryInfo<CR>
+
+" --------------------------------"
+" REPL - Iron.nvim
+" --------------------------------"
+
+if has('nvim')
+    lua << EOF
+       iron = require("iron.core")
+       iron.setup {
+           -- Options
+           -- --------
+           config = {
+               should_map_plug = false,
+               scratch_repl = true,
+               repl_definition = {
+                   sh = { command = { "bash" } },
+                   python = { command  = { "python3" } },
+                   scala = { command  = { "scala" } },
+                   lua = { command = { "lua" } }
+               },
+               repl_open_cmd = require('iron.view').curry.right(40),
+            },
+           -- Mappings    
+           -- --------
+           keymaps = {
+               send_motion = "<leader>rc", -- repl command
+               visual_send = "<leader>rc", -- repl command (visual mode)
+               send_file = "<leader>rf", -- repl file
+               send_line = "<leader>rl", -- repl line
+               send_mark = "<leader>rms", -- repl mark send
+               mark_motion = "<leader>rmm", -- repl mark motion
+               mark_visual = "<leader>rmm", -- repl mark motion (visual mode)
+               remove_mark = "<leader>rmr", -- repl mark remove
+               cr = "<leader>r<CR>", -- send a <CR> to the repl
+               interrupt = "<leader>rs", -- repl stop
+               exit = "<leader>rq", -- repl quit
+               clear = "<leader>rc", -- repl clear
+           },
+       }
+EOF
+
+    " Mappings
+    " --------
+    nnoremap <silent> <leader>ro :IronRepl<CR>
+
+endif
+
+
+
+
+
+" --------------------------------"
+" Editor Config Commands
+" --------------------------------"
+
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+au FileType gitcommit let b:EditorConfig_disable = 1
+
+" --------------------------------"
+" Coc-Options Load
+" --------------------------------"
+au BufRead,BufNewFile .cocrc set filetype=vim
+let g:cochome = $HOME . '/.vim/.cocrc'
+if filereadable(cochome)
+    exec 'source' . cochome
+    cabbrev editcoc execute 'e' g:cochome
+    cabbrev updatecoc execute 'source' g:cochome
+endif
 
 " Allow WorkSpace Specific RCs
 if filereadable("./vimwsrc")
     source ./vimwsrc
 endif
+
+" Use Deoplete for Intellij Sync
+" --------
+let g:deoplete#enable_at_startup=1
 
 " ----------------------END OF VIMRC--------------------- "

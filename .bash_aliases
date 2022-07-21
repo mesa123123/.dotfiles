@@ -19,7 +19,7 @@ alias editvim="vim ~/.vim/.vimrc"
 alias edittmux="vim ~/.tmux.conf"
 
 # Package Management
-alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm -g update'
+alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
 #  Programmes etc.
 alias gnpm='npm -g'
 alias pip='pip3'

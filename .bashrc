@@ -178,20 +178,24 @@ fi
 # Universal Environment Variables
 export PATH=$PATH:~/local/bin
 export PATH=$PATH:~/.local/bin
+# Language Servcer Protocol
 export PATH=$PATH:~/lsp
-export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+# JAVA
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+# SCALA
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"
 export SBT_HOME="/usr/bin/sbt"
+# RUST
 export CARGO_HOME="/home/$USER/.cargo"
+# PYTHON
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
+# CURL
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-
-# Chef Setup adds chef workstation stuff to the environment variables as it tends to break a lot of stuff with the terminals, its best to only use chef when its needed
 
 # Special WSL envvars that would just annoy a pure linux system
 if [[ ${WSLON} == true ]]; then
@@ -222,15 +226,11 @@ fi
 if [ "$USER" == "bowmanpete" ]; then
 	# User Environment Vars for Home PC	
 	export EXERCISM_HOME="/home/$USER/.exercism"
-	export ANDROID_HOME="/home/$USER/Android/bin"
-	export CODE_HOME="/c/Program Files/Microsoft\ VS\ Code/"
-	export HADOOP_HOME=/usr/local/hadoop
+	export ANDROID_SDK_ROOT="/usr/lib/android-sdk"
 	# Adding Home User Variables to Path
-	export PATH=$PATH:$ANDROID_HOME/emulator
-	export PATH=$PATH:$ANDROID_HOME/tools
-	export PATH=$PATH:$ANDROID_1OME/tools/bin
-	export PATH=$PATH:$ANDROID_HOME/platform-tools
-	export PATH=$PATH:/home/$USER/android-studio/bin
+	export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+    export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin
+	export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
 	export PATH=$PATH:$EXERCISM_HOME/
 	export PATH=$PATH:$HADOOP_HOME/bin
 	export PATH=$PATH:$CODE_HOME/bin

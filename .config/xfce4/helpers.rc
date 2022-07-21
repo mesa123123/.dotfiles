@@ -1,5 +1,4 @@
 TerminalEmulator=custom-TerminalEmulator
-TerminalEmulatorDismissed=true
 WebBrowserDismissed=true
-
 WebBrowser=google-chrome
+
