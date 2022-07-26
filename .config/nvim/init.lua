@@ -7,7 +7,6 @@
 --      b. Restructure Snippets so only that format of Snippets loads
 -- 2. Learn How LSP works
 -- 3. Make the modes on LuaLine Single Char
--- 4. Figure out how to get the bloody repl working
 
 ----------------------------------
 
@@ -18,8 +17,6 @@
 vim.g["config_path"] = "~/config/nvim"
 -- Set the mapleader
 vim.g["mapleader"] = "\\"
--- Set Coc_Config_Home
-vim.g["coc_config_home"] = '/home/$USER/.vim/'
 
 --------------------------------
 -- Luaisms for Vim Stuff
@@ -39,8 +36,8 @@ local wopt = vim.wo -- window options
 -- Functions
 --------
 
--- Function for Mapping Keybindings with "map"
-function map(mode, lhs, rhs, opts)
+-- Function for Mapping Keybindings with "mapping"
+function mapping(mode, lhs, rhs, opts)
     local options = { noremap = true }
     if opts then
         options = vim.tbl_extend("force", options, opts)
@@ -48,7 +45,35 @@ function map(mode, lhs, rhs, opts)
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+-- Map(function, table)
+function map(func, tbl)
+ local newtbl = {}
+ for i,v in pairs(tbl) do
+     newtbl[i] = func(v)
+ end
+ return newtbl
+end
+-- Filter(function, table)
+function filter(func, tbl)
+ local newtbl= {}
+ for i,v in pairs(tbl) do
+     if func(v) then
+     newtbl[i]=v
+     end
+ end
+ return newtbl
+end
+-- Split(string, delimiter)
+function split(s, delimiter)
+    result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
+end
+
 ----------------
+
 
 --------------------------------
 -- Plugin Loading and Settings
@@ -127,8 +152,8 @@ require("packer").startup(function()
     use {"fladson/vim-kitty", branch = "main"}
     -- Nvim Repl
     use 'hkupty/iron.nvim'
-    -- Nvim Telescope
-    use 'nvim-telescope/telescope.nvim'
+    -- Nvim Telescopm
+    use {'nvim-telescope/telescope.nvim', requires = {"BurntSushi/ripgrep", "sharkdp/fd", opt = false}, }
     -- End of Plugins
     end)
 
@@ -143,6 +168,7 @@ cmd 'cabbrev PackUpdate lua require("packer").sync()'
 --------------------------------
 cmd 'cabbrev editvim e ~/.config/nvim/init.lua'
 cmd 'cabbrev updatevim source ~/.config/nvim/init.lua'
+cmd 'cabbrev syncvim luafile ~/.config/nvim/init.lua'
 
 --------------------------------
 -- General Options Setting
@@ -185,21 +211,14 @@ opt.laststatus = 2
 ----------------------------------
 -- VSCode Terminal Behaviour
 ------
--- Terminal Alias and Keyboard Settings
-cmd 'cabbrev bterm below new<CR>:terminal'
--- Open Terminal if Terminal has previously been opened then open the
--- previously opened Terminal
--- function TerminalBufferNumbers()
---     return filter(map(getbufinfo(), 'v:val.bufnr'), 'getbufvar(v:val,"&buftype") is# "terminal"')
--- endfunction
--- nmap <silent><expr><leader>t empty(TerminalBufferNumbers())  ? 
---             \ ':bterm<CR><c-\><c-n>:res-10<CR>icls && cd ' . g:cwd . '<CR>' : 
---             \ ':let ntbn = TerminalBufferNumbers()[0]<CR>:exe "sbuffer".ntbn<CR>:res-10<CR>i' 
--- Hide Terminal
-map("t", "<silent><leader>t", "<c-\\><c-n>:q<CR>", { silent = true })
+
+-- If Terminal Is Running 
+mapping("n", "<leader>t", ":below new<CR>:terminal<CR>i", { silent = true, noremap = true })
+-- -- Hide Terminal
+mapping("t", "<leader>t", "<c-\\><c-n>:q<CR>", { silent = true })
 -- Exit Terminal Completely
-map("t", "<silent><leader>q", "exit<CR><CR>", { silent = true })
- 
+mapping("t", "<leader>q", "exit<CR><CR>", { silent = true })
+
 -- Get rid of terminal line numbers
 --------
 api.nvim_create_autocmd({ "TermOpen" }, { pattern = { "*" }, command = "setlocal nonumber norelativenumber" })
@@ -252,74 +271,74 @@ cmd 'au BufRead,BufNewFile *.draft set filetype=markdown'
  
 -- When the enter key is pressed it takes away the highlighting in from the
 -- last text search
-map("n", "<cr>", ":nohlsearch<CR>", { silent = true })
-map("n", "n", ":set hlsearch<CR>n", {silent = true })
-map("n", "N", ":set hlsearch<CR>N", {silent = true })
+mapping("n", "<cr>", ":nohlsearch<CR>", { silent = true })
+mapping("n", "n", ":set hlsearch<CR>n", {silent = true })
+mapping("n", "N", ":set hlsearch<CR>N", {silent = true })
 
 -- Remap Visual and Insert mode to use Normal Modes Tab Rules
 --------
-map("i", ">>", "<c-t>", {})
-map("i", "<<", "<c-d>", {})
+mapping("i", ">>", "<c-t>", {})
+mapping("i", "<<", "<c-d>", {})
  
 -- Map Movement Keys to Ctrl hjlk in Terminal, and Command Modes
 --------
-map("t", "<c-h>", "<Left>", {})
-map("t", "<c-h>", "<Left>", {})
-map("t", "<c-j>", "<Down>", {})
-map("t", "<c-k>", "<Up>", {})
-map("c", "<c-l>", "<Right>", {})
-map("c", "<c-j>", "<Down>", {})
-map("c", "<c-k>", "<Up>", {})
-map("c", "<c-l>", "<Right>", {})
+mapping("t", "<c-h>", "<Left>", {})
+mapping("t", "<c-h>", "<Left>", {})
+mapping("t", "<c-j>", "<Down>", {})
+mapping("t", "<c-k>", "<Up>", {})
+mapping("c", "<c-l>", "<Right>", {})
+mapping("c", "<c-j>", "<Down>", {})
+mapping("c", "<c-k>", "<Up>", {})
+mapping("c", "<c-l>", "<Right>", {})
  
 -- Tab Control
 ---------
 -- Navigation
-map("", "<C-t>k", ":tabr<cr>", {})
-map("", "<C-t>j", ":tabl<cr>", {})
-map("", "<C-t>l", ":tabn<cr>", {})
-map("", "<C-t>h", ":tabp<cr>", {})
+mapping("", "<C-t>k", ":tabr<cr>", {})
+mapping("", "<C-t>j", ":tabl<cr>", {})
+mapping("", "<C-t>l", ":tabn<cr>", {})
+mapping("", "<C-t>h", ":tabp<cr>", {})
 -- Close Current Tab
-map("", "<C-t>c", ":tabc<cr>", {})
+mapping("", "<C-t>c", ":tabc<cr>", {})
 -- Close all other Tabs
-map("", "<C-t>o", ":tabo<cr>", {})
+mapping("", "<C-t>o", ":tabo<cr>", {})
 -- New Tab - note n is already used as a search text tool and cannot be mapped
-map("", "<C-t><c-n>", ":tabnew<cr>", {})
+mapping("", "<C-t><c-n>", ":tabnew<cr>", {})
 
 -- Tmux Pane Resizing
 ---------
 -- Terminal
-map("t", "<c-a><c-j>", "<c-\\><c-n>:res-5<CR>i", {})
-map("t", "<c-a><c-k>", "<c-\\><c-n>:res+5<CR>i", {})
-map("t", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-map("t", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+mapping("t", "<c-a><c-j>", "<c-\\><c-n>:res-5<CR>i", {})
+mapping("t", "<c-a><c-k>", "<c-\\><c-n>:res+5<CR>i", {})
+mapping("t", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+mapping("t", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -- Insert
-map("i", "<c-a><c-j>", ":res-5<CR>", {})
-map("i", "<c-a><c-k>", ":res+5<CR>", {})
-map("i", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-map("i", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+mapping("i", "<c-a><c-j>", ":res-5<CR>", {})
+mapping("i", "<c-a><c-k>", ":res+5<CR>", {})
+mapping("i", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+mapping("i", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -- Command
-map("c", "<c-a><c-j>", ":res-5<CR>", {})
-map("c", "<c-a><c-k>", ":res+5<CR>", {})
-map("c", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-map("c", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+mapping("c", "<c-a><c-j>", ":res-5<CR>", {})
+mapping("c", "<c-a><c-k>", ":res+5<CR>", {})
+mapping("c", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+mapping("c", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -- Normal
-map("n", "<c-a><c-j>", ":res-5<CR>", {})
-map("n", "<c-a><c-k>", ":res+5<CR>", {})
-map("n", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-map("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+mapping("n", "<c-a><c-j>", ":res-5<CR>", {})
+mapping("n", "<c-a><c-k>", ":res+5<CR>", {})
+mapping("n", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+mapping("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
  
 -- Buffer Switch & Delete
 ---------
 -- Buffer Switch
-map("n", "<c-b>s", ":ls<CR>:b<Space>", {})
+mapping("n", "<c-b>s", ":ls<CR>:b<Space>", {})
 -- Buffer Delete, note: can only delete one buffer at a time
-map("n", "<c-b>d", ":ls<CR>:bd<Space>", {})
+mapping("n", "<c-b>d", ":ls<CR>:bd<Space>", {})
 -- Terminal Commands, autoswitch focussed pane and then change buffer 
 -- assumes the terminal is horizontally split and on the bottom
-map("t", "<c-b>s", "<c-w>k :ls<CR>:b<Space>", {})
+mapping("t", "<c-b>s", "<c-w>k :ls<CR>:b<Space>", {})
 -- Buffer Delete, note: can only delete one buffer at a time
-map("t", "<c-b>d", "<c-w>k :ls<CR>:bd<Space>", {})
+mapping("t", "<c-b>d", "<c-w>k :ls<CR>:bd<Space>", {})
 
 ----------------
  
@@ -365,12 +384,13 @@ local ls = require("luasnip")
 -----------------------------
 
 require("nvim-tree").setup {
+  -- Options 1
+  ----------
   auto_reload_on_write = true,
-  create_in_closed_folder = false,
+  create_in_closed_folder = true,
   hijack_cursor = true,
   hijack_netrw = true,
   sort_by = "name",
-  root_dirs = {},
   sync_root_with_cwd = true,
   view = {
    adaptive_size = true,
@@ -380,13 +400,15 @@ require("nvim-tree").setup {
    side = "right",
    relativenumber = true,
    signcolumn = "yes",
+   -- Mappings
+   ----------
    mappings = {
     custom_only = false,
     list = { 
               { key = { "<CR>", "o", "<2-LeftMouse>" }, action = "edit" },
-              { key = "<C-e>", action = "edit_in_place" },
+              { key = "<S-CR>", action = "edit_in_place" },
               { key = "O", action = "edit_no_picker" },
-              { key = { "<C-]>", "<2-RightMouse>" }, action = "cd" },
+              { key = { "l", "<2-RightMouse>" }, action = "cd" },
               { key = "<C-v>", action = "vsplit" },
               { key = "<C-x>", action = "split" },
               { key = "<C-t>", action = "tabnew" },
@@ -400,23 +422,23 @@ require("nvim-tree").setup {
               { key = "I", action = "toggle_git_ignored" },
               { key = "H", action = "toggle_dotfiles" },
               { key = "U", action = "toggle_custom" },
-              { key = "R", action = "refresh" },
-              { key = "a", action = "create" },
-              { key = "d", action = "remove" },
-              { key = "D", action = "trash" },
-              { key = "r", action = "rename" },
-              { key = "<C-r>", action = "full_rename" },
-              { key = "x", action = "cut" },
-              { key = "c", action = "copy" },
-              { key = "p", action = "paste" },
-              { key = "y", action = "copy_name" },
-              { key = "Y", action = "copy_path" },
-              { key = "gy", action = "copy_absolute_path" },
-              { key = "[e", action = "prev_diag_item" },
-              { key = "[c", action = "prev_git_item" },
-              { key = "]e", action = "next_diag_item" },
-              { key = "]c", action = "next_git_item" },
-              { key = "-", action = "dir_up" },
+              { key = "r", action = "refresh" },
+              { key = "ma", action = "create" },
+              { key = "md", action = "remove" },
+              { key = "mD", action = "trash" },
+              { key = "mm", action = "rename" },
+              { key = "mM", action = "full_rename" },
+              { key = "mx", action = "cut" },
+              { key = "mc", action = "copy" },
+              { key = "mp", action = "paste" },
+              { key = "my", action = "copy_name" },
+              { key = "mYr", action = "copy_path" },
+              { key = "mYa", action = "copy_absolute_path" },
+              { key = "[s", action = "prev_diag_item" },
+              { key = "[g", action = "prev_git_item" },
+              { key = "]s", action = "next_diag_item" },
+              { key = "]g", action = "next_git_item" },
+              { key = "h", action = "dir_up" },
               { key = "s", action = "system_open" },
               { key = "f", action = "live_filter" },
               { key = "F", action = "clear_live_filter" },
@@ -427,23 +449,17 @@ require("nvim-tree").setup {
               { key = ".", action = "run_file_command" },
               { key = "<C-k>", action = "toggle_file_info" },
               { key = "g?", action = "toggle_help" },
-              { key = "m", action = "toggle_mark" },
-              { key = "bmv", action = "bulk_move" },
-          }
+              { key = "mtm", action = "toggle_mark" },
+              { key = "mbm", action = "bulk_move" },
+            },
+        },
     },
+    -- Options 2
+    ----------
     renderer = {
       highlight_git = true,
       full_name = false,
       root_folder_modifier = ":~",
-      indent_markers = {
-        enable = true,
-        icons = {
-          corner = "└",
-          edge = "│",
-          item = "│",
-          none = " ",
-        },
-      },
     },
     diagnostics = {
       enable = true,
@@ -453,9 +469,7 @@ require("nvim-tree").setup {
     },
     git = {
       enable = true,
-      ignore = true,
-      show_on_dirs = true,
-      timeout = 400,
+      ignore = false,
     },
     actions = {
       open_file = {
@@ -465,11 +479,7 @@ require("nvim-tree").setup {
           enable = true,
         },
       },
-      remove_file = {
-        close_window = true,
-      },
     },
-  }
 }
 -- NvimTree Git Plugin Symbols
 -- make sure relative line numbers are used
@@ -478,10 +488,10 @@ cmd 'autocmd FileType NvimTree setlocal relativenumber'
 -- Mappings
 ----------
 -- Remap the open and close to C-n
-map("n", "<C-n>", ":NvimTreeToggle<CR>", {})
+mapping("n", "<C-n>", ":NvimTreeToggle<CR>", {})
 -- Terminal Commands, autoswitch focussed pane and then switch to nerdtree,
 -- assumes the terminal is horizontally split and on the bottom
-map("t", "<C-n>", "<C-\\><C-n><c-w>k :NvimTreeToggle<CR>", {})
+mapping("t", "<C-n>", "<C-\\><C-n><c-w>k :NvimTreeToggle<CR>", {})
 
 -----------------
 
@@ -530,10 +540,11 @@ require("lualine").setup()
 ---------------------------------"
  
 -- Find files using Telescope command-line sugar.
-map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true })
-map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
-map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true })
-map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
+mapping("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true })
+mapping("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
+mapping("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true })
+mapping("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
+mapping("n", "<C-b>s", "<cmd>Telescope buffers<cr>", {silent = true, noremap = true })
 
 ----------------
 
@@ -542,10 +553,10 @@ map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
 ---------------------------------"
 
 -- Start interactive EasyAlign in visual mode (e.g. vipga)
-map("x", "<leader>e", "<Plug>(EasyAlign)<CR>", {})
+mapping("x", "<leader>e", "<Plug>(EasyAlign)<CR>", {})
  
 -- Start interactive EasyAlign for a motion/text object (e.g. gaip)
-map("n", "<leader>e", "<Plug>(EasyAlign)<CR>", {})
+mapping("n", "<leader>e", "<Plug>(EasyAlign)<CR>", {})
  
 ---------------
  
@@ -560,10 +571,10 @@ g['dd_ui_use_nerd_fonts'] = 1
 
 -- Mappings
 ---------
-map("n", "<leader>du", ":DBUIToggle<CR>", { silent = true })
-map("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true })
-map("n", "<leader>dr", ":DBUIRenameBuffer<CR>", {silent = true })
-map("n", "<leader>dl", ":DBUILastQueryInfo<CR>", {silent = true })
+mapping("n", "<leader>du", ":DBUIToggle<CR>", { silent = true })
+mapping("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true })
+mapping("n", "<leader>dr", ":DBUIRenameBuffer<CR>", {silent = true })
+mapping("n", "<leader>dl", ":DBUILastQueryInfo<CR>", {silent = true })
 
 ----------------
 
@@ -605,7 +616,7 @@ iron.setup {
 
 -- Mappings
 ---------
-map("n", "<leader>ro", ":IronRepl<CR>", { silent = true })
+mapping("n", "<leader>ro", ":IronRepl<CR>", { silent = true })
 
 ----------------
 

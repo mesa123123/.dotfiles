@@ -216,7 +216,8 @@ fi
 # Editor Settings VIM or NEOVIM?
 if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
     export EDITOR=nvim
-    [[ -f "/home/$USER/.config/nvim/init.lua" ]] && export VIMINIT='source /home/$USER/.config/nvim/init.lua' || export VIMINIT='source /home/$USER/.config/nvim/init.vim'
+    # and am I using lua?
+    [[ -f "/home/$USER/.config/nvim/init.lua" ]] && export VIMINIT='luafile /home/$USER/.config/nvim/init.lua' || export VIMINIT='source /home/$USER/.config/nvim/init.vim'
 else
     export EDITOR=vim
     export VIMINIT='source /home/$USER/.vim/.vimrc'
