@@ -6,7 +6,8 @@
 --      a. Rewrite Snippets for Lua
 --      b. Restructure Snippets so only that format of Snippets loads
 -- 2. Learn How LSP works
--- 3. Make the modes on LuaLine Single Char
+-- 3. Setup ToggleTerm
+-- 4. Make the modes on LuaLine Single Char
 
 ----------------------------------
 
@@ -152,7 +153,9 @@ require("packer").startup(function()
     use {"fladson/vim-kitty", branch = "main"}
     -- Nvim Repl
     use 'hkupty/iron.nvim'
-    -- Nvim Telescopm
+    -- Terminal Behaviour
+    use {'akinso/toggleterm.nvim', tag = 'v2.*'}
+    -- Nvim Telescope
     use {'nvim-telescope/telescope.nvim', requires = {"BurntSushi/ripgrep", "sharkdp/fd", opt = false}, }
     -- End of Plugins
     end)
@@ -209,22 +212,9 @@ opt.laststatus = 2
 ----------------------------------
 -- Terminal Settings
 ----------------------------------
--- VSCode Terminal Behaviour
-------
 
--- If Terminal Is Running 
-mapping("n", "<leader>t", ":below new<CR>:terminal<CR>i", { silent = true, noremap = true })
--- -- Hide Terminal
-mapping("t", "<leader>t", "<c-\\><c-n>:q<CR>", { silent = true })
--- Exit Terminal Completely
-mapping("t", "<leader>q", "exit<CR><CR>", { silent = true })
+require("toggleterm").setup()
 
--- Get rid of terminal line numbers
---------
-api.nvim_create_autocmd({ "TermOpen" }, { pattern = { "*" }, command = "setlocal nonumber norelativenumber" })
-
-----------------
- 
 -------------------------------"
 -- Language Specific Settings
 -------------------------------"
