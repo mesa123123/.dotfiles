@@ -52,7 +52,6 @@ Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
 " ----
 " Snippets
-Plug 'sirver/ultisnips'
 Plug 'junegunn/vim-easy-align'
 Plug 'takac/vim-hardtime'
 " AutoComplete Etc.

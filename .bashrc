@@ -1,5 +1,21 @@
+# -------------------------------- 
+# ------- BASH_PROFILE -----------
+# --------------------------------
+
 # ~/.bashrc: executed by bash(1) for non-login shells. see /usr/share/doc/bash/examples/startup-files (in the 
 # package bash-doc) for examples
+
+# --------
+# ---- GateKeeping Nvim ----
+# --------
+# If this is nvim calling me I'm only doing this once and if I've already done it you can go away!
+if [ -v $VIMRUNTIME ]; then
+    if [ -z $HIGHER_TERM_CALLED ]; then
+        export HIGHER_TERM_CALLED=1
+    else 
+        return 0
+    fi
+fi
 
 # If not running interactively, don't do anything
 case $- in
@@ -216,7 +232,8 @@ fi
 # Editor Settings VIM or NEOVIM?
 if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
     export EDITOR=nvim
-    export VIMINIT='source /home/$USER/.config/nvim/init.vim'
+    # and am I using lua?
+    [[ -f "/home/$USER/.config/nvim/init.lua" ]] && export VIMINIT='luafile /home/$USER/.config/nvim/init.lua' || export VIMINIT='source /home/$USER/.config/nvim/init.vim'
 else
     export EDITOR=vim
     export VIMINIT='source /home/$USER/.vim/.vimrc'
@@ -290,3 +307,7 @@ if [[ $WSLON == true ]]; then
 fi
 
 complete -C /usr/bin/terraform terraform
+
+# ----------------
+# End Of bashrc
+# ----------------
