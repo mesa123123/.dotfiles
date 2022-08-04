@@ -9,7 +9,7 @@
 # ---- GateKeeping Nvim ----
 # --------
 # If this is nvim calling me I'm only doing this once and if I've already done it you can go away!
-if [ $(env| grep NVIM -c) -gt 0 ]; then
+if [ -v $VIMRUNTIME ]; then
     if [ -z $HIGHER_TERM_CALLED ]; then
         export HIGHER_TERM_CALLED=1
     else 
