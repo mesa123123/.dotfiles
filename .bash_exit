@@ -31,6 +31,6 @@ then
     pause "...Exit tasks are complete, please press any key to leave shell"
 fi
 # ---- Nvim Controls
-if [ $(env | grep NVIM -c) -gt 0 ] && [ -v $HIGHER_TERM_CALLED ]; then
+if [ -v $VIMRUNTIME ] && [ -v $HIGHER_TERM_CALLED ]; then
     unset HIGHER_TERM_CALLED
 fi
