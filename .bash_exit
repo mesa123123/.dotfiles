@@ -21,10 +21,16 @@ function timestamppush()
 	git -C "${1}" push -q origin main
 }
 	
-# ---------  Business Logic Begins Here --------- 
+# ---------  Business Logic Begins Here ---------
+
+# ---- Sync Dotfiles
 if [ -z "${TMUX}" ] && [ -z "${PIPENV_ACTIVE}" ] && [ -z "${VIMRUNTIME}" ];
 then
     timestamppush ${learning_working_directory}
     ~/.dotfiles/sync.sh -m end -r no
     pause "...Exit tasks are complete, please press any key to leave shell"
+fi
+# ---- Nvim Controls
+if [ $(env | grep NVIM -c) -gt 0 ] && [ -v $HIGHER_TERM_CALLED ]; then
+    unset HIGHER_TERM_CALLED
 fi
