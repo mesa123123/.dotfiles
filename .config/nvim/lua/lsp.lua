@@ -4,8 +4,7 @@
 -- ########################## --
 --------------------------------
 
---------------------------------
--- Luaisms for Vim Stuff
+-------------------------------- Luaisms for Vim Stuff
 --------------------------------
 
 -- Variables
@@ -34,7 +33,7 @@ local config = require("lspconfig") -- Overall configuration for lsp
 local install = require("mason-lspconfig") -- Mason is the successor to lsp-installer
 local cmp = require "cmp" -- Autocompletion for the language servers
 local cmp_lsp = require("cmp_nvim_lsp")
-local dap = require("nvim-dap")
+local dap = require("dap")
 local snip = require("luasnip")
 ----------
 
@@ -43,7 +42,7 @@ local snip = require("luasnip")
 local sig = require("lsp_signature") -- Lsp Signatures
 local nullls = require("null-ls") -- Other goodies like formatting
 local notify = require("notify")
-local dapui = require("nvim-dap-ui")
+local dapui = require("dapui")
 ----------
 
 --------------------------------
@@ -52,15 +51,19 @@ local dapui = require("nvim-dap-ui")
 
 -- Python Virtual Environments
 ----------
-local env_name = function()
-        output = {}
-            for match in string.gmatch(os.getenv("VIRTUAL_ENV"), "([^/]+)") do
-                table.insert(output, match)
-            end
-            return output[#output]
+local venv_path = function()
+    local venv = (os.getenv("VIRTUAL_ENV"))
+    if venv == nil or venv == '' then
+        return os.execute("which python")
+    else
+        local output = {}
+        for match in string.gmatch(venv, "([^/]+)") do
+            table.insert(output, match)
         end
-
-local venv_path = vim.fn.getcwd() .. string.format("%s/bin/python",env_name())
+        return vim.fn.getcwd() .. string.format("%s/bin/python", output[#output])
+    end
+end
+----------
 
 --------------------------------
 -- Snippets
@@ -263,6 +266,7 @@ local function keymappings(client)
     keymap.set("n", "<leader>ct", "<cmd>lua vim.lsp.buf.type_definition()<CR>", bufopts)
     ----------
 end
+
 ----------
 
 --------------------------------
@@ -361,6 +365,34 @@ nullls.setup {
 -- Debug Adapter Protocol
 --------------------------------
 
+-- Mappings
+----------
+local keyopts = { silent = true, noremap = true }
+-- Ui Commands
+keymap.set("n", "<leader>bge", "<cmd>lua require'dapui'.eval()<cr>", keyopts)
+keymap.set("n", "<leader>bge", "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", keyopts) -- bug gui exec
+keymap.set("n", "<leader>bgo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts) -- bug gui toggle
+keymap.set("n", "<leader>bgh", "<cmd>lua require'dap.ui.widgets'.hover()<cr>", keyopts)
+keymap.set("n", "<leader>bgs", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts)
+-- Session Commands
+keymap.set("n", "<leader>bs", "<cmd>lua require'dap'.session()<cr>", keyopts)
+keymap.set("n", "<leader>br", "<cmd>lua require'dap'.repl.toggle()<cr>", keyopts)
+keymap.set("n", "<leader>bx", "<cmd>lua require'dap'.disconnect()<cr>", keyopts) -- bug exit
+keymap.set("n", "<leader>bq", "<cmd>lua require'dap'.close()<cr>", keyopts)
+keymap.set("n", "<leader>bQ", "<cmd>lua require'dap'.terminate()<cr>", keyopts)
+-- Breakpoints (and pauses)
+keymap.set("n", "<leader>bB", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input '[Condition] > ')<cr>", keyopts) -- bug breakpoint
+keymap.set("n", "<leader>bb", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", keyopts)
+keymap.set("n", "<leader>bp", "<cmd>lua require'dap'.pause.toggle()<cr>", keyopts)
+-- Stepping commands
+keymap.set("n", "<leader>bh", "<cmd>lua require'dap'.run_to_cursor()<cr>", keyopts) -- run to here
+keymap.set("n", "<leader>bl", "<cmd>lua require'dap'.continue()<cr>", keyopts) -- bug continue
+keymap.set("n", "<leader>bh", "<cmd>lua require'dap'.step_back()<cr>", keyopts) -- bug previous
+keymap.set("n", "<leader>bj", "<cmd>lua require'dap'.step_into()<cr>", keyopts)
+keymap.set("n", "<leader>bk", "<cmd>lua require'dap'.step_over()<cr>", keyopts)
+keymap.set("n", "<leader>b", "<cmd>lua require'dap'.step_out()<cr>", keyopts)
+----------
+
 -- Adapter Setup (Adapters are like LSP-handlers for a DAP)
 ----------
 -- Python
@@ -372,17 +404,19 @@ dap.adapters.python = {
 
 -- Debugger Configuration
 ----------
-dap.configurations.python = {
-    type = 'python',
-    request = 'launch',
-    name = 'Launch file',
+-- Get the pre-made stuff
+require('dap-python').setup(venv_path())
+table.insert(dap.configurations.python, {
+    {
+        type = 'python',
+        request = 'launch',
+        name = 'Launch file',
+        program = '${file}', -- launches the current file
+        pythonPath = venv_path()
+    }
+})
+----------
 
-    program = '${file}' -- launches the current file
-    pythonPath = function()
-           if fn.executable(venv_path) == 1 then
-               return venv_path
-        else
-            return 
--------------------------------
+------------------------------
 -- EOF
 -------------------------------

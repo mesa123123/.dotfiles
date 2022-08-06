@@ -115,7 +115,7 @@ require("packer").startup(function()
     }
     -- Debug Adapter Protocol
     ----------
-    use 'mfussenegger/nvim-dap'
+    use { 'mfussenegger/nvim-dap', requires = { 'mfussenegger/nvim-dap-python' } }
     use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
     -- Language Server Protocol
     ----------
