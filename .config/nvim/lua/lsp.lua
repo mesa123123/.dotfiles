@@ -14,7 +14,6 @@ local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap -- keymaps
-local lsp = vim.lsp
 local g = vim.g -- global variables
 local opt = vim.opt -- vim options
 local gopt = vim.o -- global options
@@ -22,20 +21,46 @@ local bopt = vim.bo -- buffer options
 local wopt = vim.wo -- window options
 --------
 
+-- Lsp Abbreviations
+----------
+local lsp = vim.lsp
+local diagnose = vim.diagnostic
+local format = vim.formatting
+----------
+
 -- Required Module Loading Core Lsp Stuff
 ----------
 local config = require("lspconfig") -- Overall configuration for lsp
 local install = require("mason-lspconfig") -- Mason is the successor to lsp-installer
 local cmp = require "cmp" -- Autocompletion for the language servers
 local cmp_lsp = require("cmp_nvim_lsp")
---------
+local dap = require("nvim-dap")
+local snip = require("luasnip")
+----------
 
 -- Required Extras
 ----------
 local sig = require("lsp_signature") -- Lsp Signatures
 local nullls = require("null-ls") -- Other goodies like formatting
-local snip = require("luasnip")
 local notify = require("notify")
+local dapui = require("nvim-dap-ui")
+----------
+
+--------------------------------
+-- Language Specific Settings and Helpers
+--------------------------------
+
+-- Python Virtual Environments
+----------
+local env_name = function()
+        output = {}
+            for match in string.gmatch(os.getenv("VIRTUAL_ENV"), "([^/]+)") do
+                table.insert(output, match)
+            end
+            return output[#output]
+        end
+
+local venv_path = vim.fn.getcwd() .. string.format("%s/bin/python",env_name())
 
 --------------------------------
 -- Snippets
@@ -55,8 +80,8 @@ snip.config.set_config {
 -- Support Functions
 ----------
 local has_words_before = function()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    local line, col = unpack(api.nvim_win_get_cursor(0))
+    return col ~= 0 and api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 ----------
 
@@ -143,14 +168,14 @@ cmp.setup({
             i = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
         },
         -- Use <Tab> to call upon the cmp when needed
-        ["<Tab>"] = cmp.mapping(function(fallback)
+        ["<Tab>"] = cmp.mapping(function()
             if cmp.visible() then
                 cmp.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false }
             else
                 cmp.complete()
             end
         end, { "c" }),
-        ["<c-Space>"] = cmp.mapping(function(fallback)
+        ["<c-Space>"] = cmp.mapping(function()
             if cmp.visible() then
                 cmp.close()
             else
@@ -167,7 +192,6 @@ cmp.setup({
         }),
     },
 })
-
 ----------
 
 -- Config Text Search '/'
@@ -239,7 +263,6 @@ local function keymappings(client)
     keymap.set("n", "<leader>ct", "<cmd>lua vim.lsp.buf.type_definition()<CR>", bufopts)
     ----------
 end
-
 ----------
 
 --------------------------------
@@ -270,7 +293,9 @@ require("mason").setup({ install_root_dir = "/home/bowmanpete/.config/nvim/lua/l
 
 -- Ensure Installs
 ----------
-install.setup({ automatic_installation = true, ensure_installed = { 'sumneko_lua', 'pyright', 'markdownlint' } }) -- This is running through Mason_lsp-config
+install.setup({ automatic_installation = true,
+    ensure_installed = { 'sumneko_lua', 'pyright', 'markdownlint', 'pylint', 'debugpy', 'shellcheck',
+        'bash-debug-adapter', 'bash-language-server' } }) -- This is running through Mason_lsp-config
 ----------
 
 --------------------------------
@@ -288,7 +313,7 @@ config.sumneko_lua.setup { on_attach = on_attach, capabilities = capabilities,
                 library = api.nvim_get_runtime_file("", true),
                 checkThirdParty = false, -- Stops annoying config prompts
             },
-            completion = { autoRequire = false },
+            completion = { autoRequire = true },
             telemetry = { enable = false }, -- Don't steal my data
         },
     },
@@ -301,38 +326,63 @@ config.sumneko_lua.setup { on_attach = on_attach, capabilities = capabilities,
 config.pyright.setup { on_attach = on_attach, capabilities = capabilities }
 
 --------------------------------
--- Setup of Null-ls (Formatting and diagnostic Language Server)
+-- Setup of Null-ls (Turn Non-Lsps Into Lsps)
 --------------------------------
 
-local formatting = nullls.builtins.formatting
-local diagnostics = nullls.builtins.diagnostics
+-- Special variables for nullls
+----------
+local nformatting = nullls.builtins.formatting
+local ndiagnostics = nullls.builtins.diagnostics
+local ncompletion = nullls.builtins.completion
+----------
 
+-- Nullls Setup
+----------
 nullls.setup {
     on_attach = on_attach,
-    debug = true,
     sources = {
         -- Python Extras
         ----------
-        formatting.autopep8,
-        diagnostics.pylint.with({
+        nformatting.autopep8.with({
+            prefer_local = "./.venv/bin"
+        }),
+        ndiagnostics.pylint.with({
             prefer_local = "./.venv/bin" -- make pylint look for the virtual environment
-        })
+        }),
         ----------
+        -- Spell
+        ----------
+        ncompletion.spell,
     }
 }
-
---------------------------------
--- Colors and Themes
---------------------------------
-local hl = api.nvim_set_hl
-
-hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
-
 ----------
 
+--------------------------------
+-- Debug Adapter Protocol
+--------------------------------
+
+-- Adapter Setup (Adapters are like LSP-handlers for a DAP)
+----------
+-- Python
+dap.adapters.python = {
+    type = "executable",
+    command = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers/bin/debugpy"
+}
+----------
+
+-- Debugger Configuration
+----------
+dap.configurations.python = {
+    type = 'python',
+    request = 'launch',
+    name = 'Launch file',
+
+    program = '${file}' -- launches the current file
+    pythonPath = function()
+           if fn.executable(venv_path) == 1 then
+               return venv_path
+        else
+            return 
 -------------------------------
 -- EOF
 -------------------------------

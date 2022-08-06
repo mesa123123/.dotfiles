@@ -32,6 +32,7 @@ local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap
+local hl = api.nvim_set_hl
 local g = vim.g -- global variables
 local opt = vim.opt -- vim options
 local gopt = vim.o -- global options
@@ -45,14 +46,14 @@ local wopt = vim.wo -- window options
 ----------
 local ex = setmetatable({}, {
     __index = function(t, k)
-      local command = k:gsub("_$", "!")
-      local f = function(...)
-        return api.nvim_command(table.concat(vim.tbl_flatten {command, ...}, " "))
-      end
-      rawset(t, k, f)
-      return f
+        local command = k:gsub("_$", "!")
+        local f = function(...)
+            return api.nvim_command(table.concat(vim.tbl_flatten { command, ... }, " "))
+        end
+        rawset(t, k, f)
+        return f
     end
-  });
+});
 
 -- Map(function, table)
 function Map(func, tbl)
@@ -121,7 +122,7 @@ require("packer").startup(function()
     use { 'neovim/nvim-lspconfig',
         wants = { "nvim-cmp", "mason.nvim", "mason-lspconfig.nvim", "lsp_signature.nvim" },
         requires = { 'williamboman/mason-lspconfig.nvim', 'williamboman/mason.nvim', 'ray-x/lsp_signature.nvim',
-            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip' }, }
+            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip', 'mfussenegger/nvim-dap' }, }
     use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
     -- Testing Plugins
     ----------
@@ -220,6 +221,14 @@ require 'nvim-web-devicons'.get_icons()
 -- Status Line Settings
 ----------
 opt.laststatus = 2
+----------
+
+-- Highlighting
+---------
+hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend = 50 })
+hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
+hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
+hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
 ----------
 
 --------------------------------
@@ -398,7 +407,8 @@ keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -- Testing - Ultest : <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
 -- REPL - Iron.nvim: <leader>r
--- AutoComplete and Diagnostics - NvimCmp (and dependents): <leader>c & g
+-- Diagnostics - nvim-lspconfig (and dependents): <leader>c & g
+-- Debugging - nvim-dap: <leader>b
 ----------
 
 ----------------------------------
@@ -427,7 +437,8 @@ require("toggleterm").setup {
 keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true }) -- Send exit command
 keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true }) -- Use Esc to change modes in the terminal
 keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"", { noremap = true, silent = true })
-keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"", { noremap = true, silent = true })
+keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
+    { noremap = true, silent = true })
 
 ----------
 
@@ -557,12 +568,12 @@ require("lualine").setup({
         component_separators = { left = '', right = '' },
     },
     sections = {
-        lualine_a = { { 'mode', fmt = function (res) return res:sub(1,1) end } },
+        lualine_a = { { 'mode', fmt = function(res) return res:sub(1, 1) end } },
         lualine_b = { 'branch', 'diff', 'diagnostics' },
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'filetype' },
         lualine_y = { "os.date('%H:%M %Y-%m-%d')" },
-        lualine_z = { 'progress', 'location',  }
+        lualine_z = { 'progress', 'location', }
     },
     inactive_sections = {
         lualine_a = {},
