@@ -112,6 +112,10 @@ require("packer").startup(function()
             use 'rcarriga/nvim-notify',
         }
     }
+    -- Debug Adapter Protocol
+    ----------
+    use 'mfussenegger/nvim-dap'
+    use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
     -- Language Server Protocol
     ----------
     use { 'neovim/nvim-lspconfig',
@@ -119,9 +123,6 @@ require("packer").startup(function()
         requires = { 'williamboman/mason-lspconfig.nvim', 'williamboman/mason.nvim', 'ray-x/lsp_signature.nvim',
             'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip' }, }
     use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
-    -- Debug Adapter Protocol
-    ----------
-    use 'mfussenegger/nvim-dap'
     -- Testing Plugins
     ----------
     use 'nvim-lua/plenary.nvim'
@@ -197,12 +198,7 @@ api.nvim_create_user_command('Srcv', 'luafile ~/.config/nvim/init.lua', {}) -- S
 
 -- Dealing with Mac Colors
 ----------
-if fn.has('macunix')
-then
-    opt.termguicolors = false
-else
-    opt.termguicolors = true
-end
+opt.termguicolors = true
 ----------
 
 -- Load Color Scheme
@@ -419,7 +415,7 @@ require("toggleterm").setup {
     terminal_mappings = true,
     hide_numbers = true,
     on_open = function()
-        cmd [[ TermExec cmd="source ~/.bash_profile &&  clear" ]]
+        cmd [[ TermExec cmd="source ~/.bashrc &&  clear" ]]
     end,
     on_exit = function()
         cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
@@ -579,19 +575,6 @@ require("lualine").setup({
 })
 ----------
 
--- Turn Filename Into FilePath
--- function! LightlineTruncatedFileName()
---     let l:filePath = expand('%')
---     return winwidth(0) > 100 ? l:filePath : pathshorten(l:filePath)
--- endfunction
-
--- Shorten Branch Name If Necessary
--- function! LightlineGitBranchName()
---     let l:gitbranch = gitbranch#name()
---     return winwidth(0) > 100 ? l:gitbranch : join(split(l:gitbranch, "-")[-3:], "-")
--- endfunction
-
-
 ---------------------------------
 -- Telescope Settings
 ---------------------------------
@@ -601,6 +584,7 @@ keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true }
 keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true })
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
+keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps", { silent = true, noremap = true })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
 ----------------
 

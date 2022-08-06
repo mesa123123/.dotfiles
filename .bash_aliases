@@ -15,7 +15,6 @@ alias editfuncs="vim ~/.bash_functions && source ~/.bash_functions"
 alias editsecs="vim ~/.bash_secrets && source ~/.bash_secrets"
 alias editaptsource='sudo vim /etc/apt/sources.list'
 alias editexit="vim ~/.bash_exit && source ~/.bash_exit"
-alias editvim="vim ~/.vim/.vimrc"
 alias edittmux="vim ~/.tmux.conf"
 
 # Package Management
@@ -31,32 +30,17 @@ if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
     alias vim='nvim'
     alias svim='sudo nvim'
     alias oldvim='\vim'
+    [[ -f "/home/$USER/.config/nvim/init.lua" ]] && alias editvim="vim /home/${USER}/.config/nvim/init.lua" || alias editvim="vim /home/${USER}/.vim/.vimrc"
 else
     alias svim='sudo vim'
 fi
-# Fiddly Coc Stuff
-alias cocnpm='npm i --ignore-scripts --no-lockfile --production --legacy-peer-deps'
+
 # Screen Commands
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
 
 # Application Commands
 alias bluetooth="blueman-manager"
-
-# Selenium Commands
-if [ -f "/usr/local/bin/seleniumServer.jar" ]; then
-   alias seleniumServer="java -jar /usr/local/bin/seleniumServer.jar"
-fi
-# Fiddily Chrome WSL Stuff
-if [ "$WSLON" == "true" ]; then
-    if [ "$USER" == "m808752" ]; then
-        alias chrome='google-chrome --proxy-server="http://localhost:3128"'
-    else    
-        alias chrome='/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
-    fi
-else
-    alias chrome='google-chrome'
-fi
 
 # Chromium Stuff
 if [[ $(dpkg-query -l chromium-browser 2>/dev/null | grep -c "chromium-browser") == 1 ]]; then

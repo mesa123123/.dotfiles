@@ -265,12 +265,12 @@ end
 
 -- Dependent Modules Require
 ----------
-require("mason").setup({ install_root_dir = "/Users/m808752/.config/nvim/lua/lsp_servers" }) -- Mason is the engine the installer configs will run
+require("mason").setup({ install_root_dir = "/home/bowmanpete/.config/nvim/lua/lsp_servers" }) -- Mason is the engine the installer configs will run
 ----------
 
 -- Ensure Installs
 ----------
-install.setup({ automatic_installation = true, ensure_installed = { 'sumneko_lua', 'pyright' } }) -- This is running through Mason_lsp-config
+install.setup({ automatic_installation = true, ensure_installed = { 'sumneko_lua', 'pyright', 'markdownlint' } }) -- This is running through Mason_lsp-config
 ----------
 
 --------------------------------
@@ -295,13 +295,13 @@ config.sumneko_lua.setup { on_attach = on_attach, capabilities = capabilities,
 }
 ----------
 
+-- Python Servers
+----------
 -- Pyright
-----------
 config.pyright.setup { on_attach = on_attach, capabilities = capabilities }
-----------
 
 --------------------------------
--- Setup of Null-ls (Third Party Lsp Goodies)
+-- Setup of Null-ls (Formatting and diagnostic Language Server)
 --------------------------------
 
 local formatting = nullls.builtins.formatting
