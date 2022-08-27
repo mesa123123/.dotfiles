@@ -298,7 +298,7 @@ require("mason").setup({ install_root_dir = "/home/bowmanpete/.config/nvim/lua/l
 -- Ensure Installs
 ----------
 install.setup({ automatic_installation = true,
-    ensure_installed = { 'sumneko_lua', 'pyright', 'markdownlint', 'pylint', 'debugpy', 'shellcheck',
+    ensure_installed = { 'black', 'sumneko_lua', 'pyright', 'markdownlint', 'pylint', 'debugpy', 'shellcheck',
         'bash-debug-adapter', 'bash-language-server' } }) -- This is running through Mason_lsp-config
 ----------
 
@@ -347,7 +347,7 @@ nullls.setup {
     sources = {
         -- Python Extras
         ----------
-        nformatting.autopep8.with({
+        nformatting.black.with({
             prefer_local = "./.venv/bin"
         }),
         ndiagnostics.pylint.with({
