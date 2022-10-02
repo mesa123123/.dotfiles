@@ -18,7 +18,8 @@ alias editexit="vim ~/.bash_exit && source ~/.bash_exit"
 alias edittmux="vim ~/.tmux.conf"
 
 # Package Management
-alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
+[[ $(cat /proc/version | grep -c "UBUNTU") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
+[[ $(cat /proc/version | grep -c "MANJARO") == 1 ]] && alias uur='sudo pacman -Syu && sudo pacman -Qtdq | sudo pacman -Rns -' && alias spacman='sudo pacman && sudo yay -Syu'
 #  Programmes etc.
 alias gnpm='npm -g'
 alias pip='pip3'
@@ -26,7 +27,7 @@ alias spip='sudo pip3'
 alias prpy='pipenv run python'
 alias dotsync='~/.dotfiles/dfsync.sh -m begin -r no'
 #Fiddily Vim Stuff
-if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
+if [[ $(pacman -Qqe neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
     alias vim='nvim'
     alias svim='sudo nvim'
     alias oldvim='\vim'
@@ -43,7 +44,7 @@ alias cls='clear'
 alias bluetooth="blueman-manager"
 
 # Chromium Stuff
-if [[ $(dpkg-query -l chromium-browser 2>/dev/null | grep -c "chromium-browser") == 1 ]]; then
+if [[ $(pacman -Syu chromium-browser 2>/dev/null | grep -c "chromium-browser") == 1 ]]; then
     alias chrome='chromium-browser'
 else
     alias chrome='chromium'
@@ -63,12 +64,8 @@ fi
 if [[ "$(cargo install --list | grep "bat")" == *"bat"* ]]; then
     alias cat='bat'
 else
-    if [[ $(dpkg-query -l bat 2>/dev/null | grep -c "bat") == 1 ]]; then
-        if [[ $(lsb_release -a | grep -c "Ubuntu 18") == 1 ]]; then  
+    if [[ $(pacman -Qqe 2>/dev/null | grep -c "bat") == 1 ]]; then
             alias cat='bat'
-        else
-            alias cat='batcat'
-        fi
     fi
 fi
 # If bottom is installed use that use that instead of top
@@ -88,8 +85,10 @@ if [[ "$(cargo install --list | grep "broot")" == *"broot"* ]]; then
     alias broot='br'
     alias tree='br'
 fi
+# If git-delta is installed, use that for diff
+[[ $(cargo install --list | grep -c "git-delta") == 1 ]] && alias diff="delta"
 # If Gping is about use that instead of ping
-if [[ "$(apt-cache pkgnames gping | grep "gping")" == *"gping"* ]]; then
+if [[ "$(pacman -Qqe | grep "gping")" == *"gping"* ]]; then
     alias ping='gping'
 fi
 

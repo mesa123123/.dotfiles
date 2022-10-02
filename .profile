@@ -10,17 +10,21 @@
 
 # Force terminal type info
 export TERMINFO="/usr/share/terminfo"
+
 # Client Specific Settings
 if [ -f $HOME/.profile_secrets ]; then
 	. $HOME/.profile_secrets
 fi
+
 # WSL System Interop Setttings
 # ----------------
 # WSL Check - Note the bash rc exports the env variable
-CATOSRELEASE=$(cat /proc/sys/kernel/osrelease)
+CATOS=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
-WSLON=$([[ ${CATOSRELEASE,,} == *"microsoft"* ]] && echo "true" || echo "false")
+WSLON=$([[ ${CATOS,,} == *"microsoft"* ]])
 export WSLON
+DISTRO=$(lsb_release -si)
+export DISTRO 
 # Special WSL Paths for Interoperability in cmd lines
 if [[ ${WSLON} == "true" ]]; then
 	export PATH=$PATH:"/c/Windows/System32/"
@@ -62,8 +66,10 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Because quite a few early modules in the unix stack now require rust, add them earlier on than the bashrc
-. $HOME/.cargo/env
+# If rust packages are about add them to path
+if [ -d "$HOME/.cargo/bin" ] ; then
+    PATH="$HOME/.cargo/bin:$PATH"
+fi
 
 # Save the Profile Path Here
 export PROFILE_PATH=$PATH

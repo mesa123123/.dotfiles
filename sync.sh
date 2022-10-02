@@ -13,7 +13,7 @@ LOGFILE=~/.dotfiles/synclogs.log
 # ------- Global Script Variables -------
 
 declare -a TRACKEDFILESFORSYNC
-TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf" ".vim/.vimrc" ".vim/UltiSnips" ".vim/spell" ".vim/coc-settings.json" ".vim/autoload" ".config/nvim" "./.profile")
+TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf"  ".config/nvim" "./.profile")
 # If its wsl add the wslbin directory too, the bashrc already has functionality to sort out the wsl_on variable
 if [[ $WSLON == true ]] && [[ -f "./wslbin/*" ]]; then
     WSLBINDIR=".wslbin/"
@@ -22,10 +22,6 @@ fi
 
 SOURCEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-# In order to get around a proxy sometimes you gotta start the browser, ergo you need to know where
-# your browser is
-BROWSERCHROME="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
-BROWSERBRAVE="/c/Users/$USER/AppData/Local/BraveSoftware/Brave-Browser/Application/brave.exe"
 # ------- End of Global Script Variables -------
 
 # -------- Null Switches Method ------
@@ -71,7 +67,7 @@ esac
 done
 # --------- End of Command Switch Processes ---------
 
-# --------- Reuseable Methods --------
+# --------- Reusable Methods --------
 
 # This creates subfolders where applicable, i.e. files that are actually stored in a subfolder such as ~/.vim/.vimrc this creates those subfolders forthe client within the home folder and .dotfilesbackup folder 
 function create_subfolders()
@@ -98,14 +94,10 @@ function create_symlink()
 {
 	# If not, create a dotfiles backup directory (if not already created) 
 	if [ ! -d ~/.dotfilesbackup ]; then
-        mkdir ~/.dotfilesbackup
+		mkdir ~/.dotfilesbackup
 	fi
-    # Apparently we have to clone the whole damn file tree -_-
-    if [ ! -d ~/.dotfilesbackup/.vim ]; then
-        mkdir ~/.dotfilesbackup/.vim
-    fi
     if [ ! -d ~/.dotfilesbackup/.config ]; then
-        mkdir ~/.dotfilesbackup/.config
+	mkdir ~/.dotfilesbackup/.config
     fi
 	# Put the named file in a variable
 	FILEARG=${1}

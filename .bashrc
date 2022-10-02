@@ -45,14 +45,14 @@ shopt -s checkwinsize
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
+# Find Distro Info
+export DIST_INFO=$(cat /proc/version)
 # set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+[[ $(echo $DIST_INFO | grep --color=auto -c "UBUNTU") == 1 ]] && [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot)
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
+    (xterm-color|*-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -70,11 +70,12 @@ if [ -n "$force_color_prompt" ]; then
 	color_prompt=
     fi
 fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[[01;32m\]\u@\h\[[00m\]:\[[01;34m\]\w\[[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+if [[ $(echo $DIST_INFO | grep --color=auto -c "UBUNTU") == 1 ]]; then
+    if [ "$color_prompt" = yes ]; then
+        PS1='${debian_chroot:+($debian_chroot)}\[[01;32m\]\u@\h\[[00m\]:\[[01;34m\]\w\[[00m\]\$ '
+    else
+        PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    fi
 fi
 unset color_prompt force_color_prompt
 
@@ -93,7 +94,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
-
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
@@ -101,7 +101,6 @@ fi
 
 # colored GCC warnings and errors
 # export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
@@ -139,9 +138,7 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# Bash Completion
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
@@ -174,19 +171,6 @@ configadd() {
     grep -qxF "${2}" $1 || echo "${2}" >> $1
 }
 
-
-# Check WSL_VERSION by going through interop channels
-if [[ $WSLON == true ]]; then
-	RESPONSE=$(uname -r | grep Microsoft > /dev/null && echo "WSL1")
-	[[ ${RESPONSE}  == *"1"* ]] && export WSL_VERSION=1 || export WSL_VERSION=2
-    if [[ $WSL_VERSION == 2 ]]; then
-        export WINIP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')
-    fi
-    cd ~ || exit;
-fi
-# ---- End of WSL Settings ---- 
-# ----
-
 # ---------
 # ---- Start Of Environment Variables -----
 # ---------
@@ -212,7 +196,6 @@ export PYSPARK_PYTHON="/usr/bin/python3"
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-
 # Special WSL envvars that would just annoy a pure linux system
 if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
@@ -230,7 +213,17 @@ if [[ ${WSLON} == true ]]; then
 fi
 
 # Editor Settings VIM or NEOVIM?
-if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
+# Set Nvim default to 0
+NVIM=0
+# If on Manjaro
+if [[ $(echo $DIST_INFO | grep -c "MANJARO") == 1 ]]; then 
+	[[ $(pacman -Qqe 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+fi	
+# If on Ubuntu
+if [[ $(echo $DIST_INFO | grep -c "UBUNTU") == 1 ]]; then
+	[[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+fi
+if [[ ${NVIM} == 1 ]]; then  
     export EDITOR=nvim
     # and am I using lua?
     [[ -f "/home/$USER/.config/nvim/init.lua" ]] && export VIMINIT='luafile /home/$USER/.config/nvim/init.lua' || export VIMINIT='source /home/$USER/.config/nvim/init.vim'
@@ -259,37 +252,22 @@ fi
 # Appending Variables Variables to Path
 export PATH="$JAVA_HOME/bin:$PATH"
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
-export PATH=${PATH}:${SCALA_HOME}/bin
+export PATH="${PATH}:${SCALA_HOME}/bin"
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
 export PATH="$PATH:$GEM_HOME/bin"
-export PATH="$PATH:$(which solargraph)"
 export PATH="$PATH:/c/Program Files/Oracle/VirtualBox"
 export PATH="$PATH:$NPM_CONFIG_PREFIX/bin"
-
-
-# Chef Setup adds chef workstation stuff to the environment variables as it tends to break a lot of stuff with the terminals, its best to only use chef when its needed
-export PATH="$PATH:/opt/chef-workstation/bin:/home/${USER}/.chefdk/gem/ruby/2.7.0/bin:/opt/chef-workstation/embedded/bin:/opt/chef-workstation/gitbin"
-export GEM_ROOT="/opt/chef-workstation/embedded/lib/ruby/gems/2.7.0"
-export GEM_HOME="/home/${USER}/.chefdk/gem/ruby/2.5.0"
-export GEM_PATH="/home/${USER}/.chefdk/gem/ruby/2.5.0:/opt/chef-workstation/embedded/lib/ruby/gems/2.5.0"
-_chef_comp() {
-    local COMMANDS="exec env gem generate shell-init install update push push-archive show-policy diff export clean-policy-revisions clean-policy-cookbooks delete-policy-group delete-policy undelete describe-cookbook provision"
-    COMPREPLY=($(compgen -W "$COMMANDS" -- ${COMP_WORDS[COMP_CWORD]} ))
-}
-complete -F _chef_comp chef
-
-
 
 # ---- End Of Environment Variables -----
 
 # Powerline Setup
 if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
-	  powerline-daemon -q
-      POWERLINE_BASH_CONTINUATION=1
-      POWERLINE_BASH_SELECT=1
-	  source /usr/share/powerline/bindings/bash/powerline.sh
+  powerline-daemon -q
+  POWERLINE_BASH_CONTINUATION=1
+  POWERLINE_BASH_SELECT=1
+  source /usr/share/powerline/bindings/bash/powerline.sh
 fi
 
 
@@ -305,9 +283,6 @@ if [[ $WSLON == true ]]; then
         export DISPLAY=127.0.0.1:0.0
     fi
 fi
-
-complete -C /usr/bin/terraform terraform
-
 # ----------------
 # End Of bashrc
 # ----------------

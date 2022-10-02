@@ -169,8 +169,6 @@ require("packer").startup(function()
     use 'kristijanhusak/vim-dadbod-ui'
     -- Working with Kitty
     use { "fladson/vim-kitty", branch = "main" }
-    -- Nvim Repl
-    use 'hkupty/iron.nvim'
     -- Terminal Behaviour
     use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
     -- Nvim Telescope
@@ -406,7 +404,6 @@ keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -- Database - DadBod: : <leader>d
 -- Testing - Ultest : <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
--- REPL - Iron.nvim: <leader>r
 -- Diagnostics - nvim-lspconfig (and dependents): <leader>c & g
 -- Debugging - nvim-dap: <leader>b
 ----------
@@ -459,7 +456,6 @@ require("nvim-tree").setup {
         adaptive_size = true,
         centralize_selection = false,
         width = 50,
-        height = 30,
         side = "right",
         relativenumber = true,
         signcolumn = "yes",
@@ -629,47 +625,6 @@ keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true })
 keymap.set("n", "<leader>dr", ":DBUIRenameBuffer<CR>", { silent = true })
 keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true })
 ----------------
-
----------------------------------"
--- REPL - Iron.nvim
----------------------------------"
-
-require("iron.core").setup {
-    -- Options
-    ---------
-    config = {
-        should_map_plug = false,
-        scratch_repl = true,
-        repl_definition = {
-            sh = { command = { "bash" } },
-            python = { command = { "python3" } },
-            scala = { command = { "scala" } },
-            lua = { command = { "lua" } }
-        },
-        repl_open_cmd = require('iron.view').curry.right(40),
-    },
-    -- Mappings
-    ---------
-    keymaps = {
-        send_motion = "<Leader>rs",
-        visual_send = "<Leader>rs",
-        send_file = "<Leader>rf",
-        send_line = "<Leader>rl",
-        send_mark = "<Leader>rm",
-        mark_motion = "<Leader>rmm",
-        mark_visual = "<Leader>rmm",
-        remove_mark = "<Leader>rmd",
-        cr = "<Leader>r<cr>",
-        interrupt = "<Leader>rx",
-        exit = "<Leader>rq",
-        clear = "<Leader>rl",
-    },
-}
-
--- Mappings
----------
-keymap.set("n", "<leader>ro", ":IronRepl<CR>", { silent = true })
-----------
 
 ---------------------------------"
 -- LSP Config
