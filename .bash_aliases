@@ -64,7 +64,7 @@ fi
 if [[ "$(cargo install --list | grep "bat")" == *"bat"* ]]; then
     alias cat='bat'
 else
-    if [[ $(pacman -Qqe 2>/dev/null | grep -c "bat") == 1 ]]; then
+    if [[ $(pacman -Qqe 2>/dev/null | grep -xc "bat") == 1 ]]; then
             alias cat='bat'
     fi
 fi
