@@ -12,9 +12,9 @@
         <value type="int" value="4"/>
         <value type="int" value="5"/>
         <value type="int" value="2"/>
+        <value type="int" value="6"/>
         <value type="int" value="9"/>
         <value type="int" value="3"/>
-        <value type="int" value="6"/>
         <value type="int" value="16"/>
       </property>
       <property name="role" type="string" value="xfce4-panel-12965750720"/>
@@ -32,7 +32,7 @@
   <property name="plugins" type="empty">
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chromium.instance1576;chromium.instance18174"/>
+      <property name="mpris-players" type="string" value="chromium.instance1576;chromium.instance18174;chromium.instance37636"/>
     </property>
     <property name="plugin-5" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
