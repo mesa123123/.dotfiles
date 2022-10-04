@@ -32,12 +32,12 @@
   <property name="plugins" type="empty">
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chromium.instance18174"/>
+      <property name="mpris-players" type="string" value="chromium.instance1576;chromium.instance18174"/>
     </property>
     <property name="plugin-5" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
       <property name="digital-format" type="string" value="%a %_d %b, %R"/>
-      <property name="timezone" type="string" value="NZ"/>
+      <property name="timezone" type="string" value="GMT"/>
       <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
     </property>
     <property name="plugin-2" type="string" value="separator">

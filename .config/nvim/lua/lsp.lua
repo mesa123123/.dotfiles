@@ -299,7 +299,7 @@ require("mason").setup({ install_root_dir = "/home/bowmanpete/.config/nvim/lua/l
 ----------
 install.setup({ automatic_installation = true,
     ensure_installed = { 'black', 'sumneko_lua', 'pyright', 'markdownlint', 'pylint', 'debugpy', 'shellcheck',
-        'bash-debug-adapter', 'bash-language-server' } }) -- This is running through Mason_lsp-config
+        'bash-debug-adapter', 'bash-language-server', 'rust-analyzer' } }) -- This is running through Mason_lsp-config
 ----------
 
 --------------------------------
@@ -328,6 +328,10 @@ config.sumneko_lua.setup { on_attach = on_attach, capabilities = capabilities,
 ----------
 -- Pyright
 config.pyright.setup { on_attach = on_attach, capabilities = capabilities }
+
+-- Rust Server
+----------
+config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities }
 
 --------------------------------
 -- Setup of Null-ls (Turn Non-Lsps Into Lsps)

@@ -149,6 +149,8 @@ require("packer").startup(function()
     -- Theme
     use 'ii14/onedark.nvim'
     use 'mechatroner/rainbow_csv'
+    -- EditorConfig
+    use 'gpanders/editorconfig.nvim'
     -- Languages
     ------------
     use 'itchyny/vim-gitbranch'
@@ -162,8 +164,6 @@ require("packer").startup(function()
     use 'thosakwe/vim-flutter'
     -- Alignment
     use 'junegunn/vim-easy-align'
-    -- HardMode
-    use 'takac/vim-hardtime'
     -- Database Workbench
     use 'tpope/vim-dadbod'
     use 'kristijanhusak/vim-dadbod-ui'
