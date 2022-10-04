@@ -4,28 +4,31 @@
 -- ########################## --
 --------------------------------
 
--------------------------------- Luaisms for Vim Stuff
+--------------------------------
+-- Luaisms for Vim Stuff
 --------------------------------
 
 -- Variables
 ----------
+-- Api Exposures
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap -- keymaps
-local g = vim.g -- global variables
+local lsp = vim.lsp -- Lsp inbuilt
+local ui = vim.ui
+-- For Options
 local opt = vim.opt -- vim options
-local gopt = vim.o -- global options
+local gopt = vim.go -- global options
 local bopt = vim.bo -- buffer options
 local wopt = vim.wo -- window options
+-- For Variables
+local g = vim.g -- global variables
+local b = vim.b -- buffer variables
+local w = vim.w -- window variables
+local t = vim.t -- tabpage variables
+local v = vim.v -- general variables?
 --------
-
--- Lsp Abbreviations
-----------
-local lsp = vim.lsp
-local diagnose = vim.diagnostic
-local format = vim.formatting
-----------
 
 -- Required Module Loading Core Lsp Stuff
 ----------
@@ -35,15 +38,15 @@ local cmp = require "cmp" -- Autocompletion for the language servers
 local cmp_lsp = require("cmp_nvim_lsp")
 local dap = require("dap")
 local snip = require("luasnip")
-----------
+--------
 
 -- Required Extras
 ----------
 local sig = require("lsp_signature") -- Lsp Signatures
-local nullls = require("null-ls") -- Other goodies like formatting
+local snip = require("luasnip")
 local notify = require("notify")
-local dapui = require("dapui")
-----------
+local path = config.util.path
+local snip = require("luasnip")
 
 --------------------------------
 -- Language Specific Settings and Helpers
@@ -82,11 +85,26 @@ snip.config.set_config {
 
 -- Support Functions
 ----------
+-- Helps Cmd when theres no characters already there
 local has_words_before = function()
-    local line, col = unpack(api.nvim_win_get_cursor(0))
-    return col ~= 0 and api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 ----------
+
+-- Shorten Lines
+----------
+-- Note this will be janky but its set for improvement
+function ShortenLine()
+    if b['max_line_length'] == 0 then
+        b['max_line_length'] = fn.input("What is the line length? ")
+    end
+    if fn.strlen(fn.getline('.')) >= tonumber(b['max_line_length']) then
+        cmd [[ call cursor('.', b:max_line_length) ]]
+        cmd [[ execute "normal! F i\n" ]]
+
+    end
+end
 
 -- General Config
 ----------
@@ -195,6 +213,7 @@ cmp.setup({
         }),
     },
 })
+
 ----------
 
 -- Config Text Search '/'
@@ -233,7 +252,7 @@ local capabilities = cmp_lsp.update_capabilities(lsp.protocol.make_client_capabi
 ----------
 
 --------------------------------
--- Key Mappings
+-- Language Server Key Mappings
 --------------------------------
 
 -- Mappings
@@ -243,7 +262,7 @@ local function keymappings(client)
     ----------
     local bufopts = { noremap = true, silent = true, buffer = 0 }
     local loudbufopts = { noremap = true, silent = false, buffer = 0 }
-    ----------
+    b['max_line_length'] = 0 -- This has to be attached to the buffer so I went for a bufferopt
     -- Mappings
     ----------
     -- Commands that keep you in this buffer `g`
@@ -253,12 +272,14 @@ local function keymappings(client)
     keymap.set("n", "[G", ":lua vim.diagnostic.goto_prev({severity = diagnostic.severity.ERROR})<CR>", bufopts)
     keymap.set("n", "]G", ":lua vim.diagnostic.goto_next({severity = diagnostic.severity.ERROR})<CR>", bufopts)
     keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts)
+    keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts)
     if client.resolved_capabilities.document_formatting then
         keymap.set("n", "gf", "<cmd>lua vim.lsp.buf.formatting()<CR>", loudbufopts)
     end
     -- Commands where you leave current buffer `<leader>c`
     keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
     keymap.set("n", "<leader>cI", "<cmd>LspInfo<CR>", bufopts)
+    -- Need something here that says (if implementation isn't supported open definition/declaration in new buffer
     keymap.set("n", "<leader>cD", "<Cmd>lua vim.lsp.buf.definition()<CR>", bufopts)
     keymap.set("n", "<leader>cd", "<Cmd>lua vim.lsp.buf.declaration()<CR>", bufopts)
     keymap.set("n", "<leader>cs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
@@ -270,11 +291,12 @@ end
 ----------
 
 --------------------------------
--- Language Server Handlers
+-- Language Server Configuration
 --------------------------------
 
--- Create on Attach Function
+-- Buffer Config
 ----------
+-- On attach function
 local function on_attach(client, bufnr)
     -- Omnifunc use lsp
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
@@ -286,25 +308,44 @@ end
 
 ----------
 
+-- General Config
+----------
+lsp.buf.formatting_sync(nil, 10000) -- Format Timeout
+----------
+
 --------------------------------
 -- Configuration of Installer
 --------------------------------
 
 -- Dependent Modules Require
 ----------
-require("mason").setup({ install_root_dir = "/home/bowmanpete/.config/nvim/lua/lsp_servers" }) -- Mason is the engine the installer configs will run
+require("mason").setup({
+    install_root_dir = "/Users/m808752/.config/nvim/lua/lsp_servers"
+}) -- Mason is the engine the installer configs will run
 ----------
 
 -- Ensure Installs
 ----------
 install.setup({ automatic_installation = true,
-    ensure_installed = { 'black', 'sumneko_lua', 'pyright', 'markdownlint', 'pylint', 'debugpy', 'shellcheck',
-        'bash-debug-adapter', 'bash-language-server', 'rust-analyzer' } }) -- This is running through Mason_lsp-config
+    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'markdownlint', 'shellcheck', 'bash-language-server',
+        'black', 'cucumber-language-server', 'prettier', 'typescript_language_server', 'rust_analyzer' } }) -- This is running through Mason_lsp-config
 ----------
 
 --------------------------------
 -- Setup of Language Servers
 --------------------------------
+
+-- Functions
+----------
+-- Find Python Virutal_Env
+local function get_python_path()
+    -- Use Activated Environment
+    if vim.env.VIRTUAL_ENV then
+        return path.join(vim.env.VIRTUAL_ENV, 'bin', 'python')
+    end
+    -- Fallback to System Python
+    return fn.exepath('python3') or fn.exepath('python') or 'python'
+end
 
 -- Lua: Language Server
 ----------
@@ -317,53 +358,163 @@ config.sumneko_lua.setup { on_attach = on_attach, capabilities = capabilities,
                 library = api.nvim_get_runtime_file("", true),
                 checkThirdParty = false, -- Stops annoying config prompts
             },
-            completion = { autoRequire = true },
+            completion = { autoRequire = false },
             telemetry = { enable = false }, -- Don't steal my data
         },
     },
 }
 ----------
 
--- Python Servers
+-- Python: Pyright
 ----------
--- Pyright
-config.pyright.setup { on_attach = on_attach, capabilities = capabilities }
+config.pyright.setup { on_attach = on_attach, capabilities = capabilities,
+    on_init = function(client)
+        client.config.settings.python.pythonPath = get_python_path()
+    end
+}
+----------
+
+-- Web: Tsserver
+----------
+config.tsserver.setup({
+    capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+    on_attach = function(client)
+        client.resolved_capabilities.document_formatting = false
+    end,
+})
+----------
+
+-- Cucumber
+----------
+config.cucumber_language_server.setup { on_attach = on_attach, capabilities = capabilities }
+----------
+
+-- Bash
+----------
+config.bashls.setup { on_attach = on_attach, capabilities = capabilities }
+----------
+
+-- Yaml
+----------
+config.yamlls.setup { on_attach = on_attach, capabilities = capabilities }
+----------
 
 -- Rust Server
 ----------
 config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities }
-
---------------------------------
--- Setup of Null-ls (Turn Non-Lsps Into Lsps)
---------------------------------
-
--- Special variables for nullls
-----------
-local nformatting = nullls.builtins.formatting
-local ndiagnostics = nullls.builtins.diagnostics
-local ncompletion = nullls.builtins.completion
 ----------
 
--- Nullls Setup
+--------------------------------
+-- Setup of Null-ls
+--------------------------------
+
+-- Import Null-ls
+----------
+local nullls = require("null-ls")
+local method = nullls.methods
+local format = nullls.builtins.formatting -- Formatting
+local diagnose = nullls.builtins.diagnostics -- Diagnostics
+local code_actions = nullls.builtins.code_actions
+local hover = nullls.builtins.hover
+local register = nullls.register
+local helpers = require("null-ls.helpers")
+----------
+
+-- Functions
+----------
+-- Get Virtual Env Packages as NullLsp
+----------
+local function get_venv_command(command)
+    if vim.env.VIRTUAL_ENV then
+        return path.join(vim.env.VIRTUAL_ENV, 'bin', command)
+    else
+        return command
+    end
+end
+
+----------
+
+-- Installed Mason Managed Sources (I prefer these because they'll sit with everything else)
+----------
+local nullSources     = {}
+-- Need something in here that says like if pyproject is there, look in there, if not find mason
+local mason_installed = require("mason-registry")
+for _, package in pairs(mason_installed.get_installed_package_names()) do
+    -- Python Packages
+    -----------
+    -- Pylint
+    if package == "pylint" then -- Pylint
+        nullSources[#nullSources + 1] = diagnose.pylint.with({
+            command = get_venv_command("pylint"),
+            on_init = function(client)
+                client.config.settings.python.pythonPath = get_python_path()
+            end,
+            on_attach = on_attach
+        })
+    end
+    -- Black
+    if package == "black" then --Python Formatter
+        nullSources[#nullSources + 1] = format.black.with({
+            command = get_venv_command("black"),
+            on_init = function(client)
+                client.config.settings.python.pythonPath = get_python_path()
+            end,
+            on_attach = on_attach
+        })
+    end
+    -- Shell
+    ----------
+    -- Shellcheck
+    if package == "shellcheck" then
+        nullSources[#nullSources + 1] = code_actions.shellcheck.with({ on_attach = on_attach })
+    end
+    -- Yaml
+    ----------
+    if package == "yamllint" then
+        nullSources[#nullSources + 1] = diagnose.yamllint.with({ on_attach = on_attach })
+    end
+    ----------
+    if package == "markdownlint" then
+        nullSources[#nullSources + 1] = diagnose.markdownlint.with({
+            args = ({ "--disable MD013" }),
+            on_attach = on_attach
+        })
+        nullSources[#nullSources + 1] = format.markdownlint
+    end
+    ----------
+    -- Prettier
+    if package == "prettier" then
+        nullSources[#nullSources + 1] = format.prettier.with({
+            on_attach = on_attach,
+            filetypes = {
+                "javascript", "typescript", "css", "scss", "html", "json", "graphql"
+            },
+        })
+    end
+    ----------
+end
+------------
+
+-- Load the Mason Packages into the Null-ls engine
 ----------
 nullls.setup {
     on_attach = on_attach,
-    sources = {
-        -- Python Extras
-        ----------
-        nformatting.black.with({
-            prefer_local = "./.venv/bin"
-        }),
-        ndiagnostics.pylint.with({
-            prefer_local = "./.venv/bin" -- make pylint look for the virtual environment
-        }),
-        ----------
-        -- Spell
-        ----------
-        ncompletion.spell,
-    }
+    capabilities = capabilities,
+    debug = true,
+    sources = { sources = nullSources },
 }
 ----------
+
+--------------------------------
+-- Colors and Themes
+--------------------------------
+local hl = api.nvim_set_hl
+
+hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend = 50 })
+hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
+hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
+hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
+
 
 --------------------------------
 -- Debug Adapter Protocol
@@ -421,6 +572,6 @@ table.insert(dap.configurations.python, {
 })
 ----------
 
-------------------------------
+-------------------------------
 -- EOF
 -------------------------------
