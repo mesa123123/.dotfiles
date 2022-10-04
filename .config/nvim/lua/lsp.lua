@@ -47,6 +47,7 @@ local snip = require("luasnip")
 local notify = require("notify")
 local path = config.util.path
 local snip = require("luasnip")
+local dapui = require("dapui")
 
 --------------------------------
 -- Language Specific Settings and Helpers
@@ -320,15 +321,14 @@ lsp.buf.formatting_sync(nil, 10000) -- Format Timeout
 -- Dependent Modules Require
 ----------
 require("mason").setup({
-    install_root_dir = "/Users/m808752/.config/nvim/lua/lsp_servers"
+    install_root_dir = "/home/bowmanpete/.config/nvim/lua/lsp_servers"
 }) -- Mason is the engine the installer configs will run
 ----------
 
 -- Ensure Installs
 ----------
 install.setup({ automatic_installation = true,
-    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'markdownlint', 'shellcheck', 'bash-language-server',
-        'black', 'cucumber-language-server', 'prettier', 'typescript_language_server', 'rust_analyzer' } }) -- This is running through Mason_lsp-config
+    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'markdownlint', 'shellcheck', 'bash-language-server', 'black', 'cucumber-language-server', 'prettier', 'typescript_language_server', 'rust_analyzer' } }) -- This is running through Mason_lsp-config
 ----------
 
 --------------------------------
@@ -571,6 +571,9 @@ table.insert(dap.configurations.python, {
     }
 })
 ----------
+
+-- Setup Dap-Ui
+dapui.setup()
 
 -------------------------------
 -- EOF

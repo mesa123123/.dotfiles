@@ -31,6 +31,7 @@ local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap
+local hl = api.nvim_set_hl
 local g = vim.g -- global variables
 local opt = vim.opt -- vim options
 local gopt = vim.o -- global options
@@ -40,7 +41,7 @@ local wopt = vim.wo -- window options
 -- Functions
 --------
 
--- ex (Currenly this is a wrapper for everything not yet implemented in nvim)
+-- ex (Currently this is a wrapper for everything not yet implemented in nvim)
 ----------
 local ex = setmetatable({}, {
     __index = function(t, k)
@@ -200,8 +201,7 @@ opt.termguicolors = true
 
 -- Load Color Scheme
 ----------
--- cmd [[ colorscheme onedark ]]
-opt.colorscheme = "onedark"
+cmd [[ colorscheme onedark ]]
 ----------
 
 -- Rainbow Brackets Options
