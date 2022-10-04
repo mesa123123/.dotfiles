@@ -11,7 +11,6 @@
 --      a. Rewrite Snippets for Lua
 --      b. Restructure Snippets so only that format of Snippets loads
 -- 2. Figure out how to run telescope
--- 4. Make the modes on LuaLine Single Char
 ----------------------------------
 
 -------------------------------
@@ -32,7 +31,6 @@ local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap
-local hl = api.nvim_set_hl
 local g = vim.g -- global variables
 local opt = vim.opt -- vim options
 local gopt = vim.o -- global options
@@ -113,17 +111,17 @@ require("packer").startup(function()
             use 'rcarriga/nvim-notify',
         }
     }
-    -- Debug Adapter Protocol
-    ----------
-    use { 'mfussenegger/nvim-dap', requires = { 'mfussenegger/nvim-dap-python' } }
-    use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
     -- Language Server Protocol
     ----------
     use { 'neovim/nvim-lspconfig',
         wants = { "nvim-cmp", "mason.nvim", "mason-lspconfig.nvim", "lsp_signature.nvim" },
         requires = { 'williamboman/mason-lspconfig.nvim', 'williamboman/mason.nvim', 'ray-x/lsp_signature.nvim',
-            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip', 'mfussenegger/nvim-dap' }, }
+            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip' }, }
     use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
+    -- Debug Adapter Protocol
+    ----------
+    use { 'mfussenegger/nvim-dap', requires = { 'mfussenegger/nvim-dap-python' } }
+    use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
     -- Testing Plugins
     ----------
     use 'nvim-lua/plenary.nvim'
@@ -149,8 +147,6 @@ require("packer").startup(function()
     -- Theme
     use 'ii14/onedark.nvim'
     use 'mechatroner/rainbow_csv'
-    -- EditorConfig
-    use 'gpanders/editorconfig.nvim'
     -- Languages
     ------------
     use 'itchyny/vim-gitbranch'
@@ -164,6 +160,8 @@ require("packer").startup(function()
     use 'thosakwe/vim-flutter'
     -- Alignment
     use 'junegunn/vim-easy-align'
+    -- HardMode
+    use 'takac/vim-hardtime'
     -- Database Workbench
     use 'tpope/vim-dadbod'
     use 'kristijanhusak/vim-dadbod-ui'
@@ -195,14 +193,15 @@ api.nvim_create_user_command('Srcv', 'luafile ~/.config/nvim/init.lua', {}) -- S
 -- Color Schemes and Themes
 --------------------------------
 
--- Dealing with Mac Colors
+-- Set TermGuiColors true
 ----------
 opt.termguicolors = true
-----------
+
 
 -- Load Color Scheme
 ----------
-cmd [[ colorscheme onedark ]]
+-- cmd [[ colorscheme onedark ]]
+opt.colorscheme = "onedark"
 ----------
 
 -- Rainbow Brackets Options
@@ -227,8 +226,6 @@ hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend 
 hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
-----------
-
 --------------------------------
 -- Editor Options, Settings, Commands
 --------------------------------
@@ -273,7 +270,7 @@ cmd [[ filetype plugin indent on ]]
 
 -- FileTypes
 ----------
-cmd [[ au FileType cpp setlocal et ts=2 sw=2 ]] -- C++ Language 
+cmd [[ au FileType cpp setlocal et ts=2 sw=2 ]] -- C++ Language
 cmd [[ au BufRead,BufNewFile *.hcl set filetype=ini ]] -- HCL Language
 cmd [[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]] -- JenkinsFile
 cmd [[ au FileType python setlocal et ts=4 sw=4 sts=4 ]] -- Python Language
@@ -305,6 +302,12 @@ cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
 -- Editor Mappings
 ----------------------------------
 
+-- Redo set to uppercase U
+----------
+keymap.set('n', 'U', 'redo', { silent = true, noremap = true })
+----------
+
+
 -- Set Write/Quit to shortcuts
 ---------
 keymap.set('n', '<leader>ww', ':w<CR>', { silent = false, noremap = true })
@@ -313,6 +316,7 @@ keymap.set('n', '<leader>wqq', ':wq<CR>', { silent = false, noremap = true })
 keymap.set('n', '<leader>wqa', ':wqa<CR>', { silent = false, noremap = true })
 keymap.set('n', '<leader>wa', ':wa<CR>', { silent = false, noremap = true })
 keymap.set('n', '<leader>qa', ':qa<CR>', { silent = false, noremap = true })
+keymap.set('n', '<leader>qa!', '<cmd>qa!<cr>', { silent = false, noremap = true })
 keymap.set('n', '<leader>qq', ':q<CR>', { silent = false, noremap = true })
 keymap.set('n', '<leader>q!', ':q!<CR>', { silent = false, noremap = true })
 ----------
@@ -404,8 +408,7 @@ keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -- Database - DadBod: : <leader>d
 -- Testing - Ultest : <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
--- Diagnostics - nvim-lspconfig (and dependents): <leader>c & g
--- Debugging - nvim-dap: <leader>b
+-- AutoComplete and Diagnostics - NvimCmp (and dependents): <leader>c & g
 ----------
 
 ----------------------------------
@@ -416,13 +419,13 @@ require("toggleterm").setup {
     -- Options
     ----------
     open_mapping = '<Leader>t',
-    direction = 'float',
+    direction = 'tab',
     persist_mode = true,
     close_on_exit = true,
     terminal_mappings = true,
     hide_numbers = true,
     on_open = function()
-        cmd [[ TermExec cmd="source ~/.bashrc &&  clear" ]]
+        cmd [[ TermExec cmd="source ~/.bash_profile &&  clear" ]]
     end,
     on_exit = function()
         cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
@@ -582,19 +585,42 @@ require("lualine").setup({
 })
 ----------
 
+-- Turn Filename Into FilePath
+-- function! LightlineTruncatedFileName()
+--     let l:filePath = expand('%')
+--     return winwidth(0) > 100 ? l:filePath : pathshorten(l:filePath)
+-- endfunction
+
+-- Shorten Branch Name If Necessary
+-- function! LightlineGitBranchName()
+--     let l:gitbranch = gitbranch#name()
+--     return winwidth(0) > 100 ? l:gitbranch : join(split(l:gitbranch, "-")[-3:], "-")
+-- endfunction
+
+
 ---------------------------------
 -- Telescope Settings
 ---------------------------------
 
--- Find files using Telescope command-line sugar.
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true })
+-- Mappings
+----------
+keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true }) -- Find File
 keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true })
+keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true }) -- Find Buffer
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
-keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps", { silent = true, noremap = true })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
-----------------
-
+-- Picker Mappings
+require("telescope").setup {
+    pickers = {
+        buffers = {
+            mappings = {
+                -- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
+                i = { ["<c-d>"] = "delete_buffer" }
+            }
+        }
+    }
+}
+----------
 
 ---------------------------------
 -- Easy Align
@@ -656,4 +682,4 @@ require("lsp")
 
 --------------------------------
 -- EOF
---------------------------------
+-------------------------------
