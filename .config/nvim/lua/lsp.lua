@@ -321,14 +321,15 @@ lsp.buf.formatting_sync(nil, 10000) -- Format Timeout
 -- Dependent Modules Require
 ----------
 require("mason").setup({
-    install_root_dir = "/home/bowmanpete/.config/nvim/lua/lsp_servers"
+    install_root_dir = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers"
 }) -- Mason is the engine the installer configs will run
 ----------
 
 -- Ensure Installs
 ----------
 install.setup({ automatic_installation = true,
-    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'markdownlint', 'shellcheck', 'bash-language-server', 'black', 'cucumber-language-server', 'prettier', 'typescript_language_server', 'rust_analyzer' } }) -- This is running through Mason_lsp-config
+    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'markdownlint', 'shellcheck', 'bash-language-server',
+        'black', 'cucumber-language-server', 'prettier', 'typescript_language_server', 'rust_analyzer' } }) -- This is running through Mason_lsp-config
 ----------
 
 --------------------------------
@@ -401,7 +402,14 @@ config.yamlls.setup { on_attach = on_attach, capabilities = capabilities }
 
 -- Rust Server
 ----------
-config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities }
+config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities, settings = {
+    ['rust-analyzer'] = {
+        checkOnSave = {
+            command = "clippy"
+        }
+    }
+}
+}
 ----------
 
 --------------------------------
