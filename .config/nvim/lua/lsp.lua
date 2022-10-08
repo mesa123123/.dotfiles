@@ -275,7 +275,7 @@ local function keymappings(client)
     keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts)
     keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts)
     if client.resolved_capabilities.document_formatting then
-        keymap.set("n", "gf", "<cmd>lua vim.lsp.buf.formatting()<CR>", loudbufopts)
+        keymap.set("n", "gf", "<cmd>lua vim.lsp.buf.format()<CR>", loudbufopts)
     end
     -- Commands where you leave current buffer `<leader>c`
     keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
