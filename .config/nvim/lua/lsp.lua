@@ -274,7 +274,7 @@ local function keymappings(client)
     keymap.set("n", "]G", ":lua vim.diagnostic.goto_next({severity = diagnostic.severity.ERROR})<CR>", bufopts)
     keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts)
     keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts)
-    if client.resolved_capabilities.document_formatting then
+    if client.server_capabilities.document_formatting then
         keymap.set("n", "gf", "<cmd>lua vim.lsp.buf.format()<CR>", loudbufopts)
     end
     -- Commands where you leave current buffer `<leader>c`
@@ -311,7 +311,7 @@ end
 
 -- General Config
 ----------
-lsp.buf.formatting_sync(nil, 10000) -- Format Timeout
+lsp.buf.format(nil, 10000) -- Format Timeout
 ----------
 
 --------------------------------
@@ -380,7 +380,7 @@ config.pyright.setup { on_attach = on_attach, capabilities = capabilities,
 config.tsserver.setup({
     capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
     on_attach = function(client)
-        client.resolved_capabilities.document_formatting = false
+        client.server_capabilities.document_formatting = false
     end,
 })
 ----------

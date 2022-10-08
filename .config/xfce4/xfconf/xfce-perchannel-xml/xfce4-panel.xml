@@ -10,13 +10,14 @@
       <property name="plugin-ids" type="array">
         <value type="int" value="6"/>
         <value type="int" value="16"/>
-        <value type="int" value="8"/>
-        <value type="int" value="4"/>
-        <value type="int" value="1"/>
-        <value type="int" value="5"/>
-        <value type="int" value="2"/>
-        <value type="int" value="9"/>
         <value type="int" value="3"/>
+        <value type="int" value="9"/>
+        <value type="int" value="1"/>
+        <value type="int" value="11"/>
+        <value type="int" value="5"/>
+        <value type="int" value="12"/>
+        <value type="int" value="13"/>
+        <value type="int" value="14"/>
       </property>
       <property name="role" type="string" value="xfce4-panel-12965750720"/>
       <property name="length-adjust" type="bool" value="true"/>
@@ -40,10 +41,6 @@
       <property name="digital-format" type="string" value="%a %_d %b, %R"/>
       <property name="timezone" type="string" value="GMT"/>
       <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
-    </property>
-    <property name="plugin-2" type="string" value="separator">
-      <property name="expand" type="bool" value="true"/>
-      <property name="style" type="uint" value="0"/>
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
@@ -72,18 +69,21 @@
       <property name="style" type="uint" value="0"/>
     </property>
     <property name="plugin-16" type="string" value="whiskermenu"/>
-    <property name="plugin-4" type="string" value="launcher">
-      <property name="items" type="array">
-        <value type="string" value="16651903841.desktop"/>
-      </property>
-      <property name="show-label" type="bool" value="false"/>
-      <property name="move-first" type="bool" value="false"/>
-      <property name="arrow-position" type="uint" value="0"/>
+    <property name="plugin-11" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
     </property>
-    <property name="plugin-8" type="string" value="launcher">
-      <property name="items" type="array">
-        <value type="string" value="16651908563.desktop"/>
-      </property>
+    <property name="plugin-12" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-13" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-14" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
     </property>
   </property>
   <property name="configver" type="int" value="2"/>
