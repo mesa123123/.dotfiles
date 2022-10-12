@@ -44,11 +44,7 @@ alias cls='clear'
 alias bluetooth="blueman-manager"
 
 # Chromium Stuff
-if [[ $(pacman -Syu chromium-browser 2>/dev/null | grep -c "chromium-browser") == 1 ]]; then
-    alias chrome='chromium-browser'
-else
-    alias chrome='chromium'
-fi
+[[ $(pacman -Qqe chromium-browser 2>/dev/null | grep -c "chromium-browser") == 1 ]] && alias chrome='chromium-browser'|| alias chrome='chromium'
 
 # WSL Only Commands
 alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
@@ -56,43 +52,24 @@ alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
 # --------
 # Fancy Commands
 # --------
-if [[ $WSLON == "true" ]]; then
-    alias cmd="$CMD_HOME"
-fi
+[[ $WSLON == "true" ]] && alias cmd="$CMD_HOME"
 
 # If batcat is installed use that instead of cat
-if [[ "$(cargo install --list | grep "bat")" == *"bat"* ]]; then
-    alias cat='bat'
-else
-    if [[ $(pacman -Qqe 2>/dev/null | grep -xc "bat") == 1 ]]; then
-            alias cat='bat'
-    fi
-fi
+[[ "$(cargo install --list | grep "bat")" == *"bat"* ]] || [[ $(pacman -Qqe 2>/dev/null | grep -xc "bat") == 1 ]] && alias cat='bat'
 # If bottom is installed use that use that instead of top
-if [[ "$(cargo install --list | grep "bottom")" == *"bottom"* ]]; then
-    alias top='btm'
-fi
+[[ "$(cargo install --list | grep "bottom")" == *"bottom"* ]] && alias top='btm'
 # If tldr is installed use that instead of man
-if [[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]]; then
-    alias man='tldr'
-fi
+[[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]] && alias man='tldr'
 # If du-dust is installed use that instead
-if [[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]]; then
-    alias du='dust'
-fi
+[[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]] &&  alias du='dust'
 # If Broot is installed map it to the br command
-if [[ "$(cargo install --list | grep "broot")" == *"broot"* ]]; then
-    alias broot='br'
-    alias tree='br'
-fi
+[[ "$(cargo install --list | grep "broot")" == *"broot"* ]] && alias broot='br' && alias tree='br'
 # If git-delta is installed, use that for diff
 [[ $(cargo install --list | grep -c "git-delta") == 1 ]] && alias diff="delta"
 # If Gping is about use that instead of ping
-if [[ "$(pacman -Qqe | grep "gping")" == *"gping"* ]]; then
-    alias ping='gping'
-fi
-
+[[ "$(pacman -Qqe | grep "gping")" == *"gping"* ]] && alias ping='gping'
+# If rip grep is installed use that for grep
+[[ $(pacman -Qqe | grep -c "ripgrep") == 1 ]] && alias grep='rg'
 # Certain Terminals get fiddily with TERM settings so this gets around it for kitty at least
-if [[ "${TERM}" == *"kitty"* ]]; then
-    alias ssh="kitty +kitten ssh"
-fi
+[[ "${TERM}" == *"kitty"* ]] && alias ssh="kitty +kitten ssh"
+

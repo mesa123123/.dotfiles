@@ -186,9 +186,13 @@ cmp.setup({
             end
         end, { "i", "s", "c" }),
         -- Use Enter to Select
-        ["<CR>"] = cmp.mapping {
-            i = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
-        },
+        ["<CR>"] = cmp.mapping(function(fallback)
+            if cmp.visible() and has_words_before() then
+                cmp.confirm()
+            else
+                fallback()
+            end
+        end, { "i" }),
         -- Use <Tab> to call upon the cmp when needed
         ["<Tab>"] = cmp.mapping(function()
             if cmp.visible() then
@@ -274,8 +278,11 @@ local function keymappings(client)
     keymap.set("n", "]G", ":lua vim.diagnostic.goto_next({severity = diagnostic.severity.ERROR})<CR>", bufopts)
     keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts)
     keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts)
-    if client.server_capabilities.document_formatting then
+    if client.server_capabilities.documentFormattingProvider then
         keymap.set("n", "gf", "<cmd>lua vim.lsp.buf.format()<CR>", loudbufopts)
+        print("Formatted!")
+    else
+        print("There is no formatter attached!")
     end
     -- Commands where you leave current buffer `<leader>c`
     keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
@@ -328,8 +335,7 @@ require("mason").setup({
 -- Ensure Installs
 ----------
 install.setup({ automatic_installation = true,
-    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'markdownlint', 'shellcheck', 'bash-language-server',
-        'black', 'cucumber-language-server', 'prettier', 'typescript_language_server', 'rust_analyzer' } }) -- This is running through Mason_lsp-config
+    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'bash-language-server', 'black', 'cucumber-language-server', 'prettier', 'typescript_language_server', 'rust_analyzer' } }) -- This is running through Mason_lsp-config
 ----------
 
 --------------------------------

@@ -386,6 +386,29 @@ keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 ----------
 
 -----------------------------------------
+-- Tree-Sitter Config
+-----------------------------------------
+
+-- Plugin Setup
+----------!
+require('nvim-treesitter.configs').setup {
+    ensure_installed = { "lua", "rust", "toml" },
+    auto_install = true,
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+    },
+    ident = { enable = true },
+    rainbow = {
+        enable = true,
+        extended_mode = true,
+        max_file_lines = nil,
+    }
+
+}
+
+
+-----------------------------------------
 -- Leader Remappings, Plugin Commands
 -----------------------------------------
 
@@ -583,20 +606,6 @@ require("lualine").setup({
         lualine_z = {}
     }
 })
-----------
-
--- Turn Filename Into FilePath
--- function! LightlineTruncatedFileName()
---     let l:filePath = expand('%')
---     return winwidth(0) > 100 ? l:filePath : pathshorten(l:filePath)
--- endfunction
-
--- Shorten Branch Name If Necessary
--- function! LightlineGitBranchName()
---     let l:gitbranch = gitbranch#name()
---     return winwidth(0) > 100 ? l:gitbranch : join(split(l:gitbranch, "-")[-3:], "-")
--- endfunction
-
 
 ---------------------------------
 -- Telescope Settings
