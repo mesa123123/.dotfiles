@@ -19,7 +19,7 @@ alias edittmux="vim ~/.tmux.conf"
 
 # Package Management
 [[ $(cat /proc/version | grep -c "UBUNTU") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
-[[ $(cat /proc/version | grep -c "MANJARO") == 1 ]] && alias uur='sudo pacman -Syu && sudo pacman -Qtdq | sudo pacman -Rns - && sudo yay -Syu' && alias spacman='sudo pacman' 
+[[ $(cat /proc/version | grep -c "MANJARO") == 1 ]] && alias uur='sudo pacman -Syu && sudo yay -Syu' && alias spacman='sudo pacman' 
 #  Programmes etc.
 alias gnpm='npm -g'
 alias pip='pip3'
