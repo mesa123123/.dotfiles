@@ -63,7 +63,7 @@ alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
 # If du-dust is installed use that instead
 [[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]] &&  alias du='dust'
 # If Broot is installed map it to the br command
-[[ "$(cargo install --list | grep "broot")" == *"broot"* ]] && alias broot='br' && alias tree='br'
+[[ "$(cargo install --list | grep "broot")" == *"broot"* ]] && alias broot='broot' && alias tree='broot'
 # If git-delta is installed, use that for diff
 [[ $(cargo install --list | grep -c "git-delta") == 1 ]] && alias diff="delta"
 # If Gping is about use that instead of ping

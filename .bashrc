@@ -110,10 +110,6 @@ fi
 # Putting Node here will help similar for node configs to load properly
 [ ! -d /home/$USER/.npm-global ] && mkdir /home/$USER/.npm-global 
 export NPM_CONFIG_PREFIX=/home/$USER/.npm-global
-# Rust Broot Package
-if [ -f  ~/.config/broot/launcher/bash/br ]; then
-    source ~/.config/broot/launcher/bash/br
-fi
 # --------
 
 # --------
