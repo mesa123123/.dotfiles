@@ -51,6 +51,7 @@
         <value type="string" value="pamac-tray"/>
       </property>
       <property name="known-items" type="array">
+        <value type="string" value="indicator-solaar"/>
         <value type="string" value="MSM Notifier"/>
         <value type="string" value="discord1"/>
         <value type="string" value="blueman"/>
