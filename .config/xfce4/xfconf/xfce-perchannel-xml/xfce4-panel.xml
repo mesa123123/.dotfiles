@@ -51,17 +51,20 @@
         <value type="string" value="pamac-tray"/>
       </property>
       <property name="known-items" type="array">
-        <value type="string" value="indicator-solaar"/>
-        <value type="string" value="MSM Notifier"/>
         <value type="string" value="discord1"/>
         <value type="string" value="blueman"/>
+        <value type="string" value="indicator-solaar"/>
+        <value type="string" value="MSM Notifier"/>
       </property>
       <property name="icon-size" type="int" value="22"/>
-      <property name="single-row" type="bool" value="false"/>
+      <property name="single-row" type="bool" value="true"/>
       <property name="square-icons" type="bool" value="false"/>
       <property name="hidden-legacy-items" type="array">
+        <value type="string" value="pamac-tray"/>
       </property>
       <property name="hidden-items" type="array">
+        <value type="string" value="indicator-solaar"/>
+        <value type="string" value="MSM Notifier"/>
       </property>
       <property name="menu-is-primary" type="bool" value="true"/>
       <property name="symbolic-icons" type="bool" value="false"/>
