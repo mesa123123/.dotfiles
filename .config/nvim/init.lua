@@ -10,7 +10,6 @@
 -- 1. Learn LuaSnip
 --      a. Rewrite Snippets for Lua
 --      b. Restructure Snippets so only that format of Snippets loads
--- 2. Figure out how to run telescope
 ----------------------------------
 
 -------------------------------
@@ -611,6 +610,13 @@ keymap.set("t", "<C-n>", "<C-\\><C-n><c-w>k :NvimTreeToggle<CR>", {}) -- assumes
 
 -- Config
 ----------
+function Zonedtime(hours)
+    local t = os.time()
+    local d = t+hours*3600
+    return os.date('%H:%M %Y-%m-%d', d)
+end
+
+
 require("lualine").setup({
     options = {
         section_separators = { left = '|', right = '|' },
@@ -622,7 +628,7 @@ require("lualine").setup({
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'filetype' },
         lualine_y = { 'progress', 'location', },
-        lualine_z = { "os.date('%H:%M %Y-%m-%d')" }
+        lualine_z = { "Zonedtime(11)" }
     },
     inactive_sections = {
         lualine_a = {},
