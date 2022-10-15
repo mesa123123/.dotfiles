@@ -16,18 +16,10 @@ local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap -- keymaps
 local lsp = vim.lsp -- Lsp inbuilt
-local ui = vim.ui
--- For Options
-local opt = vim.opt -- vim options
-local gopt = vim.go -- global options
-local bopt = vim.bo -- buffer options
-local wopt = vim.wo -- window options
+-- Options
+local bo = vim.bo -- bufferopts
 -- For Variables
-local g = vim.g -- global variables
 local b = vim.b -- buffer variables
-local w = vim.w -- window variables
-local t = vim.t -- tabpage variables
-local v = vim.v -- general variables?
 --------
 
 -- Required Module Loading Core Lsp Stuff
@@ -38,17 +30,14 @@ local cmp = require "cmp" -- Autocompletion for the language servers
 local cmp_lsp = require("cmp_nvim_lsp")
 local dap = require("dap")
 local snip = require("luasnip")
+local snipload_lua = require("luasnip.loaders.from_lua")
 --------
 
 -- Required Extras
 ----------
-local sig = require("lsp_signature") -- Lsp Signatures
-local snip = require("luasnip")
-local notify = require("notify")
 local path = config.util.path
-local snip = require("luasnip")
 local dapui = require("dapui")
-
+local cmpsnip = require("cmp_luasnip")
 --------------------------------
 -- Language Specific Settings and Helpers
 --------------------------------
@@ -70,15 +59,51 @@ end
 ----------
 
 --------------------------------
+-- Utility Functions
+--------------------------------
+
+-- Find if a file exists
+----------
+local function file_exists(name)
+    local f = io.open(name, "r")
+    if f ~= nil then io.close(f) return true else return false end
+end
+
+----------
+
+--------------------------------
 -- Snippets
 --------------------------------
 
 -- Config
 ----------
-snip.config.set_config {
-    updateevents = "TextChanged,TextChangedI"
-}
+snip.config.set_config({
+    updateevents = "TextChanged,TextChangedI",
+})
 ----------
+
+-- Load Snippets
+----------
+local snips_folder_lua = fn.stdpath "config" .. "/lua/snippets/"
+snipload_lua.lazy_load { paths = snips_folder_lua }
+
+-- Functions
+----------
+function SnipEditFile()
+    local snips_file = snips_folder_lua .. bo.filetype .. ".lua"
+    if not file_exists(snips_file) then
+        io.open(snips_file)
+    end
+    cmd("e " .. snips_file)
+end
+
+-- Commands
+----------
+cmd [[command! LuaSnipEdit :lua SnipEditFile()]]
+
+-- Mappings
+----------
+keymap.set("t", "<leader>se", ":LuaSnipEdit", {})
 
 --------------------------------
 -- Completion
@@ -121,6 +146,16 @@ cmp.setup({
                 and not context.in_syntax_group("Comment")
         end
     end },
+    -- Attach all the extensions
+    sources = {
+        { name = 'nvim_lsp' },
+        { name = 'path' },
+        { name = 'buffer' },
+        { name = 'nvim_lua' },
+        { name = 'luasnip' },
+        { name = 'treesitter' },
+        { name = 'cmdline' }
+    },
     -- I'm not sure what this does, @TODO
     completion = { completeopt = "menu,menuone,noinsert", keyword_length = 1 },
     -- Set Snippets Engine
@@ -133,33 +168,24 @@ cmp.setup({
     formatting = {
         format = function(entry, vim_item)
             vim_item.menu = ({
+                nvim_lsp = "[Lsp]",
                 buffer = "[Buffer]",
-                luasnip = "[Snip]",
                 nvim_lua = "[Lua]",
+                luasnip = "[Snip]",
                 treesitter = "[Treesitter]",
             })[entry.source.name]
             return vim_item
         end,
-    },
-    -- Attach all the extensions
-    sources = {
-        { name = 'nvim_lsp' },
-        { name = 'path' },
-        { name = 'buffer' },
-        { name = 'nvim_lua' },
-        { name = 'luasnip' },
-        { name = 'treesitter' },
-        { name = 'cmdline' }
     },
     -- Mappings
     ----------
     mapping = {
         -- Go to Next Item
         ["<c-l>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
+            if snip.jumpable(1) then
+                snip.jump(1)
+            elseif cmp.visible() then
                 cmp.select_next_item()
-            elseif snip.expand_or_jumpable() then
-                snip.expand_or_jump()
             elseif has_words_before() then
                 cmp.complete()
             else
@@ -168,10 +194,10 @@ cmp.setup({
         end, { "i", "s", "c" }),
         -- Go to Previous Item
         ["<c-h>"] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-                cmp.select_prev_item()
-            elseif snip.jumpable(-1) then
+            if snip.jumpable(-1) then
                 snip.jump(-1)
+            elseif cmp.visible() then
+                cmp.select_prev_item()
             else
                 fallback()
             end
@@ -189,6 +215,8 @@ cmp.setup({
         ["<CR>"] = cmp.mapping(function(fallback)
             if cmp.visible() and has_words_before() then
                 cmp.confirm()
+            elseif snip.expandable() and has_words_before then
+                snip.expand_or_jump()
             else
                 fallback()
             end
@@ -220,6 +248,10 @@ cmp.setup({
 })
 
 ----------
+
+
+
+
 
 -- Config Text Search '/'
 ----------
@@ -335,7 +367,9 @@ require("mason").setup({
 -- Ensure Installs
 ----------
 install.setup({ automatic_installation = true,
-    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'bash-language-server', 'black', 'cucumber-language-server', 'prettier', 'typescript_language_server', 'rust_analyzer' } }) -- This is running through Mason_lsp-config
+    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'depugpy', 'markdownlint', 'shellcheck',
+        'bash-language-server', 'black', 'cucumber-language-server', 'prettier', 'typescript_language_server',
+        'rust_analyzer' } }) -- This is running through Mason_lsp-config
 ----------
 
 --------------------------------
@@ -437,7 +471,6 @@ local helpers = require("null-ls.helpers")
 -- Functions
 ----------
 -- Get Virtual Env Packages as NullLsp
-----------
 local function get_venv_command(command)
     if vim.env.VIRTUAL_ENV then
         return path.join(vim.env.VIRTUAL_ENV, 'bin', command)

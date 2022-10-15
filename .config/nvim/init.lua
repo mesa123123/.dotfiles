@@ -31,17 +31,23 @@ local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap
 local hl = api.nvim_set_hl
-local g = vim.g -- global variables
+-- For Options
 local opt = vim.opt -- vim options
-local gopt = vim.o -- global options
+local gopt = vim.go -- global options
 local bopt = vim.bo -- buffer options
 local wopt = vim.wo -- window options
+-- For Variables
+local g = vim.g -- global variables
+local b = vim.b -- buffer variables
+local w = vim.w -- window variables
+local t = vim.t -- tabpage variables
+local v = vim.v -- general variables?
+----------
 
 -- Functions
---------
+----------
 
 -- ex (Currently this is a wrapper for everything not yet implemented in nvim)
-----------
 local ex = setmetatable({}, {
     __index = function(t, k)
         local command = k:gsub("_$", "!")
@@ -62,7 +68,6 @@ function Map(func, tbl)
     return newtbl
 end
 
-----------
 
 -- Filter(function, table)
 function Filter(func, tbl)
@@ -75,7 +80,7 @@ function Filter(func, tbl)
     return newtbl
 end
 
-----------------
+----------
 
 
 --------------------------------
@@ -101,13 +106,13 @@ require("packer").startup(function()
         -- Extensions for NvimCmp
         requires = {
             use 'hrsh7th/cmp-nvim-lsp',
-            use 'saadparwaiz1/cmp_luasnip',
             use 'hrsh7th/cmp-path',
             use 'hrsh7th/cmp-buffer',
             use 'hrsh7th/cmp-nvim-lua',
             use 'hrsh7th/cmp-cmdline',
             use 'ray-x/cmp-treesitter',
             use 'L3MON4D3/LuaSnip',
+            use 'saadparwaiz1/cmp_luasnip',
             use 'rcarriga/nvim-notify',
         }
     }
@@ -147,6 +152,9 @@ require("packer").startup(function()
     -- Theme
     use 'ii14/onedark.nvim'
     use 'mechatroner/rainbow_csv'
+    -- Brackets Rainbowing
+    ------------
+    use 'luochen1990/rainbow'
     -- Discord integration
     use 'andweeb/presence.nvim'
     -- Languages
@@ -404,9 +412,10 @@ require('nvim-treesitter.configs').setup {
         enable = true,
         extended_mode = true,
         max_file_lines = nil,
-    }
-
+        colors = {},
+    },
 }
+
 
 -----------------------------------------
 -- Discord Integration - presence.nvim
@@ -451,7 +460,7 @@ require("presence"):setup({
 -- Write Commands: <leader>w
 -- Quit Commands: <leader>q
 -- Terminal - TerminalToggle : <leader>t & <leader> q
--- Snippets - LuaSnip : <leader>s
+-- Snippets - LuaSnip : <leader>z
 -- Filetree - NvimTree : <c-n>
 -- Buffer Management - Telescope Nvim: <leader>f
 -- Database - DadBod: : <leader>d
