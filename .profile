@@ -16,6 +16,11 @@ if [ -f $HOME/.profile_secrets ]; then
 	. $HOME/.profile_secrets
 fi
 
+# Put the Distro in its own Variable
+# ----------------
+DISTRO=$(lsb_release -si)
+export DISTRO 
+
 # WSL System Interop Setttings
 # ----------------
 # WSL Check - Note the bash rc exports the env variable
@@ -23,8 +28,6 @@ CATOS=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
 WSLON=$([[ ${CATOS,,} == *"microsoft"* ]])
 export WSLON
-DISTRO=$(lsb_release -si)
-export DISTRO 
 # Special WSL Paths for Interoperability in cmd lines
 if [[ ${WSLON} == "true" ]]; then
 	export PATH=$PATH:"/c/Windows/System32/"
