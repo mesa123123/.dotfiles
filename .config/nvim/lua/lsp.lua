@@ -285,7 +285,7 @@ cmp.setup.filetype('gitcommit', {
 
 -- Add Cmp Capabilities
 ----------
-local capabilities = cmp_lsp.update_capabilities(lsp.protocol.make_client_capabilities())
+local capabilities = cmp_lsp.default_capabilities(lsp.protocol.make_client_capabilities())
 ----------
 
 --------------------------------
@@ -367,11 +367,11 @@ require("mason").setup({
 -- Ensure Installs
 ----------
 install.setup({ automatic_installation = true,
-    ensure_installed = { 'sumneko_lua', 'pyright', 'pylint', 'depugpy', 'markdownlint', 'shellcheck',
-        'bash-language-server', 'black', 'cucumber-language-server', 'prettier', 'typescript_language_server',
+    ensure_installed = { 'sumneko_lua', 'pyright',
+        'bashls', 'cucumber_language_server', 'tsserver',
         'rust_analyzer' } }) -- This is running through Mason_lsp-config
 ----------
-
+local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier' }
 --------------------------------
 -- Setup of Language Servers
 --------------------------------
@@ -418,7 +418,7 @@ config.pyright.setup { on_attach = on_attach, capabilities = capabilities,
 -- Web: Tsserver
 ----------
 config.tsserver.setup({
-    capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+    capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
     on_attach = function(client)
         client.server_capabilities.document_formatting = false
     end,
