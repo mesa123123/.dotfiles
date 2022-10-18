@@ -1,0 +1,1 @@
+{"schema_version":"1.0","metrics":{"completion_time":1666131885686,"start_time":1666131882346},"primary_source":{"package":"black","type":"pip3"},"name":"black","links":{"bin":{"black":"venv\/bin\/black"}},"secondary_sources":[]}

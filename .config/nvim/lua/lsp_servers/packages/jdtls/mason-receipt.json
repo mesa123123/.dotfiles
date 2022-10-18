@@ -1,0 +1,1 @@
+{"schema_version":"1.0","metrics":{"completion_time":1666131887182,"start_time":1666131858994},"primary_source":{"tag":"v1.16.0","type":"github_tag","repo":"eclipse\/eclipse.jdt.ls"},"name":"jdtls","links":{"bin":{"jdtls":"bin\/jdtls"}},"secondary_sources":[]}

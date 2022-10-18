@@ -1,0 +1,1 @@
+{"schema_version":"1.0","metrics":{"completion_time":1666131851231,"start_time":1666131847290},"primary_source":{"package":"yaml-language-server","type":"npm"},"name":"yaml-language-server","links":{"bin":{"yaml-language-server":"node_modules\/.bin\/yaml-language-server"}},"secondary_sources":[]}

@@ -1,0 +1,1 @@
+{"schema_version":"1.0","metrics":{"completion_time":1666131919637,"start_time":1666131891865},"primary_source":{"package":"shellharden","type":"cargo"},"name":"shellharden","links":{"bin":{"shellharden":"bin\/shellharden"}},"secondary_sources":[]}

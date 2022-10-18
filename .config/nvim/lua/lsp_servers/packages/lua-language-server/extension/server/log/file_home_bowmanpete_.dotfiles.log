@@ -1,0 +1,337 @@
+[11:24:05.983][info] [#0:/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:65]: Lua Lsp startup, root: 	/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server
+[11:24:05.983][info] [#0:/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:66]: ROOT:	/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server
+[11:24:05.983][info] [#0:/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:67]: LOGPATH:	/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/log
+[11:24:05.983][info] [#0:/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:68]: METAPATH:	/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/meta
+[11:24:05.983][info] [#0:/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:69]: VERSION:	3.5.6
+[11:24:06.000][info] [#0:script/service/service.lua:141]: 
+========= Medical Examination Report =========
+    --------------- Memory ---------------
+        Total: 1.413 MB
+        # 00 : 1.413 MB
+        # 01 : 0.000 MB
+        # 02 : 0.000 MB
+        # 03 : 0.000 MB
+        # 04 : 0.000 MB
+    --------------- Coroutine ---------------
+        Total:     0
+        Running:   0
+        Suspended: 0
+        Normal:    0
+        Dead:      0
+    --------------- Cache ---------------
+        Total: 1
+        Dead:  0
+    ---------------  RPC  ---------------
+        Holdon:   0
+        Waiting:  0
+==============================================
+[11:24:06.003][info] [#0:script/language.lua:137]: VSC language: nil
+[11:24:06.003][info] [#0:script/language.lua:138]: LS  language: en-us
+[11:24:06.003][info] [#0:script/workspace/workspace.lua:38]: Workspace init root: 	file:///home/bowmanpete/.dotfiles
+[11:24:06.003][info] [#0:script/workspace/workspace.lua:42]: Log path: 	/home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/log/file_home_bowmanpete_.dotfiles.log
+[11:24:06.003][info] [#0:script/workspace/workspace.lua:51]: Workspace create: 	file:///home/bowmanpete/.dotfiles
+[11:24:06.106][info] [#0:script/provider/provider.lua:41]: Load config from client	file:///home/bowmanpete/.dotfiles
+[11:24:06.107][info] [#0:script/provider/provider.lua:42]: {
+  Lua = {
+    completion = {
+      autoRequire = false
+    },
+    diagnostics = {
+      globals = { "vim", "use" }
+    },
+    telemetry = {
+      enable = false
+    },
+    workspace = {
+      checkThirdParty = false,
+      library = { "/home/bowmanpete/.config/nvim", "/etc/xdg/nvim", "/home/bowmanpete/.local/share/nvim/site", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/Dockerfile.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/LuaSnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/csv.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/dart-vim-plugin", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/editorconfig-vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/fd", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lualine.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/null-ls.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-lspconfig", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-notify", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-tree.lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-web-devicons", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/onedark.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/plenary.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/presence.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow_csv", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/ripgrep", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/telescope.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/toggleterm.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-colors-solarized", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-cucumber", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-easy-align", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flake8", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flutter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-fugitive", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-gitbranch", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-hardtime", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-kitty", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext", "/home/bowmanpete/.local/share/nvim/site/pack/packer/opt/packer.nvim", "/usr/share/nvim/runtime", "/usr/lib/nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext/after", "/usr/share/vim/vimfiles" }
+    }
+  }
+}
+[11:24:06.107][info] [#0:script/provider/provider.lua:48]: Load config from .luarc.json/.luarc.jsonc	file:///home/bowmanpete/.dotfiles
+[11:24:06.107][info] [#0:script/provider/provider.lua:49]: {
+  ["$schema"] = "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  ["Lua.diagnostics.globals"] = { "vim" }
+}
+[11:24:06.107][info] [#0:script/provider/provider.lua:41]: Load config from client	file:///home/bowmanpete/.dotfiles
+[11:24:06.108][info] [#0:script/provider/provider.lua:42]: {
+  Lua = {
+    completion = {
+      autoRequire = false
+    },
+    diagnostics = {
+      globals = { "vim", "use" }
+    },
+    telemetry = {
+      enable = false
+    },
+    workspace = {
+      checkThirdParty = false,
+      library = { "/home/bowmanpete/.config/nvim", "/etc/xdg/nvim", "/home/bowmanpete/.local/share/nvim/site", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/Dockerfile.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/LuaSnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/csv.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/dart-vim-plugin", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/editorconfig-vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/fd", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lualine.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/null-ls.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-lspconfig", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-notify", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-tree.lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-web-devicons", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/onedark.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/plenary.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/presence.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow_csv", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/ripgrep", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/telescope.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/toggleterm.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-colors-solarized", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-cucumber", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-easy-align", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flake8", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flutter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-fugitive", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-gitbranch", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-hardtime", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-kitty", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext", "/home/bowmanpete/.local/share/nvim/site/pack/packer/opt/packer.nvim", "/usr/share/nvim/runtime", "/usr/lib/nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext/after", "/usr/share/vim/vimfiles" }
+    }
+  }
+}
+[11:24:06.108][info] [#0:script/provider/provider.lua:48]: Load config from .luarc.json/.luarc.jsonc	file:///home/bowmanpete/.dotfiles
+[11:24:06.108][info] [#0:script/provider/provider.lua:49]: {
+  ["$schema"] = "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  ["Lua.diagnostics.globals"] = { "vim" }
+}
+[11:24:06.108][info] [#0:script/provider/provider.lua:41]: Load config from client	file:///home/bowmanpete/.dotfiles
+[11:24:06.109][info] [#0:script/provider/provider.lua:42]: {
+  Lua = {
+    completion = {
+      autoRequire = false
+    },
+    diagnostics = {
+      globals = { "vim", "use" }
+    },
+    telemetry = {
+      enable = false
+    },
+    workspace = {
+      checkThirdParty = false,
+      library = { "/home/bowmanpete/.config/nvim", "/etc/xdg/nvim", "/home/bowmanpete/.local/share/nvim/site", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/Dockerfile.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/LuaSnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/csv.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/dart-vim-plugin", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/editorconfig-vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/fd", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lualine.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/null-ls.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-lspconfig", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-notify", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-tree.lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-web-devicons", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/onedark.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/plenary.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/presence.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow_csv", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/ripgrep", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/telescope.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/toggleterm.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-colors-solarized", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-cucumber", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-easy-align", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flake8", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flutter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-fugitive", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-gitbranch", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-hardtime", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-kitty", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext", "/home/bowmanpete/.local/share/nvim/site/pack/packer/opt/packer.nvim", "/usr/share/nvim/runtime", "/usr/lib/nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext/after", "/usr/share/vim/vimfiles" }
+    }
+  }
+}
+[11:24:06.110][info] [#0:script/provider/provider.lua:48]: Load config from .luarc.json/.luarc.jsonc	file:///home/bowmanpete/.dotfiles
+[11:24:06.110][info] [#0:script/provider/provider.lua:49]: {
+  ["$schema"] = "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  ["Lua.diagnostics.globals"] = { "vim" }
+}
+[11:24:06.110][info] [#0:script/provider/provider.lua:56]: Load config from client	fallback
+[11:24:06.112][info] [#0:script/provider/provider.lua:57]: {
+  Lua = {
+    completion = {
+      autoRequire = false
+    },
+    diagnostics = {
+      globals = { "vim", "use" }
+    },
+    telemetry = {
+      enable = false
+    },
+    workspace = {
+      checkThirdParty = false,
+      library = { "/home/bowmanpete/.config/nvim", "/etc/xdg/nvim", "/home/bowmanpete/.local/share/nvim/site", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/Dockerfile.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/LuaSnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/csv.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/dart-vim-plugin", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/editorconfig-vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/fd", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lualine.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/null-ls.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-lspconfig", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-notify", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-tree.lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-web-devicons", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/onedark.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/plenary.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/presence.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow_csv", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/ripgrep", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/telescope.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/toggleterm.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-colors-solarized", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-cucumber", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-easy-align", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flake8", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flutter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-fugitive", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-gitbranch", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-hardtime", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-kitty", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext", "/home/bowmanpete/.local/share/nvim/site/pack/packer/opt/packer.nvim", "/usr/share/nvim/runtime", "/usr/lib/nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext/after", "/usr/share/vim/vimfiles" }
+    }
+  }
+}
+[11:24:06.112][info] [#0:script/library.lua:207]: Init builtin library at:	file:///home/bowmanpete/.dotfiles
+[11:24:06.128][info] [#0:script/plugin.lua:86]: plugin path:	/home/bowmanpete/.dotfiles
+[11:24:06.128][warn] [#0:script/plugin.lua:101]: plugin not found:	/home/bowmanpete/.dotfiles
+[11:24:06.128][info] [#0:script/library.lua:207]: Init builtin library at:	nil
+[11:24:06.135][info] [#0:script/provider/provider.lua:56]: Load config from client	fallback
+[11:24:06.135][info] [#0:script/provider/provider.lua:57]: {
+  Lua = {
+    completion = {
+      autoRequire = false
+    },
+    diagnostics = {
+      globals = { "vim", "use" }
+    },
+    telemetry = {
+      enable = false
+    },
+    workspace = {
+      checkThirdParty = false,
+      library = { "/home/bowmanpete/.config/nvim", "/etc/xdg/nvim", "/home/bowmanpete/.local/share/nvim/site", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/Dockerfile.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/LuaSnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/csv.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/dart-vim-plugin", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/editorconfig-vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/fd", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lualine.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/null-ls.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-lspconfig", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-notify", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-tree.lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-web-devicons", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/onedark.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/plenary.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/presence.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow_csv", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/ripgrep", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/telescope.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/toggleterm.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-colors-solarized", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-cucumber", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-easy-align", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flake8", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flutter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-fugitive", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-gitbranch", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-hardtime", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-kitty", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext", "/home/bowmanpete/.local/share/nvim/site/pack/packer/opt/packer.nvim", "/usr/share/nvim/runtime", "/usr/lib/nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext/after", "/usr/share/vim/vimfiles" }
+    }
+  }
+}
+[11:24:06.135][info] [#0:script/provider/provider.lua:56]: Load config from client	fallback
+[11:24:06.135][info] [#0:script/provider/provider.lua:57]: {
+  Lua = {
+    completion = {
+      autoRequire = false
+    },
+    diagnostics = {
+      globals = { "vim", "use" }
+    },
+    telemetry = {
+      enable = false
+    },
+    workspace = {
+      checkThirdParty = false,
+      library = { "/home/bowmanpete/.config/nvim", "/etc/xdg/nvim", "/home/bowmanpete/.local/share/nvim/site", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/Dockerfile.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/LuaSnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/csv.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/dart-vim-plugin", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/editorconfig-vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/fd", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/lualine.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/null-ls.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-python", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-lspconfig", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-notify", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-tree.lua", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-treesitter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-web-devicons", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/onedark.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/plenary.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/presence.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow_csv", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/ripgrep", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/telescope.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/toggleterm.nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-colors-solarized", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-cucumber", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod-ui", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-easy-align", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flake8", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flutter", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-fugitive", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-gitbranch", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-hardtime", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-kitty", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext", "/home/bowmanpete/.local/share/nvim/site/pack/packer/opt/packer.nvim", "/usr/share/nvim/runtime", "/usr/lib/nvim", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot/after", "/home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext/after", "/usr/share/vim/vimfiles" }
+    }
+  }
+}
+[11:24:06.136][info] [#0:script/workspace/workspace.lua:305]: Preload start:	file:///home/bowmanpete/.dotfiles
+[11:24:06.143][info] [#0:script/workspace/workspace.lua:311]: Scan files at:	file:///home/bowmanpete/.dotfiles
+[11:24:06.143][info] [#0:script/workspace/workspace.lua:305]: Preload start:	<fallback>
+[11:24:06.151][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp
+[11:24:06.158][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-web-devicons
+[11:24:06.166][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-kitty
+[11:24:06.170][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/fd
+[11:24:06.189][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/opt/packer.nvim
+[11:24:06.197][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flutter
+[11:24:06.202][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flake8
+[11:24:06.206][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-colors-solarized
+[11:24:06.229][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp
+[11:24:06.229][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline/after
+[11:24:06.230][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod-ui
+[11:24:06.237][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-web-devicons
+[11:24:06.243][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext
+[11:24:06.244][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-kitty
+[11:24:06.248][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/presence.nvim
+[11:24:06.249][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/fd
+[11:24:06.254][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-gitbranch
+[11:24:06.260][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/telescope.nvim
+[11:24:06.268][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/opt/packer.nvim
+[11:24:06.277][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flutter
+[11:24:06.283][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///usr/lib/nvim
+[11:24:06.283][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path
+[11:24:06.284][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-flake8
+[11:24:06.291][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-colors-solarized
+[11:24:06.294][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot
+[11:24:06.297][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline/after
+[11:24:06.297][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod-ui
+[11:24:06.308][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext
+[11:24:06.313][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/presence.nvim
+[11:24:06.322][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-gitbranch
+[11:24:06.326][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/telescope.nvim
+[11:24:06.342][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///usr/lib/nvim
+[11:24:06.343][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path
+[11:24:06.349][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot
+[11:24:06.468][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after
+[11:24:06.468][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip
+[11:24:06.472][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-cucumber
+[11:24:06.477][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/toggleterm.nvim
+[11:24:06.487][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python
+[11:24:06.496][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim/after
+[11:24:06.497][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/meta/Lua%205.4%20en-us%20utf8
+[11:24:06.498][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp
+[11:24:06.524][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua/after
+[11:24:06.524][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter
+[11:24:06.531][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua
+[11:24:06.531][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp/after
+[11:24:06.532][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip
+[11:24:06.536][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim
+[11:24:06.537][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-cucumber
+[11:24:06.542][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/toggleterm.nvim
+[11:24:06.552][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python
+[11:24:06.562][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim/after
+[11:24:06.562][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/meta/Lua%205.4%20en-us%20utf8
+[11:24:06.564][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp
+[11:24:06.570][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline/after
+[11:24:06.570][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-hardtime
+[11:24:06.575][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-python
+[11:24:06.585][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown/after
+[11:24:06.585][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap
+[11:24:06.597][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua/after
+[11:24:06.597][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter
+[11:24:06.601][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer
+[11:24:06.605][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-nvim-lua
+[11:24:06.607][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow_csv
+[11:24:06.610][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason-lspconfig.nvim
+[11:24:06.620][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-treesitter
+[11:24:06.642][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline/after
+[11:24:06.643][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-hardtime
+[11:24:06.647][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-python
+[11:24:06.654][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown/after
+[11:24:06.655][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap
+[11:24:06.668][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer
+[11:24:06.675][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow_csv
+[11:24:06.685][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-treesitter
+[11:24:06.762][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason.nvim
+[11:24:06.829][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/mason.nvim
+[11:24:06.870][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/csv.vim
+[11:24:06.877][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim
+[11:24:06.886][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer/after
+[11:24:06.886][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown
+[11:24:06.896][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site
+[11:24:06.945][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/csv.vim
+[11:24:06.951][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim
+[11:24:06.958][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-buffer/after
+[11:24:06.958][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-markdown
+[11:24:06.969][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site
+[11:24:08.182][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///usr/share/nvim/runtime
+[11:24:08.224][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///usr/share/nvim/runtime
+[11:24:08.326][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/onedark.nvim
+[11:24:08.330][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot/after
+[11:24:08.335][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after
+[11:24:08.335][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline
+[11:24:08.340][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-easy-align
+[11:24:08.344][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/lualine.nvim
+[11:24:08.361][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///usr/share/vim/vimfiles
+[11:24:08.362][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline
+[11:24:08.366][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/dart-vim-plugin
+[11:24:08.371][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-notify
+[11:24:08.372][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/onedark.nvim
+[11:24:08.377][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-polyglot/after
+[11:24:08.387][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp_luasnip/after
+[11:24:08.388][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-cmdline
+[11:24:08.393][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-easy-align
+[11:24:08.397][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/null-ls.nvim
+[11:24:08.404][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/lualine.nvim
+[11:24:08.426][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///usr/share/vim/vimfiles
+[11:24:08.427][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/indentline
+[11:24:08.433][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/dart-vim-plugin
+[11:24:08.439][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-notify
+[11:24:08.459][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter/after
+[11:24:08.459][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path/after
+[11:24:08.460][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-tree.lua
+[11:24:08.465][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/null-ls.nvim
+[11:24:08.519][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/Dockerfile.vim
+[11:24:08.525][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-treesitter/after
+[11:24:08.526][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/cmp-path/after
+[11:24:08.526][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow
+[11:24:08.526][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-tree.lua
+[11:24:08.535][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///etc/xdg/nvim
+[11:24:08.535][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/ripgrep
+[11:24:08.573][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/editorconfig-vim
+[11:24:08.592][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/Dockerfile.vim
+[11:24:08.598][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/rainbow
+[11:24:08.604][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/plenary.nvim
+[11:24:08.608][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///etc/xdg/nvim
+[11:24:08.609][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/ripgrep
+[11:24:08.628][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.config/nvim
+[11:24:08.651][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod
+[11:24:08.661][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext/after
+[11:24:08.662][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim
+[11:24:08.666][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/editorconfig-vim
+[11:24:08.667][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/LuaSnip
+[11:24:08.696][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/plenary.nvim
+[11:24:08.724][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-lspconfig
+[11:24:08.730][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.config/nvim
+[11:24:08.730][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-dadbod
+[11:24:08.739][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-rust-syntax-ext/after
+[11:24:08.739][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim
+[11:24:08.743][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/LuaSnip
+[11:24:08.795][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim
+[11:24:08.801][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-lspconfig
+[11:24:08.811][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest
+[11:24:08.838][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-ui
+[11:24:08.856][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-fugitive
+[11:24:08.869][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/rust.vim
+[11:24:08.875][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest
+[11:24:08.891][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-dap-ui
+[11:24:08.897][info] [#0:script/workspace/workspace.lua:328]: Scan library at:	file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/vim-fugitive
+[11:24:08.900][info] [#0:script/workspace/workspace.lua:348]: Found 3524 files at:	<fallback>
+[11:24:08.900][info] [#0:script/workspace/loading.lua:153]: Load files from disk:	<fallback>
+[11:24:08.900][info] [#0:script/workspace/workspace.lua:348]: Found 3524 files at:	file:///home/bowmanpete/.dotfiles
+[11:24:08.900][info] [#0:script/workspace/loading.lua:153]: Load files from disk:	file:///home/bowmanpete/.dotfiles
+[11:24:11.035][warn] [#0:script/files.lua:532]: Compile [file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/nvim-cmp/lua/cmp/types/lsp.lua] takes [0.111] sec, size [5.503] kb.
+[11:24:11.894][warn] [#0:script/files.lua:532]: Compile [file:///home/bowmanpete/.local/share/nvim/site/pack/packer/start/neotest-python/lua/neotest-python/base.lua] takes [0.153] sec, size [2.265] kb.
+[11:24:12.550][info] [#0:script/workspace/loading.lua:165]: Loaded files takes [3.726] sec: <fallback>
+[11:24:12.550][info] [#0:script/workspace/loading.lua:174]: Compile files takes [0.000] sec: <fallback>
+[11:24:12.550][info] [#0:script/workspace/loading.lua:175]: Loaded finish:	<fallback>
+[11:24:12.550][info] [#0:script/workspace/workspace.lua:350]: Preload finish at:	<fallback>
+[11:24:12.801][info] [#0:script/workspace/loading.lua:165]: Loaded files takes [3.976] sec: file:///home/bowmanpete/.dotfiles
+[11:24:12.801][info] [#0:script/workspace/loading.lua:174]: Compile files takes [0.000] sec: file:///home/bowmanpete/.dotfiles
+[11:24:12.801][info] [#0:script/workspace/loading.lua:175]: Loaded finish:	file:///home/bowmanpete/.dotfiles
+[11:24:12.801][info] [#0:script/workspace/workspace.lua:350]: Preload finish at:	file:///home/bowmanpete/.dotfiles
+[11:24:13.500][warn] [#0:script/await.lua:186]: Await step takes [0.699] sec.
+[11:24:13.500][warn] [#0:script/proto/proto.lua:122]: Response of [workspace/diagnostic/refresh] error [-32601]: MethodNotFound
+[11:24:13.501][info] [#0:script/provider/diagnostic.lua:486]: Diagnostics scope [<fallback>], files count:[1775]
+[11:24:13.516][info] [#0:script/provider/diagnostic.lua:486]: Diagnostics scope [file:///home/bowmanpete/.dotfiles], files count:[1775]
+[11:24:13.516][warn] [#0:script/proto/proto.lua:122]: Response of [workspace/diagnostic/refresh] error [-32601]: MethodNotFound
+[11:24:14.767][warn] [#0:script/core/diagnostics/init.lua:158]: Diagnostics [different-requires] @ [file:///home/bowmanpete/.dotfiles/.config/nvim/lua/lsp.lua] takes [0.796] sec!
+[11:24:14.767][warn] [#0:script/await.lua:186]: Await step takes [0.796] sec.
+[11:24:15.289][warn] [#0:script/core/diagnostics/init.lua:158]: Diagnostics [different-requires] @ [file:///home/bowmanpete/.dotfiles/.config/nvim/lua/lsp.lua] takes [0.522] sec!
+[11:24:15.289][warn] [#0:script/await.lua:186]: Await step takes [0.522] sec.
+[11:24:15.594][info] [#0:script/provider/diagnostic.lua:503]: Diagnostics scope [<fallback>] finished, takes [2.092] sec.
+[11:24:15.594][info] [#0:script/provider/diagnostic.lua:503]: Diagnostics scope [file:///home/bowmanpete/.dotfiles] finished, takes [2.091] sec.
+[11:25:22.556][info] [#0:script/provider/provider.lua:167]: Server shutdown.
+[11:25:22.657][info] [#0:script/provider/provider.lua:160]: Server exited.

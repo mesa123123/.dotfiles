@@ -1,0 +1,17 @@
+/**
+ * A brute force (not very performant or fuzzy-search capable) index that matches permutation expressions with string.includes()
+ *
+ * @param suggestions
+ */
+export function bruteForceIndex(suggestions) {
+    return (text) => {
+        if (!text)
+            return [];
+        const predicate = (segment) => segment.toLowerCase().includes(text.toLowerCase());
+        return suggestions.filter((permutationExpression) => matches(permutationExpression, predicate));
+    };
+}
+function matches(suggestion, predicate) {
+    return !!suggestion.segments.find((segment) => typeof segment === 'string' ? predicate(segment) : !!segment.find(predicate));
+}
+//# sourceMappingURL=bruteForceIndex.js.map

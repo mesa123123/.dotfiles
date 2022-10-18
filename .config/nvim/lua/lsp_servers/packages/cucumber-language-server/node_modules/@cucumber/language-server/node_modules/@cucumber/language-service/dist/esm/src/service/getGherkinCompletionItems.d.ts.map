@@ -1,0 +1,1 @@
+{"version":3,"file":"getGherkinCompletionItems.d.ts","sourceRoot":"","sources":["../../../../src/service/getGherkinCompletionItems.ts"],"names":[],"mappings":"AAAA,OAAO,EACL,cAAc,EAGd,QAAQ,EACT,MAAM,6BAA6B,CAAA;AAEpC,OAAO,EAAE,KAAK,EAAE,MAAM,mBAAmB,CAAA;AAKzC,wBAAgB,yBAAyB,CACvC,aAAa,EAAE,MAAM,EACrB,QAAQ,EAAE,QAAQ,EAClB,KAAK,EAAE,KAAK,GACX,SAAS,cAAc,EAAE,CA4B3B"}

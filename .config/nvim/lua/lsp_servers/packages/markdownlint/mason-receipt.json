@@ -1,0 +1,1 @@
+{"schema_version":"1.0","metrics":{"completion_time":1666131917673,"start_time":1666131914321},"primary_source":{"package":"markdownlint-cli","type":"npm"},"name":"markdownlint","links":{"bin":{"markdownlint":"node_modules\/.bin\/markdownlint"}},"secondary_sources":[]}
