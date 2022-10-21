@@ -132,6 +132,15 @@ function ShortenLine()
     end
 end
 
+-- Confirm Formatting
+----------
+function FormatWithConfirm()
+    vim.lsp.buf.format()
+    print("Formatted")
+end
+
+----------
+
 -- General Config
 ----------
 cmp.setup({
@@ -249,10 +258,6 @@ cmp.setup({
 
 ----------
 
-
-
-
-
 -- Config Text Search '/'
 ----------
 cmp.setup.cmdline("/", {
@@ -311,10 +316,10 @@ local function keymappings(client)
     keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts)
     keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts)
     if client.server_capabilities.documentFormattingProvider then
-        keymap.set("n", "gf", "<cmd>lua vim.lsp.buf.format()<CR>", loudbufopts)
-        print("Formatted!")
+        keymap.set("n", "gf", ":lua FormatWithConfirm()<CR>", loudbufopts)
+        print("Formatter Accepted")
     else
-        print("There is no formatter attached!")
+        print("There Is No Formatter Attached!")
     end
     -- Commands where you leave current buffer `<leader>c`
     keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
