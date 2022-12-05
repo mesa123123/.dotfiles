@@ -199,13 +199,12 @@ fi
 # Set Nvim default to 0
 NVIM=0
 # If on Manjaro
-if [[ $(echo $DIST_INFO | grep -c "MANJARO") == 1 ]]; then 
-	[[ $(pacman -Qqe 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
-fi	
+[[ $(echo $DIST_INFO | grep -c "MANJARO") == 1 ]] && [[ $(pacman -Qqe 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
 # If on Ubuntu
-if [[ $(echo $DIST_INFO | grep -c "UBUNTU") == 1 ]]; then
-	[[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
-fi
+[[ $(echo $DIST_INFO | grep -c "UBUNTU") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+#i If on WSL
+[[ $(echo $DIST_INFO | grep -c "microsoft") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+
 if [[ ${NVIM} == 1 ]]; then  
     export EDITOR=nvim
     # and am I using lua?
