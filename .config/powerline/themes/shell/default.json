@@ -13,10 +13,6 @@
 				"priority": 30
 			},
 			{
-				"function": "powerline.segments.common.vcs.branch",
-				"priority": 40
-			},
-			{
 				"function": "powerline_pyenv.pyenv",
 				"priority": 10
 
