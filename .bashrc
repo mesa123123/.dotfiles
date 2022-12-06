@@ -183,7 +183,6 @@ export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
-    export WINHOME="/c/Users/$USER"
     export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 	# Now stuff that differs between versions of WSL 
 	if [[ $WSL_VERSION == 1 ]]; then	

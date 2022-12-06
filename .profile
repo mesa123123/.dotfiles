@@ -26,10 +26,10 @@ export DISTRO
 # WSL Check - Note the bash rc exports the env variable
 CATOS=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
-WSLON=$([[ ${CATOS,,} == *"microsoft"* ]])
-export WSLON
+export WSLON=$([[ ${CATOS,,} == *"microsoft"* ]])
 # Special WSL Paths for Interoperability in cmd lines
 if [[ ${WSLON} == "true" ]]; then
+    export WINHOME="/mnt/c/Users/${USER}/Dev"
 	export PATH=$PATH:"/c/Windows/System32/"
     export CMD_HOME="/c/Windows/System32/cmd.exe"
     # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
