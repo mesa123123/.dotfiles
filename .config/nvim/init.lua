@@ -454,7 +454,7 @@ require("toggleterm").setup {
     terminal_mappings = true,
     hide_numbers = true,
     on_open = function()
-        cmd [[ TermExec cmd="source ~/.bash_profile &&  clear" ]]
+        cmd [[ TermExec cmd="source ~/.bashrc &&  clear" ]]
     end,
     on_exit = function()
         cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
