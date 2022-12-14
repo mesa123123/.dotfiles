@@ -309,6 +309,7 @@ local function keymappings(client)
     ----------
     -- Commands that keep you in this buffer `g`
     keymap.set("n", "gw", ":lua vim.diagnostic.open_float()<CR>", bufopts)
+    keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
     keymap.set("n", "[g", ":lua vim.diagnostic.goto_prev()<CR>", bufopts)
     keymap.set("n", "]g", ":lua vim.diagnostic.goto_next()<CR>", bufopts)
     keymap.set("n", "[G", ":lua vim.diagnostic.goto_prev({severity = diagnostic.severity.ERROR})<CR>", bufopts)
@@ -322,11 +323,12 @@ local function keymappings(client)
         print("There Is No Formatter Attached!")
     end
     -- Commands where you leave current buffer `<leader>c`
-    keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
+    keymap.set("n", "<leader>cR", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
     keymap.set("n", "<leader>cI", "<cmd>LspInfo<CR>", bufopts)
     -- Need something here that says (if implementation isn't supported open definition/declaration in new buffer
     keymap.set("n", "<leader>cD", "<Cmd>lua vim.lsp.buf.definition()<CR>", bufopts)
     keymap.set("n", "<leader>cd", "<Cmd>lua vim.lsp.buf.declaration()<CR>", bufopts)
+    keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.references()<CR>", bufopts)
     keymap.set("n", "<leader>cs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
     keymap.set("n", "<leader>ci", "<cmd>lua vim.lsp.buf.implementation()<CR>", bufopts)
     keymap.set("n", "<leader>ct", "<cmd>lua vim.lsp.buf.type_definition()<CR>", bufopts)
