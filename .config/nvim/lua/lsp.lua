@@ -449,7 +449,9 @@ config.yamlls.setup { on_attach = on_attach, capabilities = capabilities }
 
 -- SQL
 ----------
-config.sqlls.setup { on_attach = on_attach, capabilities = capabilities }
+config.sqlls.setup { on_attach = on_attach, capabilities = capabilities, 
+    root_dir =  config.util.root_pattern("*.sql")
+}
 ----------
 
 -- Rust Server
