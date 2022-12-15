@@ -376,7 +376,7 @@ require("mason").setup({
 install.setup({ automatic_installation = true,
     ensure_installed = { 'sumneko_lua', 'pyright',
         'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer' } }) -- This is running through Mason_lsp-config
+        'rust_analyzer', 'sqlls' } }) -- This is running through Mason_lsp-config
 ----------
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier' }
 --------------------------------
@@ -445,6 +445,11 @@ config.bashls.setup { on_attach = on_attach, capabilities = capabilities }
 -- Yaml
 ----------
 config.yamlls.setup { on_attach = on_attach, capabilities = capabilities }
+----------
+
+-- SQL
+----------
+config.sqlls.setup { on_attach = on_attach, capabilities = capabilities }
 ----------
 
 -- Rust Server
@@ -522,6 +527,12 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     if package == "shellcheck" then
         nullSources[#nullSources + 1] = code_actions.shellcheck.with({ on_attach = on_attach })
     end
+    -- SQL
+    ----------
+    if package == "sql-formatter" then
+        nullSources[#nullSources + 1] = format.sql_formatter.with({ on_attach = on_attach })
+    end
+    ----------
     -- Yaml
     ----------
     if package == "yamllint" then
