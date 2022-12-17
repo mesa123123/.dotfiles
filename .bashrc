@@ -111,6 +111,11 @@ fi
 [ ! -d /home/$USER/.npm-global ] && mkdir /home/$USER/.npm-global 
 export NPM_CONFIG_PREFIX=/home/$USER/.npm-global
 # --------
+# ---- Deno Env ----
+if [ -d /home/$USER/.deno ]; then 
+    export DENO_INSTALL="/home/pbowman/.deno"
+    export PATH="$DENO_INSTALL/bin:$PATH"
+fi
 
 # --------
 # ---- Bash Configuration Files ----

@@ -141,7 +141,7 @@ require("packer").startup(function()
     use 'yggdroot/indentline'
     use 'tpope/vim-fugitive'
     use 'editorconfig/editorconfig-vim'
-    use 'plasticboy/vim-markdown'
+    use({ 'toppair/peek.nvim', run = 'deno task --quiet build:fast' })
     -- Colors and Themes
     ------------
     use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
@@ -296,7 +296,6 @@ g['vim_markdown_conceal_code_blocks'] = 0
 g['vim_markdown_conceal'] = 0
 -- Set .draft files to Markdown
 cmd [[ au BufRead,BufNewFile *.draft set filetype=markdown ]]
-----------
 
 -- GitCommit
 ----------
@@ -396,7 +395,7 @@ keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -----------------------------------------
 
 -- Plugin Setup
-----------!
+----------
 require('nvim-treesitter.configs').setup {
     ensure_installed = { "lua", "rust", "toml" },
     auto_install = true,
@@ -412,6 +411,31 @@ require('nvim-treesitter.configs').setup {
         colors = {},
     },
 }
+----------
+
+-----------------------------------------
+-- Markdown Preview, Peek.nvim
+-----------------------------------------
+
+-- Plugin Setup
+----------
+require('peek').setup({
+  auto_load = true,         -- whether to automatically load preview when, entering another window
+  close_on_bdelete = true,  -- close preview window on buffer delete
+  syntax = true,            -- enable syntax highlighting, affects performance
+  theme = 'dark',           -- 'dark' or 'light'
+  update_on_change = true,
+  throttle_at = 200000,     -- start throttling when file exceeds this
+  throttle_time = 'auto',   -- minimum amount of time in milliseconds
+})
+----------
+
+-- Commands
+---------
+api.nvim_create_user_command('PeekOpen', require('peek').open, {})
+api.nvim_create_user_command('PeekStatus', require('peek').is_open, {})
+api.nvim_create_user_command('PeekClose', require('peek').close, {})
+----------
 
 
 -----------------------------------------
@@ -479,7 +503,6 @@ require("nvim-tree").setup {
     -- Options 1
     ----------
     auto_reload_on_write = true,
-    create_in_closed_folder = true,
     hijack_cursor = true,
     hijack_netrw = true,
     sort_by = "name",
