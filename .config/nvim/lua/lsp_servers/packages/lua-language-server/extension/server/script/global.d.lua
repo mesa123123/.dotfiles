@@ -44,6 +44,10 @@ PREVIEW = false
 ---@type string
 CHECK = ''
 
+--make docs path
+---@type string
+DOC = ''
+
 ---@type string | '"Error"' | '"Warning"' | '"Information"' | '"Hint"'
 CHECKLEVEL = 'Warning'
 
@@ -52,3 +56,11 @@ LOGLEVEL = 'warn'
 
 ---@type boolean
 LAZY = false
+
+-- (experiment) Improve performance, but reduce accuracy
+---@type boolean
+CACHEALIVE = false
+
+-- (experiment) Compile files in multi cpu cores
+---@type integer
+COMPILECORES = 0

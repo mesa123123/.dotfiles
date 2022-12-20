@@ -1,6 +1,7 @@
 ---@class vm
 local vm        = require 'vm.vm'
 local guide     = require 'parser.guide'
+local linked    = require 'linked-table'
 
 ---@alias vm.runner.callback fun(src: parser.object, node?: vm.node)
 
@@ -11,6 +12,7 @@ local guide     = require 'parser.guide'
 ---@field _mark     table
 ---@field _has      table<parser.object, true>
 ---@field _main     parser.object
+---@field _uri      uri
 local mt = {}
 mt.__index = mt
 mt._index = 1
@@ -44,7 +46,7 @@ function mt:_markHas(obj)
     end
 end
 
-function mt:_collect()
+function mt:collect()
     local startPos  = self._loc.start
     local finishPos = 0
 
@@ -128,7 +130,7 @@ function mt:_lookIntoChild(action, topNode, outNode)
             end
         end
     elseif action.type == 'function' then
-        self:_lookIntoBlock(action, topNode:copy())
+        self:lookIntoBlock(action, topNode:copy())
     elseif action.type == 'unary' then
         if not action[1] then
             goto RETURN
@@ -168,15 +170,19 @@ function mt:_lookIntoChild(action, topNode, outNode)
                 -- if x == y then
                 topNode = self:_lookIntoChild(handler, topNode, outNode)
                 local checkerNode = vm.compileNode(checker)
-                if action.op.type == '==' then
-                    topNode = checkerNode
-                    if outNode then
-                        outNode:removeNode(topNode)
-                    end
-                else
-                    topNode:removeNode(checkerNode)
-                    if outNode then
-                        outNode = checkerNode
+                local checkerName = vm.getNodeName(checker)
+                if checkerName then
+                    topNode = topNode:copy()
+                    if action.op.type == '==' then
+                        topNode:narrow(self._uri, checkerName)
+                        if outNode then
+                            outNode:removeNode(checkerNode)
+                        end
+                    else
+                        topNode:removeNode(checkerNode)
+                        if outNode then
+                            outNode:narrow(self._uri, checkerName)
+                        end
                     end
                 end
             elseif handler.type == 'call'
@@ -189,14 +195,14 @@ function mt:_lookIntoChild(action, topNode, outNode)
                 -- if type(x) == 'string' then
                 self:_lookIntoChild(handler, topNode:copy())
                 if action.op.type == '==' then
-                    topNode:narrow(checker[1])
+                    topNode:narrow(self._uri, checker[1])
                     if outNode then
                         outNode:remove(checker[1])
                     end
                 else
                     topNode:remove(checker[1])
                     if outNode then
-                        outNode:narrow(checker[1])
+                        outNode:narrow(self._uri, checker[1])
                     end
                 end
             elseif handler.type == 'getlocal'
@@ -215,14 +221,14 @@ function mt:_lookIntoChild(action, topNode, outNode)
                     and call.args[1].node == self._loc then
                         -- `local tp = type(x);if tp == 'string' then`
                         if action.op.type == '==' then
-                            topNode:narrow(checker[1])
+                            topNode:narrow(self._uri, checker[1])
                             if outNode then
                                 outNode:remove(checker[1])
                             end
                         else
                             topNode:remove(checker[1])
                             if outNode then
-                                outNode:narrow(checker[1])
+                                outNode:narrow(self._uri, checker[1])
                             end
                         end
                     end
@@ -233,7 +239,7 @@ function mt:_lookIntoChild(action, topNode, outNode)
     or     action.type == 'in'
     or     action.type == 'repeat'
     or     action.type == 'for' then
-        topNode = self:_lookIntoBlock(action, topNode:copy())
+        topNode = self:lookIntoBlock(action, topNode:copy())
     elseif action.type == 'while' then
         local blockNode, mainNode
         if action.filter then
@@ -242,7 +248,7 @@ function mt:_lookIntoChild(action, topNode, outNode)
             blockNode = topNode:copy()
             mainNode  = topNode:copy()
         end
-        blockNode = self:_lookIntoBlock(action, blockNode:copy())
+        blockNode = self:lookIntoBlock(action, blockNode:copy())
         topNode = mainNode:merge(blockNode)
         if action.filter then
             -- look into filter again
@@ -263,7 +269,7 @@ function mt:_lookIntoChild(action, topNode, outNode)
                 hasElse = true
                 mainNode:clear()
             end
-            blockNode = self:_lookIntoBlock(subBlock, blockNode:copy())
+            blockNode = self:lookIntoBlock(subBlock, blockNode:copy())
             local neverReturn = subBlock.hasReturn
                             or  subBlock.hasGoTo
                             or  subBlock.hasBreak
@@ -326,7 +332,7 @@ end
 ---@param block   parser.object
 ---@param topNode  vm.node
 ---@return vm.node topNode
-function mt:_lookIntoBlock(block, topNode)
+function mt:lookIntoBlock(block, topNode)
     if not self._has[block] then
         return topNode
     end
@@ -339,23 +345,221 @@ function mt:_lookIntoBlock(block, topNode)
     return topNode
 end
 
----@param loc parser.object
----@param callback vm.runner.callback
-function vm.launchRunner(loc, callback)
-    local main = guide.getParentBlock(loc)
-    if not main then
+---@alias runner.info { target?: parser.object, loc: parser.object }
+
+---@type thread?
+local masterRunner = nil
+---@type table<thread, runner.info>
+local runnerInfo = setmetatable({}, {
+    __mode = 'k',
+    __index = function (self, k)
+        self[k] = {}
+        return self[k]
+    end
+})
+---@type linked-table?
+local runnerList = nil
+
+---@async
+---@param info runner.info
+local function waitResolve(info)
+    while true do
+        if not info.target then
+            break
+        end
+        if info.target.node == info.loc then
+            break
+        end
+        local node = vm.getNode(info.target)
+        if node and node.resolved then
+            break
+        end
+        coroutine.yield()
+    end
+    info.target = nil
+end
+
+local function resolveDeadLock()
+    if not runnerList then
         return
     end
-    local self = setmetatable({
-        _loc      = loc,
-        _casts    = {},
-        _mark     = {},
-        _has      = {},
-        _main     = main,
-        _callback = callback,
-    }, mt)
 
-    self:_collect()
+    ---@type runner.info[]
+    local infos = {}
+    for runner in runnerList:pairs() do
+        local info = runnerInfo[runner]
+        infos[#infos+1] = info
+    end
 
-    self:_lookIntoBlock(main, vm.getNode(loc):copy())
+    table.sort(infos, function (a, b)
+        local uriA = guide.getUri(a.loc)
+        local uriB = guide.getUri(b.loc)
+        if uriA ~= uriB then
+            return uriA < uriB
+        end
+        return a.loc.start < b.loc.start
+    end)
+
+    local firstTarget = infos[1].target
+    ---@cast firstTarget -?
+    local firstNode = vm.setNode(firstTarget, vm.getNode(firstTarget):copy(), true)
+    firstNode.resolved = true
+    firstNode:setData('resolvedByDeadLock', true)
+end
+
+---@async
+---@param loc parser.object
+---@param start fun()
+---@param finish fun()
+---@param callback vm.runner.callback
+function vm.launchRunner(loc, start, finish, callback)
+    local locNode = vm.getNode(loc)
+    if not locNode then
+        return
+    end
+
+    local function resumeMaster()
+        for i = 1, 10010 do
+            if not runnerList or runnerList:getSize() == 0 then
+                return
+            end
+            local deadLock = true
+            for runner in runnerList:pairs() do
+                local info = runnerInfo[runner]
+                local waitingSource = info.target
+                if coroutine.status(runner) == 'suspended' then
+                    local suc, err = coroutine.resume(runner)
+                    if not suc then
+                        log.error(debug.traceback(runner, err))
+                    end
+                else
+                    runnerList:pop(runner)
+                    deadLock = false
+                end
+                if not waitingSource or waitingSource ~= info.target then
+                    deadLock = false
+                end
+            end
+            if runnerList:getSize() == 0 then
+                return
+            end
+            if deadLock then
+                resolveDeadLock()
+            end
+            if i == 10000 then
+                local lines = {}
+                lines[#lines+1] = 'Dead lock:'
+                for runner in runnerList:pairs() do
+                    local info = runnerInfo[runner]
+                    lines[#lines+1] = '==============='
+                    lines[#lines+1] = string.format('Runner `%s` at %d(%s)'
+                        , info.loc[1]
+                        , info.loc.start
+                        , guide.getUri(info.loc)
+                    )
+                    lines[#lines+1] = string.format('Waiting `%s` at %d(%s)'
+                        , info.target[1]
+                        , info.target.start
+                        , guide.getUri(info.target)
+                    )
+                end
+                local msg = table.concat(lines, '\n')
+                log.error(msg)
+            end
+        end
+    end
+
+    local function launch()
+        start()
+        if not loc.ref then
+            finish()
+            return
+        end
+        local main = guide.getParentBlock(loc)
+        if not main then
+            finish()
+            return
+        end
+        local self = setmetatable({
+            _loc      = loc,
+            _casts    = {},
+            _mark     = {},
+            _has      = {},
+            _main     = main,
+            _uri      = guide.getUri(loc),
+            _callback = callback,
+        }, mt)
+
+        self:collect()
+
+        self:lookIntoBlock(main, locNode:copy())
+
+        locNode:setData('runner', nil)
+
+        finish()
+    end
+
+    local co = coroutine.create(launch)
+    locNode:setData('runner', co)
+    local info = runnerInfo[co]
+    info.loc = loc
+
+    if not runnerList then
+        runnerList = linked()
+    end
+    runnerList:pushTail(co)
+
+    if not masterRunner then
+        masterRunner = coroutine.running()
+        resumeMaster()
+        masterRunner = nil
+        return
+    end
+end
+
+---@async
+---@param source parser.object
+function vm.waitResolveRunner(source)
+    local myNode = vm.getNode(source)
+    if myNode and myNode.resolved then
+        return
+    end
+
+    local running = coroutine.running()
+    if not masterRunner or running == masterRunner then
+        return
+    end
+
+    local info = runnerInfo[running]
+
+    local targetLoc
+    if source.type == 'getlocal' then
+        targetLoc = source.node
+    elseif source.type == 'local'
+    or     source.type == 'self' then
+        targetLoc = source
+        info.target = info.target or source
+    else
+        error('Unknown source type: ' .. source.type)
+    end
+
+    local targetNode = vm.getNode(targetLoc)
+    if not targetNode then
+        -- Wait for compiling local by `compiler`
+        return
+    end
+
+    waitResolve(info)
+end
+
+---@param source parser.object
+function vm.storeWaitingRunner(source)
+    local sourceNode = vm.getNode(source)
+    if sourceNode and sourceNode.resolved then
+        return
+    end
+
+    local running = coroutine.running()
+    local info = runnerInfo[running]
+    info.target = source
 end

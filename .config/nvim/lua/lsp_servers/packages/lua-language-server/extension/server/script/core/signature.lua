@@ -137,11 +137,24 @@ local function makeSignatures(text, call, pos)
     node = node:getData 'originNode' or node
     local mark = {}
     for src in node:eachObject() do
-        if src.type == 'function'
+        if (src.type == 'function' and not vm.isVarargFunctionWithOverloads(src))
         or src.type == 'doc.type.function' then
             if not mark[src] then
                 mark[src] = true
                 signs[#signs+1] = makeOneSignature(src, oop, index)
+            end
+        elseif src.type == 'global' and src.cate == 'type' then
+            ---@cast src vm.global
+            for _, set in ipairs(src:getSets(guide.getUri(call))) do
+                if set.type == 'doc.class' then
+                    for _, overload in ipairs(set.calls) do
+                        local f = overload.overload
+                        if not mark[f] then
+                            mark[f] = true
+                            signs[#signs+1] = makeOneSignature(f, oop, index)
+                        end
+                    end
+                end
             end
         end
     end

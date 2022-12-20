@@ -77,8 +77,16 @@ Modify the diagnostic needed file status in a group.
 `Fallback` means that diagnostics in this group are controlled by `diagnostics.neededFileStatus` separately.
 Other settings will override individual settings without end of `!`.
 ]]
+config.diagnostics.workspaceEvent = -- TODO: need translate!
+"Set the time to trigger workspace diagnostics."
+config.diagnostics.workspaceEvent.OnChange = -- TODO: need translate!
+"Trigger workspace diagnostics when the file is changed."
+config.diagnostics.workspaceEvent.OnSave = -- TODO: need translate!
+"Trigger workspace diagnostics when the file is saved."
+config.diagnostics.workspaceEvent.None = -- TODO: need translate!
+"Disable workspace diagnostics."
 config.diagnostics.workspaceDelay = -- TODO: need translate!
-"Latency (milliseconds) for workspace diagnostics. When you start the workspace, or edit any file, the entire workspace will be re-diagnosed in the background. Set to negative to disable workspace diagnostics."
+"Latency (milliseconds) for workspace diagnostics."
 config.diagnostics.workspaceRate  = -- TODO: need translate!
 "Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting."
 config.diagnostics.libraryFiles   = -- TODO: need translate!
@@ -263,6 +271,8 @@ Enable telemetry to send your editor information and error logs over the network
 ]]
 config.misc.parameters                   = -- TODO: need translate!
 '[Command line parameters](https://github.com/sumneko/lua-telemetry-server/tree/master/method) when starting the language service in VSCode.'
+config.misc.executablePath               = -- TODO: need translate!
+'Specify the executable path in VSCode.'
 config.IntelliSense.traceLocalSet        = -- TODO: need translate!
 'Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.'
 config.IntelliSense.traceReturn          = -- TODO: need translate!
@@ -285,6 +295,12 @@ When checking the type of union type, ignore the `nil` in it.
 
 When this setting is `false`, the `number|nil` type cannot be assigned to the `number` type. It can be with `true`.
 ]]
+config.doc.privateName                   = -- TODO: need translate!
+'Treat specific field names as private, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are private, witch can only be accessed in the class where the definition is located.'
+config.doc.protectedName                 = -- TODO: need translate!
+'Treat specific field names as protected, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are protected, witch can only be accessed in the class where the definition is located and its subclasses.'
+config.doc.packageName                   = -- TODO: need translate!
+'Treat specific field names as package, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are package, witch can only be accessed in the file where the definition is located.'
 config.diagnostics['unused-local']          = -- TODO: need translate!
 '未使用的局部变量'
 config.diagnostics['unused-function']       = -- TODO: need translate!

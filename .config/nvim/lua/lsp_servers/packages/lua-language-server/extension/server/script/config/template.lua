@@ -290,6 +290,11 @@ local template = {
                                             )
                                             >> util.deepCopy(define.DiagnosticDefaultGroupFileStatus),
     ['Lua.diagnostics.disableScheme']       = Type.Array(Type.String) >> { 'git' },
+    ['Lua.diagnostics.workspaceEvent']      = Type.String >> 'OnSave' << {
+                                                'OnChange',
+                                                'OnSave',
+                                                'None',
+                                            },
     ['Lua.diagnostics.workspaceDelay']      = Type.Integer >> 3000,
     ['Lua.diagnostics.workspaceRate']       = Type.Integer >> 100,
     ['Lua.diagnostics.libraryFiles']        = Type.String  >> 'Opened' << {
@@ -302,7 +307,7 @@ local template = {
                                                 'Opened',
                                                 'Disable',
                                             },
-    ['Lua.diagnostics.unusedLocalExclude']   = Type.Array(Type.String),
+    ['Lua.diagnostics.unusedLocalExclude']  = Type.Array(Type.String),
     ['Lua.workspace.ignoreDir']             = Type.Array(Type.String) >> {
                                                 '.vscode',
                                             },
@@ -381,9 +386,13 @@ local template = {
     ['Lua.spell.dict']                      = Type.Array(Type.String),
     ['Lua.telemetry.enable']                = Type.Or(Type.Boolean >> false, Type.Nil) >> nil,
     ['Lua.misc.parameters']                 = Type.Array(Type.String),
+    ['Lua.misc.executablePath']             = Type.String,
     ['Lua.type.castNumberToInteger']        = Type.Boolean >> true,
     ['Lua.type.weakUnionCheck']             = Type.Boolean >> false,
     ['Lua.type.weakNilCheck']               = Type.Boolean >> false,
+    ['Lua.doc.privateName']                 = Type.Array(Type.String),
+    ['Lua.doc.protectedName']               = Type.Array(Type.String),
+    ['Lua.doc.packageName']                 = Type.Array(Type.String),
 
     -- VSCode
     ['files.associations']                  = Type.Hash(Type.String, Type.String),

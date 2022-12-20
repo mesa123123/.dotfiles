@@ -165,12 +165,13 @@ function m.eventLoop()
     end
 
     local function doSomething()
+        timer.update()
         pub.step(false)
-        if not await.step() then
-            return false
+        if await.step() then
+            busy()
+            return true
         end
-        busy()
-        return true
+        return false
     end
 
     local function sleep()
@@ -185,10 +186,6 @@ function m.eventLoop()
     end
 
     while true do
-        if doSomething() then
-            goto CONTINUE
-        end
-        timer.update()
         if doSomething() then
             goto CONTINUE
         end
@@ -264,6 +261,9 @@ function m.start()
     util.enableCloseFunction()
     await.setErrorHandle(log.error)
     pub.recruitBraves(4)
+    if COMPILECORES and COMPILECORES > 0 then
+        pub.recruitBraves(COMPILECORES, 'compile')
+    end
     proto.listen()
     m.report()
     m.testVersion()

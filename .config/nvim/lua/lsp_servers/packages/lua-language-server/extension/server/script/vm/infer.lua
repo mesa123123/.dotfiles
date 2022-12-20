@@ -34,7 +34,7 @@ local inferSorted = {
     ['nil']      = 100,
 }
 
-local viewNodeSwitch = util.switch()
+local viewNodeSwitch;viewNodeSwitch = util.switch()
     : case 'nil'
     : case 'boolean'
     : case 'string'
@@ -82,6 +82,14 @@ local viewNodeSwitch = util.switch()
             return source.name
         end
     end)
+    : case 'doc.type'
+    : call(function (source, infer, uri)
+        local buf = {}
+        for _, tp in ipairs(source.types) do
+            buf[#buf+1] = viewNodeSwitch(tp.type, tp, infer, uri)
+        end
+        return table.concat(buf, '|')
+    end)
     : case 'doc.type.name'
     : call(function (source, infer, uri)
         if source.signs then
@@ -99,8 +107,16 @@ local viewNodeSwitch = util.switch()
         return vm.getInfer(source.proto):view(uri)
     end)
     : case 'doc.generic.name'
-    : call(function (source, infer)
-        return ('<%s>'):format(source[1])
+    : call(function (source, infer, uri)
+        local resolved = vm.getGenericResolved(source)
+        if resolved then
+            return vm.getInfer(resolved):view(uri)
+        end
+        if source.generic and source.generic.extends then
+            return ('<%s:%s>'):format(source[1], vm.getInfer(source.generic.extends):view(uri))
+        else
+            return ('<%s>'):format(source[1])
+        end
     end)
     : case 'doc.type.array'
     : call(function (source, infer, uri)
@@ -217,6 +233,10 @@ local viewNodeSwitch = util.switch()
             end
         end
         return ('fun(%s)%s'):format(argView, regView)
+    end)
+    : case 'doc.field.name'
+    : call(function (source, infer, uri)
+        return vm.viewKey(source, uri)
     end)
 
 ---@class vm.node
@@ -506,4 +526,54 @@ end
 ---@return string?
 function vm.viewObject(source, uri)
     return viewNodeSwitch(source.type, source, {}, uri)
+end
+
+---@param source parser.object
+---@param uri uri
+---@return string?
+---@return string|number|boolean|nil
+function vm.viewKey(source, uri)
+    if source.type == 'doc.type' then
+        if #source.types == 1 then
+            return vm.viewKey(source.types[1], uri)
+        else
+            local key = vm.viewObject(source, uri)
+            return '[' .. key .. ']'
+        end
+    end
+    if source.type == 'tableindex' then
+        local index = source.index
+        local name = vm.getKeyName(index)
+        if not name then
+            return nil
+        end
+        local key
+        if index.type == 'string' then
+            key = util.viewString(name, index[2])
+        else
+            key = util.viewLiteral(name)
+        end
+        return ('[%s]'):format(key), name
+    end
+    if source.type == 'tableexp' then
+        return ('[%d]'):format(source.tindex), source.tindex
+    end
+    if source.type == 'doc.field' then
+        return vm.viewKey(source.field, uri)
+    end
+    if source.type == 'doc.type.field' then
+        return vm.viewKey(source.name, uri)
+    end
+    if source.type == 'doc.type.name' then
+        return '[' .. source[1] .. ']'
+    end
+    local key = vm.getKeyName(source)
+    if key == nil then
+        return nil
+    end
+    if type(key) == 'string' then
+        return key, key
+    else
+        return ('[%s]'):format(key), key
+    end
 end

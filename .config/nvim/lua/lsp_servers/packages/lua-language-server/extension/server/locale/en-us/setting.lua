@@ -77,8 +77,16 @@ Modify the diagnostic needed file status in a group.
 `Fallback` means that diagnostics in this group are controlled by `diagnostics.neededFileStatus` separately.
 Other settings will override individual settings without end of `!`.
 ]]
+config.diagnostics.workspaceEvent =
+"Set the time to trigger workspace diagnostics."
+config.diagnostics.workspaceEvent.OnChange =
+"Trigger workspace diagnostics when the file is changed."
+config.diagnostics.workspaceEvent.OnSave =
+"Trigger workspace diagnostics when the file is saved."
+config.diagnostics.workspaceEvent.None =
+"Disable workspace diagnostics."
 config.diagnostics.workspaceDelay =
-"Latency (milliseconds) for workspace diagnostics. When you start the workspace, or edit any file, the entire workspace will be re-diagnosed in the background. Set to negative to disable workspace diagnostics."
+"Latency (milliseconds) for workspace diagnostics."
 config.diagnostics.workspaceRate  =
 "Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting."
 config.diagnostics.libraryFiles   =
@@ -262,7 +270,9 @@ config.telemetry.enable                  =
 Enable telemetry to send your editor information and error logs over the network. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Home#privacy).
 ]]
 config.misc.parameters                   =
-'[Command line parameters](https://github.com/sumneko/lua-telemetry-server/tree/master/method) when starting the language service in VSCode.'
+'[Command line parameters](https://github.com/sumneko/lua-telemetry-server/tree/master/method) when starting the language server in VSCode.'
+config.misc.executablePath               =
+'Specify the executable path in VSCode.'
 config.IntelliSense.traceLocalSet        =
 'Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.'
 config.IntelliSense.traceReturn          =
@@ -285,6 +295,12 @@ When checking the type of union type, ignore the `nil` in it.
 
 When this setting is `false`, the `number|nil` type cannot be assigned to the `number` type. It can be with `true`.
 ]]
+config.doc.privateName                   =
+'Treat specific field names as private, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are private, witch can only be accessed in the class where the definition is located.'
+config.doc.protectedName                 =
+'Treat specific field names as protected, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are protected, witch can only be accessed in the class where the definition is located and its subclasses.'
+config.doc.packageName                   =
+'Treat specific field names as package, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are package, witch can only be accessed in the file where the definition is located.'
 config.diagnostics['unused-local']          =
 'Enable unused local variable diagnostics.'
 config.diagnostics['unused-function']       =

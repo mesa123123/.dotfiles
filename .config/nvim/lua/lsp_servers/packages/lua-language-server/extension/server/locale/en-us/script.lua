@@ -129,21 +129,27 @@ DIAG_UNKNOWN_CAST_VARIABLE            =
 DIAG_CAST_TYPE_MISMATCH               =
 'Cannot convert `{def}` to `{ref}`。'
 DIAG_MISSING_RETURN_VALUE             =
-'At least {min} return values are required, but here only {rmax} values are returned.'
+'Annotations specify that at least {min} return value(s) are required, found {rmax} returned here instead.'
 DIAG_MISSING_RETURN_VALUE_RANGE       =
-'At least {min} return values are required, but here only {rmin} to {rmax} values are returned.'
+'Annotations specify that at least {min} return value(s) are required, found {rmin} to {rmax} returned here instead.'
 DIAG_REDUNDANT_RETURN_VALUE           =
-'At most {max} values returned, but the {rmax}th value was returned here.'
+'Annotations specify that at most {max} return value(s) are required, found {rmax} returned here instead.'
 DIAG_REDUNDANT_RETURN_VALUE_RANGE     =
-'At most {max} values returned, but {rmin}th to {rmax}th values were returned here.'
+'Annotations specify that at most {max} return value(s) are required, found {rmin} to {rmax} returned here instead.'
 DIAG_MISSING_RETURN                   =
-'Return value is required here.'
+'Annotations specify that a return value is required here.'
 DIAG_RETURN_TYPE_MISMATCH             =
-'The type of the {index} return value is `{def}`, but the actual return is `{ref}`.'
+'Annotations specify that return value #{index} has a type of `{def}`, returning value of type `{ref}` here instead.'
 DIAG_UNKNOWN_OPERATOR                 =
 'Unknown operator `{}`.'
 DIAG_UNREACHABLE_CODE                 =
 'Unreachable code.'
+DIAG_INVISIBLE_PRIVATE                =
+'Field `{field}` is private, it can only be accessed in class `{class}`.'
+DIAG_INVISIBLE_PROTECTED              =
+'Field `{field}` is protected, it can only be accessed in class `{class}` and its subclasses.'
+DIAG_INVISIBLE_PACKAGE                =
+'Field `{field}` can only be accessed in same file `{uri}`.'
 
 MWS_NOT_SUPPORT         =
 '{} does not support multi workspace for now, I may need to restart to support the new workspace ...'
@@ -541,6 +547,14 @@ WINDOW_ASK_APPLY_LIBRARY         =
 'Do you need to configure your work environment as `{}`?'
 WINDOW_SEARCHING_IN_FILES        =
 'Searching in files...'
+WINDOW_CONFIG_LUA_DEPRECATED     =
+'`config.lua` is deprecated, please use `config.json` instead.'
+WINDOW_CONVERT_CONFIG_LUA        =
+'Convert to `config.json`'
+WINDOW_MODIFY_REQUIRE_PATH       =
+'Do you want to modify the require path?'
+WINDOW_MODIFY_REQUIRE_OK         =
+'Modify'
 
 CONFIG_LOAD_FAILED               =
 'Unable to read the settings file: {}'
@@ -582,6 +596,41 @@ CLI_CHECK_SUCCESS =
 'Diagnosis completed, no problems found'
 CLI_CHECK_RESULTS =
 'Diagnosis complete, {} problems found, see {}'
+
+TYPE_ERROR_ENUM_GLOBAL_DISMATCH =
+'Type `{child}` cannot match enumeration type of `{parent}`'
+TYPE_ERROR_ENUM_GENERIC_UNSUPPORTED =
+'Cannot use generic `{child}` in enumeration'
+TYPE_ERROR_ENUM_LITERAL_DISMATCH =
+'Literal `{child}` cannot match the enumeration value of `{parent}`'
+TYPE_ERROR_ENUM_OBJECT_DISMATCH =
+'The object `{child}` cannot match the enumeration value of `{parent}`. They must be the same object'
+TYPE_ERROR_ENUM_NO_OBJECT =
+'The passed in enumeration value `{child}` is not recognized'
+TYPE_ERROR_INTEGER_DISMATCH =
+'Literal `{child}` cannot match integer `{parent}`'
+TYPE_ERROR_STRING_DISMATCH =
+'Literal `{child}` cannot match string `{parent}`'
+TYPE_ERROR_BOOLEAN_DISMATCH =
+'Literal `{child}` cannot match boolean `{parent}`'
+TYPE_ERROR_TABLE_NO_FIELD =
+'Field `{key}` does not exist in the table'
+TYPE_ERROR_TABLE_FIELD_DISMATCH =
+'The type of field `{key}` is `{child}`, which cannot match `{parent}`'
+TYPE_ERROR_CHILD_ALL_DISMATCH =
+'All subtypes in `{child}` cannot match `{parent}`'
+TYPE_ERROR_PARENT_ALL_DISMATCH =
+'`{child}` cannot match any subtypes in `{parent}`'
+TYPE_ERROR_UNION_DISMATCH =
+'`{child}` cannot match `{parent}`'
+TYPE_ERROR_OPTIONAL_DISMATCH =
+'Optional type cannot match `{parent}`'
+TYPE_ERROR_NUMBER_LITERAL_TO_INTEGER =
+'The number `{child}` cannot be converted to an integer'
+TYPE_ERROR_NUMBER_TYPE_TO_INTEGER =
+'Cannot convert number type to integer type'
+TYPE_ERROR_DISMATCH =
+'Type `{child}` cannot match `{parent}`'
 
 LUADOC_DESC_CLASS =
 [=[
@@ -680,6 +729,20 @@ function find(path, pattern) end
 ---@param style font-style Style to apply
 function setFontStyle(style) end
 ```
+
+### Literal Enum
+```
+local enums = {
+    READ = 0,
+    WRITE = 1,
+    CLOSED = 2
+}
+
+---@alias FileStates
+---| `enums.READ`
+---| `enums.WRITE`
+---| `enums.CLOSE`
+```
 ---
 [View Wiki](https://github.com/sumneko/lua-language-server/wiki/Annotations#alias)
 ]=]
@@ -749,10 +812,11 @@ function getTags(item) end
 LUADOC_DESC_FIELD =
 [=[
 Declare a field in a class/table. This allows you to provide more in-depth
-documentation for a table.
+documentation for a table. As of `v3.6.0`, you can mark a field as `private`,
+`protected`, `public`, or `package`.
 
 ## Syntax
-`---@field <name> <type> [description]`
+`---@field [scope] <name> <type> [description]`
 
 ## Usage
 ```
@@ -1083,5 +1147,78 @@ local function setColor(color) end
 
 -- Completion and hover is provided for the below param
 setColor(colors.green)
+```
+]=]
+LUADOC_DESC_PACKAGE =
+[=[
+Mark a function as private to the file it is defined in. A packaged function
+cannot be accessed from another file.
+
+## Syntax
+`@package`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@package
+---This cannot be accessed in another file
+function Animal:eyesCount()
+    return self.eyes
+end
+```
+]=]
+LUADOC_DESC_PRIVATE =
+[=[
+Mark a function as private to a @class. Private functions can be accessed only
+from within their class and are not accessable from child classes.
+
+## Syntax
+`@private`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@private
+function Animal:eyesCount()
+    return self.eyes
+end
+
+---@class Dog:Animal
+local myDog = {}
+
+---NOT PERMITTED!
+myDog:eyesCount();
+```
+]=]
+LUADOC_DESC_PROTECTED =
+[=[
+Mark a function as protected within a @class. Protected functions can be
+accessed only from within their class or from child classes.
+
+## Syntax
+`@protected`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@protected
+function Animal:eyesCount()
+    return self.eyes
+end
+
+---@class Dog:Animal
+local myDog = {}
+
+---Permitted because function is protected, not private.
+myDog:eyesCount();
 ```
 ]=]

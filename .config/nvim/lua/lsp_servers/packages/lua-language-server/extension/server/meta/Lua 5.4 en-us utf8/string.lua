@@ -36,7 +36,7 @@ function string.char(byte, ...) end
 ---
 ---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-string.dump)
 ---
----@param f      async fun()
+---@param f      async fun(...):...
 ---@param strip? boolean
 ---@return string
 ---@nodiscard

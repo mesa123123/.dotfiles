@@ -12,7 +12,8 @@ local checkTypes = {
     'setindex',
     'setmethod',
     'tablefield',
-    'tableindex'
+    'tableindex',
+    'tableexp',
 }
 
 ---@param source parser.object
@@ -81,7 +82,8 @@ return function (uri, callback)
         end
 
         local valueNode = vm.compileNode(value)
-        if source.type == 'setindex' then
+        if source.type == 'setindex'
+        or source.type == 'tableexp' then
             -- boolean[1] = nil
             valueNode = valueNode:copy():removeOptional()
         end
@@ -94,7 +96,8 @@ return function (uri, callback)
         end
 
         local varNode = vm.compileNode(source)
-        if vm.canCastType(uri, varNode, valueNode) then
+        local errs = {}
+        if vm.canCastType(uri, varNode, valueNode, errs) then
             return
         end
 
@@ -111,7 +114,7 @@ return function (uri, callback)
             message = lang.script('DIAG_ASSIGN_TYPE_MISMATCH', {
                 def = vm.getInfer(varNode):view(uri),
                 ref = vm.getInfer(valueNode):view(uri),
-            }),
+            }) .. '\n' .. vm.viewTypeErrorMessage(uri, errs),
         }
     end)
 end

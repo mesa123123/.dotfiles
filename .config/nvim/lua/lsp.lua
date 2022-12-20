@@ -376,7 +376,7 @@ require("mason").setup({
 install.setup({ automatic_installation = true,
     ensure_installed = { 'sumneko_lua', 'pyright',
         'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer', 'sqlls' } }) -- This is running through Mason_lsp-config
+        'rust_analyzer', 'sqlls', 'omnisharp' } }) -- This is running through Mason_lsp-config
 ----------
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter' }
 --------------------------------
@@ -449,8 +449,8 @@ config.yamlls.setup { on_attach = on_attach, capabilities = capabilities }
 
 -- SQL
 ----------
-config.sqlls.setup { on_attach = on_attach, capabilities = capabilities, 
-    root_dir =  config.util.root_pattern("*.sql")
+config.sqlls.setup { on_attach = on_attach, capabilities = capabilities,
+    root_dir = config.util.root_pattern("*.sql")
 }
 ----------
 
@@ -464,6 +464,14 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
     }
 }
 }
+----------
+
+-- C#
+----------
+install.setup_handlers({
+    config.omnisharp.setup { on_attach = on_attach, capabilities = capabilities,
+    root_dir = config.util.root_pattern('.svn', '.git')}
+})
 ----------
 
 --------------------------------

@@ -96,11 +96,15 @@ local function split(str, sep)
     return t
 end
 
+---@class dummyfs
+---@operator div(string|fs.path|dummyfs): dummyfs
+---@field files table
 local dfs = {}
 dfs.__index = dfs
 dfs.type = 'dummy'
 dfs.path = ''
 
+---@return dummyfs
 function m.dummyFS(t)
     return setmetatable({
         files = t or {},
@@ -167,6 +171,7 @@ function dfs:string()
     return self.path
 end
 
+---@return fun(): dummyfs?
 function dfs:listDirectory()
     local dir = self:_open()
     if type(dir) ~= 'table' then
@@ -257,9 +262,9 @@ function dfs:saveFile(path, text)
     return true
 end
 
----@param path   string|fs.path
+---@param path   string|fs.path|dummyfs
 ---@param option table
----@return fs.path?
+---@return fs.path|dummyfs?
 local function fsAbsolute(path, option)
     if type(path) == 'string' then
         local suc, res = pcall(fs.path, path)
@@ -290,6 +295,9 @@ local function fsIsDirectory(path, option)
     return status == 'directory'
 end
 
+---@param path fs.path|dummyfs|nil
+---@param option table
+---@return fun(): fs.path|dummyfs|nil
 local function fsPairs(path, option)
     if not path then
         return function () end
@@ -417,6 +425,8 @@ local function fsCopy(source, target, option)
     return true
 end
 
+---@param path dummyfs|fs.path
+---@param option table
 local function fsCreateDirectories(path, option)
     if not path then
         return
@@ -440,7 +450,7 @@ local function fileRemove(path, option)
         return
     end
     if fsIsDirectory(path, option) then
-        for child in fsPairs(path) do
+        for child in fsPairs(path, option) do
             fileRemove(child, option)
         end
     end
@@ -449,8 +459,8 @@ local function fileRemove(path, option)
     end
 end
 
----@param source fs.path?
----@param target fs.path?
+---@param source fs.path|dummyfs?
+---@param target fs.path|dummyfs?
 ---@param option table
 local function fileCopy(source, target, option)
     if not source or not target then
@@ -461,7 +471,7 @@ local function fileCopy(source, target, option)
     local isExists = fsExists(target, option)
     if isDir1 then
         if isDir2 or fsCreateDirectories(target, option) then
-            for filePath in fsPairs(source) do
+            for filePath in fsPairs(source, option) do
                 local name = filePath:filename():string()
                 fileCopy(filePath, target / name, option)
             end
@@ -485,8 +495,8 @@ local function fileCopy(source, target, option)
     end
 end
 
----@param source fs.path?
----@param target fs.path?
+---@param source fs.path|dummyfs?
+---@param target fs.path|dummyfs?
 ---@param option table
 local function fileSync(source, target, option)
     if not source or not target then
@@ -498,10 +508,18 @@ local function fileSync(source, target, option)
     if isDir1 then
         if isDir2 then
             local fileList = m.fileList()
-            for filePath in fs.pairs(target) do
-                fileList[filePath] = true
+            if type(target) == 'table' then
+                ---@cast target dummyfs
+                for filePath in target:listDirectory() do
+                    fileList[filePath] = true
+                end
+            else
+                ---@cast target fs.path
+                for filePath in fs.pairs(target) do
+                    fileList[filePath] = true
+                end
             end
-            for filePath in fsPairs(source) do
+            for filePath in fsPairs(source, option) do
                 local name = filePath:filename():string()
                 local targetPath = target / name
                 fileSync(filePath, targetPath, option)
@@ -514,8 +532,8 @@ local function fileSync(source, target, option)
             if isExists then
                 fileRemove(target, option)
             end
-            if fsCreateDirectories(target) then
-                for filePath in fsPairs(source) do
+            if fsCreateDirectories(target, option) then
+                for filePath in fsPairs(source, option) do
                     local name = filePath:filename():string()
                     fileCopy(filePath, target / name, option)
                 end
@@ -594,8 +612,8 @@ function m.fileRemove(path, option)
 end
 
 --- 复制文件（夹）
----@param source string|fs.path
----@param target string|fs.path
+---@param source string|fs.path|dummyfs
+---@param target string|fs.path|dummyfs
 ---@return table
 function m.fileCopy(source, target, option)
     option = buildOption(option)
@@ -608,8 +626,8 @@ function m.fileCopy(source, target, option)
 end
 
 --- 同步文件（夹）
----@param source string|fs.path
----@param target string|fs.path
+---@param source string|fs.path|dummyfs
+---@param target string|fs.path|dummyfs
 ---@return table
 function m.fileSync(source, target, option)
     option = buildOption(option)

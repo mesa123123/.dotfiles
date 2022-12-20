@@ -171,7 +171,7 @@ function io.write(...) end
 ---@class file*
 local file = {}
 
----@alias readmode integer
+---@alias readmode integer|string
 ---| '"n"'  # Reads a numeral and returns it as number.
 ---| '"a"'  # Reads the whole file.
 ---|>'"l"'  # Reads the next line skipping the end of line.
@@ -182,7 +182,7 @@ local file = {}
 ---
 ---Close `file`.
 ---
----[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file)
+---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file:close)
 ---
 ---@return boolean?  suc
 ---@return exitcode? exitcode
@@ -192,7 +192,7 @@ function file:close() end
 ---
 ---Saves any written data to `file`.
 ---
----[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file)
+---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file:flush)
 ---
 function file:flush() end
 
@@ -205,7 +205,7 @@ function file:flush() end
 ---```
 ---
 ---
----[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file)
+---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file:lines)
 ---
 ---@param ... readmode
 ---@return fun():any, ...
@@ -214,7 +214,7 @@ function file:lines(...) end
 ---
 ---Reads the `file`, according to the given formats, which specify what to read.
 ---
----[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file)
+---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file:read)
 ---
 ---@param ... readmode
 ---@return any
@@ -230,7 +230,7 @@ function file:read(...) end
 ---
 ---Sets and gets the file position, measured from the beginning of the file.
 ---
----[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file)
+---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file:seek)
 ---
 ---@param whence? seekwhence
 ---@param offset? integer
@@ -246,7 +246,7 @@ function file:seek(whence, offset) end
 ---
 ---Sets the buffering mode for an output file.
 ---
----[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file)
+---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file:setvbuf)
 ---
 ---@param mode vbuf
 ---@param size? integer
@@ -255,7 +255,7 @@ function file:setvbuf(mode, size) end
 ---
 ---Writes the value of each of its arguments to `file`.
 ---
----[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file)
+---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-file:write)
 ---
 ---@param ... string|number
 ---@return file*?

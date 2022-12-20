@@ -34,14 +34,15 @@ return function (uri, callback)
                     refNode = refNode:copy():setTruthy()
                 end
 
-                if not vm.canCastType(uri, locNode, refNode) then
+                local errs = {}
+                if not vm.canCastType(uri, locNode, refNode, errs) then
                     callback {
                         start   = ref.start,
                         finish  = ref.finish,
                         message = lang.script('DIAG_CAST_LOCAL_TYPE', {
                             def = vm.getInfer(locNode):view(uri),
                             ref = vm.getInfer(refNode):view(uri),
-                        }),
+                        }) .. '\n' .. vm.viewTypeErrorMessage(uri, errs),
                     }
                 end
             end

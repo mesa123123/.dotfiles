@@ -49,13 +49,13 @@ function m.create(uri)
         uri = furi.normalize(uri)
     end
     log.info('Workspace create: ', uri)
+    local scp = scope.createFolder(uri)
+    m.folders[#m.folders+1] = scp
     if uri == furi.encode '/'
     or uri == furi.encode(os.getenv 'HOME' or '') then
         client.showMessage('Error', lang.script('WORKSPACE_NOT_ALLOWED', furi.decode(uri)))
-        return
+        scp:set('bad root', true)
     end
-    local scp = scope.createFolder(uri)
-    m.folders[#m.folders+1] = scp
 end
 
 function m.remove(uri)
@@ -90,10 +90,9 @@ local globInteferFace = {
     type = function (path)
         local result
         pcall(function ()
-            local status = fs.symlink_status(path):type()
-            if status == 'directory' then
+            if fs.is_directory(path) then
                 result = 'directory'
-            elseif status == 'regular' then
+            else
                 result = 'file'
             end
         end)
@@ -101,7 +100,7 @@ local globInteferFace = {
     end,
     list = function (path)
         local fullPath = fs.path(path)
-        if fs.symlink_status(fullPath):type() ~= 'directory' then
+        if not fs.is_directory(fullPath) then
             return nil
         end
         local paths = {}
@@ -307,26 +306,27 @@ function m.awaitPreload(scp)
     local native   = m.getNativeMatcher(scp)
     local librarys = m.getLibraryMatchers(scp)
 
-    if scp.uri then
+    if scp.uri and not scp:get('bad root') then
         log.info('Scan files at:', scp:getName())
+        scp:gc(fw.watch(m.normalize(furi.decode(scp.uri))))
         local count = 0
         ---@async
         native:scan(furi.decode(scp.uri), function (path)
             local uri = files.getRealUri(furi.encode(path))
             scp:get('cachedUris')[uri] = true
             ld:loadFile(uri)
-        end, function () ---@async
+        end, function (_) ---@async
             count = count + 1
             if count == 100000 then
                 client.showMessage('Warning', lang.script('WORKSPACE_SCAN_TOO_MUCH', count, furi.decode(scp.uri)))
             end
         end)
-        scp:gc(fw.watch(m.normalize(furi.decode(scp.uri))))
     end
 
     for _, libMatcher in ipairs(librarys) do
         log.info('Scan library at:', libMatcher.uri)
         local count = 0
+        scp:gc(fw.watch(furi.decode(libMatcher.uri)))
         scp:addLink(libMatcher.uri)
         ---@async
         libMatcher.matcher:scan(furi.decode(libMatcher.uri), function (path)
@@ -339,7 +339,6 @@ function m.awaitPreload(scp)
                 client.showMessage('Warning', lang.script('WORKSPACE_SCAN_TOO_MUCH', count, furi.decode(libMatcher.uri)))
             end
         end)
-        scp:gc(fw.watch(furi.decode(libMatcher.uri)))
     end
 
     -- must wait for other scopes to add library
@@ -559,7 +558,9 @@ config.watch(function (uri, key, value, oldValue)
     or key:find '^Lua.type'
     or key:find '^files' then
         if value ~= oldValue then
-            m.reload(scope.getScope(uri))
+            local scp = scope.getScope(uri)
+            m.reload(scp)
+            m.resetFiles(scp)
         end
     end
 end)

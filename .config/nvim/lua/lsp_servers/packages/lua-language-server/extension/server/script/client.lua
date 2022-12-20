@@ -382,21 +382,53 @@ end
 ---@param uri   uri
 ---@param edits textEditor[]
 function m.editText(uri, edits)
-    local files     = require 'files'
+    local files = require 'files'
+    local state = files.getState(uri)
+    if not state then
+        return
+    end
     local textEdits = {}
     for i, edit in ipairs(edits) do
-        textEdits[i] = converter.textEdit(converter.packRange(uri, edit.start, edit.finish), edit.text)
+        textEdits[i] = converter.textEdit(converter.packRange(state, edit.start, edit.finish), edit.text)
     end
-    proto.request('workspace/applyEdit', {
+    local params = {
         edit = {
             changes = {
                 [uri] = textEdits,
             }
         }
-    })
+    }
+    proto.request('workspace/applyEdit', params)
+    log.info('workspace/applyEdit', inspect(params))
 end
 
----@param callback async fun()
+---@alias textMultiEditor {uri: uri, start: integer, finish: integer, text: string}
+
+---@param editors textMultiEditor[]
+function m.editMultiText(editors)
+    local files = require 'files'
+    local changes = {}
+    for _, editor in ipairs(editors) do
+        local uri = editor.uri
+        local state = files.getState(uri)
+        if state then
+            if not changes[uri] then
+                changes[uri] = {}
+            end
+            local edit = converter.textEdit(converter.packRange(state, editor.start, editor.finish), editor.text)
+            table.insert(changes[uri], edit)
+        end
+    end
+    local params = {
+        edit = {
+            changes = changes,
+        }
+    }
+    proto.request('workspace/applyEdit', params)
+    log.info('workspace/applyEdit', inspect(params))
+end
+
+---@param callback async fun(ev: string)
 function m.event(callback)
     m._eventList[#m._eventList+1] = callback
 end

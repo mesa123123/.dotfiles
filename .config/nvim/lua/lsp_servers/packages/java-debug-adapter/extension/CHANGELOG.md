@@ -4,6 +4,24 @@ All notable changes to the "vscode-java-debugger" extension will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.47.0 - 2022-11-29
+### Changed
+- Optimize the build error report of "Build failed, do you want to continue?". [#1214](https://github.com/microsoft/vscode-java-debug/issues/1214).
+
+### Fixed
+- Use the system encoding to generate the *.argfile. [#1112](https://github.com/microsoft/vscode-java-debug/issues/1112).
+- "shortenCommandLine": "argfile|auto" should include "vmArgs". [#1254](https://github.com/microsoft/vscode-java-debug/issues/1254).
+
+## 0.46.0 - 2022-11-02
+### Added
+- Add "Step Into Target" feature to allow stepping directly into a specific function call when paused on a line. See [#1192](https://github.com/microsoft/vscode-java-debug/issues/1192). Thanks to [Gayan Perera](https://github.com/gayanper) for contribution.
+
+### Changed
+- Exclude **/node_modules/** from .vscode/launch.json searches. See [#1234](https://github.com/microsoft/vscode-java-debug/pull/1234). Thanks to [Brandon Cheng](https://github.com/gluxon) for contribution.
+
+### Fixed
+- Conditional Breakpoint got error code in reply:504. See [#1250](https://github.com/microsoft/vscode-java-debug/issues/1250).
+
 ## 0.45.0 - 2022-10-12
 ### Added
 - Visualize the inline breakpoint locations. See [#1193](https://github.com/microsoft/vscode-java-debug/issues/1193).

@@ -14,6 +14,8 @@ local encoder = require 'encoder'
 local ws      = require 'workspace.workspace'
 local scope   = require 'workspace.scope'
 local inspect = require 'inspect'
+local jsonc   = require 'jsonc'
+local json    = require 'json'
 
 local m = {}
 
@@ -50,7 +52,7 @@ end
 
 local function convertLink(uri, text)
     local fmt = getDocFormater(uri)
-    return text:gsub('%$([%.%w]+)', function (name)
+    return text:gsub('%$([%.%w_%:]+)', function (name)
         local lastDot = ''
         if name:sub(-1) == '.' then
             name = name:sub(1, -2)
@@ -80,7 +82,7 @@ local function createViewDocument(name)
     if not fmt then
         return nil
     end
-    name = name:match '[%w_%.]+'
+    name = name:match '[%w_%.%:]+'
     if name:sub(-1) == '.' then
         name = name:sub(1, -2)
     end
@@ -274,26 +276,85 @@ local function initBuiltIn(uri)
 end
 
 ---@param libraryDir fs.path
-local function loadSingle3rdConfig(libraryDir)
-    local configText = fsu.loadFile(libraryDir / 'config.lua')
+---@return table?
+local function loadSingle3rdConfigFromJson(libraryDir)
+    local path = libraryDir / 'config.json'
+    local configText = fsu.loadFile(path)
+    if not configText then
+        return nil
+    end
+
+    local suc, cfg = xpcall(jsonc.decode, function (err)
+        log.error('Decode config.json failed at:', libraryDir:string(), err)
+    end, configText)
+    if not suc then
+        return nil
+    end
+
+    if type(cfg) ~= 'table' then
+        log.error('config.json must be an object:', libraryDir:string())
+        return nil
+    end
+
+    return cfg
+end
+
+---@param libraryDir fs.path
+---@return table?
+local function loadSingle3rdConfigFromLua(libraryDir)
+    local path = libraryDir / 'config.lua'
+    local configText = fsu.loadFile(path)
     if not configText then
         return nil
     end
 
     local env = setmetatable({}, { __index = _G })
-    assert(load(configText, '@' .. libraryDir:string(), 't', env))()
+    local f, err = load(configText, '@' .. libraryDir:string(), 't', env)
+    if not f then
+        log.error('Load config.lua failed at:', libraryDir:string(), err)
+        return nil
+    end
+
+    local suc = xpcall(f, function (err)
+        log.error('Load config.lua failed at:', libraryDir:string(), err)
+    end)
+
+    if not suc then
+        return nil
+    end
 
     local cfg = {}
+    for k, v in pairs(env) do
+        cfg[k] = v
+    end
+
+    return cfg
+end
+
+---@param libraryDir fs.path
+local function loadSingle3rdConfig(libraryDir)
+    local cfg = loadSingle3rdConfigFromJson(libraryDir)
+    if not cfg then
+        cfg = loadSingle3rdConfigFromLua(libraryDir)
+        if not cfg then
+            return
+        end
+        local jsonbuf = json.beautify(cfg)
+        client.requestMessage('Info', lang.script.WINDOW_CONFIG_LUA_DEPRECATED, {
+            lang.script.WINDOW_CONVERT_CONFIG_LUA,
+        }, function (action, index)
+            if index == 1 and jsonbuf then
+                fsu.saveFile(libraryDir / 'config.json', jsonbuf)
+                fsu.fileRemove(libraryDir / 'config.lua')
+            end
+        end)
+    end
 
     cfg.path = libraryDir:filename():string()
     cfg.name = cfg.name or cfg.path
 
     if fs.exists(libraryDir / 'plugin.lua') then
         cfg.plugin = true
-    end
-
-    for k, v in pairs(env) do
-        cfg[k] = v
     end
 
     if cfg.words then
@@ -352,15 +413,37 @@ end
 
 local function apply3rd(uri, cfg, onlyMemory)
     local changes = {}
-    if cfg.configs then
-        for _, change in ipairs(cfg.configs) do
-            changes[#changes+1] = {
-                key    = change.key,
-                action = change.action,
-                prop   = change.prop,
-                value  = change.value,
-                uri    = uri,
-            }
+    if cfg.settings then
+        for key, value in pairs(cfg.settings) do
+            if type(value) == 'table' then
+                if #value == 0 then
+                    for k, v in pairs(value) do
+                        changes[#changes+1] = {
+                            key    = key,
+                            action = 'prop',
+                            prop   = k,
+                            value  = v,
+                            uri    = uri,
+                        }
+                    end
+                else
+                    for _, v in ipairs(value) do
+                        changes[#changes+1] = {
+                            key    = key,
+                            action = 'add',
+                            value  = v,
+                            uri    = uri,
+                        }
+                    end
+                end
+            else
+                changes[#changes+1] = {
+                    key    = key,
+                    action = 'set',
+                    value  = value,
+                    uri    = uri,
+                }
+            end
         end
     end
 
@@ -383,13 +466,13 @@ local function apply3rd(uri, cfg, onlyMemory)
     client.setConfig(changes, onlyMemory)
 end
 
-local hasAsked
+local hasAsked = {}
 ---@async
 local function askFor3rd(uri, cfg)
-    if hasAsked then
+    if hasAsked[cfg.name] then
         return nil
     end
-    hasAsked = true
+    hasAsked[cfg.name] = true
     local yes1 = lang.script.WINDOW_APPLY_WHIT_SETTING
     local yes2 = lang.script.WINDOW_APPLY_WHITOUT_SETTING
     local no   = lang.script.WINDOW_DONT_SHOW_AGAIN
@@ -402,24 +485,8 @@ local function askFor3rd(uri, cfg)
     end
     if result == yes1 then
         apply3rd(uri, cfg, false)
-        client.setConfig({
-            {
-                key    = 'Lua.workspace.checkThirdParty',
-                action = 'set',
-                value  = false,
-                uri    = uri,
-            },
-        }, false)
     elseif result == yes2 then
         apply3rd(uri, cfg, true)
-        client.setConfig({
-            {
-                key    = 'Lua.workspace.checkThirdParty',
-                action = 'set',
-                value  = false,
-                uri    = uri,
-            },
-        }, true)
     else
         client.setConfig({
             {
@@ -450,9 +517,6 @@ local function wholeMatch(a, b)
 end
 
 local function check3rdByWords(uri, configs)
-    if hasAsked then
-        return
-    end
     if not files.isLua(uri) then
         return
     end
@@ -465,23 +529,32 @@ local function check3rdByWords(uri, configs)
             return
         end
         for _, cfg in ipairs(configs) do
-            if cfg.words then
-                for _, word in ipairs(cfg.words) do
-                    await.delay()
-                    if wholeMatch(text, word) then
+            if not cfg.words then
+                goto CONTINUE
+            end
+            if hasAsked[cfg.name] then
+                goto CONTINUE
+            end
+            local library = ('%s/library'):format(cfg.dirname)
+            if util.arrayHas(config.get(uri, 'Lua.workspace.library'), library) then
+                goto CONTINUE
+            end
+            for _, word in ipairs(cfg.words) do
+                await.delay()
+                if wholeMatch(text, word) then
+                    ---@async
+                    await.call(function ()
                         askFor3rd(uri, cfg)
-                        return
-                    end
+                    end)
+                    return
                 end
             end
+            ::CONTINUE::
         end
     end, id)
 end
 
 local function check3rdByFileName(uri, configs)
-    if hasAsked then
-        return
-    end
     local path = ws.getRelativePath(uri)
     if not path then
         return
@@ -491,24 +564,29 @@ local function check3rdByFileName(uri, configs)
     await.call(function () ---@async
         await.sleep(0.1)
         for _, cfg in ipairs(configs) do
-            if cfg.files then
-                for _, filename in ipairs(cfg.files) do
-                    await.delay()
-                    if wholeMatch(path, filename) then
+            if not cfg.files then
+                goto CONTINUE
+            end
+            if hasAsked[cfg.name] then
+                goto CONTINUE
+            end
+            for _, filename in ipairs(cfg.files) do
+                await.delay()
+                if wholeMatch(path, filename) then
+                    ---@async
+                    await.call(function ()
                         askFor3rd(uri, cfg)
-                        return
-                    end
+                    end)
+                    return
                 end
             end
+            ::CONTINUE::
         end
     end, id)
 end
 
 ---@async
 local function check3rd(uri)
-    if hasAsked then
-        return
-    end
     if ws.isIgnored(uri) then
         return
     end
@@ -560,6 +638,7 @@ end)
 files.watch(function (ev, uri)
     if ev == 'update'
     or ev == 'dll' then
+        await.sleep(1)
         check3rd(uri)
     end
 end)

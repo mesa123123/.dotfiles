@@ -1411,8 +1411,8 @@ function World:getResponseTime() end
 ---
 ---The default step count is 20.
 ---
----@param steps number # The step count.
-function World:getStepCount(steps) end
+---@return number steps # The step count.
+function World:getStepCount() end
 
 ---
 ---Returns the tightness of joints in the World.
@@ -1534,6 +1534,21 @@ function World:newMeshCollider(vertices, indices) end
 ---@param radius? number # The radius of the sphere, in meters.
 ---@return lovr.Collider collider # The new Collider.
 function World:newSphereCollider(x, y, z, radius) end
+
+---
+---Adds a new Collider to the World with a TerrainShape already attached.
+---
+---
+---### NOTE:
+---The collider will be positioned at 0, 0, 0.
+---
+---Unlike other colliders, it will automatically be set as kinematic when created.
+---
+---@overload fun(self: lovr.World, scale: number, heightmap: lovr.Image, stretch?: number):lovr.Collider
+---@overload fun(self: lovr.World, scale: number, callback: function, samples?: number):lovr.Collider
+---@param scale number # The width and depth of the terrain, in meters.
+---@return lovr.Collider collider # The new Collider.
+function World:newTerrainCollider(scale) end
 
 ---
 ---Returns an iterator that can be used to iterate over "overlaps", or potential collisions between pairs of shapes in the World.

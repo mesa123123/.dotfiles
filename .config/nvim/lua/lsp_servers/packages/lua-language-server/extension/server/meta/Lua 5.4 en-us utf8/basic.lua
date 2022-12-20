@@ -74,7 +74,7 @@ _G = {}
 ---
 ---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-getfenv)
 ---
----@param f? integer|async fun()
+---@param f? integer|async fun(...):...
 ---@return table
 ---@nodiscard
 function getfenv(f) end
@@ -213,7 +213,7 @@ function pairs(t) end
 ---
 ---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-pcall)
 ---
----@param f     async fun()
+---@param f     async fun(...):...
 ---@param arg1? any
 ---@return boolean success
 ---@return any result
@@ -290,7 +290,7 @@ function select(index, ...) end
 ---
 ---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-setfenv)
 ---
----@param f     async fun()|integer
+---@param f     async fun(...):...|integer
 ---@param table table
 ---@return function
 function setfenv(f, table) end
@@ -381,7 +381,7 @@ function warn(message, ...) end
 ---
 ---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-xpcall)
 ---
----@param f     async fun()
+---@param f     async fun(...):...
 ---@param msgh  function
 ---@param arg1? any
 ---@return boolean success

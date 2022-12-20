@@ -99,7 +99,11 @@ function mt:loadFile(uri, libraryUri)
                 --    self._sets[#self._sets+1] = waker
                 --end)
                 files.setText(uri, content, false)
-                files.getState(uri)
+                if COMPILECORES then
+                    files.compileStateAsync(uri, function (state) end)
+                else
+                    files.compileState(uri)
+                end
                 if not self._cache[uri] then
                     files.addRef(uri)
                 end

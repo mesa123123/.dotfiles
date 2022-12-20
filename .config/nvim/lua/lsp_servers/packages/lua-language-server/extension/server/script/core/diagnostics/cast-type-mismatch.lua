@@ -26,14 +26,16 @@ return function (uri, callback)
                     for _, cast in ipairs(doc.casts) do
                         if not cast.mode and cast.extends then
                             local refNode = vm.compileNode(cast.extends)
-                            if not vm.canCastType(uri, defNode, refNode) then
+                            local errs = {}
+                            if not vm.canCastType(uri, defNode, refNode, errs) then
+                                assert(errs)
                                 callback {
                                     start   = cast.extends.start,
                                     finish  = cast.extends.finish,
                                     message = lang.script('DIAG_CAST_TYPE_MISMATCH', {
                                         def = vm.getInfer(defNode):view(uri),
                                         ref = vm.getInfer(refNode):view(uri),
-                                    })
+                                    }) .. '\n' .. vm.viewTypeErrorMessage(uri, errs),
                                 }
                             end
                         end

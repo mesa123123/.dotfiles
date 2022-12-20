@@ -83,7 +83,7 @@ local RESERVED = {
 local m = {}
 
 --- 打印表的结构
----@param tbl table
+---@param tbl any
 ---@param option? table
 ---@return string
 function m.dump(tbl, option)
@@ -581,7 +581,7 @@ end
 ---遍历文本的每一行
 ---@param text string
 ---@param keepNL? boolean # 保留换行符
----@return fun():string, integer
+---@return fun():string?, integer?
 function m.eachLine(text, keepNL)
     local offset = 1
     local lineCount = 0
@@ -730,7 +730,7 @@ function switchMT:has(name)
 end
 
 ---@param name string
----@return any ...
+---@return ...
 function switchMT:__call(name, ...)
     local callback = self.map[name] or self._default
     if not callback then
@@ -772,6 +772,9 @@ end
 
 function m.defaultTable(default)
     return setmetatable({}, { __index = function (t, k)
+        if k == nil then
+            return nil
+        end
         local v = default(k)
         t[k] = v
         return v
@@ -782,12 +785,18 @@ function m.multiTable(count, default)
     local current
     if default then
         current = setmetatable({}, { __index = function (t, k)
+            if k == nil then
+                return nil
+            end
             local v = default(k)
             t[k] = v
             return v
         end })
     else
         current = setmetatable({}, { __index = function (t, k)
+            if k == nil then
+                return nil
+            end
             local v = {}
             t[k] = v
             return v
@@ -795,6 +804,9 @@ function m.multiTable(count, default)
     end
     for _ = 3, count do
         current = setmetatable({}, { __index = function (t, k)
+            if k == nil then
+                return nil
+            end
             t[k] = current
             return current
         end })

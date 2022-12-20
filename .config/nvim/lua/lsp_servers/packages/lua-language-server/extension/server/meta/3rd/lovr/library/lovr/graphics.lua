@@ -456,6 +456,21 @@ function lovr.graphics.newMaterial(properties) end
 ---
 ---Currently, OBJ, glTF, and binary STL files are supported.
 ---
+---
+---### NOTE:
+---Currently, the following features are not supported by the model importer:
+---
+---- glTF: Morph targets are not supported.
+---- glTF: Only the default scene is loaded.
+---- glTF: Currently, each skin in a Model can have up to 256 joints.
+---- glTF: Meshes can't appear multiple times in the node hierarchy with different skins, they need
+---  to use 1 skin consistently.
+---- glTF: `KHR_texture_transform` is supported, but all textures in a material will use the same
+---  transform.
+---- STL: ASCII STL files are not supported.
+---
+---Diffuse and emissive textures will be loaded using sRGB encoding, all other textures will be loaded as linear.
+---
 ---@overload fun(blob: lovr.Blob, options?: table):lovr.Model
 ---@overload fun(modelData: lovr.ModelData, options?: table):lovr.Model
 ---@param filename string # The path to model file.
@@ -940,7 +955,7 @@ function Font:getWidth(string) end
 ---
 ---Sets the line spacing of the Font.
 ---
----When spacing out lines, the height of the font is multiplied the line spacing to get the final spacing value.
+---When spacing out lines, the height of the font is multiplied by the line spacing to get the final spacing value.
 ---
 ---The default is 1.0.
 ---
@@ -948,7 +963,7 @@ function Font:getWidth(string) end
 function Font:setLineSpacing(spacing) end
 
 ---
----Returns the pixel density of the font.
+---Sets the pixel density of the font.
 ---
 ---The density is a "pixels per world unit" factor that controls how the pixels in the font's texture are mapped to units in the coordinate space.
 ---
@@ -1781,7 +1796,7 @@ function Pass:line(x1, y1, z1, x2, y2, z2, ...) end
 ---@param start? number # The 1-based index of the first vertex to render from the vertex buffer (or the first index, when using an index buffer).
 ---@param count? number # The number of vertices to render (or the number of indices, when using an index buffer). When `nil`, as many vertices or indices as possible will be drawn (based on the length of the Buffers and `start`).
 ---@param instances? number # The number of copies of the mesh to render.
----@param base? number # nil
+---@param base? number # A base offset to apply to vertex indices.
 function Pass:mesh(vertices, transform, start, count, instances, base) end
 
 ---
@@ -2043,6 +2058,7 @@ function Pass:setFont(font) end
 ---
 ---This will apply to most drawing, except for text, skyboxes, and models, which use their own materials.
 ---
+---@overload fun(self: lovr.Pass, texture: lovr.Texture)
 ---@overload fun(self: lovr.Pass)
 ---@param material lovr.Material # The material to use for drawing.
 function Pass:setMaterial(material) end
@@ -2064,19 +2080,17 @@ function Pass:setMeshMode(mode) end
 ---
 ---Alternatively, a projection matrix can be used for other types of projections like orthographic, oblique, etc.
 ---
----There is also a shorthand string "orthographic" that can be used to configure an orthographic projection.
----
 ---Up to 6 views are supported.
 ---
----When rendering to the headset, both projections are changed to match the ones used by the headset.
----
----This is also available by calling `lovr.headset.getViewAngles`.
+---The Pass returned by `lovr.headset.getPass` will have its views automatically configured to match the headset.
 ---
 ---
 ---### NOTE:
 ---A far clipping plane of 0.0 can be used for an infinite far plane with reversed Z range.
 ---
----This is the default.
+---This is the default because it improves depth precision and reduces Z fighting.
+---
+---Using a non-infinite far plane requires the depth buffer to be cleared to 1.0 instead of 0.0 and the default depth test to be changed to `lequal` instead of `gequal`.
 ---
 ---@overload fun(self: lovr.Pass, view: number, matrix: lovr.Mat4)
 ---@param view number # The index of the view to update.
@@ -2146,6 +2160,8 @@ function Pass:setScissor(x, y, w, h) end
 ---For textures, white pixels will be returned.
 ---
 ---Samplers will use `linear` filtering and the `repeat` wrap mode.
+---
+---Changing the shader will not clear push constants set in the `Constants` block.
 ---
 ---@overload fun(self: lovr.Pass, default: lovr.DefaultShader)
 ---@overload fun(self: lovr.Pass)
@@ -2286,15 +2302,33 @@ function Pass:skybox(skybox) end
 function Pass:sphere(transform, longitudes, latitudes) end
 
 ---
----TODO
+---Draws text.
+---
+---The font can be changed using `Pass:setFont`.
 ---
 ---
 ---### NOTE:
----TODO
+---UTF-8 encoded strings are supported.
 ---
----@overload fun(self: lovr.Pass, colortext: table, transform: lovr.transform, wrap?: number, halign?: lovr.HorizontalAlign, valign?: lovr.VerticalAlign)
+---Newlines will start a new line of text.
+---
+---Tabs will be rendered as four spaces.
+---
+---Carriage returns are ignored.
+---
+---With the default font pixel density, a scale of 1.0 makes the text height 1 meter.
+---
+---The wrap value does not take into account the text's scale.
+---
+---Text rendering requires a special shader, which will only be automatically used when the active shader is set to `nil`.
+---
+---Blending should be enabled when rendering text (it's on by default).
+---
+---This function can draw up to 16384 visible characters at a time, and will currently throw an error if the string is too long.
+---
+---@overload fun(self: lovr.Pass, colortext: table, transform: lovr.Mat4, wrap?: number, halign?: lovr.HorizontalAlign, valign?: lovr.VerticalAlign)
 ---@param text string # The text to render.
----@param transform lovr.transform # The transform of the text.
+---@param transform lovr.Mat4 # The transform of the text.  Can also be provided as position, 1-component scale, and rotation using a mix of `Vectors` or numbers.
 ---@param wrap? number # The maximum width of each line in meters (before scale is applied).  When zero, the text will not wrap.
 ---@param halign? lovr.HorizontalAlign # The horizontal alignment.
 ---@param valign? lovr.VerticalAlign # The vertical alignment.
@@ -2305,7 +2339,7 @@ function Pass:text(text, transform, wrap, halign, valign) end
 ---
 ---One of the slots in a `Tally` object will be used to hold the result. Commands on the Pass will continue being measured until `Pass:tock` is called with the same tally and slot combination.
 ---
----Afterwards, `Pass:read` can be used to read back the tally result, or the tally can be copied to a `Buffer.
+---Afterwards, `Pass:read` can be used to read back the tally result, or the tally can be copied to a `Buffer`.
 ---
 ---
 ---### NOTE:
@@ -2322,7 +2356,7 @@ function Pass:tick(tally, slot) end
 ---
 ---`Pass:tick` must be called to start the measurement before this can be called.
 ---
----Afterwards, `Pass:read` can be used to read back the tally result, or the tally can be copied to a `Buffer.
+---Afterwards, `Pass:read` can be used to read back the tally result, or the tally can be copied to a `Buffer`.
 ---
 ---@param tally lovr.Tally # The tally storing the measurement.
 ---@param slot number # The index of the slot in the tally storing the measurement.
@@ -2357,7 +2391,9 @@ function Pass:transform(transform) end
 function Pass:translate(translation) end
 
 ---
----TODO
+---Readbacks track the progress of an asynchronous read of a `Buffer`, `Texture`, or `Tally`.
+---
+---Once a Readback is created in a transfer pass, and the transfer pass is submitted, the Readback can be polled for completion or the CPU can wait for it to finish using `Readback:wait`.
 ---
 ---@class lovr.Readback
 local Readback = {}
@@ -2367,7 +2403,7 @@ local Readback = {}
 ---
 ---
 ---### NOTE:
----TODO what if it's an image?!
+---If the Readback is reading back a Texture, returns `nil`.
 ---
 ---@return lovr.Blob blob # The Blob.
 function Readback:getBlob() end
@@ -2377,9 +2413,15 @@ function Readback:getBlob() end
 ---
 ---
 ---### NOTE:
----TODO what if the readback is a buffer/texture?!
+---This currently returns `nil` for readbacks of `Buffer` and `Texture` objects.
 ---
----@return table data # A table containing the values that were read back.
+---Only readbacks of `Tally` objects return valid data.
+---
+---For `time` and `pixel` tallies, the table will have 1 number per slot that was read.
+---
+---For `shader` tallies, there will be 4 numbers for each slot.
+---
+---@return table data # A flat table of numbers containing the values that were read back.
 function Readback:getData() end
 
 ---
@@ -2387,7 +2429,7 @@ function Readback:getData() end
 ---
 ---
 ---### NOTE:
----TODO what if it's a buffer or tally?!
+---If the Readback is not reading back a Texture, returns `nil`.
 ---
 ---@return lovr.Image image # The Image.
 function Readback:getImage() end
@@ -2403,7 +2445,7 @@ function Readback:isComplete() end
 ---
 ---
 ---### NOTE:
----TODO what if the readback will never complete?!
+---If the transfer pass that created the readback has not been submitted yet, no wait will occur and this function will return `false`.
 ---
 ---@return boolean waited # Whether the CPU had to be blocked for waiting.
 function Readback:wait() end
@@ -2480,7 +2522,9 @@ function Sampler:getMipmapRange() end
 function Sampler:getWrap() end
 
 ---
----TODO
+---Shaders are small GPU programs.
+---
+---See the `Shaders` guide for a full introduction to Shaders.
 ---
 ---@class lovr.Shader
 local Shader = {}
@@ -2533,7 +2577,23 @@ function Shader:hasAttribute(name) end
 function Shader:hasStage(stage) end
 
 ---
----TODO
+---Tally objects are able to measure events on the GPU.
+---
+---Tallies can measure three types of things:
+---
+---- `time` - measures elapsed GPU time.
+---- `pixel` - measures how many pixels were rendered, which can be used for occlusion culling.
+---- `shader` - measure how many times shaders were run.
+---
+---Tally objects can be created with up to 4096 slots.
+---
+---Each slot can hold a single measurement value.
+---
+---`Pass:tick` is used to begin a measurement, storing the result in one of the slots.
+---
+---All commands recorded on the Pass will be measured until `Pass:tock` is called with the same tally and slot.
+---
+---The measurement value stored in the slots can be copied to a `Buffer` using `Pass:copy`, or they can be read back to Lua using `Pass:read`.
 ---
 ---@class lovr.Tally
 local Tally = {}
@@ -2671,14 +2731,69 @@ function Texture:isView() end
 ---- Rendering to a particular image or mipmap level of a texture.
 ---- Binding a particular image or mipmap level to a shader.
 ---
----@param parent lovr.Texture # The parent Texture to create the view of.
 ---@param type lovr.TextureType # The texture type of the view.
 ---@param layer? number # The index of the first layer in the view.
 ---@param layerCount? number # The number of layers in the view, or `nil` to use all remaining layers.
 ---@param mipmap? number # The index of the first mipmap in the view.
 ---@param mipmapCount? number # The number of mipmaps in the view, or `nil` to use all remaining mipmaps.
 ---@return lovr.Texture view # The new texture view.
-function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) end
+function Texture:newView(type, layer, layerCount, mipmap, mipmapCount) end
+
+---
+---Controls whether premultiplied alpha is enabled.
+---
+---
+---### NOTE:
+---The premultiplied mode should be used if pixels being drawn have already been blended, or "pre-multiplied", by the alpha channel.
+---
+---This happens when rendering to a texture that contains pixels with transparent alpha values, since the stored color values have already been faded by alpha and don't need to be faded a second time with the alphamultiply blend mode.
+---
+---@alias lovr.BlendAlphaMode
+---
+---Color channel values are multiplied by the alpha channel during blending.
+---
+---| "alphamultiply"
+---
+---Color channel values are not multiplied by the alpha.
+---
+---Instead, it's assumed that the colors have already been multiplied by the alpha.
+---
+---This should be used if the pixels being drawn have already been blended, or "pre-multiplied".
+---
+---| "premultiplied"
+
+---
+---Different ways pixels can blend with the pixels behind them.
+---
+---@alias lovr.BlendMode
+---
+---Colors will be mixed based on alpha.
+---
+---| "alpha"
+---
+---Colors will be added to the existing color, alpha will not be changed.
+---
+---| "add"
+---
+---Colors will be subtracted from the existing color, alpha will not be changed.
+---
+---| "subtract"
+---
+---All color channels will be multiplied together, producing a darkening effect.
+---
+---| "multiply"
+---
+---The maximum value of each color channel will be used.
+---
+---| "lighten"
+---
+---The minimum value of each color channel will be used.
+---
+---| "darken"
+---
+---The opposite of multiply: the pixel colors are inverted, multiplied, and inverted again, producing a lightening effect.
+---
+---| "screen"
 
 ---
 ---The different ways to pack Buffer fields into memory.
@@ -2695,7 +2810,7 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---
 ---Example:
 ---
----``` layout(std140) uniform ObjectScales { float scales[64]; }; ```
+---    layout(std140) uniform ObjectScales { float scales[64]; };
 ---
 ---The `std430` layout corresponds to the std430 layout used for storage buffers in GLSL.
 ---
@@ -2703,7 +2818,7 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---
 ---Example:
 ---
----``` layout(std430) buffer TileSizes { vec2 sizes[]; } ```
+---    layout(std430) buffer TileSizes { vec2 sizes[]; }
 ---
 ---@alias lovr.BufferLayout
 ---
@@ -2718,6 +2833,95 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---The std430 layout.
 ---
 ---| "std430"
+
+---
+---The method used to compare depth and stencil values when performing the depth and stencil tests. Also used for compare modes in `Sampler`s.
+---
+---
+---### NOTE:
+---This type can also be specified using mathematical notation, e.g. `=`, `>`, `<=`, etc. `notequal` can be provided as `~=` or `!=`.
+---
+---@alias lovr.CompareMode
+---
+---The test does not take place, and acts as though it always passes.
+---
+---| "none"
+---
+---The test passes if the values are equal.
+---
+---| "equal"
+---
+---The test passes if the values are not equal.
+---
+---| "notequal"
+---
+---The test passes if the value is less than the existing one.
+---
+---| "less"
+---
+---The test passes if the value is less than or equal to the existing one.
+---
+---| "lequal"
+---
+---The test passes if the value is greater than the existing one.
+---
+---| "greater"
+---
+---The test passes if the value is greater than or equal to the existing one.
+---
+---| "gequal"
+
+---
+---The different ways of doing triangle backface culling.
+---
+---@alias lovr.CullMode
+---
+---Both sides of triangles will be drawn.
+---
+---| "none"
+---
+---Skips rendering the back side of triangles.
+---
+---| "back"
+---
+---Skips rendering the front side of triangles.
+---
+---| "front"
+
+---
+---The set of shaders built in to LÖVR.
+---
+---These can be passed to `Pass:setShader` or `lovr.graphics.newShader` instead of writing GLSL code.
+---
+---The shaders can be further customized by using the `flags` option to change their behavior.
+---
+---If the active shader is set to `nil`, LÖVR picks one of these shaders to use.
+---
+---@alias lovr.DefaultShader
+---
+---Basic shader without lighting that uses colors and a texture.
+---
+---| "unlit"
+---
+---Shades triangles based on their normal, resulting in a cool rainbow effect.
+---
+---| "normal"
+---
+---Renders font glyphs.
+---
+---| "font"
+---
+---Renders cubemaps.
+---
+---| "cubemap"
+---
+---Renders spherical textures.
+---
+---| "equirect"
+---
+---Renders a fullscreen triangle.
+---
+---| "fill"
 
 ---
 ---Whether a shape should be drawn filled or outlined.
@@ -3076,6 +3280,43 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---Notably this does not include camera poses/projections or shader variables changed with `Pass:send`.
 ---
 ---| "state"
+
+---
+---Different ways of updating the stencil buffer with `Pass:setStencilWrite`.
+---
+---@alias lovr.StencilAction
+---
+---Stencil buffer pixels will not be changed by draws.
+---
+---| "keep"
+---
+---Stencil buffer pixels will be set to zero.
+---
+---| "zero"
+---
+---Stencil buffer pixels will be replaced with a custom value.
+---
+---| "replace"
+---
+---Stencil buffer pixels will be incremented each time they're rendered to.
+---
+---| "increment"
+---
+---Stencil buffer pixels will be decremented each time they're rendered to.
+---
+---| "decrement"
+---
+---Similar to increment, but will wrap around to 0 when it exceeds 255.
+---
+---| "incrementwrap"
+---
+---Similar to decrement, but will wrap around to 255 when it goes below 0.
+---
+---| "decrementwrap"
+---
+---The bits in the stencil buffer pixels will be inverted.
+---
+---| "invert"
 
 ---
 ---These are the different metrics a `Tally` can measure.
