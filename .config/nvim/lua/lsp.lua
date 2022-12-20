@@ -537,7 +537,6 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     ----------
     if package == "markdownlint" then
         nullSources[#nullSources + 1] = diagnose.markdownlint.with({
-            args = ({ "--disable MD013" }),
             on_attach = on_attach,
             autostart = true
         })
