@@ -20,6 +20,7 @@ local lsp = vim.lsp -- Lsp inbuilt
 local bo = vim.bo -- bufferopts
 -- For Variables
 local b = vim.b -- buffer variables
+G = vim.g -- global variables
 --------
 
 -- Required Module Loading Core Lsp Stuff
@@ -68,7 +69,19 @@ local function file_exists(name)
     local f = io.open(name, "r")
     if f ~= nil then io.close(f) return true else return false end
 end
+----------
 
+-- Refresh Diagnostics
+----------
+-- function G.buf_update_diagnostics()
+--     local clients = lsp.buf_get_clients()
+--     local buf = api.nvim_get_current_buf()
+-- 
+--     for _, client in ipairs(clients) do
+--         local diagnostics = vim.lsp.diagnostic.get(buf, client.id)
+--         vim.lsp.diagnostic.display(diagnostics, buf, client.id)
+--     end
+-- end
 ----------
 
 --------------------------------
@@ -349,6 +362,10 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     -- FormatExpr use lsp
     api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+    -- AutoRefresh if the LSP can't on its own
+--    api.nvim_exec([[
+--        au CursorHold <buffer> lua G.buf_update_diagnostics()
+--    ]], false)
     -- Attach Keymappings
     keymappings(client)
 end
@@ -376,7 +393,7 @@ require("mason").setup({
 install.setup({ automatic_installation = true,
     ensure_installed = { 'sumneko_lua', 'pyright',
         'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer', 'sqlls', 'omnisharp' } }) -- This is running through Mason_lsp-config
+        'rust_analyzer', 'sqlls', 'omnisharp_mono' } }) -- This is running through Mason_lsp-config
 ----------
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter' }
 --------------------------------
@@ -468,10 +485,8 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
 
 -- C#
 ----------
-install.setup_handlers({
-    config.omnisharp.setup { on_attach = on_attach, capabilities = capabilities,
-    root_dir = config.util.root_pattern('.svn', '.git')}
-})
+config.omnisharp.setup { on_attach = on_attach, capabilities = capabilities,
+    root_dir = config.util.root_pattern(".svn", ".git") }
 ----------
 
 --------------------------------
