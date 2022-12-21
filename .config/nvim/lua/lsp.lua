@@ -485,7 +485,7 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
 
 -- C#
 ----------
-config.omnisharp.setup { on_attach = on_attach, capabilities = capabilities,
+config.omnisharp_mono.setup { on_attach = on_attach, capabilities = capabilities,
     root_dir = config.util.root_pattern(".svn", ".git") }
 ----------
 

@@ -282,6 +282,7 @@ cmd [[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]] -- JenkinsFile
 cmd [[ au FileType python setlocal et ts=4 sw=4 sts=4 ]] -- Python Language
 cmd [[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]] -- Typescript Settings
 cmd [[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]] -- Vagrant Files
+cmd [[ au Filetype cs setlocal ft=cs ]]
 ----------
 
 -- Markdown
