@@ -41,9 +41,13 @@
       <property name="digital-format" type="string" value="%a %_d %b, %R"/>
       <property name="timezone" type="string" value="GMT"/>
       <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
+      <property name="digital-time-format" type="string" value="%a %_d %b, %R"/>
+      <property name="digital-layout" type="uint" value="3"/>
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="msm notifier"/>
+        <value type="string" value="no network connection"/>
         <value type="string" value="networkmanager applet"/>
         <value type="string" value="xfce terminal"/>
         <value type="string" value="clipman"/>
