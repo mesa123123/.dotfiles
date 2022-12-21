@@ -383,8 +383,9 @@ lsp.buf.format(nil, 10000) -- Format Timeout
 
 -- Dependent Modules Require
 ----------
+local server_dir = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers"
 require("mason").setup({
-    install_root_dir = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers"
+    install_root_dir = server_dir
 }) -- Mason is the engine the installer configs will run
 ----------
 
@@ -393,7 +394,7 @@ require("mason").setup({
 install.setup({ automatic_installation = true,
     ensure_installed = { 'sumneko_lua', 'pyright',
         'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer', 'sqlls', 'omnisharp_mono' } }) -- This is running through Mason_lsp-config
+        'rust_analyzer', 'sqlls', 'csharp_ls' } }) -- This is running through Mason_lsp-config
 ----------
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter' }
 --------------------------------
@@ -485,8 +486,9 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
 
 -- C#
 ----------
-config.omnisharp_mono.setup { on_attach = on_attach, capabilities = capabilities,
-    root_dir = config.util.root_pattern(".svn", ".git") }
+config.csharp_ls.setup { on_attach = on_attach, capabilities = capabilities,
+    root_dir = config.util.root_pattern(".svn", ".git") 
+}
 ----------
 
 --------------------------------
