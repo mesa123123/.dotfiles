@@ -437,6 +437,22 @@ api.nvim_create_user_command('PeekStatus', require('peek').is_open, {})
 api.nvim_create_user_command('PeekClose', require('peek').close, {})
 ----------
 
+-----------------------------------------
+-- Notification Settings - Notify.nvim
+-----------------------------------------
+
+local notify = require("notify")
+
+-- Configuration
+----------
+notify.setup({
+    render = "simple",
+    timeout = 500,
+    stages = "fade",
+    minimum_width = 25,
+    top_down = false
+    })
+----------
 
 -----------------------------------------
 -- Leader Remappings, Plugin Commands
