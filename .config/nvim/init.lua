@@ -68,7 +68,6 @@ function Map(func, tbl)
     return newtbl
 end
 
-
 -- Filter(function, table)
 function Filter(func, tbl)
     local newtbl = {}
@@ -286,17 +285,19 @@ cmd [[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]] -- Vagrant Files
 
 -- Markdown
 ---------
+-- Set certain types to markdown
+cmd [[ au BufRead,BufNewFile *.draft set filetype=markdown ]]
+cmd [[ au BufRead,BufNewFile *.md set filetype=markdown ]]
+-- Config
 cmd [[ au FileType markdown setlocal ts=2 sw=2 sts=2 ]]
 cmd [[ au FileType markdown setlocal spell spelllang=en_gb ]]
 cmd [[ au FileType markdown inoremap <TAB> <C-t> ]]
 -- Markdown Syntax Highlighting
-g['vim_markdown_fenced_languages'] = [['csharp=cs', 'json=javascript']]
-g['vim_markdown_folding_disabled'] = 1
+g['vim_markdown_fenced_languages'] = [['csharp=cs', 'json=javascript', 'mermaid=mermaid']]
+g['vim_markdown_folding_disabled'] = 0
 g['vim_markdown_conceal_code_blocks'] = 0
 g['vim_markdown_conceal'] = 0
--- Set .draft files to Markdown
-cmd [[ au BufRead,BufNewFile *.draft set filetype=markdown ]]
-
+g['indentLine_setConceal'] = 0
 -- GitCommit
 ----------
 g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
@@ -420,13 +421,13 @@ require('nvim-treesitter.configs').setup {
 -- Plugin Setup
 ----------
 require('peek').setup({
-  auto_load = true,         -- whether to automatically load preview when, entering another window
-  close_on_bdelete = true,  -- close preview window on buffer delete
-  syntax = true,            -- enable syntax highlighting, affects performance
-  theme = 'dark',           -- 'dark' or 'light'
-  update_on_change = true,
-  throttle_at = 200000,     -- start throttling when file exceeds this
-  throttle_time = 'auto',   -- minimum amount of time in milliseconds
+    auto_load = true, -- whether to automatically load preview when, entering another window
+    close_on_bdelete = true, -- close preview window on buffer delete
+    syntax = true, -- enable syntax highlighting, affects performance
+    theme = 'dark', -- 'dark' or 'light'
+    update_on_change = true,
+    throttle_at = 200000, -- start throttling when file exceeds this
+    throttle_time = 'auto', -- minimum amount of time in milliseconds
 })
 ----------
 
@@ -451,7 +452,7 @@ notify.setup({
     stages = "fade",
     minimum_width = 25,
     top_down = false
-    })
+})
 ----------
 
 -----------------------------------------
@@ -631,10 +632,9 @@ keymap.set("t", "<C-n>", "<C-\\><C-n><c-w>k :NvimTreeToggle<CR>", {}) -- assumes
 ----------
 function Zonedtime(hours)
     local t = os.time()
-    local d = t+hours*3600
+    local d = t + hours * 3600
     return os.date('%H:%M %Y-%m-%d', d)
 end
-
 
 require("lualine").setup({
     options = {

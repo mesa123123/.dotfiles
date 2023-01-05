@@ -69,6 +69,7 @@ local function file_exists(name)
     local f = io.open(name, "r")
     if f ~= nil then io.close(f) return true else return false end
 end
+
 ----------
 
 -- Refresh Diagnostics
@@ -76,7 +77,7 @@ end
 -- function G.buf_update_diagnostics()
 --     local clients = lsp.buf_get_clients()
 --     local buf = api.nvim_get_current_buf()
--- 
+--
 --     for _, client in ipairs(clients) do
 --         local diagnostics = vim.lsp.diagnostic.get(buf, client.id)
 --         vim.lsp.diagnostic.display(diagnostics, buf, client.id)
@@ -363,9 +364,9 @@ local function on_attach(client, bufnr)
     -- FormatExpr use lsp
     api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()")
     -- AutoRefresh if the LSP can't on its own
---    api.nvim_exec([[
---        au CursorHold <buffer> lua G.buf_update_diagnostics()
---    ]], false)
+    --    api.nvim_exec([[
+    --        au CursorHold <buffer> lua G.buf_update_diagnostics()
+    --    ]], false)
     -- Attach Keymappings
     keymappings(client)
 end
@@ -487,7 +488,7 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
 -- C#
 ----------
 config.csharp_ls.setup { on_attach = on_attach, capabilities = capabilities,
-    root_dir = config.util.root_pattern(".svn", ".git") 
+    root_dir = config.util.root_pattern(".svn", ".git")
 }
 ----------
 
@@ -563,7 +564,8 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     if package == "markdownlint" then
         nullSources[#nullSources + 1] = diagnose.markdownlint.with({
             on_attach = on_attach,
-            autostart = true
+            autostart = true,
+            filetypes = { "markdown", "md", "mdx" }
         })
         nullSources[#nullSources + 1] = format.markdownlint
     end
