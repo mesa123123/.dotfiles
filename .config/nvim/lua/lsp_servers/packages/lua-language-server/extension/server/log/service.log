@@ -1,9 +1,9 @@
-[10:22:55.789][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:66]: Lua Lsp startup, root: 	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server
-[10:22:55.789][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:67]: ROOT:	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server
-[10:22:55.789][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:68]: LOGPATH:	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/log
-[10:22:55.789][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:69]: METAPATH:	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/meta
-[10:22:55.789][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:70]: VERSION:	3.6.4-dev
-[10:22:55.808][info] [#0:script/service/service.lua:141]: 
+[15:21:33.051][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:66]: Lua Lsp startup, root: 	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server
+[15:21:33.051][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:67]: ROOT:	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server
+[15:21:33.051][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:68]: LOGPATH:	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/log
+[15:21:33.051][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:69]: METAPATH:	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/meta
+[15:21:33.051][info] [#0:/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/main.lua:70]: VERSION:	3.6.4-dev
+[15:21:33.070][info] [#0:script/service/service.lua:141]: 
 ========= Medical Examination Report =========
     --------------- Memory ---------------
         Total: 1.564 MB
@@ -25,7 +25,7 @@
         Holdon:   0
         Waiting:  0
 ==============================================
-[10:22:55.811][info] [#0:script/language.lua:137]: VSC language: nil
-[10:22:55.812][info] [#0:script/language.lua:138]: LS  language: en-us
-[10:22:55.812][info] [#0:script/workspace/workspace.lua:38]: Workspace init root: 	file:///home/pbowman/.dotfiles
-[10:22:55.812][info] [#0:script/workspace/workspace.lua:42]: Log path: 	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/log/file_home_pbowman_.dotfiles.log
+[15:21:33.074][info] [#0:script/language.lua:137]: VSC language: nil
+[15:21:33.074][info] [#0:script/language.lua:138]: LS  language: en-us
+[15:21:33.074][info] [#0:script/workspace/workspace.lua:38]: Workspace init root: 	file:///home/pbowman/.dotfiles
+[15:21:33.074][info] [#0:script/workspace/workspace.lua:42]: Log path: 	/home/pbowman/.dotfiles/.config/nvim/lua/lsp_servers/packages/lua-language-server/extension/server/log/file_home_pbowman_.dotfiles.log
