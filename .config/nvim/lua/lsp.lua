@@ -560,6 +560,7 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     if package == "yamllint" then
         nullSources[#nullSources + 1] = diagnose.yamllint.with({ on_attach = on_attach })
     end
+    -- Markdown
     ----------
     if package == "markdownlint" then
         nullSources[#nullSources + 1] = diagnose.markdownlint.with({
@@ -567,7 +568,11 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             autostart = true,
             filetypes = { "markdown", "md", "mdx" }
         })
-        nullSources[#nullSources + 1] = format.markdownlint
+        nullSources[#nullSources + 1] = format.markdownlint.with({
+            on_attach = on_attach,
+            autostart = true,
+            filetypes = { "markdown", "md", "mdx" }
+        })
     end
     ----------
     -- Prettier

@@ -85,12 +85,12 @@ end
 --------------------------------
 -- Plugin Loading and Settings
 --------------------------------
--- Install Packer and Sync if required (vim-plug was going to be more complicated and I'm lazy)
+-- Install Packer and Sync if required
 ----------------
 local install_path = fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
     -- Clone packer and install
-    api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path .. ' --depth=1')
+    api.nvim_command('! git clone https://github.com/wbthomason/packer.nvim ' .. install_path .. ' --depth=1')
 end
 -- Load Packer
 cmd [[packadd packer.nvim]]
