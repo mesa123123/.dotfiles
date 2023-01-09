@@ -25,8 +25,10 @@ alias edittmux="vim ~/.tmux.conf"
 alias gnpm='npm -g'
 alias pip='pip3'
 alias spip='sudo pip3'
-alias prpy='pipenv run python'
 alias dotsync='~/.dotfiles/dfsync.sh -m begin -r no'
+alias comppose='docker-compose'
+# Hardware Application Commands
+alias bluetooth="blueman-manager"
 #Fiddily Vim Stuff
 if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") ]]; then
     alias vim='nvim'
@@ -41,8 +43,6 @@ fi
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
 
-# Application Commands
-alias bluetooth="blueman-manager"
 
 # WSL Only Commands
 alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
