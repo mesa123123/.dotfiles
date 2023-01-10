@@ -124,8 +124,7 @@ require("packer").startup(function()
     use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
     -- Debug Adapter Protocol
     ----------
-    use { 'mfussenegger/nvim-dap', requires = { 'mfussenegger/nvim-dap-python' } }
-    use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
+    use { 'mfussenegger/nvim-dap' }
     -- Testing Plugins
     ----------
     use 'nvim-lua/plenary.nvim'
@@ -663,10 +662,18 @@ require("lualine").setup({
 -- Telescope Settings
 ---------------------------------
 
+-- Helper Vars and Funcs
+----------
+function fullTextSearch()
+    require("telescope.builtin").grep_string({search = fn.input("Search For > ") })
+end
+----------
+
+
 -- Mappings
 ----------
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true }) -- Find File
-keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
+keymap.set("n", "<leader>fg", "lua fullTextSearch()", { silent = true })
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true }) -- Find Buffer
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })

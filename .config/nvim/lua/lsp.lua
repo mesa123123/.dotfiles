@@ -608,7 +608,6 @@ hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blen
 hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
 
-
 --------------------------------
 -- Debug Adapter Protocol
 --------------------------------
@@ -640,33 +639,6 @@ keymap.set("n", "<leader>bj", "<cmd>lua require'dap'.step_into()<cr>", keyopts)
 keymap.set("n", "<leader>bk", "<cmd>lua require'dap'.step_over()<cr>", keyopts)
 keymap.set("n", "<leader>b", "<cmd>lua require'dap'.step_out()<cr>", keyopts)
 ----------
-
--- Adapter Setup (Adapters are like LSP-handlers for a DAP)
-----------
--- Python
-dap.adapters.python = {
-    type = "executable",
-    command = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers/bin/debugpy"
-}
-----------
-
--- Debugger Configuration
-----------
--- Get the pre-made stuff
-require('dap-python').setup(venv_path())
-table.insert(dap.configurations.python, {
-    {
-        type = 'python',
-        request = 'launch',
-        name = 'Launch file',
-        program = '${file}', -- launches the current file
-        pythonPath = venv_path()
-    }
-})
-----------
-
--- Setup Dap-Ui
-dapui.setup()
 
 -------------------------------
 -- EOF
