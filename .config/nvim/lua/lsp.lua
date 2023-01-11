@@ -37,8 +37,8 @@ local snipload_lua = require("luasnip.loaders.from_lua")
 -- Required Extras
 ----------
 local path = config.util.path
-local dapui = require("dapui")
 local cmpsnip = require("cmp_luasnip")
+local telescope = require("telescope")
 --------------------------------
 -- Language Specific Settings and Helpers
 --------------------------------
@@ -342,7 +342,7 @@ local function keymappings(client)
     -- Need something here that says (if implementation isn't supported open definition/declaration in new buffer
     keymap.set("n", "<leader>cD", "<Cmd>lua vim.lsp.buf.definition()<CR>", bufopts)
     keymap.set("n", "<leader>cd", "<Cmd>lua vim.lsp.buf.declaration()<CR>", bufopts)
-    keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.references()<CR>", bufopts)
+    keymap.set("n", "<leader>cr", "<cmd>lua require('telescope.builtin').lsp_references()<CR>", bufopts)
     keymap.set("n", "<leader>cs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
     keymap.set("n", "<leader>ci", "<cmd>lua vim.lsp.buf.implementation()<CR>", bufopts)
     keymap.set("n", "<leader>ct", "<cmd>lua vim.lsp.buf.type_definition()<CR>", bufopts)
