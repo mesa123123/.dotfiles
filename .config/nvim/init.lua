@@ -81,7 +81,6 @@ end
 
 ----------
 
-
 --------------------------------
 -- Plugin Loading and Settings
 --------------------------------
@@ -230,6 +229,8 @@ hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend 
 hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
+----------
+
 --------------------------------
 -- Editor Options, Settings, Commands
 --------------------------------
@@ -260,6 +261,7 @@ g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
 -- Commands
 ----------
 cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
+cmd [[ set mouse= ]]
 ----------
 
 -------------------------------"
@@ -662,12 +664,14 @@ require("lualine").setup({
 -- Telescope Settings
 ---------------------------------
 
+----------
 -- Mappings
 ----------
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true }) -- Find File
 keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true }) -- Find Buffer
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
+keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
 -- Picker Mappings
 require("telescope").setup {
