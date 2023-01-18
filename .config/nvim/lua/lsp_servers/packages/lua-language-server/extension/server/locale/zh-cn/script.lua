@@ -279,6 +279,8 @@ PARSER_AMBIGUOUS_SYNTAX   =
 '在 Lua 5.1 中，函数调用的左括号必须与函数在同一行。'
 PARSER_NEED_PAREN         =
 '需要添加一对括号。'
+PARSER_NESTING_LONG_MARK  =
+'Lua 5.1 中不允许使用嵌套的 `[[...]]` 。'
 PARSER_LUADOC_MISS_CLASS_NAME           =
 '缺少类名称。'
 PARSER_LUADOC_MISS_EXTENDS_SYMBOL       =
@@ -447,6 +449,8 @@ COMMAND_JSON_TO_LUA_FAILED =
 'JSON 转 Lua 失败：{}'
 COMMAND_ADD_DICT           = -- TODO: need translate!
 'Add Word to dictionary'
+COMMAND_REFERENCE_COUNT    =
+'{} 个引用'
 
 COMPLETION_IMPORT_FROM           =
 '从 {} 中导入'
@@ -562,6 +566,8 @@ CONFIG_LOAD_ERROR                =
 '设置文件加载错误：{}'
 CONFIG_TYPE_ERROR                =
 '设置文件必须是lua或json格式：{}'
+CONFIG_MODIFY_FAIL_SYNTAX_ERROR  =
+'修改设置失败，设置文件中有语法错误：{}'
 
 PLUGIN_RUNTIME_ERROR             =
 [[

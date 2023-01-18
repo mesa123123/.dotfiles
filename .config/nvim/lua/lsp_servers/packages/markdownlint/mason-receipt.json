@@ -1,1 +1,1 @@
-{"secondary_sources":[],"schema_version":"1.0","primary_source":{"type":"npm","package":"markdownlint-cli"},"links":{"bin":{"markdownlint":"node_modules\/.bin\/markdownlint"}},"metrics":{"start_time":1671271627838,"completion_time":1671271632488},"name":"markdownlint"}
+{"secondary_sources":[],"schema_version":"1.0","primary_source":{"type":"npm","package":"markdownlint-cli"},"links":{"bin":{"markdownlint":"node_modules\/.bin\/markdownlint"}},"metrics":{"start_time":1673927709930,"completion_time":1673927712282},"name":"markdownlint"}

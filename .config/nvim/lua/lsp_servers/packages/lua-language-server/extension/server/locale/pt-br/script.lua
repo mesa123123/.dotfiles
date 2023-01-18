@@ -279,6 +279,8 @@ PARSER_AMBIGUOUS_SYNTAX   = -- TODO: need translate!
 'In Lua 5.1, the left brackets called by the function must be in the same line as the function.'
 PARSER_NEED_PAREN         = -- TODO: need translate!
 '需要添加一对括号。'
+PARSER_NESTING_LONG_MARK  = -- TODO: need translate!
+'Nesting of `[[...]]` is not allowed in Lua 5.1 .'
 PARSER_LUADOC_MISS_CLASS_NAME           =
 'Esperado <class name>.'
 PARSER_LUADOC_MISS_EXTENDS_SYMBOL       =
@@ -447,6 +449,8 @@ COMMAND_JSON_TO_LUA_FAILED =
 'Converção de JSON para Lua falhou: {}.'
 COMMAND_ADD_DICT           =
 'Adicione uma palavra ao dicionário'
+COMMAND_REFERENCE_COUNT    = -- TODO: need translate!
+'{} references'
 
 COMPLETION_IMPORT_FROM           =
 'Importa de {}.'
@@ -562,6 +566,8 @@ CONFIG_LOAD_ERROR                =
 'Configurando o erro de carregamento do arquivo: {}'
 CONFIG_TYPE_ERROR                =
 'O arquivo de configuração deve estar no formato LUA ou JSON: {}'
+CONFIG_MODIFY_FAIL_SYNTAX_ERROR  = -- TODO: need translate!
+'Failed to modify settings, there are syntax errors in the settings file: {}'
 
 PLUGIN_RUNTIME_ERROR             =
 [[

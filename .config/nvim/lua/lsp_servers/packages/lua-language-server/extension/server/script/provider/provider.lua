@@ -23,15 +23,20 @@ local fs         = require 'bee.filesystem'
 
 require 'library'
 
+---@class provider
+local m = {}
+
+m.attributes = {}
+
 ---@async
-local function updateConfig(uri)
+function m.updateConfig(uri)
     config.addNullSymbol(json.null)
     local specified = cfgLoader.loadLocalConfig(uri, CONFIGPATH)
     if specified then
         log.info('Load config from specified', CONFIGPATH)
         log.info(inspect(specified))
         -- watch directory
-        filewatch.watch(workspace.getAbsolutePath(uri, CONFIGPATH):gsub('[^/\\]+$', ''))
+        filewatch.watch(workspace.getAbsolutePath(uri, CONFIGPATH):gsub('[^/\\]+$', ''), false)
         config.update(scope.override, specified)
     end
 
@@ -58,11 +63,6 @@ local function updateConfig(uri)
     config.update(scope.fallback, global)
 end
 
----@class provider
-local m = {}
-
-m.attributes = {}
-
 function m.register(method)
     return function (attrs)
         m.attributes[method] = attrs
@@ -81,7 +81,7 @@ filewatch.event(function (ev, path) ---@async
         for _, scp in ipairs(workspace.folders) do
             local configPath = workspace.getAbsolutePath(scp.uri, CONFIGPATH)
             if path == configPath then
-                updateConfig(scp.uri)
+                m.updateConfig(scp.uri)
             end
         end
     end
@@ -89,7 +89,7 @@ filewatch.event(function (ev, path) ---@async
         for _, scp in ipairs(workspace.folders) do
             local rcPath     = workspace.getAbsolutePath(scp.uri, '.luarc.json')
             if path == rcPath then
-                updateConfig(scp.uri)
+                m.updateConfig(scp.uri)
             end
         end
     end
@@ -97,7 +97,7 @@ filewatch.event(function (ev, path) ---@async
         for _, scp in ipairs(workspace.folders) do
             local rcPath     = workspace.getAbsolutePath(scp.uri, '.luarc.jsonc')
             if path == rcPath then
-                updateConfig(scp.uri)
+                m.updateConfig(scp.uri)
             end
         end
     end
@@ -109,7 +109,7 @@ m.register 'initialize' {
 
         if params.rootUri then
             workspace.initRoot(params.rootUri)
-            cap.resolve('ROOT_URI', furi.decode(params.rootUri):gsub('\\', '/') .. '/')
+            cap.resolve('ROOT_PATH', furi.decode(params.rootUri):gsub('\\', '/') .. '/')
         end
 
         if params.workspaceFolders then
@@ -134,9 +134,8 @@ m.register 'initialize' {
 m.register 'initialized'{
     ---@async
     function (params)
-        files.init()
         local _ <close> = progress.create(workspace.getFirstScope().uri, lang.script.WINDOW_INITIALIZING, 0.5)
-        updateConfig()
+        m.updateConfig()
         local registrations = {}
 
         if client.getAbility 'workspace.didChangeConfiguration.dynamicRegistration' then
@@ -177,7 +176,7 @@ m.register 'workspace/didChangeConfiguration' {
         if CONFIGPATH then
             return
         end
-        updateConfig()
+        m.updateConfig()
     end
 }
 
@@ -186,16 +185,21 @@ m.register 'workspace/didRenameFiles' {
         workspace = {
             fileOperations = {
                 didRename = {
-                    filters = {
-                        {
-                            pattern = {
-                                glob = '{ROOT_URI}**',
-                                options = {
-                                    ignoreCase = true,
-                                }
-                            },
-                        },
-                    },
+                    filters = function ()
+                        local filters = {}
+                        for i, scp in ipairs(workspace.folders) do
+                            local path = furi.decode(scp.uri):gsub('\\', '/')
+                            filters[i] = {
+                                pattern = {
+                                    glob = path .. '/**',
+                                    options = {
+                                        ignoreCase = true,
+                                    }
+                                },
+                            }
+                        end
+                        return filters
+                    end
                 },
             },
         },
@@ -246,7 +250,7 @@ m.register 'workspace/didChangeWorkspaceFolders' {
         log.debug('workspace/didChangeWorkspaceFolders', inspect(params))
         for _, folder in ipairs(params.event.added) do
             workspace.create(folder.uri)
-            updateConfig()
+            m.updateConfig()
             workspace.reload(scope.getScope(folder.uri))
         end
         for _, folder in ipairs(params.event.removed) do
@@ -256,6 +260,7 @@ m.register 'workspace/didChangeWorkspaceFolders' {
 }
 
 m.register 'textDocument/didOpen' {
+    ---@async
     function (params)
         local doc      = params.textDocument
         local scheme   = furi.split(doc.uri)
@@ -270,6 +275,8 @@ m.register 'textDocument/didOpen' {
             file.version = doc.version
         end)
         files.open(uri)
+        workspace.awaitReady(uri)
+        files.compileState(uri)
     end
 }
 
@@ -296,6 +303,7 @@ m.register 'textDocument/didChange' {
         end
         local changes = params.contentChanges
         local uri     = files.getRealUri(doc.uri)
+        workspace.awaitReady(uri)
         local text = files.getOriginText(uri)
         if not text then
             files.setText(uri, pub.awaitTask('loadFile', furi.decode(uri)), false)
@@ -792,7 +800,7 @@ m.register 'textDocument/signatureHelp' {
             infos[i] = {
                 label           = result.label,
                 parameters      = parameters,
-                activeParameter = result.index - 1,
+                activeParameter = math.max(0, result.index - 1),
                 documentation   = result.description and {
                     value = tostring(result.description),
                     kind  = 'markdown',
@@ -907,6 +915,53 @@ m.register 'textDocument/codeAction' {
         end
 
         return results
+    end
+}
+
+m.register 'textDocument/codeLens' {
+    capability = {
+        codeLensProvider = {
+            resolveProvider = true,
+        }
+    },
+    abortByFileUpdate = true,
+    ---@async
+    function (params)
+        local uri = files.getRealUri(params.textDocument.uri)
+        if not config.get(uri, 'Lua.codeLens.enable') then
+            return
+        end
+        workspace.awaitReady(uri)
+        local state = files.getState(uri)
+        if not state then
+            return nil
+        end
+        local core = require 'core.code-lens'
+        local results = core.codeLens(uri)
+        if not results then
+            return nil
+        end
+        local codeLens = {}
+        for _, result in ipairs(results) do
+            codeLens[#codeLens+1] = {
+                range = converter.packRange(state, result.position, result.position),
+                data  = {
+                    uri = uri,
+                    id   = result.id,
+                },
+            }
+        end
+        return codeLens
+    end
+}
+
+m.register 'codeLens/resolve' {
+    ---@async
+    function (codeLen)
+        local core = require 'core.code-lens'
+        local command = core.resolve(codeLen.data.uri, codeLen.data.id)
+        codeLen.command = command or converter.command('...', '', {})
+        return codeLen
     end
 }
 
@@ -1154,6 +1209,7 @@ m.register '$/status/click' {
             titleDiagnostic,
             DEVELOP and 'Restart Server' or nil,
             DEVELOP and 'Clear Node Cache' or nil,
+            DEVELOP and 'GC' or nil,
         })
         if not result then
             return
@@ -1170,6 +1226,9 @@ m.register '$/status/click' {
         elseif result == 'Clear Node Cache' then
             local vm = require 'vm'
             vm.clearNodeCache()
+            collectgarbage()
+            collectgarbage()
+        elseif result == 'GC' then
             collectgarbage()
             collectgarbage()
         end
@@ -1571,3 +1630,5 @@ files.watch(function (ev, uri)
         end
     end
 end)
+
+return m

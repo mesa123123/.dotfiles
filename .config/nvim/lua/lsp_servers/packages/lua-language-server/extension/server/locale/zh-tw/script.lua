@@ -279,6 +279,8 @@ PARSER_AMBIGUOUS_SYNTAX   = -- TODO: need translate!
 '在 Lua 5.1 中，函数调用的左括号必须与函数在同一行。'
 PARSER_NEED_PAREN         = -- TODO: need translate!
 '需要添加一对括号。'
+PARSER_NESTING_LONG_MARK  = -- TODO: need translate!
+'Nesting of `[[...]]` is not allowed in Lua 5.1 .'
 PARSER_LUADOC_MISS_CLASS_NAME           =
 '缺少類別名稱。'
 PARSER_LUADOC_MISS_EXTENDS_SYMBOL       =
@@ -447,6 +449,8 @@ COMMAND_JSON_TO_LUA_FAILED =
 'JSON 轉 Lua 失敗：{}'
 COMMAND_ADD_DICT           =
 '添加單字到字典裡'
+COMMAND_REFERENCE_COUNT    = -- TODO: need translate!
+'{} references'
 
 COMPLETION_IMPORT_FROM           =
 '從 {} 中匯入'
@@ -562,6 +566,8 @@ CONFIG_LOAD_ERROR                =
 '設定檔案載入錯誤：{}'
 CONFIG_TYPE_ERROR                =
 '設定檔案必須是lua或json格式：{}'
+CONFIG_MODIFY_FAIL_SYNTAX_ERROR  = -- TODO: need translate!
+'Failed to modify settings, there are syntax errors in the settings file: {}'
 
 PLUGIN_RUNTIME_ERROR             =
 [[

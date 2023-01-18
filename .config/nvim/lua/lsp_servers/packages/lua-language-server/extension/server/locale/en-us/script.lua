@@ -279,6 +279,8 @@ PARSER_AMBIGUOUS_SYNTAX   = -- TODO: need translate!
 'In Lua 5.1, the left brackets called by the function must be in the same line as the function.'
 PARSER_NEED_PAREN         = -- TODO: need translate!
 'Need to add a pair of parentheses.'
+PARSER_NESTING_LONG_MARK  =
+'Nesting of `[[...]]` is not allowed in Lua 5.1 .'
 PARSER_LUADOC_MISS_CLASS_NAME           =
 '<class name> expected.'
 PARSER_LUADOC_MISS_EXTENDS_SYMBOL       =
@@ -447,6 +449,8 @@ COMMAND_JSON_TO_LUA_FAILED =
 'Convert JSON to Lua failed: {}'
 COMMAND_ADD_DICT           =
 'Add Word to dictionary'
+COMMAND_REFERENCE_COUNT    =
+'{} references'
 
 COMPLETION_IMPORT_FROM           =
 'Import from {}'
@@ -562,6 +566,8 @@ CONFIG_LOAD_ERROR                =
 'Setting file loading error: {}'
 CONFIG_TYPE_ERROR                =
 'The setting file must be in lua or json format: {}'
+CONFIG_MODIFY_FAIL_SYNTAX_ERROR  =
+'Failed to modify settings, there are syntax errors in the settings file: {}'
 
 PLUGIN_RUNTIME_ERROR             =
 [[
