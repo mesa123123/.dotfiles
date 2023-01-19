@@ -43,15 +43,15 @@ fi
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
 
-
-# WSL Only Commands
-alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
-
 # --------
 # Fancy Commands
 # --------
+# WSLON Commands
 [[ $WSLON == "true" ]] && alias cmd="$CMD_HOME"
+[[ $WSLON == "true" ]] && alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
+[[ $WLSON == "true" ]] && alias jupyter-lab='jupyter-lab --no-browser'
 
+# CARGO Utilities
 # If batcat is installed use that instead of cat
 [[ "$(cargo install --list | grep "bat")" == *"bat"* ]] || [[ $(pacman -Qqe 2>/dev/null | grep -xc "bat") == 1 ]] && alias cat='bat'
 # If bottom is installed use that use that instead of top
