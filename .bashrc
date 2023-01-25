@@ -272,3 +272,5 @@ fi
 # ----------------
 # End Of bashrc
 # ----------------
+
+source /home/pbowman/.config/broot/launcher/bash/br
