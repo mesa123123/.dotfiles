@@ -39,25 +39,12 @@ local snipload_lua = require("luasnip.loaders.from_lua")
 local path = config.util.path
 local cmpsnip = require("cmp_luasnip")
 local telescope = require("telescope")
+
 --------------------------------
 -- Language Specific Settings and Helpers
 --------------------------------
 
--- Python Virtual Environments
-----------
-local venv_path = function()
-    local venv = (os.getenv("VIRTUAL_ENV"))
-    if venv == nil or venv == '' then
-        return os.execute("which python")
-    else
-        local output = {}
-        for match in string.gmatch(venv, "([^/]+)") do
-            table.insert(output, match)
-        end
-        return vim.fn.getcwd() .. string.format("%s/bin/python", output[#output])
-    end
-end
-----------
+-- Empty
 
 --------------------------------
 -- Utility Functions
@@ -612,33 +599,54 @@ hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend =
 -- Debug Adapter Protocol
 --------------------------------
 
+-- UI Load
+----------
+require('dapui').setup()
+
+
+-- Languages
+----------
+local python_path = get_python_path()
+require('dap-python').setup(python_path)
+
 -- Mappings
 ----------
-local keyopts = { silent = true, noremap = true }
--- Ui Commands
-keymap.set("n", "<leader>bge", "<cmd>lua require'dapui'.eval()<cr>", keyopts)
-keymap.set("n", "<leader>bge", "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", keyopts) -- bug gui exec
-keymap.set("n", "<leader>bgo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts) -- bug gui toggle
-keymap.set("n", "<leader>bgh", "<cmd>lua require'dap.ui.widgets'.hover()<cr>", keyopts)
-keymap.set("n", "<leader>bgs", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts)
+local keyopts = { silent = false, noremap = true }
 -- Session Commands
-keymap.set("n", "<leader>bs", "<cmd>lua require'dap'.session()<cr>", keyopts)
-keymap.set("n", "<leader>br", "<cmd>lua require'dap'.repl.toggle()<cr>", keyopts)
-keymap.set("n", "<leader>bx", "<cmd>lua require'dap'.disconnect()<cr>", keyopts) -- bug exit
-keymap.set("n", "<leader>bq", "<cmd>lua require'dap'.close()<cr>", keyopts)
-keymap.set("n", "<leader>bQ", "<cmd>lua require'dap'.terminate()<cr>", keyopts)
+keymap.set("n", "<leader>br", "<cmd>lua require('dap').continue()<cr>", keyopts) -- bug continue
+keymap.set("n", "<leader>bs", "<cmd>lua require('dap').session()<cr>", keyopts)
+keymap.set("n", "<leader>bt", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts)
+keymap.set("n", "<leader>bx", "<cmd>lua require('dap').disconnect()<cr>", keyopts) -- bug exit
+keymap.set("n", "<leader>bq", "<cmd>lua require('dap').close()<cr>", keyopts)
+keymap.set("n", "<leader>bQ", "<cmd>lua require('dap').terminate()<cr>", keyopts)
 -- Breakpoints (and pauses)
-keymap.set("n", "<leader>bB", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input '[Condition] > ')<cr>", keyopts) -- bug breakpoint
-keymap.set("n", "<leader>bb", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", keyopts)
-keymap.set("n", "<leader>bp", "<cmd>lua require'dap'.pause.toggle()<cr>", keyopts)
+keymap.set("n", "<leader>bB", "<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>", keyopts) -- bug breakpoint
+keymap.set("n", "<leader>bb", "<cmd>lua require('dap').toggle_breakpoint()<cr>", keyopts)
+keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts)
 -- Stepping commands
-keymap.set("n", "<leader>bh", "<cmd>lua require'dap'.run_to_cursor()<cr>", keyopts) -- run to here
-keymap.set("n", "<leader>bl", "<cmd>lua require'dap'.continue()<cr>", keyopts) -- bug continue
-keymap.set("n", "<leader>bh", "<cmd>lua require'dap'.step_back()<cr>", keyopts) -- bug previous
-keymap.set("n", "<leader>bj", "<cmd>lua require'dap'.step_into()<cr>", keyopts)
-keymap.set("n", "<leader>bk", "<cmd>lua require'dap'.step_over()<cr>", keyopts)
-keymap.set("n", "<leader>b", "<cmd>lua require'dap'.step_out()<cr>", keyopts)
+keymap.set("n", "<leader>bc", "<cmd>lua require('dap').run_to_cursor()<cr>", keyopts) -- run to here
+keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_back()<cr>", keyopts) -- bug previous
+keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_into()<cr>", keyopts)
+keymap.set("n", "<leader>bj", "<cmd>lua require('dap').step_over()<cr>", keyopts)
+keymap.set("n", "<leader>bo", "<cmd>lua require('dap').step_out()<cr>", keyopts)
 ----------
+
+-- UI Mappings
+----------
+keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval()<cr>", keyopts)
+keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", keyopts) -- bug gui exec
+keymap.set("n", "<leader>buo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts) -- bug gui toggle
+keymap.set("n", "<leader>buh", "<cmd>lua require'dap.ui.widgets'.hover()<cr>", keyopts)
+keymap.set("n", "<leader>bus", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts)--
+
+-- Telescope Integration
+----------
+-- telescope-dap loaded in init.lua
+keymap.set('n', '<leader>bf', '<cmd>lua require"telescope".extensions.dap.commands{}<CR>')
+keymap.set('n', '<leader>bfo', '<cmd>lua require"telescope".extensions.dap.configurations{}<CR>')
+keymap.set('n', '<leader>bfb', '<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>')
+keymap.set('n', '<leader>bfv', '<cmd>lua require"telescope".extensions.dap.variables{}<CR>')
+keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>')
 
 -------------------------------
 -- EOF

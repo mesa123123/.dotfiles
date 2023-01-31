@@ -124,6 +124,8 @@ require("packer").startup(function()
     -- Debug Adapter Protocol
     ----------
     use { 'mfussenegger/nvim-dap' }
+    use { 'mfussenegger/nvim-dap-python' }
+    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
     -- Testing Plugins
     ----------
     use 'nvim-lua/plenary.nvim'
@@ -174,7 +176,8 @@ require("packer").startup(function()
     -- Terminal Behaviour
     use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
     -- Nvim Telescope
-    use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false }, }
+    use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false } }
+    use { 'nvim-telescope/telescope-dap.nvim' }
     -- End of Plugins
 end)
 
@@ -682,8 +685,14 @@ require("telescope").setup {
                 i = { ["<c-d>"] = "delete_buffer" }
             }
         }
+    },
+    extensions = {
+
     }
 }
+-- Extensions
+----------
+require('telescope').load_extension('dap')
 ----------
 
 ---------------------------------
