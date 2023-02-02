@@ -1,10 +1,4 @@
 --------------------------------
--- ########################## --
--- # Lsp And Related Setups # --
--- ########################## --
---------------------------------
-
---------------------------------
 -- Luaisms for Vim Stuff
 --------------------------------
 
@@ -607,7 +601,7 @@ require('dapui').setup()
 -- Languages
 ----------
 local python_path = get_python_path()
-require('dap-python').setup(python_path)
+-- require('dap-python').setup(python_path)
 
 -- Mappings
 ----------
@@ -637,7 +631,7 @@ keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval()<cr>", keyopts)
 keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", keyopts) -- bug gui exec
 keymap.set("n", "<leader>buo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts) -- bug gui toggle
 keymap.set("n", "<leader>buh", "<cmd>lua require'dap.ui.widgets'.hover()<cr>", keyopts)
-keymap.set("n", "<leader>bus", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts)--
+keymap.set("n", "<leader>bus", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts) --
 
 -- Telescope Integration
 ----------
@@ -647,6 +641,27 @@ keymap.set('n', '<leader>bfo', '<cmd>lua require"telescope".extensions.dap.confi
 keymap.set('n', '<leader>bfb', '<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>')
 keymap.set('n', '<leader>bfv', '<cmd>lua require"telescope".extensions.dap.variables{}<CR>')
 keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>')
+
+-- Custom configs - Load per project .dap-cofig.lua
+----------
+
+local function load_dap_config()
+    local workspace_folder = vim.api.nvim_call_function("getcwd", {})
+    local config_file = io.open(workspace_folder .. "/.dap-config.lua", "r")
+
+    if config_file then
+        io.close(config_file)
+        local success, dap_config = pcall(dofile, workspace_folder .. "/.dap-config.lua")
+        if success then
+            print(dap_config)
+            dap.launch(dap_config())
+        else
+            print("Error loading .dap-config.lua: " .. dap_config)
+        end
+    end
+end
+
+load_dap_config()
 
 -------------------------------
 -- EOF
