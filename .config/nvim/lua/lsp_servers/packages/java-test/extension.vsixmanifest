@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
 		<Metadata>
-			<Identity Language="en-US" Id="vscode-java-test" Version="0.37.1" Publisher="vscjava" />
+			<Identity Language="en-US" Id="vscode-java-test" Version="0.38.1" Publisher="vscjava" />
 			<DisplayName>Test Runner for Java</DisplayName>
 			<Description xml:space="preserve">Run and debug JUnit or TestNG test cases.</Description>
 			<Tags>java,test,junit,testng,debug</Tags>
@@ -24,6 +24,8 @@
 				
 				
 				<Property Id="Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown" Value="true" />
+				<Property Id="Microsoft.VisualStudio.Services.Content.Pricing" Value="Free"/>
+
 				
 				
 			</Properties>

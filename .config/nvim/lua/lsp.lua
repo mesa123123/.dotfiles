@@ -374,9 +374,9 @@ require("mason").setup({
 -- Ensure Installs
 ----------
 install.setup({ automatic_installation = true,
-    ensure_installed = { 'sumneko_lua', 'pyright',
+    ensure_installed = { 'lua_ls', 'pyright',
         'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer', 'sqlls', 'csharp_ls' } }) -- This is running through Mason_lsp-config
+        'rust_analyzer'  } }) -- This is running through Mason_lsp-config
 ----------
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter' }
 --------------------------------
@@ -397,7 +397,7 @@ end
 
 -- Lua: Language Server
 ----------
-config.sumneko_lua.setup { on_attach = on_attach, capabilities = capabilities,
+config.lua_ls.setup { on_attach = on_attach, capabilities = capabilities,
     -- Config
     settings = {
         Lua = {
@@ -463,13 +463,6 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
         }
     }
 }
-}
-----------
-
--- C#
-----------
-config.csharp_ls.setup { on_attach = on_attach, capabilities = capabilities,
-    root_dir = config.util.root_pattern(".svn", ".git")
 }
 ----------
 

@@ -5,7 +5,7 @@
   "repository": {
     "url": "https://github.com/Microsoft/vscode-java-test"
   },
-  "version": "0.37.1",
+  "version": "0.38.1",
   "publisher": "vscjava",
   "bugs": {
     "url": "https://github.com/Microsoft/vscode-java-test/issues"
@@ -55,23 +55,23 @@
   "main": "./main.js",
   "contributes": {
     "javaExtensions": [
-      "./server/junit-jupiter-api_5.9.0.jar",
-      "./server/junit-jupiter-engine_5.9.0.jar",
-      "./server/junit-jupiter-migrationsupport_5.9.0.jar",
-      "./server/junit-jupiter-params_5.9.0.jar",
-      "./server/junit-platform-commons_1.9.0.jar",
-      "./server/junit-platform-engine_1.9.0.jar",
-      "./server/junit-platform-launcher_1.9.0.jar",
-      "./server/junit-platform-runner_1.9.0.jar",
-      "./server/junit-platform-suite-api_1.9.0.jar",
-      "./server/junit-platform-suite-commons_1.9.0.jar",
-      "./server/junit-platform-suite-engine_1.9.0.jar",
-      "./server/junit-vintage-engine_5.9.0.jar",
+      "./server/junit-jupiter-api_5.9.2.jar",
+      "./server/junit-jupiter-engine_5.9.2.jar",
+      "./server/junit-jupiter-migrationsupport_5.9.2.jar",
+      "./server/junit-jupiter-params_5.9.2.jar",
+      "./server/junit-platform-commons_1.9.2.jar",
+      "./server/junit-platform-engine_1.9.2.jar",
+      "./server/junit-platform-launcher_1.9.2.jar",
+      "./server/junit-platform-runner_1.9.2.jar",
+      "./server/junit-platform-suite-api_1.9.2.jar",
+      "./server/junit-platform-suite-commons_1.9.2.jar",
+      "./server/junit-platform-suite-engine_1.9.2.jar",
+      "./server/junit-vintage-engine_5.9.2.jar",
       "./server/org.apiguardian.api_1.1.2.jar",
       "./server/org.eclipse.jdt.junit4.runtime_1.3.0.v20220609-1843.jar",
-      "./server/org.eclipse.jdt.junit5.runtime_1.1.0.v20220715-1030.jar",
-      "./server/org.opentest4j_1.2.0.v20190826-0900.jar",
-      "./server/com.microsoft.java.test.plugin-0.37.1.jar"
+      "./server/org.eclipse.jdt.junit5.runtime_1.1.100.v20220907-0450.jar",
+      "./server/org.opentest4j_1.2.0.jar",
+      "./server/com.microsoft.java.test.plugin-0.38.1.jar"
     ],
     "viewsWelcome": [
       {
@@ -461,20 +461,20 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/glob": "^7.2.0",
-    "@types/lodash": "^4.14.182",
+    "@types/lodash": "^4.14.191",
     "@types/lru-cache": "^7.10.10",
     "@types/mocha": "^9.1.1",
-    "@types/node": "16.x",
-    "@types/sinon": "^10.0.12",
+    "@types/node": "^16.18.11",
+    "@types/sinon": "^10.0.13",
     "@types/vscode": "1.69.0",
-    "@vscode/test-electron": "^2.1.5",
+    "@vscode/test-electron": "^2.2.2",
     "glob": "^7.2.3",
     "mocha": "^9.2.2",
-    "sinon": "^11.1.2",
-    "ts-loader": "^9.3.1",
+    "sinon": "^14.0.2",
+    "ts-loader": "^9.4.2",
     "tslint": "^6.1.3",
-    "typescript": "^4.7.4",
-    "webpack": "^5.73.0",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
@@ -482,9 +482,9 @@
     "get-port": "^4.2.0",
     "iconv-lite": "^0.6.3",
     "lodash": "^4.17.21",
-    "lru-cache": "^7.13.1",
+    "lru-cache": "^7.14.1",
     "vscode-extension-telemetry-wrapper": "^0.13.2",
     "vscode-languageclient": "6.0.0-next.9",
-    "vscode-tas-client": "^0.1.47"
+    "vscode-tas-client": "^0.1.63"
   }
 }
