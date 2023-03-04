@@ -456,6 +456,21 @@ function lovr.graphics.newMaterial(properties) end
 ---
 ---Currently, OBJ, glTF, and binary STL files are supported.
 ---
+---
+---### NOTE:
+---Currently, the following features are not supported by the model importer:
+---
+---- glTF: Morph targets are not supported.
+---- glTF: Only the default scene is loaded.
+---- glTF: Currently, each skin in a Model can have up to 256 joints.
+---- glTF: Meshes can't appear multiple times in the node hierarchy with different skins, they need
+---  to use 1 skin consistently.
+---- glTF: `KHR_texture_transform` is supported, but all textures in a material will use the same
+---  transform.
+---- STL: ASCII STL files are not supported.
+---
+---Diffuse and emissive textures will be loaded using sRGB encoding, all other textures will be loaded as linear.
+---
 ---@overload fun(blob: lovr.Blob, options?: table):lovr.Model
 ---@overload fun(modelData: lovr.ModelData, options?: table):lovr.Model
 ---@param filename string # The path to model file.
@@ -940,7 +955,7 @@ function Font:getWidth(string) end
 ---
 ---Sets the line spacing of the Font.
 ---
----When spacing out lines, the height of the font is multiplied the line spacing to get the final spacing value.
+---When spacing out lines, the height of the font is multiplied by the line spacing to get the final spacing value.
 ---
 ---The default is 1.0.
 ---
@@ -948,7 +963,7 @@ function Font:getWidth(string) end
 function Font:setLineSpacing(spacing) end
 
 ---
----Returns the pixel density of the font.
+---Sets the pixel density of the font.
 ---
 ---The density is a "pixels per world unit" factor that controls how the pixels in the font's texture are mapped to units in the coordinate space.
 ---
@@ -1462,7 +1477,7 @@ local Pass = {}
 ---
 ---Similar to `Pass:copy`, except the source and destination sizes can be different.
 ---
----The pixels from the source texture will be scaled to the destination size.
+---The pixels from the source texture will be scaled to the destination size. This can only be called on a transfer pass, which can be created with `lovr.graphics.getPass`.
 ---
 ---
 ---### NOTE:
@@ -1531,6 +1546,8 @@ function Pass:circle(transform, style, angle1, angle2, segments) end
 ---
 ---Clears a Buffer or Texture.
 ---
+---This can only be called on a transfer pass, which can be created with `lovr.graphics.getPass`.
+---
 ---@overload fun(self: lovr.Pass, texture: lovr.Texture, color: lovr.Vec4, layer?: number, layers?: number, level?: number, levels?: number)
 ---@param buffer lovr.Buffer # The Buffer to clear.
 ---@param index? number # The index of the first item to clear.
@@ -1540,24 +1557,59 @@ function Pass:clear(buffer, index, count) end
 ---
 ---Runs a compute shader.
 ---
----Compute shaders are run in 3D grids of workgroups.
+---Before calling this, a compute shader needs to be active, using `Pass:setShader`.
 ---
----Each local workgroup is itself a 3D grid of invocations, declared using `local_size_x`, `local_size_y`, and `local_size_z` in the shader code.
+---This can only be called on a Pass with the `compute` type, which can be created using `lovr.graphics.getPass`.
 ---
 ---
 ---### NOTE:
----All these 3D grids can get confusing, but the basic idea is to make the local workgroup size a small block of e.g. 8x8 pixels or 4x4x4 voxels, and then dispatch however many global workgroups are needed to cover an image or voxel field.
+---Usually compute shaders are run many times in parallel: once for each pixel in an image, once per particle, once per object, etc.
 ---
----The reason to do it this way is that the GPU runs invocations in bundles called subgroups.
+---The 3 arguments represent how many times to run, or "dispatch", the compute shader, in up to 3 dimensions.
 ---
----Subgroups are usually 32 or 64 invocations (the exact size is given by the `subgroupSize` property of `lovr.graphics.getDevice`).
+---Each element of this grid is called a **workgroup**.
 ---
----If the local workgroup size was `1x1x1`, then the GPU would only run 1 invocation per subgroup and waste the other 31 or 63.
+---To make things even more complicated, each workgroup itself is made up of a set of "mini GPU threads", which are called **local workgroups**.
+---
+---Like workgroups, the local workgroup size can also be 3D.
+---
+---It's declared in the shader code, like this:
+---
+---    layout(local_size_x = w, local_size_y = h, local_size_z = d) in;
+---
+---All these 3D grids can get confusing, but the basic idea is to make the local workgroup size a small block of e.g. 32 particles or 8x8 pixels or 4x4x4 voxels, and then dispatch however many workgroups are needed to cover a list of particles, image, voxel field, etc.
+---
+---The reason to do it this way is that the GPU runs its threads in little fixed-size bundles called subgroups.
+---
+---Subgroups are usually 32 or 64 threads (the exact size is given by the `subgroupSize` property of `lovr.graphics.getDevice`) and all run together.
+---
+---If the local workgroup size was `1x1x1`, then the GPU would only run 1 thread per subgroup and waste the other 31 or 63.
+---
+---So for the best performance, be sure to set a local workgroup size bigger than 1!
+---
+---Inside the compute shader, a few builtin variables can be used to figure out which workgroup is running:
+---
+---- `uvec3 WorkgroupCount` is the workgroup count per axis (the `Pass:compute` arguments).
+---- `uvec3 WorkgroupSize` is the local workgroup size (declared in the shader).
+---- `uvec3 WorkgroupID` is the index of the current (global) workgroup.
+---- `uvec3 LocalThreadID` is the index of the local workgroup inside its workgroup.
+---- `uint LocalThreadIndex` is a 1D version of `LocalThreadID`.
+---- `uvec3 GlobalThreadID` is the unique identifier for a thread within all workgroups in a
+---  dispatch. It's equivalent to `WorkgroupID * WorkgroupSize + LocalThreadID` (usually what you
+---  want!)
+---
+---Indirect compute dispatches are useful to "chain" compute shaders together, while keeping all of the data on the GPU.
+---
+---The first dispatch can do some computation and write some results to buffers, then the second indirect dispatch can use the data in those buffers to know how many times it should run.
+---
+---An example would be a compute shader that does some sort of object culling, writing the number of visible objects to a buffer along with the IDs of each one. Subsequent compute shaders can be indirectly dispatched to perform extra processing on the visible objects.
+---
+---Finally, an indirect draw can be used to render them.
 ---
 ---@overload fun(self: lovr.Pass, buffer: lovr.Buffer, offset?: number)
----@param x? number # How many workgroups to dispatch in the x dimension.
----@param y? number # How many workgroups to dispatch in the y dimension.
----@param z? number # How many workgroups to dispatch in the z dimension.
+---@param x? number # The number of workgroups to dispatch in the x dimension.
+---@param y? number # The number of workgroups to dispatch in the y dimension.
+---@param z? number # The number of workgroups to dispatch in the z dimension.
 function Pass:compute(x, y, z) end
 
 ---
@@ -1574,7 +1626,7 @@ function Pass:cone(transform, segments) end
 ---
 ---Copies data to or between `Buffer` and `Texture` objects.
 ---
----This function must be called on a `transfer` pass.
+---This can only be called on a transfer pass, which can be created with `lovr.graphics.getPass`.
 ---
 ---@overload fun(self: lovr.Pass, blob: lovr.Blob, bufferdst: lovr.Buffer, srcoffset?: number, dstoffset?: number, size?: number)
 ---@overload fun(self: lovr.Pass, buffersrc: lovr.Buffer, bufferdst: lovr.Buffer, srcoffset?: number, dstoffset?: number, size?: number)
@@ -1699,6 +1751,7 @@ function Pass:getTarget() end
 ---
 ---The type restricts what kinds of functions can be called on the pass.
 ---
+---@return lovr.PassType type # The type of the Pass.
 function Pass:getType() end
 
 ---
@@ -1781,11 +1834,15 @@ function Pass:line(x1, y1, z1, x2, y2, z2, ...) end
 ---@param start? number # The 1-based index of the first vertex to render from the vertex buffer (or the first index, when using an index buffer).
 ---@param count? number # The number of vertices to render (or the number of indices, when using an index buffer). When `nil`, as many vertices or indices as possible will be drawn (based on the length of the Buffers and `start`).
 ---@param instances? number # The number of copies of the mesh to render.
----@param base? number # nil
+---@param base? number # A base offset to apply to vertex indices.
 function Pass:mesh(vertices, transform, start, count, instances, base) end
 
 ---
 ---Generates mipmaps for a texture.
+---
+---This can only be called on a transfer pass, which can be created with `lovr.graphics.getPass`.
+---
+---When rendering to textures with a render pass, it's also possible to automatically regenerate mipmaps after rendering by adding the `mipmaps` flag when creating the pass.
 ---
 ---@param texture lovr.Texture # The texture to mipmap.
 ---@param base? number # The index of the mipmap used to generate the remaining mipmaps.
@@ -1856,7 +1913,9 @@ function Pass:push(stack) end
 ---
 ---Creates a `Readback` object which asynchronously downloads data from a `Buffer`, `Texture`, or `Tally`.
 ---
----The readback can be polled for completion, or, after this transfer pass is completed, `Readback:wait` can be used to block until the download is complete.
+---The readback can be polled for completion, or, after this transfer pass is submitted, `Readback:wait` can be used to block until the download is complete.
+---
+---This can only be called on a transfer pass, which can be created with `lovr.graphics.getPass`.
 ---
 ---@overload fun(self: lovr.Pass, texture: lovr.Texture, x?: number, y?: number, layer?: number, level?: number, width?: number, height?: number):lovr.Readback
 ---@overload fun(self: lovr.Pass, tally: lovr.Tally, index: number, count: number):lovr.Readback
@@ -2043,6 +2102,7 @@ function Pass:setFont(font) end
 ---
 ---This will apply to most drawing, except for text, skyboxes, and models, which use their own materials.
 ---
+---@overload fun(self: lovr.Pass, texture: lovr.Texture)
 ---@overload fun(self: lovr.Pass)
 ---@param material lovr.Material # The material to use for drawing.
 function Pass:setMaterial(material) end
@@ -2064,19 +2124,17 @@ function Pass:setMeshMode(mode) end
 ---
 ---Alternatively, a projection matrix can be used for other types of projections like orthographic, oblique, etc.
 ---
----There is also a shorthand string "orthographic" that can be used to configure an orthographic projection.
----
 ---Up to 6 views are supported.
 ---
----When rendering to the headset, both projections are changed to match the ones used by the headset.
----
----This is also available by calling `lovr.headset.getViewAngles`.
+---The Pass returned by `lovr.headset.getPass` will have its views automatically configured to match the headset.
 ---
 ---
 ---### NOTE:
 ---A far clipping plane of 0.0 can be used for an infinite far plane with reversed Z range.
 ---
----This is the default.
+---This is the default because it improves depth precision and reduces Z fighting.
+---
+---Using a non-infinite far plane requires the depth buffer to be cleared to 1.0 instead of 0.0 and the default depth test to be changed to `lequal` instead of `gequal`.
 ---
 ---@overload fun(self: lovr.Pass, view: number, matrix: lovr.Mat4)
 ---@param view number # The index of the view to update.
@@ -2146,6 +2204,8 @@ function Pass:setScissor(x, y, w, h) end
 ---For textures, white pixels will be returned.
 ---
 ---Samplers will use `linear` filtering and the `repeat` wrap mode.
+---
+---Changing the shader will not clear push constants set in the `Constants` block.
 ---
 ---@overload fun(self: lovr.Pass, default: lovr.DefaultShader)
 ---@overload fun(self: lovr.Pass)
@@ -2286,15 +2346,33 @@ function Pass:skybox(skybox) end
 function Pass:sphere(transform, longitudes, latitudes) end
 
 ---
----TODO
+---Draws text.
+---
+---The font can be changed using `Pass:setFont`.
 ---
 ---
 ---### NOTE:
----TODO
+---UTF-8 encoded strings are supported.
 ---
----@overload fun(self: lovr.Pass, colortext: table, transform: lovr.transform, wrap?: number, halign?: lovr.HorizontalAlign, valign?: lovr.VerticalAlign)
+---Newlines will start a new line of text.
+---
+---Tabs will be rendered as four spaces.
+---
+---Carriage returns are ignored.
+---
+---With the default font pixel density, a scale of 1.0 makes the text height 1 meter.
+---
+---The wrap value does not take into account the text's scale.
+---
+---Text rendering requires a special shader, which will only be automatically used when the active shader is set to `nil`.
+---
+---Blending should be enabled when rendering text (it's on by default).
+---
+---This function can draw up to 16384 visible characters at a time, and will currently throw an error if the string is too long.
+---
+---@overload fun(self: lovr.Pass, colortext: table, transform: lovr.Mat4, wrap?: number, halign?: lovr.HorizontalAlign, valign?: lovr.VerticalAlign)
 ---@param text string # The text to render.
----@param transform lovr.transform # The transform of the text.
+---@param transform lovr.Mat4 # The transform of the text.  Can also be provided as position, 1-component scale, and rotation using a mix of `Vectors` or numbers.
 ---@param wrap? number # The maximum width of each line in meters (before scale is applied).  When zero, the text will not wrap.
 ---@param halign? lovr.HorizontalAlign # The horizontal alignment.
 ---@param valign? lovr.VerticalAlign # The vertical alignment.
@@ -2305,7 +2383,7 @@ function Pass:text(text, transform, wrap, halign, valign) end
 ---
 ---One of the slots in a `Tally` object will be used to hold the result. Commands on the Pass will continue being measured until `Pass:tock` is called with the same tally and slot combination.
 ---
----Afterwards, `Pass:read` can be used to read back the tally result, or the tally can be copied to a `Buffer.
+---Afterwards, `Pass:read` can be used to read back the tally result, or the tally can be copied to a `Buffer`.
 ---
 ---
 ---### NOTE:
@@ -2322,7 +2400,7 @@ function Pass:tick(tally, slot) end
 ---
 ---`Pass:tick` must be called to start the measurement before this can be called.
 ---
----Afterwards, `Pass:read` can be used to read back the tally result, or the tally can be copied to a `Buffer.
+---Afterwards, `Pass:read` can be used to read back the tally result, or the tally can be copied to a `Buffer`.
 ---
 ---@param tally lovr.Tally # The tally storing the measurement.
 ---@param slot number # The index of the slot in the tally storing the measurement.
@@ -2357,7 +2435,9 @@ function Pass:transform(transform) end
 function Pass:translate(translation) end
 
 ---
----TODO
+---Readbacks track the progress of an asynchronous read of a `Buffer`, `Texture`, or `Tally`.
+---
+---Once a Readback is created in a transfer pass, and the transfer pass is submitted, the Readback can be polled for completion or the CPU can wait for it to finish using `Readback:wait`.
 ---
 ---@class lovr.Readback
 local Readback = {}
@@ -2367,7 +2447,7 @@ local Readback = {}
 ---
 ---
 ---### NOTE:
----TODO what if it's an image?!
+---If the Readback is reading back a Texture, returns `nil`.
 ---
 ---@return lovr.Blob blob # The Blob.
 function Readback:getBlob() end
@@ -2377,9 +2457,15 @@ function Readback:getBlob() end
 ---
 ---
 ---### NOTE:
----TODO what if the readback is a buffer/texture?!
+---This currently returns `nil` for readbacks of `Buffer` and `Texture` objects.
 ---
----@return table data # A table containing the values that were read back.
+---Only readbacks of `Tally` objects return valid data.
+---
+---For `time` and `pixel` tallies, the table will have 1 number per slot that was read.
+---
+---For `shader` tallies, there will be 4 numbers for each slot.
+---
+---@return table data # A flat table of numbers containing the values that were read back.
 function Readback:getData() end
 
 ---
@@ -2387,7 +2473,7 @@ function Readback:getData() end
 ---
 ---
 ---### NOTE:
----TODO what if it's a buffer or tally?!
+---If the Readback is not reading back a Texture, returns `nil`.
 ---
 ---@return lovr.Image image # The Image.
 function Readback:getImage() end
@@ -2403,7 +2489,7 @@ function Readback:isComplete() end
 ---
 ---
 ---### NOTE:
----TODO what if the readback will never complete?!
+---If the transfer pass that created the readback has not been submitted yet, no wait will occur and this function will return `false`.
 ---
 ---@return boolean waited # Whether the CPU had to be blocked for waiting.
 function Readback:wait() end
@@ -2480,7 +2566,9 @@ function Sampler:getMipmapRange() end
 function Sampler:getWrap() end
 
 ---
----TODO
+---Shaders are small GPU programs.
+---
+---See the `Shaders` guide for a full introduction to Shaders.
 ---
 ---@class lovr.Shader
 local Shader = {}
@@ -2533,7 +2621,23 @@ function Shader:hasAttribute(name) end
 function Shader:hasStage(stage) end
 
 ---
----TODO
+---Tally objects are able to measure events on the GPU.
+---
+---Tallies can measure three types of things:
+---
+---- `time` - measures elapsed GPU time.
+---- `pixel` - measures how many pixels were rendered, which can be used for occlusion culling.
+---- `shader` - measure how many times shaders were run.
+---
+---Tally objects can be created with up to 4096 slots.
+---
+---Each slot can hold a single measurement value.
+---
+---`Pass:tick` is used to begin a measurement, storing the result in one of the slots.
+---
+---All commands recorded on the Pass will be measured until `Pass:tock` is called with the same tally and slot.
+---
+---The measurement value stored in the slots can be copied to a `Buffer` using `Pass:copy`, or they can be read back to Lua using `Pass:read`.
 ---
 ---@class lovr.Tally
 local Tally = {}
@@ -2671,14 +2775,69 @@ function Texture:isView() end
 ---- Rendering to a particular image or mipmap level of a texture.
 ---- Binding a particular image or mipmap level to a shader.
 ---
----@param parent lovr.Texture # The parent Texture to create the view of.
 ---@param type lovr.TextureType # The texture type of the view.
 ---@param layer? number # The index of the first layer in the view.
 ---@param layerCount? number # The number of layers in the view, or `nil` to use all remaining layers.
 ---@param mipmap? number # The index of the first mipmap in the view.
 ---@param mipmapCount? number # The number of mipmaps in the view, or `nil` to use all remaining mipmaps.
 ---@return lovr.Texture view # The new texture view.
-function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) end
+function Texture:newView(type, layer, layerCount, mipmap, mipmapCount) end
+
+---
+---Controls whether premultiplied alpha is enabled.
+---
+---
+---### NOTE:
+---The premultiplied mode should be used if pixels being drawn have already been blended, or "pre-multiplied", by the alpha channel.
+---
+---This happens when rendering to a texture that contains pixels with transparent alpha values, since the stored color values have already been faded by alpha and don't need to be faded a second time with the alphamultiply blend mode.
+---
+---@alias lovr.BlendAlphaMode
+---
+---Color channel values are multiplied by the alpha channel during blending.
+---
+---| "alphamultiply"
+---
+---Color channel values are not multiplied by the alpha.
+---
+---Instead, it's assumed that the colors have already been multiplied by the alpha.
+---
+---This should be used if the pixels being drawn have already been blended, or "pre-multiplied".
+---
+---| "premultiplied"
+
+---
+---Different ways pixels can blend with the pixels behind them.
+---
+---@alias lovr.BlendMode
+---
+---Colors will be mixed based on alpha.
+---
+---| "alpha"
+---
+---Colors will be added to the existing color, alpha will not be changed.
+---
+---| "add"
+---
+---Colors will be subtracted from the existing color, alpha will not be changed.
+---
+---| "subtract"
+---
+---All color channels will be multiplied together, producing a darkening effect.
+---
+---| "multiply"
+---
+---The maximum value of each color channel will be used.
+---
+---| "lighten"
+---
+---The minimum value of each color channel will be used.
+---
+---| "darken"
+---
+---The opposite of multiply: the pixel colors are inverted, multiplied, and inverted again, producing a lightening effect.
+---
+---| "screen"
 
 ---
 ---The different ways to pack Buffer fields into memory.
@@ -2695,7 +2854,7 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---
 ---Example:
 ---
----``` layout(std140) uniform ObjectScales { float scales[64]; }; ```
+---    layout(std140) uniform ObjectScales { float scales[64]; };
 ---
 ---The `std430` layout corresponds to the std430 layout used for storage buffers in GLSL.
 ---
@@ -2703,7 +2862,7 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---
 ---Example:
 ---
----``` layout(std430) buffer TileSizes { vec2 sizes[]; } ```
+---    layout(std430) buffer TileSizes { vec2 sizes[]; }
 ---
 ---@alias lovr.BufferLayout
 ---
@@ -2718,6 +2877,95 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---The std430 layout.
 ---
 ---| "std430"
+
+---
+---The method used to compare depth and stencil values when performing the depth and stencil tests. Also used for compare modes in `Sampler`s.
+---
+---
+---### NOTE:
+---This type can also be specified using mathematical notation, e.g. `=`, `>`, `<=`, etc. `notequal` can be provided as `~=` or `!=`.
+---
+---@alias lovr.CompareMode
+---
+---The test does not take place, and acts as though it always passes.
+---
+---| "none"
+---
+---The test passes if the values are equal.
+---
+---| "equal"
+---
+---The test passes if the values are not equal.
+---
+---| "notequal"
+---
+---The test passes if the value is less than the existing one.
+---
+---| "less"
+---
+---The test passes if the value is less than or equal to the existing one.
+---
+---| "lequal"
+---
+---The test passes if the value is greater than the existing one.
+---
+---| "greater"
+---
+---The test passes if the value is greater than or equal to the existing one.
+---
+---| "gequal"
+
+---
+---The different ways of doing triangle backface culling.
+---
+---@alias lovr.CullMode
+---
+---Both sides of triangles will be drawn.
+---
+---| "none"
+---
+---Skips rendering the back side of triangles.
+---
+---| "back"
+---
+---Skips rendering the front side of triangles.
+---
+---| "front"
+
+---
+---The set of shaders built in to LÖVR.
+---
+---These can be passed to `Pass:setShader` or `lovr.graphics.newShader` instead of writing GLSL code.
+---
+---The shaders can be further customized by using the `flags` option to change their behavior.
+---
+---If the active shader is set to `nil`, LÖVR picks one of these shaders to use.
+---
+---@alias lovr.DefaultShader
+---
+---Basic shader without lighting that uses colors and a texture.
+---
+---| "unlit"
+---
+---Shades triangles based on their normal, resulting in a cool rainbow effect.
+---
+---| "normal"
+---
+---Renders font glyphs.
+---
+---| "font"
+---
+---Renders cubemaps.
+---
+---| "cubemap"
+---
+---Renders spherical textures.
+---
+---| "equirect"
+---
+---Renders a fullscreen triangle.
+---
+---| "fill"
 
 ---
 ---Whether a shape should be drawn filled or outlined.
@@ -2930,6 +3178,14 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---A 4x4 matrix containing sixteen 32-bit floats.
 ---
 ---| "mat4"
+---
+---Like u16, but 1-indexed.
+---
+---| "index16"
+---
+---Like u32, but 1-indexed.
+---
+---| "index32"
 
 ---
 ---Controls how `Sampler` objects smooth pixels in textures.
@@ -3076,6 +3332,43 @@ function Texture:newView(parent, type, layer, layerCount, mipmap, mipmapCount) e
 ---Notably this does not include camera poses/projections or shader variables changed with `Pass:send`.
 ---
 ---| "state"
+
+---
+---Different ways of updating the stencil buffer with `Pass:setStencilWrite`.
+---
+---@alias lovr.StencilAction
+---
+---Stencil buffer pixels will not be changed by draws.
+---
+---| "keep"
+---
+---Stencil buffer pixels will be set to zero.
+---
+---| "zero"
+---
+---Stencil buffer pixels will be replaced with a custom value.
+---
+---| "replace"
+---
+---Stencil buffer pixels will be incremented each time they're rendered to.
+---
+---| "increment"
+---
+---Stencil buffer pixels will be decremented each time they're rendered to.
+---
+---| "decrement"
+---
+---Similar to increment, but will wrap around to 0 when it exceeds 255.
+---
+---| "incrementwrap"
+---
+---Similar to decrement, but will wrap around to 255 when it goes below 0.
+---
+---| "decrementwrap"
+---
+---The bits in the stencil buffer pixels will be inverted.
+---
+---| "invert"
 
 ---
 ---These are the different metrics a `Tally` can measure.

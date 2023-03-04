@@ -81,6 +81,7 @@ local function checkOperators(operators, op, value, result)
             result = vm.createNode()
         end
         result:merge(vm.compileNode(operator.extends))
+        break
         ::CONTINUE::
     end
     return result
@@ -273,7 +274,7 @@ vm.binarySwitch = util.switch()
                         or op == '//' and a // b
                         or op == '^'  and a ^  b
             vm.setNode(source, {
-                type   = math.type(result) == 'integer' and 'integer' or 'number',
+                type   = (op == '//' or math.type(result) == 'integer') and 'integer' or 'number',
                 start  = source.start,
                 finish = source.finish,
                 parent = source,
@@ -288,7 +289,6 @@ vm.binarySwitch = util.switch()
             if op == '+'
             or op == '-'
             or op == '*'
-            or op == '//'
             or op == '%' then
                 local uri = guide.getUri(source)
                 local infer1 = vm.getInfer(source[1])
@@ -301,6 +301,10 @@ vm.binarySwitch = util.switch()
                         return
                     end
                 end
+            end
+            if op == '//' then
+                vm.setNode(source, node or vm.declareGlobal('type', 'integer'))
+                return
             end
             vm.setNode(source, node or vm.declareGlobal('type', 'number'))
         end

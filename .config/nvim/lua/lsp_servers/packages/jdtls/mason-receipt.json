@@ -1,1 +1,1 @@
-{"schema_version":"1.0","metrics":{"completion_time":1666131887182,"start_time":1666131858994},"primary_source":{"tag":"v1.16.0","type":"github_tag","repo":"eclipse\/eclipse.jdt.ls"},"name":"jdtls","links":{"bin":{"jdtls":"bin\/jdtls"}},"secondary_sources":[]}
+{"secondary_sources":[],"schema_version":"1.0","primary_source":{"type":"github_tag","repo":"eclipse\/eclipse.jdt.ls","tag":"v1.19.0"},"links":{"bin":{"jdtls":"bin\/jdtls"}},"metrics":{"start_time":1674090212709,"completion_time":1674090221810},"name":"jdtls"}

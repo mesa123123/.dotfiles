@@ -1,5 +1,5 @@
 ---#if not JIT then DISABLE() end
----@meta
+---@meta jit
 
 ---@version JIT
 ---@class jitlib
@@ -9,17 +9,17 @@
 ---@field arch        string
 jit = {}
 
----@overload fun()
+---@overload fun(...):...
 ---@param func       function|boolean
 ---@param recursive? boolean
 function jit.on(func, recursive) end
 
----@overload fun()
+---@overload fun(...):...
 ---@param func       function|boolean
 ---@param recursive? boolean
 function jit.off(func, recursive) end
 
----@overload fun()
+---@overload fun(...):...
 ---@overload fun(tr: number)
 ---@param func       function|boolean
 ---@param recursive? boolean

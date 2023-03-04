@@ -19,15 +19,18 @@ alias edittmux="vim ~/.tmux.conf"
 
 # Package Management
 [[ $(cat /proc/version | grep -c "UBUNTU") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
+[[ $(cat /proc/version | grep -c "microsoft") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
 [[ $(cat /proc/version | grep -c "MANJARO") == 1 ]] && alias uur='sudo pacman -Syu && yay -Syu && sudo pacman -R $(pacman -Qdtq) && yay -R $(yay -Qdtq) && yay -Scc' && alias spacman='sudo pacman' 
 #  Programmes etc.
 alias gnpm='npm -g'
 alias pip='pip3'
 alias spip='sudo pip3'
-alias prpy='pipenv run python'
 alias dotsync='~/.dotfiles/dfsync.sh -m begin -r no'
+alias comppose='docker-compose'
+# Hardware Application Commands
+alias bluetooth="blueman-manager"
 #Fiddily Vim Stuff
-if [[ $(pacman -Qqe neovim 2>/dev/null | grep -c "neovim") == 1 ]]; then
+if [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") ]]; then
     alias vim='nvim'
     alias svim='sudo nvim'
     alias oldvim='\vim'
@@ -40,20 +43,15 @@ fi
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
 
-# Application Commands
-alias bluetooth="blueman-manager"
-
-# Chromium Stuff
-[[ $(pacman -Qqe chromium-browser 2>/dev/null | grep -c "chromium-browser") == 1 ]] && alias chrome='chromium-browser'|| alias chrome='chromium'
-
-# WSL Only Commands
-alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
-
 # --------
 # Fancy Commands
 # --------
+# WSLON Commands
 [[ $WSLON == "true" ]] && alias cmd="$CMD_HOME"
+[[ $WSLON == "true" ]] && alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
+[[ $WLSON == "true" ]] && alias jupyter-lab='jupyter-lab --no-browser'
 
+# CARGO Utilities
 # If batcat is installed use that instead of cat
 [[ "$(cargo install --list | grep "bat")" == *"bat"* ]] || [[ $(pacman -Qqe 2>/dev/null | grep -xc "bat") == 1 ]] && alias cat='bat'
 # If bottom is installed use that use that instead of top
@@ -66,10 +64,6 @@ alias wsl_desktop='dbus-launch --exit-with-session ~/.xsession'
 [[ "$(cargo install --list | grep "broot")" == *"broot"* ]] && alias broot='broot' && alias tree='broot'
 # If git-delta is installed, use that for diff
 [[ $(cargo install --list | grep -c "git-delta") == 1 ]] && alias diff="delta"
-# If Gping is about use that instead of ping
-[[ "$(pacman -Qqe | grep "gping")" == *"gping"* ]] && alias ping='gping'
-# If rip grep is installed use that for grep
-[[ $(pacman -Qqe | grep -c "ripgrep") == 1 ]] && alias grep='rg'
 # Certain Terminals get fiddily with TERM settings so this gets around it for kitty at least
 [[ "${TERM}" == *"kitty"* ]] && alias ssh="kitty +kitten ssh"
 

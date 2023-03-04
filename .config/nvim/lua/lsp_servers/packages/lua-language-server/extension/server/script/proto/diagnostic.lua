@@ -173,7 +173,6 @@ m.register {
 
 m.register {
     'duplicate-index',
-    'duplicate-set-field',
 } {
     group    = 'duplicate',
     severity = 'Warning',
@@ -181,9 +180,18 @@ m.register {
 }
 
 m.register {
+    'duplicate-set-field',
+} {
+    group    = 'duplicate',
+    severity = 'Warning',
+    status   = 'Opened',
+}
+
+m.register {
     'close-non-object',
     'deprecated',
     'discard-returns',
+    'invisible',
 } {
     group    = 'strict',
     severity = 'Warning',

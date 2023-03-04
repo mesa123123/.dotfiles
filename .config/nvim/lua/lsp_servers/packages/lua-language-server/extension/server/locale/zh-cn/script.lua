@@ -144,6 +144,12 @@ DIAG_UNKNOWN_OPERATOR                 =
 '未知的运算符 `{}`。'
 DIAG_UNREACHABLE_CODE                 =
 '不可达的代码。'
+DIAG_INVISIBLE_PRIVATE                =
+'字段 `{field}` 是私有的，只能在 `{class}` 类中才能访问。'
+DIAG_INVISIBLE_PROTECTED              =
+'字段 `{field}` 受到保护，只能在 `{class}` 类极其子类中才能访问。'
+DIAG_INVISIBLE_PACKAGE                =
+'字段 `{field}` 只能在相同的文件 `{uri}` 中才能访问。'
 
 MWS_NOT_SUPPORT         =
 '{} 目前还不支持多工作目录，我可能需要重启才能支持新的工作目录...'
@@ -273,6 +279,8 @@ PARSER_AMBIGUOUS_SYNTAX   =
 '在 Lua 5.1 中，函数调用的左括号必须与函数在同一行。'
 PARSER_NEED_PAREN         =
 '需要添加一对括号。'
+PARSER_NESTING_LONG_MARK  =
+'Lua 5.1 中不允许使用嵌套的 `[[...]]` 。'
 PARSER_LUADOC_MISS_CLASS_NAME           =
 '缺少类名称。'
 PARSER_LUADOC_MISS_EXTENDS_SYMBOL       =
@@ -441,6 +449,8 @@ COMMAND_JSON_TO_LUA_FAILED =
 'JSON 转 Lua 失败：{}'
 COMMAND_ADD_DICT           = -- TODO: need translate!
 'Add Word to dictionary'
+COMMAND_REFERENCE_COUNT    =
+'{} 个引用'
 
 COMPLETION_IMPORT_FROM           =
 '从 {} 中导入'
@@ -541,6 +551,14 @@ WINDOW_ASK_APPLY_LIBRARY         =
 '是否需要将你的工作环境配置为 `{}` ？'
 WINDOW_SEARCHING_IN_FILES        =
 '正在文件中搜索...'
+WINDOW_CONFIG_LUA_DEPRECATED     =
+'`config.lua` 已废弃，请改用 `config.json` 。'
+WINDOW_CONVERT_CONFIG_LUA        =
+'转换为 `config.json`'
+WINDOW_MODIFY_REQUIRE_PATH      =
+'你想要修改 `require` 的路径吗？'
+WINDOW_MODIFY_REQUIRE_OK        =
+'修改'
 
 CONFIG_LOAD_FAILED               =
 '无法读取设置文件：{}'
@@ -548,6 +566,8 @@ CONFIG_LOAD_ERROR                =
 '设置文件加载错误：{}'
 CONFIG_TYPE_ERROR                =
 '设置文件必须是lua或json格式：{}'
+CONFIG_MODIFY_FAIL_SYNTAX_ERROR  =
+'修改设置失败，设置文件中有语法错误：{}'
 
 PLUGIN_RUNTIME_ERROR             =
 [[
@@ -582,6 +602,41 @@ CLI_CHECK_SUCCESS =
 '诊断完成，没有发现问题'
 CLI_CHECK_RESULTS =
 '诊断完成，共有 {} 个问题，请查看 {}'
+
+TYPE_ERROR_ENUM_GLOBAL_DISMATCH =
+'类型 `{child}` 无法匹配 `{parent}` 的枚举类型'
+TYPE_ERROR_ENUM_GENERIC_UNSUPPORTED =
+'无法在枚举中使用泛型 `{child}`'
+TYPE_ERROR_ENUM_LITERAL_DISMATCH =
+'字面量 `{child}` 无法匹配 `{parent}` 的枚举值'
+TYPE_ERROR_ENUM_OBJECT_DISMATCH =
+'对象 `{child}` 无法匹配 `{parent}` 的枚举值，它们必须是同一个对象'
+TYPE_ERROR_ENUM_NO_OBJECT =
+'无法识别传入的枚举值 `{child}`'
+TYPE_ERROR_INTEGER_DISMATCH =
+'字面量 `{child}` 无法匹配整数 `{parent}`'
+TYPE_ERROR_STRING_DISMATCH =
+'字面量 `{child}` 无法匹配字符串 `{parent}`'
+TYPE_ERROR_BOOLEAN_DISMATCH =
+'字面量 `{child}` 无法匹配布尔值 `{parent}`'
+TYPE_ERROR_TABLE_NO_FIELD =
+'表中不存在字段 `{key}`'
+TYPE_ERROR_TABLE_FIELD_DISMATCH =
+'字段 `{key}` 的类型为 `{child}`，无法匹配 `{parent}`'
+TYPE_ERROR_CHILD_ALL_DISMATCH =
+'`{child}` 中的所有子类型均无法匹配 `{parent}`'
+TYPE_ERROR_PARENT_ALL_DISMATCH =
+'`{child}` 无法匹配 `{parent}` 中的任何子类'
+TYPE_ERROR_UNION_DISMATCH =
+'`{child}` 无法匹配 `{parent}`'
+TYPE_ERROR_OPTIONAL_DISMATCH =
+'可选类型无法匹配 `{parent}`'
+TYPE_ERROR_NUMBER_LITERAL_TO_INTEGER =
+'无法将数字 `{child}` 转换为整数'
+TYPE_ERROR_NUMBER_TYPE_TO_INTEGER =
+'无法将数字类型转换为整数类型'
+TYPE_ERROR_DISMATCH =
+'类型 `{child}` 无法匹配 `{parent}`'
 
 LUADOC_DESC_CLASS = -- TODO: need translate!
 [=[
@@ -680,6 +735,20 @@ function find(path, pattern) end
 ---@param style font-style Style to apply
 function setFontStyle(style) end
 ```
+
+### Literal Enum
+```
+local enums = {
+    READ = 0,
+    WRITE = 1,
+    CLOSED = 2
+}
+
+---@alias FileStates
+---| `enums.READ`
+---| `enums.WRITE`
+---| `enums.CLOSE`
+```
 ---
 [View Wiki](https://github.com/sumneko/lua-language-server/wiki/Annotations#alias)
 ]=]
@@ -749,7 +818,8 @@ function getTags(item) end
 LUADOC_DESC_FIELD = -- TODO: need translate!
 [=[
 Declare a field in a class/table. This allows you to provide more in-depth
-documentation for a table.
+documentation for a table. As of `v3.6.0`, you can mark a field as `private`,
+`protected`, `public`, or `package`.
 
 ## Syntax
 `---@field <name> <type> [description]`
@@ -1083,5 +1153,78 @@ local function setColor(color) end
 
 -- Completion and hover is provided for the below param
 setColor(colors.green)
+```
+]=]
+LUADOC_DESC_PACKAGE = -- TODO: need translate!
+[=[
+Mark a function as private to the file it is defined in. A packaged function
+cannot be accessed from another file.
+
+## Syntax
+`@package`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@package
+---This cannot be accessed in another file
+function Animal:eyesCount()
+    return self.eyes
+end
+```
+]=]
+LUADOC_DESC_PRIVATE = -- TODO: need translate!
+[=[
+Mark a function as private to a @class. Private functions can be accessed only
+from within their class and are not accessable from child classes.
+
+## Syntax
+`@private`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@private
+function Animal:eyesCount()
+    return self.eyes
+end
+
+---@class Dog:Animal
+local myDog = {}
+
+---NOT PERMITTED!
+myDog:eyesCount();
+```
+]=]
+LUADOC_DESC_PROTECTED = -- TODO: need translate!
+[=[
+Mark a function as protected within a @class. Protected functions can be
+accessed only from within their class or from child classes.
+
+## Syntax
+`@protected`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@protected
+function Animal:eyesCount()
+    return self.eyes
+end
+
+---@class Dog:Animal
+local myDog = {}
+
+---Permitted because function is protected, not private.
+myDog:eyesCount();
 ```
 ]=]

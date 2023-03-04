@@ -5,10 +5,12 @@ local guide    = require 'parser.guide'
 local vm       = require 'vm.vm'
 
 ---@class vm.infer
+---@field node vm.node
 ---@field views table<string, boolean>
----@field cachedView? string
----@field node? vm.node
 ---@field _drop table
+---@field _lastView? string
+---@field _lastViewUri? uri
+---@field _lastViewDefault? any
 local mt = {}
 mt.__index = mt
 mt._hasTable       = false
@@ -34,7 +36,7 @@ local inferSorted = {
     ['nil']      = 100,
 }
 
-local viewNodeSwitch = util.switch()
+local viewNodeSwitch;viewNodeSwitch = util.switch()
     : case 'nil'
     : case 'boolean'
     : case 'string'
@@ -60,7 +62,7 @@ local viewNodeSwitch = util.switch()
     : case 'function'
     : call(function (source, infer)
         local parent = source.parent
-        if guide.isSet(parent) then
+        if guide.isAssign(parent) then
             infer._hasFunctionDef = true
         end
         return source.type
@@ -82,6 +84,14 @@ local viewNodeSwitch = util.switch()
             return source.name
         end
     end)
+    : case 'doc.type'
+    : call(function (source, infer, uri)
+        local buf = {}
+        for _, tp in ipairs(source.types) do
+            buf[#buf+1] = viewNodeSwitch(tp.type, tp, infer, uri)
+        end
+        return table.concat(buf, '|')
+    end)
     : case 'doc.type.name'
     : call(function (source, infer, uri)
         if source.signs then
@@ -99,8 +109,16 @@ local viewNodeSwitch = util.switch()
         return vm.getInfer(source.proto):view(uri)
     end)
     : case 'doc.generic.name'
-    : call(function (source, infer)
-        return ('<%s>'):format(source[1])
+    : call(function (source, infer, uri)
+        local resolved = vm.getGenericResolved(source)
+        if resolved then
+            return vm.getInfer(resolved):view(uri)
+        end
+        if source.generic and source.generic.extends then
+            return ('<%s:%s>'):format(source[1], vm.getInfer(source.generic.extends):view(uri))
+        else
+            return ('<%s>'):format(source[1])
+        end
     end)
     : case 'doc.type.array'
     : call(function (source, infer, uri)
@@ -118,11 +136,13 @@ local viewNodeSwitch = util.switch()
         for i, sign in ipairs(source.signs) do
             buf[i] = vm.getInfer(sign):view(uri)
         end
-        if infer._drop then
-            local node = vm.compileNode(source)
-            for c in node:eachObject() do
-                if guide.isLiteral(c) then
-                    infer._drop[c] = true
+        local node = vm.compileNode(source)
+        for c in node:eachObject() do
+            if guide.isLiteral(c) then
+                ---@cast c parser.object
+                local view = vm.getInfer(c):view(uri)
+                if view then
+                    infer._drop[view] = true
                 end
             end
         end
@@ -131,10 +151,6 @@ local viewNodeSwitch = util.switch()
     : case 'doc.type.table'
     : call(function (source, infer, uri)
         if #source.fields == 0 then
-            infer._hasTable = true
-            return
-        end
-        if infer._drop and infer._drop[source] then
             infer._hasTable = true
             return
         end
@@ -218,11 +234,15 @@ local viewNodeSwitch = util.switch()
         end
         return ('fun(%s)%s'):format(argView, regView)
     end)
+    : case 'doc.field.name'
+    : call(function (source, infer, uri)
+        return vm.viewKey(source, uri)
+    end)
 
 ---@class vm.node
 ---@field lastInfer? vm.infer
 
----@param source vm.object | vm.node
+---@param source vm.node.object | vm.node
 ---@return vm.infer
 function vm.getInfer(source)
     ---@type vm.node
@@ -271,9 +291,14 @@ function mt:_trim()
 end
 
 ---@param uri uri
----@return table<string, true>
 function mt:_eraseAlias(uri)
-    local drop = {}
+    local count = 0
+    for _ in pairs(self.views) do
+        count = count + 1
+    end
+    if count <= 1 then
+        return
+    end
     local expandAlias = config.get(uri, 'Lua.hover.expandAlias')
     for n in self.node:eachObject() do
         if n.type == 'global' and n.cate == 'type' then
@@ -284,8 +309,10 @@ function mt:_eraseAlias(uri)
             for _, set in ipairs(n:getSets(uri)) do
                 if set.type == 'doc.alias' then
                     if expandAlias then
-                        drop[n.name] = true
-                        local newInfer = {}
+                        self._drop[n.name] = true
+                        local newInfer = setmetatable({
+                            _drop = {},
+                        }, mt)
                         for _, ext in ipairs(set.extends.types) do
                             viewNodeSwitch(ext.type, ext, newInfer, uri)
                         end
@@ -296,7 +323,7 @@ function mt:_eraseAlias(uri)
                         for _, ext in ipairs(set.extends.types) do
                             local view = viewNodeSwitch(ext.type, ext, {}, uri)
                             if view and view ~= n.name then
-                                drop[view] = true
+                                self._drop[view] = true
                             end
                         end
                     end
@@ -306,7 +333,6 @@ function mt:_eraseAlias(uri)
             ::CONTINUE::
         end
     end
-    return drop
 end
 
 ---@param uri uri
@@ -367,20 +393,28 @@ end
 ---@param default? string
 ---@return string
 function mt:view(uri, default)
+    if  self._lastView
+    and self._lastViewUri == uri
+    and self._lastViewDefault == default then
+        return self._lastView
+    end
+    self._lastViewUri = uri
+    self._lastViewDefault = default
+
     self:_computeViews(uri)
 
     if self.views['any'] then
+        self._lastView = 'any'
         return 'any'
     end
 
-    local drop
     if self._hasClass then
-        drop = self:_eraseAlias(uri)
+        self:_eraseAlias(uri)
     end
 
     local array = {}
     for view in pairs(self.views) do
-        if not drop or not drop[view] then
+        if not self._drop[view] then
             array[#array+1] = view
         end
     end
@@ -412,13 +446,22 @@ function mt:view(uri, default)
     end
 
     if self.node:isOptional() then
-        if max > 1 then
-            view = '(' .. view .. ')?'
+        if #array == 0 then
+            view = 'nil'
         else
-            view = view .. '?'
+            if max > 1 then
+                view = '(' .. view .. ')?'
+            else
+                view = view .. '?'
+            end
         end
     end
 
+    if #view > 200 then
+        view = view:sub(1, 180) .. '...(too long)...' .. view:sub(-10)
+    end
+
+    self._lastView = view
     return view
 end
 
@@ -426,23 +469,6 @@ end
 function mt:eachView(uri)
     self:_computeViews(uri)
     return next, self.views
-end
-
----@param other vm.infer
----@return vm.infer
-function mt:merge(other)
-    if self == vm.NULL then
-        return other
-    end
-    if other == vm.NULL then
-        return self
-    end
-
-    local infer = setmetatable({
-        node  = vm.createNode(self.node, other.node),
-    }, mt)
-
-    return infer
 end
 
 ---@return string?
@@ -505,5 +531,58 @@ end
 ---@param uri uri
 ---@return string?
 function vm.viewObject(source, uri)
-    return viewNodeSwitch(source.type, source, {}, uri)
+    local infer = setmetatable({
+        _drop = {},
+    }, mt)
+    return viewNodeSwitch(source.type, source, infer, uri)
+end
+
+---@param source parser.object
+---@param uri uri
+---@return string?
+---@return string|number|boolean|nil
+function vm.viewKey(source, uri)
+    if source.type == 'doc.type' then
+        if #source.types == 1 then
+            return vm.viewKey(source.types[1], uri)
+        else
+            local key = vm.getInfer(source):view(uri)
+            return '[' .. key .. ']'
+        end
+    end
+    if source.type == 'tableindex' then
+        local index = source.index
+        local name = vm.getKeyName(index)
+        if not name then
+            return nil
+        end
+        local key
+        if index.type == 'string' then
+            key = util.viewString(name, index[2])
+        else
+            key = util.viewLiteral(name)
+        end
+        return ('[%s]'):format(key), name
+    end
+    if source.type == 'tableexp' then
+        return ('[%d]'):format(source.tindex), source.tindex
+    end
+    if source.type == 'doc.field' then
+        return vm.viewKey(source.field, uri)
+    end
+    if source.type == 'doc.type.field' then
+        return vm.viewKey(source.name, uri)
+    end
+    if source.type == 'doc.type.name' then
+        return '[' .. source[1] .. ']'
+    end
+    local key = vm.getKeyName(source)
+    if key == nil then
+        return nil
+    end
+    if type(key) == 'string' then
+        return key, key
+    else
+        return ('[%s]'):format(key), key
+    end
 end

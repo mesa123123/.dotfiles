@@ -139,11 +139,17 @@ DIAG_REDUNDANT_RETURN_VALUE_RANGE     = -- TODO: need translate!
 DIAG_MISSING_RETURN                   = -- TODO: need translate!
 'Return value is required here.'
 DIAG_RETURN_TYPE_MISMATCH             = -- TODO: need translate!
-'The type of the {index} return value is `{def}`, but the actual return is `{ref}`.'
+'The type of the {index} return value is `{def}`, but the actual return is `{ref}`.\n{err}'
 DIAG_UNKNOWN_OPERATOR                 = -- TODO: need translate!
 'Unknown operator `{}`.'
 DIAG_UNREACHABLE_CODE                 = -- TODO: need translate!
 'Unreachable code.'
+DIAG_INVISIBLE_PRIVATE                = -- TODO: need translate!
+'Field `{field}` is private, it can only be accessed in class `{class}`.'
+DIAG_INVISIBLE_PROTECTED              = -- TODO: need translate!
+'Field `{field}` is protected, it can only be accessed in class `{class}` and its subclasses.'
+DIAG_INVISIBLE_PACKAGE                = -- TODO: need translate!
+'Field `{field}` can only be accessed in same file `{uri}`.'
 
 MWS_NOT_SUPPORT         =
 '{} não é suportado múltiplos espaços de trabalho por enquanto, posso precisar reiniciar para estabelecer um novo espaço de trabalho ...'
@@ -273,6 +279,8 @@ PARSER_AMBIGUOUS_SYNTAX   = -- TODO: need translate!
 'In Lua 5.1, the left brackets called by the function must be in the same line as the function.'
 PARSER_NEED_PAREN         = -- TODO: need translate!
 '需要添加一对括号。'
+PARSER_NESTING_LONG_MARK  = -- TODO: need translate!
+'Nesting of `[[...]]` is not allowed in Lua 5.1 .'
 PARSER_LUADOC_MISS_CLASS_NAME           =
 'Esperado <class name>.'
 PARSER_LUADOC_MISS_EXTENDS_SYMBOL       =
@@ -441,6 +449,8 @@ COMMAND_JSON_TO_LUA_FAILED =
 'Converção de JSON para Lua falhou: {}.'
 COMMAND_ADD_DICT           =
 'Adicione uma palavra ao dicionário'
+COMMAND_REFERENCE_COUNT    = -- TODO: need translate!
+'{} references'
 
 COMPLETION_IMPORT_FROM           =
 'Importa de {}.'
@@ -541,6 +551,14 @@ WINDOW_ASK_APPLY_LIBRARY         =
 'Você precisa configurar seu ambiente de trabalho como `{}`?'
 WINDOW_SEARCHING_IN_FILES        = -- TODO: need translate!
 'Procurando nos arquivos...'
+WINDOW_CONFIG_LUA_DEPRECATED     = -- TODO: need translate!
+'`config.lua` is deprecated, please use `config.json` instead.'
+WINDOW_CONVERT_CONFIG_LUA        = -- TODO: need translate!
+'Convert to `config.json`'
+WINDOW_MODIFY_REQUIRE_PATH       = -- TODO: need translate!
+'Do you want to modify the require path?'
+WINDOW_MODIFY_REQUIRE_OK         = -- TODO: need translate!
+'Modify'
 
 CONFIG_LOAD_FAILED               =
 'Não é possível ler o arquivo de configurações: {}'
@@ -548,6 +566,8 @@ CONFIG_LOAD_ERROR                =
 'Configurando o erro de carregamento do arquivo: {}'
 CONFIG_TYPE_ERROR                =
 'O arquivo de configuração deve estar no formato LUA ou JSON: {}'
+CONFIG_MODIFY_FAIL_SYNTAX_ERROR  = -- TODO: need translate!
+'Failed to modify settings, there are syntax errors in the settings file: {}'
 
 PLUGIN_RUNTIME_ERROR             =
 [[
@@ -582,6 +602,41 @@ CLI_CHECK_SUCCESS =
 'Diagnóstico completo, nenhum problema encontrado'
 CLI_CHECK_RESULTS =
 'Diagnóstico completo, {} problemas encontrados, veja {}'
+
+TYPE_ERROR_ENUM_GLOBAL_DISMATCH = -- TODO: need translate!
+'Type `{child}` cannot match enumeration type of `{parent}`'
+TYPE_ERROR_ENUM_GENERIC_UNSUPPORTED = -- TODO: need translate!
+'Cannot use generic `{child}` in enumeration'
+TYPE_ERROR_ENUM_LITERAL_DISMATCH = -- TODO: need translate!
+'Literal `{child}` cannot match the enumeration value of `{parent}`'
+TYPE_ERROR_ENUM_OBJECT_DISMATCH = -- TODO: need translate!
+'The object `{child}` cannot match the enumeration value of `{parent}`. They must be the same object'
+TYPE_ERROR_ENUM_NO_OBJECT = -- TODO: need translate!
+'The passed in enumeration value `{child}` is not recognized'
+TYPE_ERROR_INTEGER_DISMATCH = -- TODO: need translate!
+'Literal `{child}` cannot match integer `{parent}`'
+TYPE_ERROR_STRING_DISMATCH = -- TODO: need translate!
+'Literal `{child}` cannot match string `{parent}`'
+TYPE_ERROR_BOOLEAN_DISMATCH = -- TODO: need translate!
+'Literal `{child}` cannot match boolean `{parent}`'
+TYPE_ERROR_TABLE_NO_FIELD = -- TODO: need translate!
+'Field `{key}` does not exist in the table'
+TYPE_ERROR_TABLE_FIELD_DISMATCH = -- TODO: need translate!
+'The type of field `{key}` is `{child}`, which cannot match `{parent}`'
+TYPE_ERROR_CHILD_ALL_DISMATCH = -- TODO: need translate!
+'All subtypes in `{child}` cannot match `{parent}`'
+TYPE_ERROR_PARENT_ALL_DISMATCH = -- TODO: need translate!
+'`{child}` cannot match any subtypes in `{parent}`'
+TYPE_ERROR_UNION_DISMATCH = -- TODO: need translate!
+'`{child}` cannot match `{parent}`'
+TYPE_ERROR_OPTIONAL_DISMATCH = -- TODO: need translate!
+'Optional type cannot match `{parent}`'
+TYPE_ERROR_NUMBER_LITERAL_TO_INTEGER = -- TODO: need translate!
+'The number `{child}` cannot be converted to an integer'
+TYPE_ERROR_NUMBER_TYPE_TO_INTEGER = -- TODO: need translate!
+'Cannot convert number type to integer type'
+TYPE_ERROR_DISMATCH = -- TODO: need translate!
+'Type `{child}` cannot match `{parent}`'
 
 LUADOC_DESC_CLASS = -- TODO: need translate!
 [=[
@@ -680,6 +735,20 @@ function find(path, pattern) end
 ---@param style font-style Style to apply
 function setFontStyle(style) end
 ```
+
+### Literal Enum
+```
+local enums = {
+    READ = 0,
+    WRITE = 1,
+    CLOSED = 2
+}
+
+---@alias FileStates
+---| `enums.READ`
+---| `enums.WRITE`
+---| `enums.CLOSE`
+```
 ---
 [View Wiki](https://github.com/sumneko/lua-language-server/wiki/Annotations#alias)
 ]=]
@@ -749,7 +818,8 @@ function getTags(item) end
 LUADOC_DESC_FIELD = -- TODO: need translate!
 [=[
 Declare a field in a class/table. This allows you to provide more in-depth
-documentation for a table.
+documentation for a table. As of `v3.6.0`, you can mark a field as `private`,
+`protected`, `public`, or `package`.
 
 ## Syntax
 `---@field <name> <type> [description]`
@@ -1083,5 +1153,78 @@ local function setColor(color) end
 
 -- Completion and hover is provided for the below param
 setColor(colors.green)
+```
+]=]
+LUADOC_DESC_PACKAGE = -- TODO: need translate!
+[=[
+Mark a function as private to the file it is defined in. A packaged function
+cannot be accessed from another file.
+
+## Syntax
+`@package`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@package
+---This cannot be accessed in another file
+function Animal:eyesCount()
+    return self.eyes
+end
+```
+]=]
+LUADOC_DESC_PRIVATE = -- TODO: need translate!
+[=[
+Mark a function as private to a @class. Private functions can be accessed only
+from within their class and are not accessable from child classes.
+
+## Syntax
+`@private`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@private
+function Animal:eyesCount()
+    return self.eyes
+end
+
+---@class Dog:Animal
+local myDog = {}
+
+---NOT PERMITTED!
+myDog:eyesCount();
+```
+]=]
+LUADOC_DESC_PROTECTED = -- TODO: need translate!
+[=[
+Mark a function as protected within a @class. Protected functions can be
+accessed only from within their class or from child classes.
+
+## Syntax
+`@protected`
+
+## Usage
+```
+---@class Animal
+---@field private eyes integer
+local Animal = {}
+
+---@protected
+function Animal:eyesCount()
+    return self.eyes
+end
+
+---@class Dog:Animal
+local myDog = {}
+
+---Permitted because function is protected, not private.
+myDog:eyesCount();
 ```
 ]=]

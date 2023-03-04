@@ -17,11 +17,21 @@
 ---  <tr>
 ---    <td>macOS</td>
 ---    <td><code>/Users/&lt;user&gt;/Library/Application Support/LOVR/&lt;identity&gt;</code></td>
+---  </tr>
+---  <tr>
+---    <td>Linux</td>
+---    <td><code>/home/&lt;user&gt;/.local/share/LOVR/&lt;identity&gt;</code></td>
+---  </tr>
+---  <tr>
+---    <td>Android</td>
+---    <td><code>/sdcard/Android/data/&lt;identity&gt;/files</code></td>
 ---  </tr> </table>
 ---
 ---`<identity>` should be a unique identifier for your app.
 ---
 ---It can be set either in `lovr.conf` or by using `lovr.filesystem.setIdentity`.
+---
+---On Android, the identity can not be changed and will always be the package id, like `org.lovr.app`.
 ---
 ---All filenames are relative to either the save directory or the directory containing the project source.
 ---
@@ -134,7 +144,7 @@ function lovr.filesystem.getRequirePath() end
 ---### NOTE:
 ---The save directory takes the following form:
 ---
----``` <appdata>/LOVR/<identity> ```
+---    <appdata>/LOVR/<identity>
 ---
 ---Where `<appdata>` is `lovr.filesystem.getAppdataDirectory` and `<identity>` is `lovr.filesystem.getIdentity` and can be customized using `lovr.conf`.
 ---
@@ -279,14 +289,6 @@ function lovr.filesystem.setIdentity(identity) end
 function lovr.filesystem.setRequirePath(path) end
 
 ---
----Sets the location of the project's source.
----
----This can only be done once, and is usually done internally.
----
----@param identity string # The path containing the project's source.
-function lovr.filesystem.setSource(identity) end
-
----
 ---Unmounts a directory or archive previously mounted with `lovr.filesystem.mount`.
 ---
 ---
@@ -308,8 +310,8 @@ function lovr.filesystem.unmount(path) end
 ---
 ---If the file already has data in it, it will be replaced with the new content.
 ---
----@overload fun(filename: string, blob: lovr.Blob):number
+---@overload fun(filename: string, blob: lovr.Blob):boolean
 ---@param filename string # The file to write to.
 ---@param content string # A string to write to the file.
----@return number bytes # The number of bytes written.
+---@return boolean success # Whether the write was successful.
 function lovr.filesystem.write(filename, content) end

@@ -22,6 +22,10 @@ CONFIGPATH = ''
 ---@type boolean
 SHOWSOURCE = false
 
+---display the internal semantic of the hovring token, use command line: --shownode=true
+---@type boolean
+SHOWNODE = false
+
 ---trace every searching into log, use command line: --trace=true
 ---@type boolean
 TRACE = false
@@ -44,11 +48,24 @@ PREVIEW = false
 ---@type string
 CHECK = ''
 
+--make docs path
+---@type string
+DOC = ''
+
 ---@type string | '"Error"' | '"Warning"' | '"Information"' | '"Hint"'
 CHECKLEVEL = 'Warning'
 
 ---@type 'trace' | 'debug' | 'info' | 'warn' | 'error'
 LOGLEVEL = 'warn'
 
+-- (experiment) Cache data into disk, may reduce memory usage, but increase CPU usage.
 ---@type boolean
 LAZY = false
+
+-- (experiment) Improve performance, but reduce accuracy
+---@type boolean
+CACHEALIVE = false
+
+-- (experiment) Compile files in multi cpu cores
+---@type integer
+COMPILECORES = 0

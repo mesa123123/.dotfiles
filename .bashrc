@@ -111,6 +111,11 @@ fi
 [ ! -d /home/$USER/.npm-global ] && mkdir /home/$USER/.npm-global 
 export NPM_CONFIG_PREFIX=/home/$USER/.npm-global
 # --------
+# ---- Deno Env ----
+if [ -d /home/$USER/.deno ]; then 
+    export DENO_INSTALL="/home/pbowman/.deno"
+    export PATH="$DENO_INSTALL/bin:$PATH"
+fi
 
 # --------
 # ---- Bash Configuration Files ----
@@ -183,7 +188,6 @@ export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
-    export WINHOME="/c/Users/$USER"
     export PIP_CONFIG_FILE="$WINHOME/pip.ini"
 	# Now stuff that differs between versions of WSL 
 	if [[ $WSL_VERSION == 1 ]]; then	
@@ -199,13 +203,12 @@ fi
 # Set Nvim default to 0
 NVIM=0
 # If on Manjaro
-if [[ $(echo $DIST_INFO | grep -c "MANJARO") == 1 ]]; then 
-	[[ $(pacman -Qqe 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
-fi	
+[[ $(echo $DIST_INFO | grep -c "MANJARO") == 1 ]] && [[ $(pacman -Qqe 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
 # If on Ubuntu
-if [[ $(echo $DIST_INFO | grep -c "UBUNTU") == 1 ]]; then
-	[[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
-fi
+[[ $(echo $DIST_INFO | grep -c "UBUNTU") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+#i If on WSL
+[[ $(echo $DIST_INFO | grep -c "microsoft") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+
 if [[ ${NVIM} == 1 ]]; then  
     export EDITOR=nvim
     # and am I using lua?
@@ -269,3 +272,5 @@ fi
 # ----------------
 # End Of bashrc
 # ----------------
+
+source /home/pbowman/.config/broot/launcher/bash/br

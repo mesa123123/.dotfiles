@@ -68,7 +68,6 @@ function Map(func, tbl)
     return newtbl
 end
 
-
 -- Filter(function, table)
 function Filter(func, tbl)
     local newtbl = {}
@@ -82,16 +81,15 @@ end
 
 ----------
 
-
 --------------------------------
 -- Plugin Loading and Settings
 --------------------------------
--- Install Packer and Sync if required (vim-plug was going to be more complicated and I'm lazy)
+-- Install Packer and Sync if required
 ----------------
 local install_path = fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
     -- Clone packer and install
-    api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path .. ' --depth=1')
+    api.nvim_command('! git clone https://github.com/wbthomason/packer.nvim ' .. install_path .. ' --depth=1')
 end
 -- Load Packer
 cmd [[packadd packer.nvim]]
@@ -125,8 +123,9 @@ require("packer").startup(function()
     use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
     -- Debug Adapter Protocol
     ----------
-    use { 'mfussenegger/nvim-dap', requires = { 'mfussenegger/nvim-dap-python' } }
-    use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
+    use { 'mfussenegger/nvim-dap' }
+    use { 'mfussenegger/nvim-dap-python' }
+    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
     -- Testing Plugins
     ----------
     use 'nvim-lua/plenary.nvim'
@@ -141,7 +140,7 @@ require("packer").startup(function()
     use 'yggdroot/indentline'
     use 'tpope/vim-fugitive'
     use 'editorconfig/editorconfig-vim'
-    use 'plasticboy/vim-markdown'
+    use({ 'toppair/peek.nvim', run = 'deno task --quiet build:fast' })
     -- Colors and Themes
     ------------
     use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
@@ -155,9 +154,6 @@ require("packer").startup(function()
     -- Brackets Rainbowing
     ------------
     use 'luochen1990/rainbow'
-    -- Discord integration
-    use 'andweeb/presence.nvim'
-    -- Languages
     ------------
     use 'itchyny/vim-gitbranch'
     use 'ekalinin/Dockerfile.vim'
@@ -180,7 +176,8 @@ require("packer").startup(function()
     -- Terminal Behaviour
     use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
     -- Nvim Telescope
-    use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false }, }
+    use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false } }
+    use { 'nvim-telescope/telescope-dap.nvim' }
     -- End of Plugins
 end)
 
@@ -235,6 +232,8 @@ hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend 
 hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
+----------
+
 --------------------------------
 -- Editor Options, Settings, Commands
 --------------------------------
@@ -265,6 +264,7 @@ g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
 -- Commands
 ----------
 cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
+cmd [[ set mouse= ]]
 ----------
 
 -------------------------------"
@@ -289,18 +289,19 @@ cmd [[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]] -- Vagrant Files
 
 -- Markdown
 ---------
+-- Set certain types to markdown
+cmd [[ au BufRead,BufNewFile *.draft set filetype=markdown ]]
+cmd [[ au BufRead,BufNewFile *.md set filetype=markdown ]]
+-- Config
 cmd [[ au FileType markdown setlocal ts=2 sw=2 sts=2 ]]
 cmd [[ au FileType markdown setlocal spell spelllang=en_gb ]]
 cmd [[ au FileType markdown inoremap <TAB> <C-t> ]]
 -- Markdown Syntax Highlighting
-g['vim_markdown_fenced_languages'] = [['csharp=cs', 'json=javascript']]
-g['vim_markdown_folding_disabled'] = 1
+g['vim_markdown_fenced_languages'] = [['csharp=cs', 'json=javascript', 'mermaid=mermaid']]
+g['vim_markdown_folding_disabled'] = 0
 g['vim_markdown_conceal_code_blocks'] = 0
 g['vim_markdown_conceal'] = 0
--- Set .draft files to Markdown
-cmd [[ au BufRead,BufNewFile *.draft set filetype=markdown ]]
-----------
-
+g['indentLine_setConceal'] = 0
 -- GitCommit
 ----------
 g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
@@ -399,7 +400,7 @@ keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -----------------------------------------
 
 -- Plugin Setup
-----------!
+----------
 require('nvim-treesitter.configs').setup {
     ensure_installed = { "lua", "rust", "toml" },
     auto_install = true,
@@ -415,33 +416,48 @@ require('nvim-treesitter.configs').setup {
         colors = {},
     },
 }
-
-
------------------------------------------
--- Discord Integration - presence.nvim
------------------------------------------
-
--- Presence.nvim setup
 ----------
-require("presence"):setup({
-    -- General options
-    auto_update        = true, -- Update activity based on autocmd events (if `false`, map or manually execute `:lua package.loaded.presence:update()`)
-    neovim_image_text  = "The One True Text Editor", -- Text displayed when hovered over the Neovim image
-    main_image         = "neovim", -- Main image display (either "neovim" or "file")
-    log_level          = "debug", -- Log messages at or above this level (one of the following: "debug", "info", "warn", "error")
-    debounce_timeout   = 10, -- Number of seconds to debounce events (or calls to `:lua package.loaded.presence:update(<filename>, true)`)
-    buttons            = true, -- Configure Rich Presence button(s), either a boolean to enable/disable, a static table (`{{ label = "<label>", url = "<url>" }, ...}`, or a function(buffer: string, repo_url: string|nil): table)
-    file_assets        = {}, -- Custom file asset definitions keyed by file names and extensions (see default config at `lua/presence/file_assets.lua` for reference)
-    show_time          = false, -- Show the timer
-    -- Rich Presence text options
-    editing_text        = "Writing Code", -- Format string rendered when an editable file is loaded in the buffer (either string or function(filename: string): string)
-    file_explorer_text  = "Browsing Project", -- Format string rendered when browsing a file explorer (either string or function(file_explorer_name: string): string)
-    git_commit_text     = "Committing changes", -- Format string rendered when committing changes in git (either string or function(filename: string): string)
-    plugin_manager_text = "Managing plugins", -- Format string rendered when managing plugins (either string or function(plugin_manager_name: string): string)
-    reading_text        = "Reading Code", -- Format string rendered when a read-only or unmodifiable file is loaded in the buffer (either string or function(filename: string): string)
-    workspace_text      = "Working on %s", -- Format string rendered when in a git repository (either string or function(project_name: string|nil, filename: string): string)
-    line_number_text    = "Line %s out of %s", -- Format string rendered when `enable_line_number` is set to true (either string or function(line_number: number, line_count: number): string)
+
+-----------------------------------------
+-- Markdown Preview, Peek.nvim
+-----------------------------------------
+
+-- Plugin Setup
+----------
+require('peek').setup({
+    auto_load = true, -- whether to automatically load preview when, entering another window
+    close_on_bdelete = true, -- close preview window on buffer delete
+    syntax = true, -- enable syntax highlighting, affects performance
+    theme = 'dark', -- 'dark' or 'light'
+    update_on_change = true,
+    throttle_at = 200000, -- start throttling when file exceeds this
+    throttle_time = 'auto', -- minimum amount of time in milliseconds
 })
+----------
+
+-- Commands
+---------
+api.nvim_create_user_command('PeekOpen', require('peek').open, {})
+api.nvim_create_user_command('PeekStatus', require('peek').is_open, {})
+api.nvim_create_user_command('PeekClose', require('peek').close, {})
+----------
+
+-----------------------------------------
+-- Notification Settings - Notify.nvim
+-----------------------------------------
+
+local notify = require("notify")
+
+-- Configuration
+----------
+notify.setup({
+    render = "simple",
+    timeout = 500,
+    stages = "fade",
+    minimum_width = 25,
+    top_down = false
+})
+----------
 
 -----------------------------------------
 -- Leader Remappings, Plugin Commands
@@ -483,7 +499,7 @@ require("toggleterm").setup {
     terminal_mappings = true,
     hide_numbers = true,
     on_open = function()
-        cmd [[ TermExec cmd="source ~/.bash_profile &&  clear" ]]
+        cmd [[ TermExec cmd="source ~/.bashrc &&  clear" ]]
     end,
     on_exit = function()
         cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
@@ -508,7 +524,6 @@ require("nvim-tree").setup {
     -- Options 1
     ----------
     auto_reload_on_write = true,
-    create_in_closed_folder = true,
     hijack_cursor = true,
     hijack_netrw = true,
     sort_by = "name",
@@ -621,10 +636,9 @@ keymap.set("t", "<C-n>", "<C-\\><C-n><c-w>k :NvimTreeToggle<CR>", {}) -- assumes
 ----------
 function Zonedtime(hours)
     local t = os.time()
-    local d = t+hours*3600
+    local d = t + hours * 3600
     return os.date('%H:%M %Y-%m-%d', d)
 end
-
 
 require("lualine").setup({
     options = {
@@ -653,12 +667,14 @@ require("lualine").setup({
 -- Telescope Settings
 ---------------------------------
 
+----------
 -- Mappings
 ----------
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true }) -- Find File
 keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true }) -- Find Buffer
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
+keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
 -- Picker Mappings
 require("telescope").setup {
@@ -669,8 +685,14 @@ require("telescope").setup {
                 i = { ["<c-d>"] = "delete_buffer" }
             }
         }
+    },
+    extensions = {
+
     }
 }
+-- Extensions
+----------
+require('telescope').load_extension('dap')
 ----------
 
 ---------------------------------

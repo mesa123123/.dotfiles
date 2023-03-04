@@ -76,8 +76,16 @@ config.diagnostics.groupFileStatus =
 设置为 `Fallback` 意味着组中的诊断由 `diagnostics.neededFileStatus` 单独设置。
 其他设置将覆盖单独设置，但是不会覆盖以 `!` 结尾的设置。
 ]]
+config.diagnostics.workspaceEvent =
+"设置触发工作区诊断的时机。"
+config.diagnostics.workspaceEvent.OnChange =
+"当文件发生变化时触发工作区诊断。"
+config.diagnostics.workspaceEvent.OnSave =
+"当文件保存时触发工作区诊断。"
+config.diagnostics.workspaceEvent.None =
+"关闭工作区诊断。"
 config.diagnostics.workspaceDelay =
-"进行工作区诊断的延迟（毫秒）。当你启动工作区，或编辑了任意文件后，将会在后台对整个工作区进行重新诊断。设置为负数可以禁用工作区诊断。"
+"进行工作区诊断的延迟（毫秒）。"
 config.diagnostics.workspaceRate  =
 "工作区诊断的运行速率（百分比）。降低该值会减少CPU占用，但是也会降低工作区诊断的速度。你当前正在编辑的文件的诊断总是全速完成，不受该选项影响。"
 config.diagnostics.libraryFiles   =
@@ -247,6 +255,8 @@ config.hint.semicolon.SameLine           =
 '2个语句在同一行时，在它们之间显示分号。'
 config.hint.semicolon.Disable            =
 '禁用虚拟分号。'
+config.codeLens.enable                   = -- TODO: need translate!
+'启用代码度量。'
 config.format.enable                     =
 '启用代码格式化程序。'
 config.format.defaultConfig              =
@@ -262,6 +272,8 @@ config.telemetry.enable                  =
 ]]
 config.misc.parameters                   =
 'VSCode中启动语言服务时的[命令行参数](https://github.com/sumneko/lua-language-server/wiki/Getting-Started#arguments)。'
+config.misc.executablePath               =
+'VSCode中指定可执行文件路径。'
 config.IntelliSense.traceLocalSet        =
 '请查阅[文档](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features)了解用法。'
 config.IntelliSense.traceReturn          =
@@ -284,6 +296,12 @@ config.type.weakNilCheck                 =
 
 此设置为 `false` 时，`numer|nil` 类型无法赋给 `number` 类型；为 `true` 是则可以。
 ]]
+config.doc.privateName                   =
+'将特定名称的字段视为私有，例如 `m_*` 意味着 `XXX.m_id` 与 `XXX.m_type` 是私有字段，只能在定义所在的类中访问。'
+config.doc.protectedName                 =
+'将特定名称的字段视为受保护，例如 `m_*` 意味着 `XXX.m_id` 与 `XXX.m_type` 是受保护的字段，只能在定义所在的类极其子类中访问。'
+config.doc.packageName                   =
+'将特定名称的字段视为package，例如 `m_*` 意味着 `XXX.m_id` 与 `XXX.m_type` 只能在定义所在的文件中访问。'
 config.diagnostics['unused-local']          =
 '未使用的局部变量'
 config.diagnostics['unused-function']       =
@@ -352,6 +370,8 @@ config.diagnostics['duplicate-doc-param']   = -- TODO: need translate!
 'Enable diagnostics for a duplicated param annotation name.'
 config.diagnostics['duplicate-set-field']   = -- TODO: need translate!
 'Enable diagnostics for setting the same field in a class more than once.'
+config.diagnostics['invisible']             = -- TODO: need translate!
+'Enable diagnostics for accesses to fields which are invisible.'
 config.diagnostics['missing-parameter']     = -- TODO: need translate!
 'Enable diagnostics for function calls where the number of arguments is less than the number of annotated function parameters.'
 config.diagnostics['missing-return']        = -- TODO: need translate!
@@ -392,3 +412,11 @@ config.diagnostics['unknown-operator']      = -- TODO: need translate!
 'Enable diagnostics for unknown operators.'
 config.diagnostics['unreachable-code']      = -- TODO: need translate!
 'Enable diagnostics for unreachable code.'
+config.typeFormat.config                    = -- TODO: need translate!
+'Configures the formatting behavior while typing Lua code.'
+config.typeFormat.config.auto_complete_end  = -- TODO: need translate!
+'Controls if `end` is automatically completed at suitable positions.'
+config.typeFormat.config.auto_complete_table_sep = -- TODO: need translate!
+'Controls if a separator is automatically appended at the end of a table declaration.'
+config.typeFormat.config.format_line        = -- TODO: need translate!
+'Controls if a line is formatted at all.'

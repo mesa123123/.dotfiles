@@ -1,10 +1,4 @@
 --------------------------------
--- ########################## --
--- # Lsp And Related Setups # --
--- ########################## --
---------------------------------
-
---------------------------------
 -- Luaisms for Vim Stuff
 --------------------------------
 
@@ -20,6 +14,7 @@ local lsp = vim.lsp -- Lsp inbuilt
 local bo = vim.bo -- bufferopts
 -- For Variables
 local b = vim.b -- buffer variables
+G = vim.g -- global variables
 --------
 
 -- Required Module Loading Core Lsp Stuff
@@ -36,27 +31,14 @@ local snipload_lua = require("luasnip.loaders.from_lua")
 -- Required Extras
 ----------
 local path = config.util.path
-local dapui = require("dapui")
 local cmpsnip = require("cmp_luasnip")
+local telescope = require("telescope")
+
 --------------------------------
 -- Language Specific Settings and Helpers
 --------------------------------
 
--- Python Virtual Environments
-----------
-local venv_path = function()
-    local venv = (os.getenv("VIRTUAL_ENV"))
-    if venv == nil or venv == '' then
-        return os.execute("which python")
-    else
-        local output = {}
-        for match in string.gmatch(venv, "([^/]+)") do
-            table.insert(output, match)
-        end
-        return vim.fn.getcwd() .. string.format("%s/bin/python", output[#output])
-    end
-end
-----------
+-- Empty
 
 --------------------------------
 -- Utility Functions
@@ -69,6 +51,19 @@ local function file_exists(name)
     if f ~= nil then io.close(f) return true else return false end
 end
 
+----------
+
+-- Refresh Diagnostics
+----------
+-- function G.buf_update_diagnostics()
+--     local clients = lsp.buf_get_clients()
+--     local buf = api.nvim_get_current_buf()
+--
+--     for _, client in ipairs(clients) do
+--         local diagnostics = vim.lsp.diagnostic.get(buf, client.id)
+--         vim.lsp.diagnostic.display(diagnostics, buf, client.id)
+--     end
+-- end
 ----------
 
 --------------------------------
@@ -309,6 +304,7 @@ local function keymappings(client)
     ----------
     -- Commands that keep you in this buffer `g`
     keymap.set("n", "gw", ":lua vim.diagnostic.open_float()<CR>", bufopts)
+    keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
     keymap.set("n", "[g", ":lua vim.diagnostic.goto_prev()<CR>", bufopts)
     keymap.set("n", "]g", ":lua vim.diagnostic.goto_next()<CR>", bufopts)
     keymap.set("n", "[G", ":lua vim.diagnostic.goto_prev({severity = diagnostic.severity.ERROR})<CR>", bufopts)
@@ -322,11 +318,12 @@ local function keymappings(client)
         print("There Is No Formatter Attached!")
     end
     -- Commands where you leave current buffer `<leader>c`
-    keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
+    keymap.set("n", "<leader>cR", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
     keymap.set("n", "<leader>cI", "<cmd>LspInfo<CR>", bufopts)
     -- Need something here that says (if implementation isn't supported open definition/declaration in new buffer
     keymap.set("n", "<leader>cD", "<Cmd>lua vim.lsp.buf.definition()<CR>", bufopts)
     keymap.set("n", "<leader>cd", "<Cmd>lua vim.lsp.buf.declaration()<CR>", bufopts)
+    keymap.set("n", "<leader>cr", "<cmd>lua require('telescope.builtin').lsp_references()<CR>", bufopts)
     keymap.set("n", "<leader>cs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
     keymap.set("n", "<leader>ci", "<cmd>lua vim.lsp.buf.implementation()<CR>", bufopts)
     keymap.set("n", "<leader>ct", "<cmd>lua vim.lsp.buf.type_definition()<CR>", bufopts)
@@ -347,6 +344,10 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     -- FormatExpr use lsp
     api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+    -- AutoRefresh if the LSP can't on its own
+    --    api.nvim_exec([[
+    --        au CursorHold <buffer> lua G.buf_update_diagnostics()
+    --    ]], false)
     -- Attach Keymappings
     keymappings(client)
 end
@@ -364,8 +365,9 @@ lsp.buf.format(nil, 10000) -- Format Timeout
 
 -- Dependent Modules Require
 ----------
+local server_dir = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers"
 require("mason").setup({
-    install_root_dir = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers"
+    install_root_dir = server_dir
 }) -- Mason is the engine the installer configs will run
 ----------
 
@@ -374,9 +376,9 @@ require("mason").setup({
 install.setup({ automatic_installation = true,
     ensure_installed = { 'sumneko_lua', 'pyright',
         'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer' } }) -- This is running through Mason_lsp-config
+        'rust_analyzer', 'sqlls', 'csharp_ls' } }) -- This is running through Mason_lsp-config
 ----------
-local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier' }
+local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter' }
 --------------------------------
 -- Setup of Language Servers
 --------------------------------
@@ -445,6 +447,13 @@ config.bashls.setup { on_attach = on_attach, capabilities = capabilities }
 config.yamlls.setup { on_attach = on_attach, capabilities = capabilities }
 ----------
 
+-- SQL
+----------
+config.sqlls.setup { on_attach = on_attach, capabilities = capabilities,
+    root_dir = config.util.root_pattern("*.sql")
+}
+----------
+
 -- Rust Server
 ----------
 config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities, settings = {
@@ -454,6 +463,13 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
         }
     }
 }
+}
+----------
+
+-- C#
+----------
+config.csharp_ls.setup { on_attach = on_attach, capabilities = capabilities,
+    root_dir = config.util.root_pattern(".svn", ".git")
 }
 ----------
 
@@ -525,13 +541,19 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     if package == "yamllint" then
         nullSources[#nullSources + 1] = diagnose.yamllint.with({ on_attach = on_attach })
     end
+    -- Markdown
     ----------
     if package == "markdownlint" then
         nullSources[#nullSources + 1] = diagnose.markdownlint.with({
-            args = ({ "--disable MD013" }),
-            on_attach = on_attach
+            on_attach = on_attach,
+            autostart = true,
+            filetypes = { "markdown", "md", "mdx" }
         })
-        nullSources[#nullSources + 1] = format.markdownlint
+        nullSources[#nullSources + 1] = format.markdownlint.with({
+            on_attach = on_attach,
+            autostart = true,
+            filetypes = { "markdown", "md", "mdx" }
+        })
     end
     ----------
     -- Prettier
@@ -567,65 +589,79 @@ hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blen
 hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
 
-
 --------------------------------
 -- Debug Adapter Protocol
 --------------------------------
 
+-- UI Load
+----------
+require('dapui').setup()
+
+
+-- Languages
+----------
+local python_path = get_python_path()
+-- require('dap-python').setup(python_path)
+
 -- Mappings
 ----------
-local keyopts = { silent = true, noremap = true }
--- Ui Commands
-keymap.set("n", "<leader>bge", "<cmd>lua require'dapui'.eval()<cr>", keyopts)
-keymap.set("n", "<leader>bge", "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", keyopts) -- bug gui exec
-keymap.set("n", "<leader>bgo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts) -- bug gui toggle
-keymap.set("n", "<leader>bgh", "<cmd>lua require'dap.ui.widgets'.hover()<cr>", keyopts)
-keymap.set("n", "<leader>bgs", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts)
+local keyopts = { silent = false, noremap = true }
 -- Session Commands
-keymap.set("n", "<leader>bs", "<cmd>lua require'dap'.session()<cr>", keyopts)
-keymap.set("n", "<leader>br", "<cmd>lua require'dap'.repl.toggle()<cr>", keyopts)
-keymap.set("n", "<leader>bx", "<cmd>lua require'dap'.disconnect()<cr>", keyopts) -- bug exit
-keymap.set("n", "<leader>bq", "<cmd>lua require'dap'.close()<cr>", keyopts)
-keymap.set("n", "<leader>bQ", "<cmd>lua require'dap'.terminate()<cr>", keyopts)
+keymap.set("n", "<leader>br", "<cmd>lua require('dap').continue()<cr>", keyopts) -- bug continue
+keymap.set("n", "<leader>bs", "<cmd>lua require('dap').session()<cr>", keyopts)
+keymap.set("n", "<leader>bt", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts)
+keymap.set("n", "<leader>bx", "<cmd>lua require('dap').disconnect()<cr>", keyopts) -- bug exit
+keymap.set("n", "<leader>bq", "<cmd>lua require('dap').close()<cr>", keyopts)
+keymap.set("n", "<leader>bQ", "<cmd>lua require('dap').terminate()<cr>", keyopts)
 -- Breakpoints (and pauses)
-keymap.set("n", "<leader>bB", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input '[Condition] > ')<cr>", keyopts) -- bug breakpoint
-keymap.set("n", "<leader>bb", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", keyopts)
-keymap.set("n", "<leader>bp", "<cmd>lua require'dap'.pause.toggle()<cr>", keyopts)
+keymap.set("n", "<leader>bB", "<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>", keyopts) -- bug breakpoint
+keymap.set("n", "<leader>bb", "<cmd>lua require('dap').toggle_breakpoint()<cr>", keyopts)
+keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts)
 -- Stepping commands
-keymap.set("n", "<leader>bh", "<cmd>lua require'dap'.run_to_cursor()<cr>", keyopts) -- run to here
-keymap.set("n", "<leader>bl", "<cmd>lua require'dap'.continue()<cr>", keyopts) -- bug continue
-keymap.set("n", "<leader>bh", "<cmd>lua require'dap'.step_back()<cr>", keyopts) -- bug previous
-keymap.set("n", "<leader>bj", "<cmd>lua require'dap'.step_into()<cr>", keyopts)
-keymap.set("n", "<leader>bk", "<cmd>lua require'dap'.step_over()<cr>", keyopts)
-keymap.set("n", "<leader>b", "<cmd>lua require'dap'.step_out()<cr>", keyopts)
+keymap.set("n", "<leader>bc", "<cmd>lua require('dap').run_to_cursor()<cr>", keyopts) -- run to here
+keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_back()<cr>", keyopts) -- bug previous
+keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_into()<cr>", keyopts)
+keymap.set("n", "<leader>bj", "<cmd>lua require('dap').step_over()<cr>", keyopts)
+keymap.set("n", "<leader>bo", "<cmd>lua require('dap').step_out()<cr>", keyopts)
 ----------
 
--- Adapter Setup (Adapters are like LSP-handlers for a DAP)
+-- UI Mappings
 ----------
--- Python
-dap.adapters.python = {
-    type = "executable",
-    command = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers/bin/debugpy"
-}
+keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval()<cr>", keyopts)
+keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", keyopts) -- bug gui exec
+keymap.set("n", "<leader>buo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts) -- bug gui toggle
+keymap.set("n", "<leader>buh", "<cmd>lua require'dap.ui.widgets'.hover()<cr>", keyopts)
+keymap.set("n", "<leader>bus", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts) --
+
+-- Telescope Integration
+----------
+-- telescope-dap loaded in init.lua
+keymap.set('n', '<leader>bf', '<cmd>lua require"telescope".extensions.dap.commands{}<CR>')
+keymap.set('n', '<leader>bfo', '<cmd>lua require"telescope".extensions.dap.configurations{}<CR>')
+keymap.set('n', '<leader>bfb', '<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>')
+keymap.set('n', '<leader>bfv', '<cmd>lua require"telescope".extensions.dap.variables{}<CR>')
+keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>')
+
+-- Custom configs - Load per project .dap-cofig.lua
 ----------
 
--- Debugger Configuration
-----------
--- Get the pre-made stuff
-require('dap-python').setup(venv_path())
-table.insert(dap.configurations.python, {
-    {
-        type = 'python',
-        request = 'launch',
-        name = 'Launch file',
-        program = '${file}', -- launches the current file
-        pythonPath = venv_path()
-    }
-})
-----------
+local function load_dap_config()
+    local workspace_folder = vim.api.nvim_call_function("getcwd", {})
+    local config_file = io.open(workspace_folder .. "/.dap-config.lua", "r")
 
--- Setup Dap-Ui
-dapui.setup()
+    if config_file then
+        io.close(config_file)
+        local success, dap_config = pcall(dofile, workspace_folder .. "/.dap-config.lua")
+        if success then
+            print(dap_config)
+            dap.launch(dap_config())
+        else
+            print("Error loading .dap-config.lua: " .. dap_config)
+        end
+    end
+end
+
+load_dap_config()
 
 -------------------------------
 -- EOF

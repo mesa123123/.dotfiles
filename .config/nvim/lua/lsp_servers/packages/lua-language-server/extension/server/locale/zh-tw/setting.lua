@@ -76,8 +76,16 @@ config.diagnostics.groupFileStatus =
 設定為 `Fallback` 意味著組中的診斷由 `diagnostics.neededFileStatus` 單獨設定。
 其他設定將覆蓋單獨設定，但是不會覆蓋以 `!` 結尾的設定。
 ]]
+config.diagnostics.workspaceEvent = -- TODO: need translate!
+"Set the time to trigger workspace diagnostics."
+config.diagnostics.workspaceEvent.OnChange = -- TODO: need translate!
+"Trigger workspace diagnostics when the file is changed."
+config.diagnostics.workspaceEvent.OnSave = -- TODO: need translate!
+"Trigger workspace diagnostics when the file is saved."
+config.diagnostics.workspaceEvent.None = -- TODO: need translate!
+"Disable workspace diagnostics."
 config.diagnostics.workspaceDelay =
-"進行工作區診斷的延遲（毫秒）。當你啟動工作區，或編輯了任何檔案後，將會在背景對整個工作區進行重新診斷。設定為負數可以停用工作區診斷。"
+"進行工作區診斷的延遲（毫秒）。"
 config.diagnostics.workspaceRate  =
 "工作區診斷的執行速率（百分比）。降低該值會減少CPU使用率，但是也會降低工作區診斷的速度。你目前正在編輯的檔案的診斷總是全速完成，不受該選項影響。"
 config.diagnostics.libraryFiles   =
@@ -247,6 +255,8 @@ config.hint.semicolon.SameLine            =
 '兩個陳述式在同一行時，在它們之間顯示分號。'
 config.hint.semicolon.Disable            =
 '停用虛擬分號。'
+config.codeLens.enable                   = -- TODO: need translate!
+'Enable code lens.'
 config.format.enable                     =
 '啟用程式碼格式化程式。'
 config.format.defaultConfig              =
@@ -262,6 +272,8 @@ config.telemetry.enable                  =
 ]]
 config.misc.parameters                   =
 'VSCode中啟動語言伺服時的[命令列參數](https://github.com/sumneko/lua-language-server/wiki/Getting-Started#arguments)。'
+config.misc.executablePath               = -- TODO: need translate!
+'Specify the executable path in VSCode.'
 config.IntelliSense.traceLocalSet        =
 '請查閱[文件](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features)瞭解用法。'
 config.IntelliSense.traceReturn          =
@@ -284,6 +296,12 @@ When checking the type of union type, ignore the `nil` in it.
 
 When this setting is `false`, the `number|nil` type cannot be assigned to the `number` type. It can be with `true`.
 ]]
+config.doc.privateName                   = -- TODO: need translate!
+'Treat specific field names as private, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are private, witch can only be accessed in the class where the definition is located.'
+config.doc.protectedName                 = -- TODO: need translate!
+'Treat specific field names as protected, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are protected, witch can only be accessed in the class where the definition is located and its subclasses.'
+config.doc.packageName                   = -- TODO: need translate!
+'Treat specific field names as package, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are package, witch can only be accessed in the file where the definition is located.'
 config.diagnostics['unused-local']          =
 '未使用的區域變數'
 config.diagnostics['unused-function']       =
@@ -352,6 +370,8 @@ config.diagnostics['duplicate-doc-param']   = -- TODO: need translate!
 'Enable diagnostics for a duplicated param annotation name.'
 config.diagnostics['duplicate-set-field']   = -- TODO: need translate!
 'Enable diagnostics for setting the same field in a class more than once.'
+config.diagnostics['invisible']             = -- TODO: need translate!
+'Enable diagnostics for accesses to fields which are invisible.'
 config.diagnostics['missing-parameter']     = -- TODO: need translate!
 'Enable diagnostics for function calls where the number of arguments is less than the number of annotated function parameters.'
 config.diagnostics['missing-return']        = -- TODO: need translate!
@@ -392,3 +412,11 @@ config.diagnostics['unknown-operator']      = -- TODO: need translate!
 'Enable diagnostics for unknown operators.'
 config.diagnostics['unreachable-code']      = -- TODO: need translate!
 'Enable diagnostics for unreachable code.'
+config.typeFormat.config                    = -- TODO: need translate!
+'Configures the formatting behavior while typing Lua code.'
+config.typeFormat.config.auto_complete_end  = -- TODO: need translate!
+'Controls if `end` is automatically completed at suitable positions.'
+config.typeFormat.config.auto_complete_table_sep = -- TODO: need translate!
+'Controls if a separator is automatically appended at the end of a table declaration.'
+config.typeFormat.config.format_line        = -- TODO: need translate!
+'Controls if a line is formatted at all.'

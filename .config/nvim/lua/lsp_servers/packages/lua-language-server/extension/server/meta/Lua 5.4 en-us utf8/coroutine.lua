@@ -1,4 +1,4 @@
----@meta
+---@meta coroutine
 
 ---
 ---
@@ -13,7 +13,7 @@ coroutine = {}
 ---
 ---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-coroutine.create)
 ---
----@param f async fun()
+---@param f async fun(...):...
 ---@return thread
 ---@nodiscard
 function coroutine.create(f) end
@@ -79,7 +79,7 @@ function coroutine.status(co) end
 ---
 ---[View documents](http://www.lua.org/manual/5.4/manual.html#pdf-coroutine.wrap)
 ---
----@param f async fun()
+---@param f async fun(...):...
 ---@return fun(...):...
 ---@nodiscard
 function coroutine.wrap(f) end

@@ -26,10 +26,11 @@ export DISTRO
 # WSL Check - Note the bash rc exports the env variable
 CATOS=$(cat /proc/sys/kernel/osrelease)
 # Create and export the WSLON variable to the environment
-WSLON=$([[ ${CATOS,,} == *"microsoft"* ]])
-export WSLON
+export WSLON=$([[ ${CATOS,,} == *"microsoft"* ]] && echo "true" || echo "false")
+
 # Special WSL Paths for Interoperability in cmd lines
 if [[ ${WSLON} == "true" ]]; then
+    export WINHOME="/mnt/c/Users/${USER}/"
 	export PATH=$PATH:"/c/Windows/System32/"
     export CMD_HOME="/c/Windows/System32/cmd.exe"
     # As Powershell is reqiured to run some scripts and is placed stupidly in the win10 filesystem it needs its own special variable
@@ -74,6 +75,13 @@ if [ -d "$HOME/.cargo/bin" ] ; then
     PATH="$HOME/.cargo/bin:$PATH"
 fi
 
+# Setup Pyenv to deal with multiple python versions
+if [ -d "$HOME/.pyenv" ] ; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
 # Save the Profile Path Here
 export PROFILE_PATH=$PATH
 
