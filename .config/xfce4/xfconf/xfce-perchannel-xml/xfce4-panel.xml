@@ -34,7 +34,7 @@
   <property name="plugins" type="empty">
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chromium.instance10422;chromium.instance13262;chromium.instance14476;chromium.instance1468;chromium.instance1486;chromium.instance1550;chromium.instance1576;chromium.instance1654;chromium.instance18174;chromium.instance1864;chromium.instance25153;chromium.instance26829;chromium.instance3183;chromium.instance37497;chromium.instance37576;chromium.instance37636;chromium.instance6204;chromium.instance64648;chromium.instance9293"/>
+      <property name="mpris-players" type="string" value="chromium.instance10422;chromium.instance13262;chromium.instance14476;chromium.instance1468;chromium.instance1486;chromium.instance1550;chromium.instance1576;chromium.instance1654;chromium.instance18174;chromium.instance1864;chromium.instance25153;chromium.instance26829;chromium.instance3183;chromium.instance37497;chromium.instance37576;chromium.instance37636;chromium.instance6204;chromium.instance64648;chromium.instance75541;chromium.instance9293"/>
     </property>
     <property name="plugin-5" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
@@ -56,6 +56,7 @@
         <value type="string" value="pamac-tray"/>
       </property>
       <property name="known-items" type="array">
+        <value type="string" value="remmina-icon"/>
         <value type="string" value="steam"/>
         <value type="string" value="discord1"/>
         <value type="string" value="blueman"/>
