@@ -46,6 +46,7 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “spark-vv7fa8-5g” active: spark-vv7fa8-5g (72%)"/>
         <value type="string" value="msm notifier"/>
         <value type="string" value="no network connection"/>
         <value type="string" value="networkmanager applet"/>
