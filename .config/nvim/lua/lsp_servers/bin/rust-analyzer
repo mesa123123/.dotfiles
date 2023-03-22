@@ -1,1 +1,1 @@
-/home/bowmanpete/.config/nvim/lua/lsp_servers/packages/rust-analyzer/rust-analyzer
+../packages/rust-analyzer/rust-analyzer
