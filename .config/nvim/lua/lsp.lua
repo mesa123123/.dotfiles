@@ -84,13 +84,13 @@ snip.config.set_config({
 
 -- Load Snippets
 ----------
-local snips_folder_lua = fn.stdpath "config" .. "/lua/snippets/"
-snipload_lua.lazy_load { paths = snips_folder_lua }
+local snips_folder = fn.stdpath "config" .. "/lua/snippets/"
+snipload_lua.lazy_load { paths = snips_folder}
 
 -- Functions
 ----------
 function SnipEditFile()
-    local snips_file = snips_folder_lua .. bo.filetype .. ".lua"
+    local snips_file = snips_folder .. bo.filetype .. ".lua"
     if not file_exists(snips_file) then
         io.open(snips_file)
     end
