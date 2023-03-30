@@ -94,6 +94,7 @@ local snipfile = snippet("snipfile", {
         "", "", "return snippets, autosnippets" }),
 }
 )
+
 table.insert(snippets, snipfile)
 
 return snippets, autosnippets

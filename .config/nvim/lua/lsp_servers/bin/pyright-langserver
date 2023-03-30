@@ -1,1 +1,1 @@
-../packages/pyright/node_modules/.bin/pyright-langserver
+/home/pbowman/.config/nvim/lua/lsp_servers/packages/pyright/node_modules/.bin/pyright-langserver

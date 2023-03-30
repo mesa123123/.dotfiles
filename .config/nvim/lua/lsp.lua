@@ -5,23 +5,23 @@
 -- Variables
 ----------
 -- Api Exposures
-local cmd = vim.cmd -- vim commands
-local api = vim.api -- vim api (I'm not sure what this does)
-local fn = vim.fn -- vim functions
+local cmd = vim.cmd       -- vim commands
+local api = vim.api       -- vim api (I'm not sure what this does)
+local fn = vim.fn         -- vim functions
 local keymap = vim.keymap -- keymaps
-local lsp = vim.lsp -- Lsp inbuilt
+local lsp = vim.lsp       -- Lsp inbuilt
 -- Options
-local bo = vim.bo -- bufferopts
+local bo = vim.bo         -- bufferopts
 -- For Variables
-local b = vim.b -- buffer variables
-G = vim.g -- global variables
+local b = vim.b           -- buffer variables
+G = vim.g                 -- global variables
 --------
 
 -- Required Module Loading Core Lsp Stuff
 ----------
-local config = require("lspconfig") -- Overall configuration for lsp
+local config = require("lspconfig")        -- Overall configuration for lsp
 local install = require("mason-lspconfig") -- Mason is the successor to lsp-installer
-local cmp = require "cmp" -- Autocompletion for the language servers
+local cmp = require "cmp"                  -- Autocompletion for the language servers
 local cmp_lsp = require("cmp_nvim_lsp")
 local dap = require("dap")
 local snip = require("luasnip")
@@ -48,7 +48,12 @@ local telescope = require("telescope")
 ----------
 local function file_exists(name)
     local f = io.open(name, "r")
-    if f ~= nil then io.close(f) return true else return false end
+    if f ~= nil then
+        io.close(f)
+        return true
+    else
+        return false
+    end
 end
 
 ----------
@@ -98,7 +103,7 @@ cmd [[command! LuaSnipEdit :lua SnipEditFile()]]
 
 -- Mappings
 ----------
-keymap.set("t", "<leader>se", ":LuaSnipEdit", {})
+keymap.set("n", "<leader>se", ":LuaSnipEdit<CR>", {})
 
 --------------------------------
 -- Completion
@@ -123,7 +128,6 @@ function ShortenLine()
     if fn.strlen(fn.getline('.')) >= tonumber(b['max_line_length']) then
         cmd [[ call cursor('.', b:max_line_length) ]]
         cmd [[ execute "normal! F i\n" ]]
-
     end
 end
 
@@ -143,7 +147,7 @@ cmp.setup({
     ----------
     enabled = { function()
         local context = require 'cmp.config.context' -- disable completion in comments
-        if vim.api.nvim_get_mode().mode == 'c' then -- keep command mode completion enabled when cursor is in a comment
+        if vim.api.nvim_get_mode().mode == 'c' then  -- keep command mode completion enabled when cursor is in a comment
             return true
         else
             return not context.in_treesitter_capture("comment")
@@ -177,6 +181,8 @@ cmp.setup({
                 nvim_lua = "[Lua]",
                 luasnip = "[Snip]",
                 treesitter = "[Treesitter]",
+                path = "[Path]",
+                cmdline = "[CmdLine]"
             })[entry.source.name]
             return vim_item
         end,
@@ -310,6 +316,7 @@ local function keymappings(client)
     keymap.set("n", "[G", ":lua vim.diagnostic.goto_prev({severity = diagnostic.severity.ERROR})<CR>", bufopts)
     keymap.set("n", "]G", ":lua vim.diagnostic.goto_next({severity = diagnostic.severity.ERROR})<CR>", bufopts)
     keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts)
+    keymap.set("n", "gh", ":lua vim.lsp.buf.hover()<CR>", bufopts)
     keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts)
     if client.server_capabilities.documentFormattingProvider then
         keymap.set("n", "gf", ":lua FormatWithConfirm()<CR>", loudbufopts)
@@ -373,10 +380,12 @@ require("mason").setup({
 
 -- Ensure Installs
 ----------
-install.setup({ automatic_installation = true,
+install.setup({
+    automatic_installation = true,
     ensure_installed = { 'lua_ls', 'pyright',
         'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer'  } }) -- This is running through Mason_lsp-config
+        'rust_analyzer' }
+}) -- This is running through Mason_lsp-config
 ----------
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter' }
 --------------------------------
@@ -474,10 +483,11 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
 ----------
 local nullls = require("null-ls")
 local method = nullls.methods
-local format = nullls.builtins.formatting -- Formatting
+local format = nullls.builtins.formatting    -- Formatting
 local diagnose = nullls.builtins.diagnostics -- Diagnostics
 local code_actions = nullls.builtins.code_actions
 local hover = nullls.builtins.hover
+local completion = nullls.builtins.completion -- Code Completion
 local register = nullls.register
 local helpers = require("null-ls.helpers")
 ----------
@@ -495,6 +505,8 @@ end
 
 ----------
 
+-- Setup Various Servers/Packages
+----------
 -- Installed Mason Managed Sources (I prefer these because they'll sit with everything else)
 ----------
 local nullSources     = {}
@@ -559,10 +571,37 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
         })
     end
     ----------
+    -- English
+    ----------
+    if package == "write-good" then
+        nullSources[#nullSources + 1] = diagnose.write_good.with({
+            on_attach = on_attach,
+            filetypes = {
+                "txt", "md", "mdx", "markdown"
+            },
+        })
+    end
+    ----------
 end
 ------------
 
--- Load the Mason Packages into the Null-ls engine
+-- Builtin Sources (Not Managed By Mason)
+----------
+-- English Completion
+nullSources[#nullSources + 1] = completion.spell.with({
+    on_attach = on_attach,
+    autostart = true,
+    filetypes = { "txt", "markdown", "md", "mdx" },
+})
+-- -- Dictionary Definitions
+nullSources[#nullSources + 1] = hover.dictionary.with({
+    on_attach = on_attach,
+    autostart = true,
+    filetypes = { "txt", "markdown", "md", "mdx" },
+})
+-----------
+
+-- Load the Packages into the Null-ls engine
 ----------
 nullls.setup {
     on_attach = on_attach,
@@ -612,7 +651,7 @@ keymap.set("n", "<leader>bb", "<cmd>lua require('dap').toggle_breakpoint()<cr>",
 keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts)
 -- Stepping commands
 keymap.set("n", "<leader>bc", "<cmd>lua require('dap').run_to_cursor()<cr>", keyopts) -- run to here
-keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_back()<cr>", keyopts) -- bug previous
+keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_back()<cr>", keyopts)     -- bug previous
 keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_into()<cr>", keyopts)
 keymap.set("n", "<leader>bj", "<cmd>lua require('dap').step_over()<cr>", keyopts)
 keymap.set("n", "<leader>bo", "<cmd>lua require('dap').step_out()<cr>", keyopts)
@@ -622,9 +661,9 @@ keymap.set("n", "<leader>bo", "<cmd>lua require('dap').step_out()<cr>", keyopts)
 ----------
 keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval()<cr>", keyopts)
 keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", keyopts) -- bug gui exec
-keymap.set("n", "<leader>buo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts) -- bug gui toggle
+keymap.set("n", "<leader>buo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts)                             -- bug gui toggle
 keymap.set("n", "<leader>buh", "<cmd>lua require'dap.ui.widgets'.hover()<cr>", keyopts)
-keymap.set("n", "<leader>bus", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts) --
+keymap.set("n", "<leader>bus", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts)                    --
 
 -- Telescope Integration
 ----------
