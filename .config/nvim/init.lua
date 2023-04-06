@@ -321,6 +321,7 @@ keymap.set('n', 'U', 'redo', { silent = true, noremap = true })
 -- Set Write/Quit to shortcuts
 ---------
 keymap.set('n', '<leader>ww', ':w<CR>', { silent = false, noremap = true })
+keymap.set('n', '<leader>w!', ':w!<CR>', { silent = false, noremap = true })
 keymap.set('n', '<leader>ws', ':source %<CR>', { silent = false, noremap = true })
 keymap.set('n', '<leader>wqq', ':wq<CR>', { silent = false, noremap = true })
 keymap.set('n', '<leader>wqa', ':wqa<CR>', { silent = false, noremap = true })
