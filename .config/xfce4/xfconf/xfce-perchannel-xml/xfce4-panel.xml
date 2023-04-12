@@ -25,16 +25,16 @@
       <property name="size" type="uint" value="36"/>
       <property name="mode" type="uint" value="0"/>
       <property name="autohide-behavior" type="uint" value="0"/>
-      <property name="disable-struts" type="bool" value="false"/>
       <property name="icon-size" type="uint" value="16"/>
       <property name="leave-opacity" type="uint" value="100"/>
+      <property name="enable-struts" type="bool" value="true"/>
     </property>
     <property name="dark-mode" type="bool" value="true"/>
   </property>
   <property name="plugins" type="empty">
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chromium.instance10422;chromium.instance13262;chromium.instance14476;chromium.instance1468;chromium.instance1486;chromium.instance1550;chromium.instance1576;chromium.instance1654;chromium.instance18174;chromium.instance1864;chromium.instance2134;chromium.instance25153;chromium.instance26829;chromium.instance3183;chromium.instance37497;chromium.instance37576;chromium.instance37636;chromium.instance48295;chromium.instance6204;chromium.instance64648;chromium.instance75541;chromium.instance9293"/>
+      <property name="mpris-players" type="string" value="chromium.instance10422;chromium.instance13262;chromium.instance14476;chromium.instance1468;chromium.instance1486;chromium.instance1550;chromium.instance1576;chromium.instance1654;chromium.instance1679;chromium.instance18174;chromium.instance1864;chromium.instance2134;chromium.instance25153;chromium.instance26829;chromium.instance3183;chromium.instance37497;chromium.instance37576;chromium.instance37636;chromium.instance48295;chromium.instance6204;chromium.instance64648;chromium.instance75541;chromium.instance9293"/>
     </property>
     <property name="plugin-5" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
@@ -46,6 +46,7 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “vodafoneefa47c-ext” active: vodafoneefa47c-ext (73%)"/>
         <value type="string" value="wi-fi network connection “spark-vv7fa8-5g” active: spark-vv7fa8-5g (67%)"/>
         <value type="string" value="wi-fi network connection “spark-vv7fa8-5g” active: spark-vv7fa8-5g (72%)"/>
         <value type="string" value="msm notifier"/>
