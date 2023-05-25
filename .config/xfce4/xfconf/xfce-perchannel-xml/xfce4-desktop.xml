@@ -13,7 +13,7 @@
         <property name="workspace0" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="4"/>
-          <property name="last-image" type="string" value="/home/bowmanpete/.dotfiles/assets/Fedora Idea.png"/>
+          <property name="last-image" type="string" value="/home/bowmanpete/.dotfiles/assets/Background.png"/>
           <property name="rgba1" type="array">
             <value type="double" value="0.13333333333333333"/>
             <value type="double" value="0.13333333333333333"/>
