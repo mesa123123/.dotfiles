@@ -178,6 +178,7 @@ require("packer").startup(function()
     -- Nvim Telescope
     use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false } }
     use { 'nvim-telescope/telescope-dap.nvim' }
+    use { 'nvim-telescope/telescope-file-browser.nvim', requires = {'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim'} }
     -- End of Plugins
 end)
 
@@ -624,9 +625,9 @@ cmd [[ autocmd FileType NvimTree setlocal relativenumber ]] -- make sure relativ
 
 -- Mappings
 ----------
-keymap.set("n", "<C-n>", ":NvimTreeToggle<CR>", {}) -- Remap the open and close to C-n
+keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { noremap = true }) -- Remap the open and close to C-n
 -- Terminal Commands, autoswitch focussed pane and then switch to nerdtree,
-keymap.set("t", "<C-n>", "<C-\\><C-n><c-w>k :NvimTreeToggle<CR>", {}) -- assumes the terminal is horizontally split and on the bottom
+keymap.set("t", "<C-n>", "<C-\\><C-n><c-w>k :Telescope file_browser<CR>", { noremap = true }) -- assumes the terminal is horizontally split and on the bottom
 -----------------
 
 -----------------------------
@@ -694,6 +695,7 @@ require("telescope").setup {
 -- Extensions
 ----------
 require('telescope').load_extension('dap')
+require('telescope').load_extension('file_browser')
 ----------
 
 ---------------------------------
