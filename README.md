@@ -10,6 +10,7 @@ Honestly this will be an unclean mess of things, but the name basically explains
 - Get telescope configured how you like it
   -  Get telescope file-browser configured properly too
 - Figure out how to use the DAP
+- Lua-Snips need to be up to code too!
 
 
 ### Compatibility
