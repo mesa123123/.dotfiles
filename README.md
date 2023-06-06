@@ -7,8 +7,7 @@ Honestly this will be an unclean mess of things, but the name basically explains
 ### Neovim
 
 - Move the nvim configs into their own repo, they're getting big enough that they need to!
-- Get telescope configured how you like it
-  -  Get telescope file-browser configured properly too
+- Sort out which key!
 - Figure out how to use the DAP
 - Lua-Snips need to be up to code too!
 
