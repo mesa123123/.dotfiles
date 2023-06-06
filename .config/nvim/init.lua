@@ -16,7 +16,7 @@
 -- Priority Settings
 --------------------------------
 -- Set the config path
-vim.g["config_path"] = "~/config/nvim"
+vim.g["config_path"] = "~/.config/nvim"
 -- Set the mapleader
 vim.g["mapleader"] = "\\"
 
@@ -28,7 +28,7 @@ vim.g["mapleader"] = "\\"
 ----------
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
-local fn = vim.fn -- vim functions
+local fn = vim.fn   -- vim functions
 local keymap = vim.keymap
 local hl = api.nvim_set_hl
 -- For Options
@@ -37,11 +37,11 @@ local gopt = vim.go -- global options
 local bopt = vim.bo -- buffer options
 local wopt = vim.wo -- window options
 -- For Variables
-local g = vim.g -- global variables
-local b = vim.b -- buffer variables
-local w = vim.w -- window variables
-local t = vim.t -- tabpage variables
-local v = vim.v -- general variables?
+local g = vim.g     -- global variables
+local b = vim.b     -- buffer variables
+local w = vim.w     -- window variables
+local t = vim.t     -- tabpage variables
+local v = vim.v     -- general variables?
 ----------
 
 -- Functions
@@ -178,7 +178,8 @@ require("packer").startup(function()
     -- Nvim Telescope
     use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false } }
     use { 'nvim-telescope/telescope-dap.nvim' }
-    use { 'nvim-telescope/telescope-file-browser.nvim', requires = {'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim'} }
+    use { 'nvim-telescope/telescope-file-browser.nvim', requires = { 'nvim-telescope/telescope.nvim',
+        'nvim-lua/plenary.nvim' } }
     -- End of Plugins
 end)
 
@@ -193,7 +194,7 @@ api.nvim_create_user_command('PackUpdate', 'lua require("packer").sync()', {})
 
 -- Commands
 ----------
-api.nvim_create_user_command('Editvim', 'e ~/.config/nvim/init.lua', {}) -- Edit Config
+api.nvim_create_user_command('Editvim', 'e ~/.config/nvim/init.lua', {})    -- Edit Config
 api.nvim_create_user_command('Srcv', 'luafile ~/.config/nvim/init.lua', {}) -- Source Config
 ----------
 
@@ -280,12 +281,12 @@ cmd [[ filetype plugin indent on ]]
 
 -- FileTypes
 ----------
-cmd [[ au FileType cpp setlocal et ts=2 sw=2 ]] -- C++ Language
-cmd [[ au BufRead,BufNewFile *.hcl set filetype=ini ]] -- HCL Language
+cmd [[ au FileType cpp setlocal et ts=2 sw=2 ]]                 -- C++ Language
+cmd [[ au BufRead,BufNewFile *.hcl set filetype=ini ]]          -- HCL Language
 cmd [[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]] -- JenkinsFile
-cmd [[ au FileType python setlocal et ts=4 sw=4 sts=4 ]] -- Python Language
-cmd [[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]] -- Typescript Settings
-cmd [[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]] -- Vagrant Files
+cmd [[ au FileType python setlocal et ts=4 sw=4 sts=4 ]]        -- Python Language
+cmd [[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]]       -- Typescript Settings
+cmd [[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]]   -- Vagrant Files
 ----------
 
 -- Markdown
@@ -427,13 +428,13 @@ require('nvim-treesitter.configs').setup {
 -- Plugin Setup
 ----------
 require('peek').setup({
-    auto_load = true, -- whether to automatically load preview when, entering another window
+    auto_load = true,        -- whether to automatically load preview when, entering another window
     close_on_bdelete = true, -- close preview window on buffer delete
-    syntax = true, -- enable syntax highlighting, affects performance
-    theme = 'dark', -- 'dark' or 'light'
+    syntax = true,           -- enable syntax highlighting, affects performance
+    theme = 'dark',          -- 'dark' or 'light'
     update_on_change = true,
-    throttle_at = 200000, -- start throttling when file exceeds this
-    throttle_time = 'auto', -- minimum amount of time in milliseconds
+    throttle_at = 200000,    -- start throttling when file exceeds this
+    throttle_time = 'auto',  -- minimum amount of time in milliseconds
 })
 ----------
 
@@ -511,124 +512,12 @@ require("toggleterm").setup {
 -- Mappings
 ----------
 keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true }) -- Send exit command
-keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true }) -- Use Esc to change modes in the terminal
+keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true })          -- Use Esc to change modes in the terminal
 keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"", { noremap = true, silent = true })
 keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
     { noremap = true, silent = true })
 
 ----------
-
------------------------------
--- Filetree Options - NvimTree
------------------------------
-
-require("nvim-tree").setup {
-    -- Options 1
-    ----------
-    auto_reload_on_write = true,
-    hijack_cursor = true,
-    hijack_netrw = true,
-    sort_by = "name",
-    sync_root_with_cwd = true,
-    view = {
-        adaptive_size = true,
-        centralize_selection = false,
-        width = 50,
-        side = "right",
-        relativenumber = true,
-        signcolumn = "yes",
-        -- Mappings
-        ----------
-        mappings = {
-            custom_only = false,
-            list = {
-                { key = { "<CR>", "o", "<2-LeftMouse>" }, action = "edit" },
-                { key = "<S-CR>", action = "edit_in_place" },
-                { key = "O", action = "edit_no_picker" },
-                { key = { "l", "<2-RightMouse>" }, action = "cd" },
-                { key = "<C-v>", action = "vsplit" },
-                { key = "<C-x>", action = "split" },
-                { key = "<C-t>", action = "tabnew" },
-                { key = "<", action = "prev_sibling" },
-                { key = ">", action = "next_sibling" },
-                { key = "P", action = "parent_node" },
-                { key = "<BS>", action = "close_node" },
-                { key = "<Tab>", action = "preview" },
-                { key = "I", action = "toggle_git_ignored" },
-                { key = "H", action = "toggle_dotfiles" },
-                { key = "U", action = "toggle_custom" },
-                { key = "r", action = "refresh" },
-                { key = "ma", action = "create" },
-                { key = "md", action = "remove" },
-                { key = "mD", action = "trash" },
-                { key = "mm", action = "rename" },
-                { key = "mM", action = "full_rename" },
-                { key = "mx", action = "cut" },
-                { key = "mc", action = "copy" },
-                { key = "mp", action = "paste" },
-                { key = "my", action = "copy_name" },
-                { key = "mYr", action = "copy_path" },
-                { key = "mYa", action = "copy_absolute_path" },
-                { key = "[s", action = "prev_diag_item" },
-                { key = "[g", action = "prev_git_item" },
-                { key = "]s", action = "next_diag_item" },
-                { key = "]g", action = "next_git_item" },
-                { key = "h", action = "dir_up" },
-                { key = "s", action = "system_open" },
-                { key = "f", action = "live_filter" },
-                { key = "F", action = "clear_live_filter" },
-                { key = "q", action = "close" },
-                { key = "W", action = "collapse_all" },
-                { key = "E", action = "expand_all" },
-                { key = "S", action = "search_node" },
-                { key = ".", action = "run_file_command" },
-                { key = "<C-k>", action = "toggle_file_info" },
-                { key = "g?", action = "toggle_help" },
-                { key = "mtm", action = "toggle_mark" },
-                { key = "mbm", action = "bulk_move" },
-            },
-        },
-    },
-    -- Options 2
-    ----------
-    renderer = {
-        highlight_git = true,
-        full_name = false,
-        root_folder_modifier = ":~",
-    },
-    diagnostics = {
-        enable = true,
-    },
-    filters = {
-        dotfiles = true,
-    },
-    git = {
-        enable = true,
-        ignore = false,
-    },
-    actions = {
-        open_file = {
-            quit_on_open = false,
-            resize_window = true,
-            window_picker = {
-                enable = true,
-            },
-        },
-    },
-}
-----------
-
--- NvimTree Git Plugin Symbols
-----------
-cmd [[ autocmd FileType NvimTree setlocal relativenumber ]] -- make sure relative line numbers are used
-----------
-
--- Mappings
-----------
-keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { noremap = true }) -- Remap the open and close to C-n
--- Terminal Commands, autoswitch focussed pane and then switch to nerdtree,
-keymap.set("t", "<C-n>", "<C-\\><C-n><c-w>k :Telescope file_browser<CR>", { noremap = true }) -- assumes the terminal is horizontally split and on the bottom
------------------
 
 -----------------------------
 -- LuaLine Configuration
@@ -665,16 +554,57 @@ require("lualine").setup({
     }
 })
 
+-----------------------------
+-- Filetree Options - telescope-file-browser
+-----------------------------
+
+--Imports
+----------
+local fb_actions = require "telescope._extensions.file_browser.actions"
+local actions = require "telescope.actions"
+----------
+
+
+-- Setup
+----------
+local file_browser_configs = {
+    hijack_netrw = true,
+    initial_mode = 'normal',
+    -- Mappings
+    ----------
+    -- Normal Mode
+    mappings = {
+        ['n'] = {
+            ["<C-n>"] = actions.close,
+            ["l"] = fb_actions.change_cwd,
+            ["h"] = fb_actions.goto_parent_dir,
+            ["c"] = fb_actions.goto_cwd,
+            ["<C-h>"] = fb_actions.toggle_hidden,
+        },
+        ['i'] = {
+            ["<C-n>"] = actions.close,
+            ["<C-l>"] = fb_actions.change_cwd,
+            ["<C-h>"] = fb_actions.goto_parent_dir,
+            ["<C-c>"] = fb_actions.goto_cwd,
+            ["<A-h>"] = fb_actions.toggle_hidden,
+        },
+    },
+}
+
+-- Mappings
+----------
+keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { silent = true, noremap = true }) -- Remap the open and close to C-n
+----------
+
 ---------------------------------
 -- Telescope Settings
 ---------------------------------
 
-----------
 -- Mappings
 ----------
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true }) -- Find File
 keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true }) -- Find Buffer
+keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true })    -- Find Buffer
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
 keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
@@ -689,12 +619,13 @@ require("telescope").setup {
         }
     },
     extensions = {
-
+        file_browser = file_browser_configs
     }
 }
+---------
+
 -- Extensions
 ----------
-require('telescope').load_extension('dap')
 require('telescope').load_extension('file_browser')
 ----------
 
@@ -726,7 +657,7 @@ keymap.set("n", "<leader>du", ":DBUIToggle<CR>", { silent = true })
 keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true })
 keymap.set("n", "<leader>dr", ":DBUIRenameBuffer<CR>", { silent = true })
 keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true })
-----------------
+---------
 
 ---------------------------------"
 -- LSP Config
