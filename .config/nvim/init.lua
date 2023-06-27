@@ -580,6 +580,7 @@ local file_browser_configs = {
             ["h"] = fb_actions.goto_parent_dir,
             ["c"] = fb_actions.goto_cwd,
             ["<C-h>"] = fb_actions.toggle_hidden,
+            ["a"] = fb_actions.create,
         },
         ['i'] = {
             ["<C-n>"] = actions.close,
