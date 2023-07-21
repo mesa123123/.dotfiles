@@ -570,6 +570,8 @@ local actions = require "telescope.actions"
 local file_browser_configs = {
     hijack_netrw = true,
     initial_mode = 'normal',
+    git_status = true,
+    respect_gitignore = false,
     -- Mappings
     ----------
     -- Normal Mode
@@ -581,6 +583,7 @@ local file_browser_configs = {
             ["c"] = fb_actions.goto_cwd,
             ["<C-h>"] = fb_actions.toggle_hidden,
             ["a"] = fb_actions.create,
+            ["H"] = fb_actions.toggle_hidden,
         },
         ['i'] = {
             ["<C-n>"] = actions.close,
