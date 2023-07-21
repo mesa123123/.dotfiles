@@ -565,6 +565,7 @@ local actions = require "telescope.actions"
 ----------
 
 
+
 -- Setup
 ----------
 local file_browser_configs = {
