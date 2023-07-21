@@ -2,17 +2,11 @@
 
 "use strict";
 
-const {
-  addError, forEachLine, htmlElementRe, withinAnyRange, unescapeMarkdown
-} = require("../helpers");
-const { codeBlockAndSpanRanges, lineMetadata, referenceLinkImageData } =
-  require("./cache");
+const { addError } = require("../helpers");
+const { filterByTypes, getHtmlTagInfo, parse } =
+  require("../helpers/micromark.cjs");
 
-const linkDestinationRe = /\]\(\s*$/;
-// See https://spec.commonmark.org/0.29/#autolinks
-const emailAddressRe =
-  // eslint-disable-next-line max-len
-  /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-zA-Z\d](?:[a-zA-Z\d-]{0,61}[a-zA-Z\d])?(?:\.[a-zA-Z\d](?:[a-zA-Z\d-]{0,61}[a-zA-Z\d])?)*$/;
+const nextLinesRe = /[\r\n][\s\S]*$/;
 
 module.exports = {
   "names": [ "MD033", "no-inline-html" ],
@@ -22,38 +16,51 @@ module.exports = {
     let allowedElements = params.config.allowed_elements;
     allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
     allowedElements = allowedElements.map((element) => element.toLowerCase());
-    const exclusions = codeBlockAndSpanRanges();
-    const { references, definitionLineIndices } = referenceLinkImageData();
-    for (const datas of references.values()) {
-      for (const data of datas) {
-        const [ lineIndex, index, , textLength, labelLength ] = data;
-        if (labelLength > 0) {
-          exclusions.push([ lineIndex, index + 3 + textLength, labelLength ]);
+    const pending = [ [ 0, params.parsers.micromark.tokens ] ];
+    let current = null;
+    while ((current = pending.shift())) {
+      const [ offset, tokens ] = current;
+      for (const token of filterByTypes(tokens, [ "htmlFlow", "htmlText" ])) {
+        if (token.type === "htmlText") {
+          const htmlTagInfo = getHtmlTagInfo(token);
+          if (
+            htmlTagInfo &&
+            !htmlTagInfo.close &&
+            !allowedElements.includes(htmlTagInfo.name.toLowerCase())
+          ) {
+            const range = [
+              token.startColumn,
+              token.text.replace(nextLinesRe, "").length
+            ];
+            addError(
+              onError,
+              token.startLine + offset,
+              "Element: " + htmlTagInfo.name,
+              undefined,
+              range
+            );
+          }
+        } else {
+          // token.type === "htmlFlow"
+          // Re-parse without "htmlFlow" to get only "htmlText" tokens
+          const options = {
+            "extensions": [
+              {
+                "disable": {
+                  "null": [ "codeIndented", "htmlFlow" ]
+                }
+              }
+            ]
+          };
+          // Use lines instead of token.text for accurate columns
+          const lines =
+            params.lines.slice(token.startLine - 1, token.endLine).join("\n");
+          const flowTokens = parse(lines, options);
+          pending.push(
+            [ token.startLine - 1, flowTokens ]
+          );
         }
       }
     }
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
-      let match = null;
-      // eslint-disable-next-line no-unmodified-loop-condition
-      while (!inCode && ((match = htmlElementRe.exec(line)) !== null)) {
-        const [ tag, content, element ] = match;
-        if (
-          !allowedElements.includes(element.toLowerCase()) &&
-          !tag.endsWith("\\>") &&
-          !emailAddressRe.test(content) &&
-          !withinAnyRange(exclusions, lineIndex, match.index, tag.length) &&
-          !definitionLineIndices.includes(lineIndex)
-        ) {
-          const prefix = line.substring(0, match.index);
-          if (!linkDestinationRe.test(prefix)) {
-            const unescaped = unescapeMarkdown(prefix + "<", "_");
-            if (!unescaped.endsWith("_")) {
-              addError(onError, lineIndex + 1, "Element: " + element,
-                undefined, [ match.index + 1, tag.length ]);
-            }
-          }
-        }
-      }
-    });
   }
 };

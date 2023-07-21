@@ -1,1 +1,1 @@
-../packages/markdownlint/node_modules/.bin/markdownlint
+/home/bowmanpete/.config/nvim/lua/lsp_servers/packages/markdownlint/node_modules/.bin/markdownlint

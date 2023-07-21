@@ -34,7 +34,7 @@ module.exports = {
   "information": new URL("https://example.com/rules/any-blockquote"),
   "tags": [ "test" ],
   "function": function rule(params, onError) {
-    params.tokens.filter(function filterToken(token) {
+    params.parsers.markdownit.tokens.filter(function filterToken(token) {
       return token.type === "blockquote_open";
     }).forEach(function forToken(blockquote) {
       var lines = blockquote.map[1] - blockquote.map[0];
@@ -120,8 +120,6 @@ exception.
 - [Code for all `markdownlint` built-in rules][lib]
 - [Package configuration for publishing to npm][test-rules-npm]
   - Packages should export a single rule object or an `Array` of rule objects
-- [Custom rules from the Microsoft/vscode-docs-authoring
-  repository][vscode-docs-authoring]
 - [Custom rules from the axibase/docs-util repository][docs-util]
 - [Custom rules from the webhintio/hint repository][hint]
 
@@ -374,4 +372,3 @@ Yields the `params` object:
 [options-custom-rules]: ../README.md#optionscustomrules
 [test-rules]: ../test/rules
 [test-rules-npm]: ../test/rules/npm
-[vscode-docs-authoring]: https://github.com/microsoft/vscode-docs-authoring/tree/main/packages/docs-linting/markdownlint-custom-rules

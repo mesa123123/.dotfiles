@@ -33,9 +33,10 @@ shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # Find Distro Info
-export DIST_INFO=$(cat /proc/version)
+DIST_INFO=$(cat /proc/version)
+export DIST_INFO
 # set variable identifying the chroot you work in (used in the prompt below)
-[[ $(echo $DIST_INFO | grep --color=auto -c "UBUNTU") == 1 ]] && [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot)
+[[ $(echo "$DIST_INFO" | grep --color=auto -c "UBUNTU") == 1 ]] && [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot)
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
@@ -54,10 +55,10 @@ if [ -n "$force_color_prompt" ]; then
 	# a case would tend to support setf rather than setaf.)
 	color_prompt=yes
     else
-	color_prompt=
+	color_prompt=no
     fi
 fi
-if [[ $(echo $DIST_INFO | grep --color=auto -c "UBUNTU") == 1 ]]; then
+if [[ $(echo "$DIST_INFO" | grep --color=auto -c "UBUNTU") == 1 ]]; then
     if [ "$color_prompt" = yes ]; then
         PS1='${debian_chroot:+($debian_chroot)}\[[01;32m\]\u@\h\[[00m\]:\[[01;34m\]\w\[[00m\]\$ '
     else
@@ -65,15 +66,6 @@ if [[ $(echo $DIST_INFO | grep --color=auto -c "UBUNTU") == 1 ]]; then
     fi
 fi
 unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\]$PS1"
-    ;;
-*)
-    ;;
-esac
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -102,17 +94,17 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # --------
 
 # ----------- PROFILE Revert ------------------------------
-if [[ ! -z "$PROFILE_PATH" ]]; then
+if [[ -n "$PROFILE_PATH" ]]; then
     export PATH=$PROFILE_PATH
 fi
 
 # ---- Node Env ----
 # Putting Node here will help similar for node configs to load properly
-[ ! -d /home/$USER/.npm-global ] && mkdir /home/$USER/.npm-global 
+[ ! -d /home/"$USER"/.npm-global ] && mkdir /home/"$USER"/.npm-global 
 export NPM_CONFIG_PREFIX=/home/$USER/.npm-global
 # --------
 # ---- Deno Env ----
-if [ -d /home/$USER/.deno ]; then 
+if [ -d /home/"$USER"/.deno ]; then 
     export DENO_INSTALL="/home/pbowman/.deno"
     export PATH="$DENO_INSTALL/bin:$PATH"
 fi
@@ -123,7 +115,7 @@ fi
 
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+    . /home/"$USER"/.bash_aliases
 fi
 
 # Bash Completion
@@ -156,7 +148,7 @@ fi
 
 # ---- Function that adds text to files if they are not currently there ----
 configadd() {
-    grep -qxF "${2}" $1 || echo "${2}" >> $1
+    grep -qxF "${2}" "$1" || echo "${2}" >> "$1"
 }
 
 # ---------
@@ -180,6 +172,8 @@ export CARGO_HOME="/home/$USER/.cargo"
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIPENV_VENV_IN_PROJECT=1
 export PYSPARK_PYTHON="/usr/bin/python3"
+export PYENV_ROOT="$HOME/.pyenv"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # CURL
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
@@ -203,19 +197,19 @@ fi
 # Set Nvim default to 0
 NVIM=0
 # If on Manjaro
-[[ $(echo $DIST_INFO | grep -c "MANJARO") == 1 ]] && [[ $(pacman -Qqe 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+[[ $(echo "$DIST_INFO" | grep -c "MANJARO") == 1 ]] && [[ $(pacman -Qqe 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
 # If on Ubuntu
-[[ $(echo $DIST_INFO | grep -c "UBUNTU") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+[[ $(echo "$DIST_INFO" | grep -c "UBUNTU") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
 #i If on WSL
-[[ $(echo $DIST_INFO | grep -c "microsoft") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+[[ $(echo "$DIST_INFO" | grep -c "microsoft") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
 
 if [[ ${NVIM} == 1 ]]; then  
     export EDITOR=nvim
     # and am I using lua?
-    [[ -f "/home/$USER/.config/nvim/init.lua" ]] && export VIMINIT='luafile /home/$USER/.config/nvim/init.lua' || export VIMINIT='source /home/$USER/.config/nvim/init.vim'
+    [[ -f "/home/$USER/.config/nvim/init.lua" ]] && export VIMINIT="luafile /home/$USER/.config/nvim/init.lua" || export VIMINIT="source /home/$USER/.config/nvim/init.vim"
 else
     export EDITOR=vim
-    export VIMINIT='source /home/$USER/.vim/.vimrc'
+    export VIMINIT="source /home/$USER/.vim/.vimrc"
 fi
 
 # Home User Environment Variables
@@ -245,8 +239,17 @@ export PATH="$PATH:$CODE_HOME/bin"
 export PATH="$PATH:$GEM_HOME/bin"
 export PATH="$PATH:/c/Program Files/Oracle/VirtualBox"
 export PATH="$PATH:$NPM_CONFIG_PREFIX/bin"
+export PATH="$PYENV_ROOT/bin:$PATH"
 
 # ---- End Of Environment Variables -----
+
+
+
+# ---- Automated Shell Commands For Startup ----
+
+# Pyenv Setup
+eval "$(pyenv init -)"  
+eval "$(pyenv virtualenv-init -)"
 
 # Powerline Setup
 if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
@@ -255,9 +258,6 @@ if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
   POWERLINE_BASH_SELECT=1
   source /usr/share/powerline/bindings/bash/powerline.sh
 fi
-
-
-# ---- Automated Shell Commands For Startup ----
 
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
@@ -269,8 +269,9 @@ if [[ $WSLON == true ]]; then
         export DISPLAY=127.0.0.1:0.0
     fi
 fi
+
+# ---- End Of Automated Shell Commands on Startup -----
+
 # ----------------
 # End Of bashrc
 # ----------------
-
-source /home/pbowman/.config/broot/launcher/bash/br

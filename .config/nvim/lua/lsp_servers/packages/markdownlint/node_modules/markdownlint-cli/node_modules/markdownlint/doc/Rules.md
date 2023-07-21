@@ -1410,42 +1410,48 @@ Aliases: `no-bare-urls`
 
 Fixable: Some violations can be fixed by tooling
 
-This rule is triggered whenever a URL is given that isn't surrounded by angle
-brackets:
+This rule is triggered whenever a URL or email address appears without
+surrounding angle brackets:
 
 ```markdown
-For more information, see https://www.example.com/.
+For more info, visit https://www.example.com/ or email user@example.com.
 ```
 
-To fix this, add angle brackets around the URL:
+To fix this, add angle brackets around the URL or email address:
 
 ```markdown
-For more information, see <https://www.example.com/>.
+For more info, visit <https://www.example.com/> or email <user@example.com>.
 ```
 
-Note: To use a bare URL without it being converted into a link, enclose it in
-a code block, otherwise in some Markdown parsers it *will* be converted:
+Note: To include a bare URL or email without it being converted into a link,
+wrap it in a code span:
 
 ```markdown
-`https://www.example.com`
+Not a clickable link: `https://www.example.com`
 ```
 
-Note: The following scenario does *not* trigger this rule to avoid conflicts
-with `MD011`/`no-reversed-links`:
+Note: The following scenario does not trigger this rule because it could be a
+shortcut link:
 
 ```markdown
 [https://www.example.com]
 ```
 
-The use of quotes around a bare link will *not* trigger this rule, either:
+Note: The following syntax triggers this rule because the nested link could be
+a shortcut link (which takes precedence):
 
 ```markdown
-"https://www.example.com"
-'https://www.example.com'
+[text [shortcut] text](https://example.com)
 ```
 
-Rationale: Without angle brackets, the URL isn't converted into a link by many
-Markdown parsers.
+To avoid this, escape both inner brackets:
+
+```markdown
+[link \[text\] link](https://example.com)
+```
+
+Rationale: Without angle brackets, a bare URL or email isn't converted into a
+link by some Markdown parsers.
 
 <a name="md035"></a>
 
@@ -2184,7 +2190,7 @@ convert heading to lowercase, remove punctuation, convert spaces to dashes,
 append an incrementing integer as needed for uniqueness.
 
 [github-section-links]: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#section-links
-[github-heading-algorithm]: https://github.com/gjtorikian/html-pipeline/blob/main/lib/html/pipeline/toc_filter.rb
+[github-heading-algorithm]: https://github.com/gjtorikian/html-pipeline/blob/f13a1534cb650ba17af400d1acd3a22c28004c09/lib/html/pipeline/toc_filter.rb
 
 <a name="md052"></a>
 

@@ -5,7 +5,7 @@
   "repository": {
     "url": "https://github.com/Microsoft/vscode-java-test"
   },
-  "version": "0.38.2",
+  "version": "0.39.0",
   "publisher": "vscjava",
   "bugs": {
     "url": "https://github.com/Microsoft/vscode-java-test/issues"
@@ -71,7 +71,7 @@
       "./server/org.eclipse.jdt.junit4.runtime_1.3.0.v20220609-1843.jar",
       "./server/org.eclipse.jdt.junit5.runtime_1.1.100.v20220907-0450.jar",
       "./server/org.opentest4j_1.2.0.jar",
-      "./server/com.microsoft.java.test.plugin-0.38.2.jar"
+      "./server/com.microsoft.java.test.plugin-0.39.0.jar"
     ],
     "viewsWelcome": [
       {
@@ -89,17 +89,17 @@
       "view/item/context": [
         {
           "command": "java.test.runFromJavaProjectExplorer",
-          "when": "view == javaProjectExplorer && viewItem =~ /java:(type|package|packageRoot)(?=.*?\\b\\+uri\\b)(?=.*?\\b\\+test\\b)/",
+          "when": "view == javaProjectExplorer && viewItem =~ /java:(type|package|packageRoot)(?=.*?\\b\\+uri\\b)(?=.*?\\b\\+test\\b)(?!.*?\\b\\+resource\\b)/",
           "group": "8_execution@10"
         },
         {
           "command": "java.test.debugFromJavaProjectExplorer",
-          "when": "view == javaProjectExplorer && viewItem =~ /java:(type|package|packageRoot)(?=.*?\\b\\+uri\\b)(?=.*?\\b\\+test\\b)/",
+          "when": "view == javaProjectExplorer && viewItem =~ /java:(type|package|packageRoot)(?=.*?\\b\\+uri\\b)(?=.*?\\b\\+test\\b)(?!.*?\\b\\+resource\\b)/",
           "group": "8_execution@20"
         },
         {
           "command": "java.test.runFromJavaProjectExplorer",
-          "when": "view == javaProjectExplorer && viewItem =~ /java:(type|package|packageRoot)(?=.*?\\b\\+uri\\b)(?=.*?\\b\\+test\\b)/",
+          "when": "view == javaProjectExplorer && viewItem =~ /java:(type|package|packageRoot)(?=.*?\\b\\+uri\\b)(?=.*?\\b\\+test\\b)(?!.*?\\b\\+resource\\b)/",
           "group": "inline@run_0"
         }
       ],
@@ -287,6 +287,11 @@
               "description": "%configuration.java.test.config.preLaunchTask.description%",
               "default": ""
             },
+            "postDebugTask": {
+              "type": "string",
+              "description": "%configuration.java.test.config.postDebugTask.description%",
+              "default": ""
+            },
             "testKind": {
               "type": "string",
               "markdownDescription": "%configuration.java.test.config.testKind.description%",
@@ -413,6 +418,11 @@
               "preLaunchTask": {
                 "type": "string",
                 "description": "%configuration.java.test.config.preLaunchTask.description%",
+                "default": ""
+              },
+              "postDebugTask": {
+                "type": "string",
+                "description": "%configuration.java.test.config.postDebugTask.description%",
                 "default": ""
               },
               "testKind": {
