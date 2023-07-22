@@ -98,6 +98,10 @@ cmd [[packadd packer.nvim]]
 require("packer").startup(function()
     -- Packer can manage itself as an optional plugin
     use { "wbthomason/packer.nvim", opt = true }
+    -- Fundamentals
+    ----------
+    use 'nvim-lua/plenary.nvim'
+    use 'nvim-treesitter/nvim-treesitter'
     -- Autocompletion
     ----------
     use { 'hrsh7th/nvim-cmp',
@@ -128,12 +132,14 @@ require("packer").startup(function()
     use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
     -- Testing Plugins
     ----------
-    use 'nvim-lua/plenary.nvim'
-    use 'nvim-treesitter/nvim-treesitter'
     use 'antoinemadec/FixCursorHold.nvim'
     use 'nvim-neotest/neotest'
     use 'nvim-neotest/neotest-python'
     use 'tpope/vim-cucumber'
+    -- Database Workbench
+    -----------
+    use 'tpope/vim-dadbod'
+    use 'kristijanhusak/vim-dadbod-ui'
     -- File System and Plugins
     ----------
     use { 'kyazdani42/nvim-tree.lua', requires = { 'kyazdani42/nvim-web-devicons', }, }
@@ -152,15 +158,32 @@ require("packer").startup(function()
     use 'ii14/onedark.nvim'
     use 'mechatroner/rainbow_csv'
     -- Brackets Rainbowing
-    ------------
     use 'luochen1990/rainbow'
-    ------------
+    -- Git Highlighting
     use 'itchyny/vim-gitbranch'
+    -- Language Syntaxes
     use 'ekalinin/Dockerfile.vim'
     use 'rust-lang/rust.vim'
     use 'sheerun/vim-polyglot'
     use 'arzg/vim-rust-syntax-ext'
     use 'chrisbra/csv.vim'
+    -- Nvim Telescope
+    ---------
+    use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false } }
+    use { 'nvim-telescope/telescope-dap.nvim' }
+    use { 'nvim-telescope/telescope-file-browser.nvim', requires = { 'nvim-telescope/telescope.nvim',
+        'nvim-lua/plenary.nvim' } }
+    -----------
+    -- Obsidian Functionality
+   use({
+  "epwalsh/obsidian.nvim",
+  config = function()
+    require("obsidian").setup({
+      dir = "~/Learning",
+
+    })
+  end,
+}) 
     -- Dart/Flutter
     use 'dart-lang/dart-vim-plugin'
     use 'thosakwe/vim-flutter'
@@ -168,18 +191,10 @@ require("packer").startup(function()
     use 'junegunn/vim-easy-align'
     -- HardMode
     use 'takac/vim-hardtime'
-    -- Database Workbench
-    use 'tpope/vim-dadbod'
-    use 'kristijanhusak/vim-dadbod-ui'
     -- Working with Kitty
     use { "fladson/vim-kitty", branch = "main" }
     -- Terminal Behaviour
     use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
-    -- Nvim Telescope
-    use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false } }
-    use { 'nvim-telescope/telescope-dap.nvim' }
-    use { 'nvim-telescope/telescope-file-browser.nvim', requires = { 'nvim-telescope/telescope.nvim',
-        'nvim-lua/plenary.nvim' } }
     -- End of Plugins
 end)
 
@@ -405,11 +420,11 @@ keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 -- Plugin Setup
 ----------
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { "lua", "rust", "toml" },
+    ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline" },
     auto_install = true,
     highlight = {
         enable = true,
-        additional_vim_regex_highlighting = false,
+        additional_vim_regex_highlighting = { "markdown" },
     },
     ident = { enable = true },
     rainbow = {
@@ -418,6 +433,7 @@ require('nvim-treesitter.configs').setup {
         max_file_lines = nil,
         colors = {},
     },
+            
 }
 ----------
 
