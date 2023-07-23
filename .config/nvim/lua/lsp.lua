@@ -26,6 +26,7 @@ local cmp_lsp = require("cmp_nvim_lsp")
 local dap = require("dap")
 local snip = require("luasnip")
 local snipload_lua = require("luasnip.loaders.from_lua")
+local whichKey = require("which-key")
 --------
 
 -- Required Extras
@@ -56,21 +57,6 @@ local function file_exists(name)
     end
 end
 
-----------
-
--- Refresh Diagnostics
-----------
--- function G.buf_update_diagnostics()
---     local clients = lsp.buf_get_clients()
---     local buf = api.nvim_get_current_buf()
---
---     for _, client in ipairs(clients) do
---         local diagnostics = vim.lsp.diagnostic.get(buf, client.id)
---         vim.lsp.diagnostic.display(diagnostics, buf, client.id)
---     end
--- end
-----------
-
 --------------------------------
 -- Snippets
 --------------------------------
@@ -85,7 +71,7 @@ snip.config.set_config({
 -- Load Snippets
 ----------
 local snips_folder = fn.stdpath "config" .. "/lua/snippets/"
-snipload_lua.lazy_load { paths = snips_folder}
+snipload_lua.lazy_load { paths = snips_folder }
 
 -- Functions
 ----------
@@ -103,7 +89,7 @@ cmd [[command! LuaSnipEdit :lua SnipEditFile()]]
 
 -- Mappings
 ----------
-keymap.set("n", "<leader>se", ":LuaSnipEdit<CR>", {})
+keymap.set("n", "<leader>se", ":LuaSnipEdit<CR>", { desc = "Edit Snippets File" })
 
 --------------------------------
 -- Completion
@@ -303,41 +289,70 @@ local capabilities = cmp_lsp.default_capabilities(lsp.protocol.make_client_capab
 local function keymappings(client)
     -- Mapping Opts
     ----------
-    local bufopts = { noremap = true, silent = true, buffer = 0 }
-    local loudbufopts = { noremap = true, silent = false, buffer = 0 }
+    -- Silent Mappings
+    local function bufopts(opts)
+        local standardOpts = { noremap = true, silent = true, buffer = 0 }
+        for k, v in pairs(standardOpts) do
+            opts[k] = v
+        end
+        return opts
+    end
+    -- Non silent Mappings
+    local function loudbufopts(opts)
+        local standardOpts = { noremap = true, silent = false, buffer = 0 }
+        for k, v in pairs(standardOpts) do
+            opts[k] = v
+        end
+        return opts
+    end
+
     b['max_line_length'] = 0 -- This has to be attached to the buffer so I went for a bufferopt
+
     -- Mappings
     ----------
     -- Commands that keep you in this buffer `g`
-    keymap.set("n", "gw", ":lua vim.diagnostic.open_float()<CR>", bufopts)
-    keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
-    keymap.set("n", "[g", ":lua vim.diagnostic.goto_prev()<CR>", bufopts)
-    keymap.set("n", "]g", ":lua vim.diagnostic.goto_next()<CR>", bufopts)
-    keymap.set("n", "[G", ":lua vim.diagnostic.goto_prev({severity = diagnostic.severity.ERROR})<CR>", bufopts)
-    keymap.set("n", "]G", ":lua vim.diagnostic.goto_next({severity = diagnostic.severity.ERROR})<CR>", bufopts)
-    keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts)
-    keymap.set("n", "gh", ":lua vim.lsp.buf.hover()<CR>", bufopts)
-    keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts)
+    keymap.set("n", "gw", ":lua vim.diagnostic.open_float()<CR>", bufopts({ desc = "LSP: Open Diagnostics Window" }))
+    keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts({ desc = "LSP: Open Signature Help" }))
+    keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts({ desc = "LSP: Take Code Action" }))
+    keymap.set("n", "gh", ":lua vim.lsp.buf.hover()<CR>", bufopts({ desc = "LSP: Open Hover Dialog" }))
+    keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts({ desc = "LSP: Shorten Line" }))
     if client.server_capabilities.documentFormattingProvider then
-        keymap.set("n", "gf", ":lua FormatWithConfirm()<CR>", loudbufopts)
+        keymap.set("n", "gf", ":lua FormatWithConfirm()<CR>", loudbufopts({ desc = "LSP: Format Code" }))
         print("Formatter Accepted")
     else
         print("There Is No Formatter Attached!")
     end
+
+    keymap.set("n", "[g", ":lua vim.diagnostic.goto_prev()<CR>", bufopts({ desc = "LSP: Previous Code Action" }))
+    keymap.set("n", "]g", ":lua vim.diagnostic.goto_next()<CR>", bufopts({ desc = "LSP: Next Error Code Action" }))
+    keymap.set("n", "[G", ":lua vim.diagnostic.goto_prev({severity = diagnostic.severity.ERROR})<CR>",
+        bufopts({ desc = "LSP: Next Error" }))
+    keymap.set("n", "]G", ":lua vim.diagnostic.goto_next({severity = diagnostic.severity.ERROR})<CR>",
+        bufopts({ desc = "LSP: Previous Error" }))
     -- Commands where you leave current buffer `<leader>c`
-    keymap.set("n", "<leader>cR", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts)
-    keymap.set("n", "<leader>cI", "<cmd>LspInfo<CR>", bufopts)
+    keymap.set("n", "<leader>cR", "<cmd>lua vim.lsp.buf.rename()<CR>", bufopts({ desc = "LSP: Rename Buffer" }))
+    keymap.set("n", "<leader>cI", "<cmd>LspInfo<CR>", bufopts({ desc = "LSP: Show Info" }))
     -- Need something here that says (if implementation isn't supported open definition/declaration in new buffer
-    keymap.set("n", "<leader>cD", "<Cmd>lua vim.lsp.buf.definition()<CR>", bufopts)
-    keymap.set("n", "<leader>cd", "<Cmd>lua vim.lsp.buf.declaration()<CR>", bufopts)
-    keymap.set("n", "<leader>cr", "<cmd>lua require('telescope.builtin').lsp_references()<CR>", bufopts)
-    keymap.set("n", "<leader>cs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", bufopts)
-    keymap.set("n", "<leader>ci", "<cmd>lua vim.lsp.buf.implementation()<CR>", bufopts)
-    keymap.set("n", "<leader>ct", "<cmd>lua vim.lsp.buf.type_definition()<CR>", bufopts)
+    keymap.set("n", "<leader>cD", "<Cmd>lua vim.lsp.buf.definition()<CR>", bufopts({ desc = "LSP: Go To Definition" }))
+    keymap.set("n", "<leader>cd", "<Cmd>lua vim.lsp.buf.declaration()<CR>", bufopts({ desc = "LSP: Go To Declaration" }))
+    keymap.set("n", "<leader>cr", "<cmd>lua require('telescope.builtin').lsp_references()<CR>",
+        bufopts({ desc = "LSP: Go to References" }))
+    keymap.set("n", "<leader>cs", "<cmd>lua vim.lsp.buf.signature_help()<CR>",
+        bufopts({ desc = "LSP: Bring Up Signature Help" }))
+    keymap.set("n", "<leader>ci", "<cmd>lua vim.lsp.buf.implementation()<CR>",
+        bufopts({ desc = "LSP: Go To Implementation" }))
+    keymap.set("n", "<leader>ct", "<cmd>lua vim.lsp.buf.type_definition()<CR>",
+        bufopts({ desc = "LSP: Go To Type Definition" }))
+    -- Mapping Assistance
+    ----------
+    whichKey.register({
+        g = { name = "Code & Diagnostics Actions" },
+        ["<leader>"] = {
+            c = { name = "Code & Diagnostic Opts" }
+        }
+    })
     ----------
 end
-
-----------
 
 --------------------------------
 -- Language Server Configuration
@@ -625,54 +640,64 @@ hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend =
 -- Debug Adapter Protocol
 --------------------------------
 
--- UI Load
-----------
-require('dapui').setup()
-
-
 -- Languages
 ----------
 local python_path = get_python_path()
--- require('dap-python').setup(python_path)
 
 -- Mappings
 ----------
-local keyopts = { silent = false, noremap = true }
+local function keyopts(opts)
+    local standardOpts = { silent = false, noremap = true }
+    for k, v in pairs(standardOpts) do
+        opts[k] = v
+    end
+    return opts
+end
 -- Session Commands
-keymap.set("n", "<leader>br", "<cmd>lua require('dap').continue()<cr>", keyopts) -- bug continue
-keymap.set("n", "<leader>bs", "<cmd>lua require('dap').session()<cr>", keyopts)
-keymap.set("n", "<leader>bt", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts)
-keymap.set("n", "<leader>bx", "<cmd>lua require('dap').disconnect()<cr>", keyopts) -- bug exit
-keymap.set("n", "<leader>bq", "<cmd>lua require('dap').close()<cr>", keyopts)
-keymap.set("n", "<leader>bQ", "<cmd>lua require('dap').terminate()<cr>", keyopts)
+keymap.set("n", "<leader>bs", "<cmd>lua require('dap').session()<cr>", keyopts({ desc = "Start Debug Session" }))
+keymap.set("n", "<leader>bc", "<cmd>lua require('dap').continue()<cr>", keyopts({ desc = "Continue Debug Run" }))       -- bug continue
+keymap.set("n", "<leader>bx", "<cmd>lua require('dap').disconnect()<cr>", keyopts({ desc = "Deattach Debug Session" })) -- bug exit
+keymap.set("n", "<leader>bq", "<cmd>lua require('dap').close()<cr>", keyopts({ desc = "Close Debug Session" }))
+keymap.set("n", "<leader>bQ", "<cmd>lua require('dap').terminate()<cr>", keyopts({ desc = "Terminate Debug Session" }))
 -- Breakpoints (and pauses)
-keymap.set("n", "<leader>bB", "<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>", keyopts) -- bug breakpoint
-keymap.set("n", "<leader>bb", "<cmd>lua require('dap').toggle_breakpoint()<cr>", keyopts)
-keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts)
+keymap.set("n", "<leader>bb", "<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>",
+    keyopts({ desc = "Set BreakPoint" })) -- bug breakpoint
+keymap.set("n", "<leader>bB", "<cmd>lua require('dap').toggle_breakpoint()<cr>", keyopts({ desc = "Toggle Breakpoint" }))
+keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts({ desc = "Toggle Pause" }))
 -- Stepping commands
-keymap.set("n", "<leader>bc", "<cmd>lua require('dap').run_to_cursor()<cr>", keyopts) -- run to here
-keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_back()<cr>", keyopts)     -- bug previous
-keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_into()<cr>", keyopts)
-keymap.set("n", "<leader>bj", "<cmd>lua require('dap').step_over()<cr>", keyopts)
-keymap.set("n", "<leader>bo", "<cmd>lua require('dap').step_out()<cr>", keyopts)
+keymap.set("n", "<leader>bC", "<cmd>lua require('dap').run_to_cursor()<cr>", keyopts({ desc = "Run Session To Cursor" })) -- run to here
+keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_back()<cr>", keyopts({ desc = "Step Back" }))                 -- bug previous
+keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_into()<cr>", keyopts({ desc = "Step Into" }))
+keymap.set("n", "<leader>bj", "<cmd>lua require('dap').step_over()<cr>", keyopts({ desc = "Step Over" }))
+keymap.set("n", "<leader>bo", "<cmd>lua require('dap').step_out()<cr>", keyopts({ desc = "Step Out" }))
+-- Dap REPL
+keymap.set("n", "<leader>br", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts({ desc = "Toggle Debug REPL" }))
 ----------
-
--- UI Mappings
-----------
-keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval()<cr>", keyopts)
-keymap.set("n", "<leader>bue", "<cmd>lua require'dapui'.eval(vim.fn.input '[Expression] > ')<cr>", keyopts) -- bug gui exec
-keymap.set("n", "<leader>buo", "<cmd>lua require'dapui'.toggle()<cr>", keyopts)                             -- bug gui toggle
-keymap.set("n", "<leader>buh", "<cmd>lua require'dap.ui.widgets'.hover()<cr>", keyopts)
-keymap.set("n", "<leader>bus", "<cmd>lua require'dap.ui.widgets'.scopes()<cr>", keyopts)                    --
 
 -- Telescope Integration
 ----------
+
+-- Adding Assistance Menus
+whichKey.register({
+    ["<leader>"] = {
+        b = {
+            f = { name = "UI Options" }
+        }
+    }
+})
+
+
 -- telescope-dap loaded in init.lua
-keymap.set('n', '<leader>bf', '<cmd>lua require"telescope".extensions.dap.commands{}<CR>')
-keymap.set('n', '<leader>bfo', '<cmd>lua require"telescope".extensions.dap.configurations{}<CR>')
-keymap.set('n', '<leader>bfb', '<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>')
-keymap.set('n', '<leader>bfv', '<cmd>lua require"telescope".extensions.dap.variables{}<CR>')
-keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>')
+keymap.set('n', '<leader>bfc', '<cmd>lua require"telescope".extensions.dap.commands{}<CR>',
+    keyopts({ desc = "Debug Command Palette UI" }))
+keymap.set('n', '<leader>bfo', '<cmd>lua require"telescope".extensions.dap.configurations{}<CR>',
+    keyopts({ desc = "Debug Config UI" }))
+keymap.set('n', '<leader>bfb', '<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>',
+    keyopts({ desc = "List All BreakPoints UI" }))
+keymap.set('n', '<leader>bfv', '<cmd>lua require"telescope".extensions.dap.variables{}<CR>',
+    keyopts({ desc = "Variable UI" }))
+keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>', keyopts({ desc = "Frames UI" }))
+----------
 
 -- Custom configs - Load per project .dap-cofig.lua
 ----------

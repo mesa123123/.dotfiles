@@ -31,6 +31,7 @@ local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn   -- vim functions
 local keymap = vim.keymap
 local hl = api.nvim_set_hl
+local loop = vim.loop
 -- For Options
 local opt = vim.opt -- vim options
 local gopt = vim.go -- global options
@@ -40,8 +41,6 @@ local wopt = vim.wo -- window options
 local g = vim.g     -- global variables
 local b = vim.b     -- buffer variables
 local w = vim.w     -- window variables
-local t = vim.t     -- tabpage variables
-local v = vim.v     -- general variables?
 ----------
 
 -- Functions
@@ -52,7 +51,7 @@ local ex = setmetatable({}, {
     __index = function(t, k)
         local command = k:gsub("_$", "!")
         local f = function(...)
-            return api.nvim_command(table.concat(vim.tbl_flatten { command, ... }, " "))
+            return api.nvim_cmd(table.concat(vim.tbl_flatten { command, ... }, " "))
         end
         rawset(t, k, f)
         return f
@@ -82,129 +81,138 @@ end
 ----------
 
 --------------------------------
--- Plugin Loading and Settings
+-- Plugin Loading and Settings -- lazy.nvim
 --------------------------------
--- Install Packer and Sync if required
-----------------
-local install_path = fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-    -- Clone packer and install
-    api.nvim_command('! git clone https://github.com/wbthomason/packer.nvim ' .. install_path .. ' --depth=1')
+
+-- Install
+----------
+-- Download
+local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not loop.fs_stat(lazypath) then
+    fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
 end
--- Load Packer
-cmd [[packadd packer.nvim]]
--- Load Plugins
+-- Add to Runtime Path
+opt.rtp:prepend(lazypath)
+----------
+
+-- Setup
 ----------------
-require("packer").startup(function()
-    -- Packer can manage itself as an optional plugin
-    use { "wbthomason/packer.nvim", opt = true }
-    -- Fundamentals
-    ----------
-    use 'nvim-lua/plenary.nvim'
-    use 'nvim-treesitter/nvim-treesitter'
+local plugins = {
+    'nvim-lua/plenary.nvim',
+    'nvim-treesitter/nvim-treesitter',
     -- Autocompletion
     ----------
-    use { 'hrsh7th/nvim-cmp',
+    {
+        'hrsh7th/nvim-cmp',
         -- Extensions for NvimCmp
-        requires = {
-            use 'hrsh7th/cmp-nvim-lsp',
-            use 'hrsh7th/cmp-path',
-            use 'hrsh7th/cmp-buffer',
-            use 'hrsh7th/cmp-nvim-lua',
-            use 'hrsh7th/cmp-cmdline',
-            use 'ray-x/cmp-treesitter',
-            use 'L3MON4D3/LuaSnip',
-            use 'saadparwaiz1/cmp_luasnip',
-            use 'rcarriga/nvim-notify',
+        dependencies = {
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-path',
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/cmp-nvim-lua',
+            'hrsh7th/cmp-cmdline',
+            'ray-x/cmp-treesitter',
+            'L3MON4D3/LuaSnip',
+            'saadparwaiz1/cmp_luasnip',
+            'rcarriga/nvim-notify',
         }
-    }
+    },
     -- Language Server Protocol
     ----------
-    use { 'neovim/nvim-lspconfig',
-        wants = { "nvim-cmp", "mason.nvim", "mason-lspconfig.nvim", "lsp_signature.nvim" },
-        requires = { 'williamboman/mason-lspconfig.nvim', 'williamboman/mason.nvim', 'ray-x/lsp_signature.nvim',
-            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip' }, }
-    use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
+    {
+        'neovim/nvim-lspconfig',
+        dependencies = { 'williamboman/mason-lspconfig.nvim', 'williamboman/mason.nvim', 'ray-x/lsp_signature.nvim',
+            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip' },
+    },
+    { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' },
     -- Debug Adapter Protocol
     ----------
-    use { 'mfussenegger/nvim-dap' }
-    use { 'mfussenegger/nvim-dap-python' }
-    use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+    'mfussenegger/nvim-dap',
     -- Assitance Plugins
     ----------
-    use { 'folke/which-key.nvim' }
+    'folke/which-key.nvim',
     -- Testing Plugins
     ----------
-    use 'antoinemadec/FixCursorHold.nvim'
-    use 'nvim-neotest/neotest'
-    use 'nvim-neotest/neotest-python'
-    use 'tpope/vim-cucumber'
-    -- Database Workbench
+    'antoinemadec/FixCursorHold.nvim',
+    'nvim-neotest/neotest',
+    'nvim-neotest/neotest-python',
+    'tpope/vim-cucumber',
+    -- Database Workbench,
     -----------
-    use 'tpope/vim-dadbod'
-    use 'kristijanhusak/vim-dadbod-ui'
+    'tpope/vim-dadbod',
+    'kristijanhusak/vim-dadbod-ui',
     -- File System and Plugins
     ----------
-    use { 'kyazdani42/nvim-tree.lua', requires = { 'kyazdani42/nvim-web-devicons', }, }
-    use 'yggdroot/indentline'
-    use 'tpope/vim-fugitive'
-    use 'editorconfig/editorconfig-vim'
-    use({ 'toppair/peek.nvim', run = 'deno task --quiet build:fast' })
+    'yggdroot/indentline',
+    'tpope/vim-fugitive',
+    'editorconfig/editorconfig-vim',
+    { 'toppair/peek.nvim',         build = 'deno task --quiet build:fast' },
     -- Colors and Themes
     ------------
-    use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
-    use 'altercation/vim-colors-solarized'
-    use 'nvie/vim-flake8'
+    { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true } },
+    'altercation/vim-colors-solarized',
+    'nvie/vim-flake8',
     -- DevIcons
-    use 'kyazdani42/nvim-web-devicons'
+    'nvim-tree/nvim-web-devicons',
     -- Theme
-    use 'ii14/onedark.nvim'
-    use 'mechatroner/rainbow_csv'
+    'ii14/onedark.nvim',
+    'mechatroner/rainbow_csv',
     -- Brackets Rainbowing
-    use 'luochen1990/rainbow'
+    'luochen1990/rainbow',
     -- Git Highlighting
-    use 'itchyny/vim-gitbranch'
+    'itchyny/vim-gitbranch',
     -- Language Syntaxes
-    use 'ekalinin/Dockerfile.vim'
-    use 'rust-lang/rust.vim'
-    use 'sheerun/vim-polyglot'
-    use 'arzg/vim-rust-syntax-ext'
-    use 'chrisbra/csv.vim'
+    'ekalinin/Dockerfile.vim',
+    'rust-lang/rust.vim',
+    'sheerun/vim-polyglot',
+    'arzg/vim-rust-syntax-ext',
+    'chrisbra/csv.vim',
+    -- Dashboard
+    {
+        'goolord/alpha-nvim',
+        event = "VimEnter",
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+    },
     -- Nvim Telescope
     ---------
-    use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false } }
-    use { 'nvim-telescope/telescope-dap.nvim' }
-    use { 'nvim-telescope/telescope-file-browser.nvim', requires = { 'nvim-telescope/telescope.nvim',
-        'nvim-lua/plenary.nvim' } }
+    { 'nvim-telescope/telescope.nvim', dependencies = { "BurntSushi/ripgrep", "sharkdp/fd", lazy = false } },
+    'nvim-telescope/telescope-dap.nvim',
+    {
+        'nvim-telescope/telescope-file-browser.nvim',
+        dependencies = { 'nvim-telescope/telescope.nvim',
+            'nvim-lua/plenary.nvim' }
+    },
+    {
+        'nvim-telescope/telescope-project.nvim',
+        dependencies = { 'nvim-telescope/telescope.nvim' },
+    },
     -----------
     -- Obsidian Functionality
-    use({
-        "epwalsh/obsidian.nvim",
-        config = function()
-            require("obsidian").setup({
-                dir = "~/Learning",
-
-            })
-        end,
-    })
+    "epwalsh/obsidian.nvim",
     -- Dart/Flutter
-    use 'dart-lang/dart-vim-plugin'
-    use 'thosakwe/vim-flutter'
+    'dart-lang/dart-vim-plugin',
+    'thosakwe/vim-flutter',
     -- Alignment
-    use 'junegunn/vim-easy-align'
+    'junegunn/vim-easy-align',
     -- HardMode
-    use 'takac/vim-hardtime'
+    'takac/vim-hardtime',
     -- Working with Kitty
-    use { "fladson/vim-kitty", branch = "main" }
+    { "fladson/vim-kitty",             branch = "main" },
     -- Terminal Behaviour
-    use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
-    -- End of Plugins
-end)
-
--- Sync Plugins via Alias
-------------------
-api.nvim_create_user_command('PackUpdate', 'lua require("packer").sync()', {})
-------------------
+    { 'akinsho/toggleterm.nvim',       version = 'v2.*' },
+}
+-- Plugin Options
+local pluginOpts = {}
+-- Load
+require("lazy").setup(plugins, pluginOpts)
+----------
 
 --------------------------------
 -- Configure Vimrc from Vim
@@ -224,10 +232,9 @@ api.nvim_create_user_command('Srcv', 'luafile ~/.config/nvim/init.lua', {}) -- S
 ----------
 opt.termguicolors = true
 
-
 -- Load Color Scheme
 ----------
-cmd [[ colorscheme onedark ]]
+cmd('colorscheme onedark')
 ----------
 
 -- Rainbow Brackets Options
@@ -287,9 +294,9 @@ cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
 cmd [[ set mouse= ]]
 ----------
 
--------------------------------"
+-------------------------------
 -- Language Specific Settings
--------------------------------"
+-------------------------------
 
 -- Filetype Enable
 -----------
@@ -345,7 +352,7 @@ keymap.set('n', '<leader>ws', ':source %<CR>', { silent = false, noremap = true,
 keymap.set('n', '<leader>wqq', ':wq<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
 keymap.set('n', '<leader>wqa', ':wqa<CR>', { silent = false, noremap = true, desc = "Write All & Quit Nvim" })
 keymap.set('n', '<leader>wa', ':wa<CR>', { silent = false, noremap = true, desc = "Write All" })
-keymap.set('n', '<leader>qa', ':qa<CR>', { silent = false, noremap = true, desc = "Quit Nvim" })
+keymap.set('n', '<leader>qaa', ':qa<CR>', { silent = false, noremap = true, desc = "Quit Nvim" })
 keymap.set('n', '<leader>qa!', '<cmd>qa!<cr>', { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
 keymap.set('n', '<leader>qq', ':q<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
 keymap.set('n', '<leader>q!', ':q!<CR>', { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
@@ -416,6 +423,30 @@ keymap.set("n", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
 keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 ----------
 
+----------------------------------
+-- Editor Mapping Assistance -- Which Key
+----------------------------------
+
+-- Setup
+---------------
+local whichKey = require("which-key")
+whichKey.setup()
+---------------
+
+-- Mappings
+---------------
+keymap.set("n", "<c-/>", "<cmd>WhichKey<CR>", { silent = true, noremap = false, desc = "Editor Mapping Assistance" })
+---------------
+
+-- General Menu Keys Register
+---------------
+whichKey.register({
+    ["]"] = { name = "Go To Next" },
+    ["["] = { name = "Go To Previous" }
+})
+
+
+
 -----------------------------------------
 -- Tree-Sitter Config
 -----------------------------------------
@@ -436,6 +467,9 @@ require('nvim-treesitter.configs').setup {
         max_file_lines = nil,
         colors = {},
     },
+    modules = {},
+    sync_install = true,
+    ignore_install = {},
 
 }
 ----------
@@ -481,85 +515,6 @@ notify.setup({
 })
 ----------
 
------------------------------------------
--- Leader Remappings, Plugin Commands
------------------------------------------
-
--- Note
-----------
--- I'll use leader mappings for plugins and super extra goodies
--- however ones I use all the time will be mapped to `<c-` or a specific key
--- This follows the conventions <leader>{plugin key}{command key}
--- I've listed already use leader commands here
-----------
-
--- Mappings
-----------
--- Write Commands: <leader>w
--- Quit Commands: <leader>q
--- Terminal - TerminalToggle : <leader>t & <leader> q
--- Snippets - LuaSnip : <leader>s
--- Filetree - Telescope File Browser : <c-n>
--- Buffer Management - Telescope Nvim: <leader>f
--- Database - DadBod: : <leader>d
--- Testing - Ultest : <leader>x (T is being used for the terminal)
--- Code Alignment - EasyAlign : <leader>e
--- AutoComplete and Diagnostics - NvimCmp (and dependents): <leader>c & g
--- Debugging - NvimDAP: <leader>b
-----------
-
--- Key Map Assitance
-----------
-local whichKey = require("which-key")
-whichKey.setup()
-
-whichKey.register({
-     ["<leader>"] = {
-        w = { name = "Write"},
-        q = { name = "Close and Quit"},
-        t = { name = "Terminal"},
-        s = { name = "Snippets"},
-        f = { name = "Telescope"},
-        d = { name = "Database"},
-        c = { name = "LSP"},
-        b = { name = "Debugging"},
-        x = { name = "Testing"},
-     }
- })
----------
-
-
-----------------------------------
--- Terminal Settings
-----------------------------------
-
-require("toggleterm").setup {
-    -- Options
-    ----------
-    open_mapping = '<Leader>t',
-    direction = 'tab',
-    persist_mode = true,
-    close_on_exit = true,
-    terminal_mappings = true,
-    hide_numbers = true,
-    on_open = function()
-        cmd [[ TermExec cmd="source ~/.bashrc &&  clear" ]]
-    end,
-    on_exit = function()
-        cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
-    end
-}
-
--- Mappings
-----------
-keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true, desc = "Quit Terminal Instance" }) -- Send exit command
-keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true })                                           -- Use Esc to change modes in the terminal
-keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"", { noremap = true, silent = true })
-keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
-    { noremap = true, silent = true })
-
-----------
-
 -----------------------------
 -- LuaLine Configuration
 -----------------------------
@@ -594,32 +549,135 @@ require("lualine").setup({
         lualine_z = {}
     }
 })
+----------
 
 -----------------------------
--- Filetree Options - telescope-file-browser
+-- Start Page - alpha.nvim
 -----------------------------
 
---Imports
+-- Config
+----------
+local alpha = require("alpha")
+local dashboard = require("alpha.themes.dashboard")
+alpha.setup(dashboard.config)
+----------
+
+-----------------------------------------
+-- Leader Remappings, Plugin Commands
+-----------------------------------------
+
+-- Note
+---------
+-- I'll use leader mappings for plugins and super extra goodies
+-- however ones I use all the time will be mapped to `<c-` or a specific key
+-- This follows the conventions <leader>{plugin key}{command key}
+-- I've listed already use leader commands here
+----------
+
+-- Mappings
+----------
+-- Configured Here
+-- Terminal - TerminalToggle : <leader>t & <leader> q (while in terminal mode)
+-- Via Telescope
+-- Filetree - Telescope File Browser : <c-n>
+-- Project Management - telescope-project: <leader>p
+-- Buffer Management - Telescope Nvim: <leader>f
+-- Database - DadBod: : <leader>d
+-- Testing - Ultest : <leader>x (T is being used for the terminal)
+-- Code Alignment - EasyAlign : <leader>e
+-- Wiki Commands - Obsidian.nvim: <leader>k
+-- Previously Configured
+-- Write Commands: <leader>w
+-- Quit Commands: <leader>q
+-- Configured in init.lsp
+-- Snippets - LuaSnip : <leader>s
+-- Debugging - NvimDAP: <leader>b
+-- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c & g
+----------
+
+-- Key Map Assitance
+----------
+whichKey.register({
+    ["<leader>"] = {
+        w = { name = "File Write" },
+        k = { name = "Wiki Opts" },
+        q = { name = "Close and Quit" },
+        t = { name = "Terminal" },
+        s = { name = "Snippets" },
+        f = { name = "Telescope" },
+        d = { name = "Database" },
+        b = { name = "Debugging" },
+        x = { name = "Testing" },
+        c = { name = "+LSP Opts" }
+    }
+})
+---------
+
+
+----------------------------------
+-- Terminal Settings: <leader>t - toggleterm
+----------------------------------
+
+-- Config
+----------
+require("toggleterm").setup {
+    -- Options
+    ----------
+    open_mapping = '<Leader>t',
+    direction = 'tab',
+    persist_mode = true,
+    close_on_exit = true,
+    terminal_mappings = true,
+    hide_numbers = true,
+    on_open = function()
+        cmd [[ TermExec cmd="source ~/.bashrc &&  clear" ]]
+    end,
+    on_exit = function()
+        cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
+    end
+}
+----------
+
+-- Mappings
+----------
+keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true, desc = "Quit Terminal Instance" }) -- Send exit command
+keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true })                                           -- Use Esc to change modes in the terminal
+keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"", { noremap = true, silent = true })
+keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
+    { noremap = true, silent = true })
+----------
+
+
+---------------------------------
+-- Functions Handled by Telescope
+---------------------------------
+-- Projects
+-- File Tree
+-- Buffer Management
+
+-----------------------------
+-- Filetree: <c-n> - telescope-file-browser
+-----------------------------
+
+-- Functions
 ----------
 local fb_actions = require "telescope._extensions.file_browser.actions"
-local actions = require "telescope.actions"
+local tele_actions = require "telescope.actions"
 ----------
 
-
-
--- Setup
+-- Config
 ----------
 local file_browser_configs = {
     hijack_netrw = true,
     initial_mode = 'normal',
     git_status = true,
     respect_gitignore = false,
-    -- Mappings
+    -- Internal Mappings
     ----------
-    -- Normal Mode
     mappings = {
+        -- Normal Mode
         ['n'] = {
-            ["<C-n>"] = actions.close,
+            ["<C-n>"] = tele_actions.close,
             ["l"] = fb_actions.change_cwd,
             ["h"] = fb_actions.goto_parent_dir,
             ["c"] = fb_actions.goto_cwd,
@@ -627,8 +685,9 @@ local file_browser_configs = {
             ["a"] = fb_actions.create,
             ["H"] = fb_actions.toggle_hidden,
         },
+        -- Insert Mode
         ['i'] = {
-            ["<C-n>"] = actions.close,
+            ["<C-n>"] = tele_actions.close,
             ["<C-l>"] = fb_actions.change_cwd,
             ["<C-h>"] = fb_actions.goto_parent_dir,
             ["<C-c>"] = fb_actions.goto_cwd,
@@ -636,14 +695,30 @@ local file_browser_configs = {
         },
     },
 }
+----------
 
 -- Mappings
 ----------
-keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { silent = true, noremap = true }) -- Remap the open and close to C-n
+keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { silent = true, noremap = true, desc = "Toggle File Browser" }) -- Remap the open and close to C-n
 ----------
 
+-----------------------------
+-- Project Management: <leader>p - telescope-project
+-----------------------------
+
+-- Functions
+----------
+local project_actions = require "telescope._extensions.project.actions"
+----------
+
+-- Config
+----------
+local project_configs = {}
+----------
+
+
 ---------------------------------
--- Telescope Settings
+-- Buffer Management: <leader>f  - Telescope Core
 ---------------------------------
 
 -- Mappings
@@ -654,7 +729,14 @@ keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true, des
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true, desc = "Telescope: Help Tags" })
 keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true, desc = "Telescope: Keymaps" })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
--- Picker Mappings
+----------
+
+---------------------------------
+-- Telescope Setup
+---------------------------------
+
+-- Setup
+----------
 require("telescope").setup {
     pickers = {
         buffers = {
@@ -665,27 +747,73 @@ require("telescope").setup {
         }
     },
     extensions = {
-        file_browser = file_browser_configs
+        file_browser = file_browser_configs,
+        project = project_configs
     }
 }
+
+-- Extension Setup (Must Go last)
+require('telescope').load_extension('file_browser')
+require('telescope').load_extension('project')
+----------
+
+---------
+-- End of Telescope Setup
 ---------
 
--- Extensions
+---------------------------------
+-- Wiki Functionality: <leader>k - Obsidian.nvim
+---------------------------------
+
+-- Setup
 ----------
-require('telescope').load_extension('file_browser')
+require("obsidian").setup({
+    dir = "~/Learning",
+    templates = {
+        subdir = "templates",
+        date_format = "%Y-%m-%d-%a",
+        time_format = "%H:%M",
+    }
+})
 ----------
+
+
+-- Mappings
+----------
+keymap.set("n", "<leader>kb", "<cmd>ObsidianBackLinks<cr>", { silent = true, desc = "Get References To Current" })
+keymap.set("n", "<leader>kct", "<cmd>ObsidianToday<cr>", { silent = true, desc = "Create New Daily Note" })
+keymap.set("n", "<leader>ky", "<cmd>ObsidianYesterday<cr>",
+    { silent = true, desc = "Create New Daily Note For Yesterday" })
+keymap.set("n", "<leader>ko", "<cmd>ObsidianOpen<cr>", { silent = true, desc = "Open in Obisidian App" })
+keymap.set("n", "<leader>kcn", "<cmd>ObsidianNew<cr>", { silent = true, desc = "Create New Note" })
+keymap.set("n", "<leader>ks", "<cmd>ObsidianSearch<cr>", { silent = true, desc = "Search Vault Notes" })
+keymap.set("n", "<leader>kq", "<cmd>ObsidianQuickSwitch<cr>", { silent = true, desc = "Note Quick Switch" })
+keymap.set("v", "<leader>kl", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Go To Selected Link" })
+keymap.set("n", "<leader>klo", "<cmd>ObsidianLink ", { silent = false, desc = "Go To Link" })
+keymap.set("n", "<leader>kcl", "<cmd>ObsidianLinkNew", { silent = true, desc = "Created New Linked Note" })
+keymap.set("n", "<leader>kll", "<cmd>ObsidianFollowLink<cr>", { silent = true, desc = "Go To Link Under Cursor" })
+keymap.set("n", "<leader>kt", "<cmd>ObsidianTemplate<cr>", { silent = true, desc = "Insert Template Into Link" })
+-- Mapping Assist
+whichKey.register({
+    ["<leader>k"] = {
+        c = { name = "Create New" },
+        l = { name = "Links Opts" }
+    }
+})
+-----------
 
 ---------------------------------
 -- Easy Align
 ---------------------------------
 
+-- Mappings
+----------
 -- Start interactive EasyAlign in visual mode (e.g. vipga)
 keymap.set("x", "<leader>e", "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 
 -- Start interactive EasyAlign for a motion/text object (e.g. gaip)
 keymap.set("n", "<leader>e", "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
-
----------------
+----------
 
 ---------------------------------"
 -- Database Commands - DadBod
@@ -699,8 +827,8 @@ g['dd_ui_use_nerd_fonts'] = 1
 
 -- Mappings
 ---------
-keymap.set("n", "<leader>du", ":DBUIToggle<CR>", { silent = true, desc = "Toggle DB UI"})
-keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true, desc = "Find DB Buffer"})
+keymap.set("n", "<leader>du", ":DBUIToggle<CR>", { silent = true, desc = "Toggle DB UI" })
+keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true, desc = "Find DB Buffer" })
 keymap.set("n", "<leader>dr", ":DBUIRenameBuffer<CR>", { silent = true, desc = "Rename DB Buffer" })
 keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = "Run Last Query" })
 ---------
