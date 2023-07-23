@@ -780,18 +780,17 @@ require("obsidian").setup({
 
 -- Mappings
 ----------
-keymap.set("n", "<leader>kb", "<cmd>ObsidianBackLinks<cr>", { silent = true, desc = "Get References To Current" })
+keymap.set("n", "<leader>kb", "<cmd>ObsidianBacklinks<cr>", { silent = true, desc = "Get References To Current" })
 keymap.set("n", "<leader>kct", "<cmd>ObsidianToday<cr>", { silent = true, desc = "Create New Daily Note" })
 keymap.set("n", "<leader>ky", "<cmd>ObsidianYesterday<cr>",
     { silent = true, desc = "Create New Daily Note For Yesterday" })
 keymap.set("n", "<leader>ko", "<cmd>ObsidianOpen<cr>", { silent = true, desc = "Open in Obisidian App" })
-keymap.set("n", "<leader>kcn", "<cmd>ObsidianNew<cr>", { silent = true, desc = "Create New Note" })
+keymap.set("n", "<leader>kcn", ":ObsidianNew ", { silent = false, desc = "Create New Note" })
+keymap.set("v", "<leader>kcl", ":ObsidianLinkNew ", { silent = false, desc = "Created New Linked Note" })
 keymap.set("n", "<leader>ks", "<cmd>ObsidianSearch<cr>", { silent = true, desc = "Search Vault Notes" })
 keymap.set("n", "<leader>kq", "<cmd>ObsidianQuickSwitch<cr>", { silent = true, desc = "Note Quick Switch" })
-keymap.set("v", "<leader>kl", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Go To Selected Link" })
-keymap.set("n", "<leader>klo", "<cmd>ObsidianLink ", { silent = false, desc = "Go To Link" })
-keymap.set("n", "<leader>kcl", "<cmd>ObsidianLinkNew", { silent = true, desc = "Created New Linked Note" })
 keymap.set("n", "<leader>kll", "<cmd>ObsidianFollowLink<cr>", { silent = true, desc = "Go To Link Under Cursor" })
+keymap.set("v", "<leader>kla", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Link Note To Selection" })
 keymap.set("n", "<leader>kt", "<cmd>ObsidianTemplate<cr>", { silent = true, desc = "Insert Template Into Link" })
 -- Mapping Assist
 whichKey.register({
