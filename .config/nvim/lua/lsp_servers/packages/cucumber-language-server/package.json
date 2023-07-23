@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cucumber/language-server": "^1.4.0"
+    "@cucumber/language-server": "^1.2.0"
   }
 }

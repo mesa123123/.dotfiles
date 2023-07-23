@@ -402,7 +402,8 @@ install.setup({
         'rust_analyzer' }
 }) -- This is running through Mason_lsp-config
 ----------
-local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter' }
+local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter',
+    'rstcheck' }
 --------------------------------
 -- Setup of Language Servers
 --------------------------------
@@ -586,6 +587,13 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
         })
     end
     ----------
+    -- Restructured Text
+    if package == "rstcheck" then
+        nullSources[#nullSources + 1] = diagnose.rstcheck.with({
+            on_attach = on_attach,
+            filetypes = { "rst" },
+        })
+    end
     -- English
     ----------
     if package == "write-good" then

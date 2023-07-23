@@ -454,11 +454,11 @@ whichKey.register({
 -- Plugin Setup
 ----------
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline" },
+    ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline", "rst" },
     auto_install = true,
     highlight = {
         enable = true,
-        additional_vim_regex_highlighting = { "markdown" },
+        additional_vim_regex_highlighting = { "markdown", "rst" },
     },
     ident = { enable = true },
     rainbow = {
