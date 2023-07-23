@@ -130,6 +130,9 @@ require("packer").startup(function()
     use { 'mfussenegger/nvim-dap' }
     use { 'mfussenegger/nvim-dap-python' }
     use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+    -- Assitance Plugins
+    ----------
+    use { 'folke/which-key.nvim' }
     -- Testing Plugins
     ----------
     use 'antoinemadec/FixCursorHold.nvim'
@@ -175,15 +178,15 @@ require("packer").startup(function()
         'nvim-lua/plenary.nvim' } }
     -----------
     -- Obsidian Functionality
-   use({
-  "epwalsh/obsidian.nvim",
-  config = function()
-    require("obsidian").setup({
-      dir = "~/Learning",
+    use({
+        "epwalsh/obsidian.nvim",
+        config = function()
+            require("obsidian").setup({
+                dir = "~/Learning",
 
+            })
+        end,
     })
-  end,
-}) 
     -- Dart/Flutter
     use 'dart-lang/dart-vim-plugin'
     use 'thosakwe/vim-flutter'
@@ -334,20 +337,20 @@ cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
 keymap.set('n', 'U', 'redo', { silent = true, noremap = true })
 ----------
 
-
 -- Set Write/Quit to shortcuts
 ---------
-keymap.set('n', '<leader>ww', ':w<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>w!', ':w!<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>ws', ':source %<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>wqq', ':wq<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>wqa', ':wqa<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>wa', ':wa<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>qa', ':qa<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>qa!', '<cmd>qa!<cr>', { silent = false, noremap = true })
-keymap.set('n', '<leader>qq', ':q<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>q!', ':q!<CR>', { silent = false, noremap = true })
-----------
+keymap.set('n', '<leader>ww', ':w<CR>', { silent = false, noremap = true, desc = "Write" })
+keymap.set('n', '<leader>w!', ':w!<CR>', { silent = false, noremap = true, desc = "Over-Write" })
+keymap.set('n', '<leader>ws', ':source %<CR>', { silent = false, noremap = true, desc = "Write and Source to Nvim" })
+keymap.set('n', '<leader>wqq', ':wq<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
+keymap.set('n', '<leader>wqa', ':wqa<CR>', { silent = false, noremap = true, desc = "Write All & Quit Nvim" })
+keymap.set('n', '<leader>wa', ':wa<CR>', { silent = false, noremap = true, desc = "Write All" })
+keymap.set('n', '<leader>qa', ':qa<CR>', { silent = false, noremap = true, desc = "Quit Nvim" })
+keymap.set('n', '<leader>qa!', '<cmd>qa!<cr>', { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
+keymap.set('n', '<leader>qq', ':q<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
+keymap.set('n', '<leader>q!', ':q!<CR>', { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
+
+---------
 
 -- When the enter key is pressed it takes away the highlighting in from the last text search
 ----------
@@ -433,7 +436,7 @@ require('nvim-treesitter.configs').setup {
         max_file_lines = nil,
         colors = {},
     },
-            
+
 }
 ----------
 
@@ -495,14 +498,36 @@ notify.setup({
 -- Write Commands: <leader>w
 -- Quit Commands: <leader>q
 -- Terminal - TerminalToggle : <leader>t & <leader> q
--- Snippets - LuaSnip : <leader>z
--- Filetree - NvimTree : <c-n>
+-- Snippets - LuaSnip : <leader>s
+-- Filetree - Telescope File Browser : <c-n>
 -- Buffer Management - Telescope Nvim: <leader>f
 -- Database - DadBod: : <leader>d
 -- Testing - Ultest : <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
 -- AutoComplete and Diagnostics - NvimCmp (and dependents): <leader>c & g
+-- Debugging - NvimDAP: <leader>b
 ----------
+
+-- Key Map Assitance
+----------
+local whichKey = require("which-key")
+whichKey.setup()
+
+whichKey.register({
+     ["<leader>"] = {
+        w = { name = "Write"},
+        q = { name = "Close and Quit"},
+        t = { name = "Terminal"},
+        s = { name = "Snippets"},
+        f = { name = "Telescope"},
+        d = { name = "Database"},
+        c = { name = "LSP"},
+        b = { name = "Debugging"},
+        x = { name = "Testing"},
+     }
+ })
+---------
+
 
 ----------------------------------
 -- Terminal Settings
@@ -527,8 +552,8 @@ require("toggleterm").setup {
 
 -- Mappings
 ----------
-keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true }) -- Send exit command
-keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true })          -- Use Esc to change modes in the terminal
+keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true, desc = "Quit Terminal Instance" }) -- Send exit command
+keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true })                                           -- Use Esc to change modes in the terminal
 keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"", { noremap = true, silent = true })
 keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
     { noremap = true, silent = true })
@@ -623,11 +648,11 @@ keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { silent = true, noremap
 
 -- Mappings
 ----------
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true }) -- Find File
-keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true })    -- Find Buffer
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
-keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true })
+keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true, desc = "Telescope: Find Files" }) -- Find File
+keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true, desc = "Telescope: Live Grep" })
+keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true, desc = "Telescope: Show Buffers" })  -- Find Buffer
+keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true, desc = "Telescope: Help Tags" })
+keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true, desc = "Telescope: Keymaps" })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
 -- Picker Mappings
 require("telescope").setup {
@@ -655,10 +680,10 @@ require('telescope').load_extension('file_browser')
 ---------------------------------
 
 -- Start interactive EasyAlign in visual mode (e.g. vipga)
-keymap.set("x", "<leader>e", "<Plug>(EasyAlign)<CR>", {})
+keymap.set("x", "<leader>e", "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 
 -- Start interactive EasyAlign for a motion/text object (e.g. gaip)
-keymap.set("n", "<leader>e", "<Plug>(EasyAlign)<CR>", {})
+keymap.set("n", "<leader>e", "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 
 ---------------
 
@@ -674,10 +699,10 @@ g['dd_ui_use_nerd_fonts'] = 1
 
 -- Mappings
 ---------
-keymap.set("n", "<leader>du", ":DBUIToggle<CR>", { silent = true })
-keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true })
-keymap.set("n", "<leader>dr", ":DBUIRenameBuffer<CR>", { silent = true })
-keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true })
+keymap.set("n", "<leader>du", ":DBUIToggle<CR>", { silent = true, desc = "Toggle DB UI"})
+keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true, desc = "Find DB Buffer"})
+keymap.set("n", "<leader>dr", ":DBUIRenameBuffer<CR>", { silent = true, desc = "Rename DB Buffer" })
+keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = "Run Last Query" })
 ---------
 
 ---------------------------------"
