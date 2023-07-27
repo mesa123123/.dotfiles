@@ -61,7 +61,7 @@ alias cls='clear'
 # If du-dust is installed use that instead
 [[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]] &&  alias du='dust'
 # If Broot is installed map it to the br command
-[[ "$(cargo install --list | grep "broot")" == *"broot"* ]] && alias broot='broot' && alias tree='broot'
+[[ "$(cargo install --list | grep "tre")" == *"tre"* ]] && alias tree='tre'
 # If git-delta is installed, use that for diff
 [[ $(cargo install --list | grep -c "git-delta") == 1 ]] && alias diff="delta"
 # Certain Terminals get fiddily with TERM settings so this gets around it for kitty at least
