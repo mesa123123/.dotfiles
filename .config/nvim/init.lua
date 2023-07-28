@@ -153,10 +153,10 @@ local plugins = {
     'yggdroot/indentline',
     'tpope/vim-fugitive',
     'editorconfig/editorconfig-vim',
-    { 'toppair/peek.nvim',         build = 'deno task --quiet build:fast' },
+    { 'toppair/peek.nvim',               build = 'deno task --quiet build:fast' },
     -- Colors and Themes
     ------------
-    { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true } },
+    { 'nvim-lualine/lualine.nvim',       dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true } },
     'altercation/vim-colors-solarized',
     'nvie/vim-flake8',
     -- DevIcons
@@ -773,7 +773,8 @@ require("obsidian").setup({
         subdir = "templates",
         date_format = "%Y-%m-%d-%a",
         time_format = "%H:%M",
-    }
+    },
+    mappings = {},
 })
 ----------
 
