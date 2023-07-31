@@ -568,7 +568,8 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
         nullSources[#nullSources + 1] = diagnose.markdownlint.with({
             on_attach = on_attach,
             autostart = true,
-            filetypes = { "markdown", "md", "mdx" }
+            filetypes = { "markdown", "md", "mdx" },
+            extra_args = { "-r","~MD013" },
         })
         nullSources[#nullSources + 1] = format.markdownlint.with({
             on_attach = on_attach,
