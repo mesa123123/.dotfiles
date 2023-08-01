@@ -198,12 +198,6 @@ local plugins = {
     ----------
     -- Wiki - Obsidian nvim
     "epwalsh/obsidian.nvim",
-    -- Flashcards - Anki.nvim
-    { "rareitems/anki.nvim",
-        config = function()
-            require("anki").setup()
-        end,
-    },
     ----------
     -- Dart/Flutter
     'dart-lang/dart-vim-plugin',
@@ -597,7 +591,6 @@ alpha.setup(dashboard.config)
 -- Testing - Ultest : <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
 -- Wiki Commands - Obsidian.nvim: <leader>k,
--- FlashCards Commands - Anki.nvim: <leader>r,
 -- Previously Configured
 -- Write Commands: <leader>w
 -- Quit Commands: <leader>q
@@ -828,17 +821,6 @@ whichKey.register({
     }
 })
 -----------
-
----------------------------------
--- Flashcards: <leader>r - anki.nvim
----------------------------------
-
-
--- Setup
-----------
-
-
-
 
 ---------------------------------
 -- Easy Align
