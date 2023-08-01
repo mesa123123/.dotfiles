@@ -194,8 +194,17 @@ local plugins = {
         dependencies = { 'nvim-telescope/telescope.nvim' },
     },
     -----------
-    -- Obsidian Functionality
+    -- Study Functionality
+    ----------
+    -- Wiki - Obsidian nvim
     "epwalsh/obsidian.nvim",
+    -- Flashcards - Anki.nvim
+    { "rareitems/anki.nvim",
+        config = function()
+            require("anki").setup()
+        end,
+    },
+    ----------
     -- Dart/Flutter
     'dart-lang/dart-vim-plugin',
     'thosakwe/vim-flutter',
@@ -522,7 +531,9 @@ notify.setup({
 -- Config
 ----------
 function Zonedtime(hours)
-    local t = os.time()
+    -- Change time zone here (default seems to be +12 on home workstation)
+    local zone_difference = 11
+    local t = os.time() - (zone_difference * 3600)
     local d = t + hours * 3600
     return os.date('%H:%M %Y-%m-%d', d)
 end
@@ -585,7 +596,8 @@ alpha.setup(dashboard.config)
 -- Database - DadBod: : <leader>d
 -- Testing - Ultest : <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
--- Wiki Commands - Obsidian.nvim: <leader>k
+-- Wiki Commands - Obsidian.nvim: <leader>k,
+-- FlashCards Commands - Anki.nvim: <leader>r,
 -- Previously Configured
 -- Write Commands: <leader>w
 -- Quit Commands: <leader>q
@@ -608,7 +620,8 @@ whichKey.register({
         d = { name = "Database" },
         b = { name = "Debugging" },
         x = { name = "Testing" },
-        c = { name = "+LSP Opts" }
+        c = { name = "+LSP Opts" },
+        r = { name = "Flashcards" },
     }
 })
 ---------
@@ -765,6 +778,19 @@ require('telescope').load_extension('project')
 -- Wiki Functionality: <leader>k - Obsidian.nvim
 ---------------------------------
 
+-- Functions
+----------
+local make_note_id = function(title)
+    local suffix = ""
+    if title ~= nil then
+        suffix = title:gsub(" ", "-")
+    else
+        suffix = tostring(os.time())
+    end
+    return suffix
+end
+
+
 -- Setup
 ----------
 require("obsidian").setup({
@@ -775,6 +801,7 @@ require("obsidian").setup({
         time_format = "%H:%M",
     },
     mappings = {},
+    note_id_func = make_note_id
 })
 ----------
 
@@ -801,6 +828,17 @@ whichKey.register({
     }
 })
 -----------
+
+---------------------------------
+-- Flashcards: <leader>r - anki.nvim
+---------------------------------
+
+
+-- Setup
+----------
+
+
+
 
 ---------------------------------
 -- Easy Align
