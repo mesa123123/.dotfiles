@@ -40,13 +40,15 @@
     <property name="plugin-5" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
       <property name="digital-format" type="string" value="%a %_d %b, %R"/>
-      <property name="timezone" type="string" value="GMT"/>
+      <property name="timezone" type="string" value="UTC"/>
       <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
-      <property name="digital-time-format" type="string" value="%a %_d %b, %R"/>
+      <property name="digital-time-format" type="string" value="%T"/>
       <property name="digital-layout" type="uint" value="3"/>
+      <property name="digital-time-font" type="string" value="FiraCode Nerd Font Propo Bold Italic 8"/>
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (81%)"/>
         <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (80%)"/>
         <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (59%)"/>
         <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (46%)"/>
