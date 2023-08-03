@@ -395,7 +395,7 @@ install.setup({
     automatic_installation = true,
     ensure_installed = { 'lua_ls', 'pyright',
         'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer' }
+        'rust_analyzer', 'terraformls' }
 }) -- This is running through Mason_lsp-config
 ----------
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter',
@@ -487,6 +487,11 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
 }
 ----------
 
+-- Terraform
+---------
+config.terraformls.setup { on_attach = on_attach, capabilities = capabilities }
+
+
 --------------------------------
 -- Setup of Null-ls
 --------------------------------
@@ -498,6 +503,7 @@ local method = nullls.methods
 local format = nullls.builtins.formatting    -- Formatting
 local diagnose = nullls.builtins.diagnostics -- Diagnostics
 local code_actions = nullls.builtins.code_actions
+local generator = nullls.generator
 local hover = nullls.builtins.hover
 local completion = nullls.builtins.completion -- Code Completion
 local register = nullls.register
@@ -515,14 +521,19 @@ local function get_venv_command(command)
     end
 end
 
+-- Variables
+----------
+-- Builtin
+local nullSources = {}
+-- Non builtin
+local newSources = {}
+----------
+
 ----------
 
 -- Setup Various Servers/Packages
 ----------
 -- Installed Mason Managed Sources (I prefer these because they'll sit with everything else)
-----------
-local nullSources     = {}
--- Need something in here that says like if pyproject is there, look in there, if not find mason
 local mason_installed = require("mason-registry")
 for _, package in pairs(mason_installed.get_installed_package_names()) do
     -- Python Packages
@@ -604,7 +615,6 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             end
         })
     end
-    ----------
 end
 ------------
 
