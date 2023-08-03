@@ -569,7 +569,7 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             on_attach = on_attach,
             autostart = true,
             filetypes = { "markdown", "md", "mdx" },
-            extra_args = { "-r","~MD013" },
+            extra_args = { "--disable", "MD013 MD012 --" },
         })
         nullSources[#nullSources + 1] = format.markdownlint.with({
             on_attach = on_attach,

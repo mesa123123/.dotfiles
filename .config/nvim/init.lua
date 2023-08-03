@@ -675,7 +675,7 @@ local tele_actions = require "telescope.actions"
 ----------
 local file_browser_configs = {
     hijack_netrw = true,
-    initial_mode = 'normal',
+    initial_mode = 'insert',
     git_status = true,
     respect_gitignore = false,
     -- Internal Mappings
