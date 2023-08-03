@@ -660,6 +660,12 @@ keymap.set("t", "editvim", "say \"You're already in vim! This is why no one love
 -- Projects
 -- File Tree
 -- Buffer Management
+--
+
+-- Telescope Variables
+----------
+local tele_actions = require "telescope.actions"
+----------
 
 -----------------------------
 -- Filetree: <c-n> - telescope-file-browser
@@ -668,7 +674,6 @@ keymap.set("t", "editvim", "say \"You're already in vim! This is why no one love
 -- Functions
 ----------
 local fb_actions = require "telescope._extensions.file_browser.actions"
-local tele_actions = require "telescope.actions"
 ----------
 
 -- Config
@@ -698,6 +703,8 @@ local file_browser_configs = {
             ["<C-h>"] = fb_actions.goto_parent_dir,
             ["<C-c>"] = fb_actions.goto_cwd,
             ["<A-h>"] = fb_actions.toggle_hidden,
+            ["<c-k>"] = tele_actions.move_selection_previous,
+            ["<c-j>"] = tele_actions.move_selection_next,
         },
     },
 }
@@ -748,7 +755,12 @@ require("telescope").setup {
         buffers = {
             mappings = {
                 -- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
-                i = { ["<c-d>"] = "delete_buffer" }
+                i = {
+                    ["<c-d>"] = "delete_buffer",
+                    ["<c-k>"] = tele_actions.move_selection_previous,
+                    ["<c-j>"] = tele_actions.move_selection_next,
+                }
+
             }
         }
     },

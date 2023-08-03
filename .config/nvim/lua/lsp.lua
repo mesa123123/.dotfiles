@@ -366,10 +366,6 @@ local function on_attach(client, bufnr)
     api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
     -- FormatExpr use lsp
     api.nvim_buf_set_option(0, "formatexpr", "v:lua.vim.lsp.formatexpr()")
-    -- AutoRefresh if the LSP can't on its own
-    --    api.nvim_exec([[
-    --        au CursorHold <buffer> lua G.buf_update_diagnostics()
-    --    ]], false)
     -- Attach Keymappings
     keymappings(client)
 end
@@ -403,7 +399,7 @@ install.setup({
 }) -- This is running through Mason_lsp-config
 ----------
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter',
-    'rstcheck' }
+    'rstcheck', 'write_good' }
 --------------------------------
 -- Setup of Language Servers
 --------------------------------
@@ -426,7 +422,7 @@ config.lua_ls.setup { on_attach = on_attach, capabilities = capabilities,
     -- Config
     settings = {
         Lua = {
-            diagnostics = { globals = { 'vim', 'use' }, }, -- Makes sure that vim, packer global errors dont pop up
+            diagnostics = { globals = { 'vim' }, }, -- Makes sure that vim, packer global errors dont pop up
             workspace = {
                 library = api.nvim_get_runtime_file("", true),
                 checkThirdParty = false, -- Stops annoying config prompts
@@ -569,7 +565,7 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             on_attach = on_attach,
             autostart = true,
             filetypes = { "markdown", "md", "mdx" },
-            extra_args = { "--disable", "MD013 MD012 --" },
+            extra_args = { "--disable", "MD013", "MD012", "MD041" }
         })
         nullSources[#nullSources + 1] = format.markdownlint.with({
             on_attach = on_attach,
@@ -603,6 +599,9 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             filetypes = {
                 "txt", "md", "mdx", "markdown"
             },
+            diagnostics_postprocess = function(diagnostic)
+                diagnostic.severity = vim.diagnostic.severity["INFO"]
+            end
         })
     end
     ----------
