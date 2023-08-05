@@ -57,6 +57,15 @@ local function file_exists(name)
     end
 end
 
+-- Merge two tables
+----------
+local function tableConcat(t1, t2)
+    for _, v in ipairs(t2) do
+        table.insert(t1, v)
+    end
+    return t1
+end
+
 --------------------------------
 -- Snippets
 --------------------------------
@@ -316,13 +325,7 @@ local function keymappings(client)
     keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts({ desc = "LSP: Take Code Action" }))
     keymap.set("n", "gh", ":lua vim.lsp.buf.hover()<CR>", bufopts({ desc = "LSP: Open Hover Dialog" }))
     keymap.set("n", "gl", ":lua ShortenLine()<CR>", bufopts({ desc = "LSP: Shorten Line" }))
-    if client.server_capabilities.documentFormattingProvider then
-        keymap.set("n", "gf", ":lua FormatWithConfirm()<CR>", loudbufopts({ desc = "LSP: Format Code" }))
-        print("Formatter Accepted")
-    else
-        print("There Is No Formatter Attached!")
-    end
-
+    keymap.set("n", "gf", ":lua FormatWithConfirm()<CR>", loudbufopts({ desc = "LSP: Format Code" }))
     keymap.set("n", "[g", ":lua vim.diagnostic.goto_prev()<CR>", bufopts({ desc = "LSP: Previous Code Action" }))
     keymap.set("n", "]g", ":lua vim.diagnostic.goto_next()<CR>", bufopts({ desc = "LSP: Next Error Code Action" }))
     keymap.set("n", "[G", ":lua vim.diagnostic.goto_prev({severity = diagnostic.severity.ERROR})<CR>",
@@ -388,18 +391,21 @@ require("mason").setup({
     install_root_dir = server_dir
 }) -- Mason is the engine the installer configs will run
 ----------
-
+-- List Necessary Installs
+----------
+-- Core Language Servers
+local lsp_servers = { 'lua_ls', 'pyright',
+    'bashls', 'cucumber_language_server', 'tsserver',
+    'rust_analyzer', 'terraformls' }
+-- Other Language Servers, Handled by Nullls
+local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter',
+    'rstcheck', 'write_good' }
 -- Ensure Installs
 ----------
 install.setup({
     automatic_installation = true,
-    ensure_installed = { 'lua_ls', 'pyright',
-        'bashls', 'cucumber_language_server', 'tsserver',
-        'rust_analyzer', 'terraformls' }
+    ensure_installed = lsp_servers
 }) -- This is running through Mason_lsp-config
-----------
-local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter',
-    'rstcheck', 'write_good' }
 --------------------------------
 -- Setup of Language Servers
 --------------------------------
@@ -489,8 +495,8 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
 
 -- Terraform
 ---------
-config.terraformls.setup { on_attach = on_attach, capabilities = capabilities }
-
+config.terraformls.setup { on_attach = on_attach, capabilities = capabilities, filetypes = { "tf", "terraform" } }
+config.tflint.setup { on_attach = on_attach, capabilities = capabilities }
 
 --------------------------------
 -- Setup of Null-ls
