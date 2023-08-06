@@ -342,13 +342,26 @@ cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
 -- Editor Mappings
 ----------------------------------
 
--- Redo set to uppercase U
+-- Autocorrect Mappings
 ----------
-keymap.set('n', 'U', 'redo', { silent = true, noremap = true })
+-- Create Edit Command
+api.nvim_create_user_command('Editautocorrect', 'e ~/.config/nvim/lua/autocorrect.lua', {})
+-- Load File
+require('autocorrect')
 ----------
 
+-- Writing Mappings
+----------
+-- Redo set to uppercase U
+keymap.set('n', 'U', ':redo<CR>', { silent = true, noremap = true })
+-- Remap Visual and Insert mode to use Normal Modes Tab Rules
+keymap.set("i", ">>", "<c-t>", {})
+keymap.set("i", "<<", "<c-d>", {})
+----------
+
+-- File Mappings
+----------
 -- Set Write/Quit to shortcuts
----------
 keymap.set('n', '<leader>ww', ':w<CR>', { silent = false, noremap = true, desc = "Write" })
 keymap.set('n', '<leader>w!', ':w!<CR>', { silent = false, noremap = true, desc = "Over-Write" })
 keymap.set('n', '<leader>ws', ':source %<CR>', { silent = false, noremap = true, desc = "Write and Source to Nvim" })
@@ -359,36 +372,42 @@ keymap.set('n', '<leader>qaa', ':qa<CR>', { silent = false, noremap = true, desc
 keymap.set('n', '<leader>qa!', '<cmd>qa!<cr>', { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
 keymap.set('n', '<leader>qq', ':q<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
 keymap.set('n', '<leader>q!', ':q!<CR>', { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
-
 ---------
 
--- When the enter key is pressed it takes away the highlighting in from the last text search
-----------
+-- Visual Mappings
+---------
+-- Trigger Highlight Searching Automatically
 keymap.set("n", "<cr>", ":nohlsearch<CR>", { silent = true })
 keymap.set("n", "n", ":set hlsearch<CR>n", { silent = true })
 keymap.set("n", "N", ":set hlsearch<CR>N", { silent = true })
-----------
-
--- Remap Visual and Insert mode to use Normal Modes Tab Rules
-----------
-keymap.set("i", ">>", "<c-t>", {})
-keymap.set("i", "<<", "<c-d>", {})
-----------
-
--- Map Movement Keys to Ctrl hjlk in Terminal, and Command Modes
-----------
-keymap.set("t", "<c-h>", "<Left>", {})
-keymap.set("t", "<c-h>", "<Left>", {})
-keymap.set("t", "<c-j>", "<Down>", {})
-keymap.set("t", "<c-k>", "<Up>", {})
-keymap.set("c", "<c-l>", "<Right>", {})
-keymap.set("c", "<c-j>", "<Down>", {})
-keymap.set("c", "<c-k>", "<Up>", {})
-keymap.set("c", "<c-l>", "<Right>", {})
-----------
-
--- Tab Control
 ---------
+
+-- Pane Control Mappings
+----------
+-- Tmux Pane Resizing Terminal Mode
+keymap.set("t", "<c-a><c-j>", "<c-\\><c-n>:res-5<CR>i", {})
+keymap.set("t", "<c-a><c-k>", "<c-\\><c-n>:res+5<CR>i", {})
+keymap.set("t", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+keymap.set("t", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+-- Insert Mode
+keymap.set("i", "<c-a><c-j>", ":res-5<CR>", {})
+keymap.set("i", "<c-a><c-k>", ":res+5<CR>", {})
+keymap.set("i", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+keymap.set("i", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+-- Command Mode
+keymap.set("c", "<c-a><c-j>", ":res-5<CR>", {})
+keymap.set("c", "<c-a><c-k>", ":res+5<CR>", {})
+keymap.set("c", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+keymap.set("c", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+-- Normal Mode
+keymap.set("n", "<c-a><c-j>", ":res-5<CR>", {})
+keymap.set("n", "<c-a><c-k>", ":res+5<CR>", {})
+keymap.set("n", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+----------
+
+-- Tab Control mappings
+----------
 -- Navigation
 keymap.set("", "<C-t>k", ":tabr<cr>", {})
 keymap.set("", "<C-t>j", ":tabl<cr>", {})
@@ -400,30 +419,6 @@ keymap.set("", "<C-t>c", ":tabc<cr>", {})
 keymap.set("", "<C-t>o", ":tabo<cr>", {})
 -- New Tab - note n is already used as a search text tool and cannot be mapped
 keymap.set("", "<C-t><c-n>", ":tabnew<cr>", {})
-----------
-
--- Tmux Pane Resizing
---------
--- Terminal
-keymap.set("t", "<c-a><c-j>", "<c-\\><c-n>:res-5<CR>i", {})
-keymap.set("t", "<c-a><c-k>", "<c-\\><c-n>:res+5<CR>i", {})
-keymap.set("t", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("t", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Insert
-keymap.set("i", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("i", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("i", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("i", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Command
-keymap.set("c", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("c", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("c", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("c", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Normal
-keymap.set("n", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("n", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("n", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 ----------
 
 ----------------------------------
@@ -447,6 +442,7 @@ whichKey.register({
     ["]"] = { name = "Go To Next" },
     ["["] = { name = "Go To Previous" }
 })
+
 
 
 

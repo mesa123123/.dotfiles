@@ -228,9 +228,8 @@ if [ "$USER" == "bowmanpete" ]; then
     if [ -d "/home/${USER}/dev/learning/" ]; then
         export LEARNHOME="/home/${USER}/dev/learning/"
     else
-        export LEARNHOME="/home/${USER}/dev/learning/"
-        if [ -d "/home/${USER}/dev/Learning/" ]; then
-        export LEARNHOME="/home/${USER}/dev/Learning/"
+        if [ -d "/home/${USER}/Learning/" ]; then
+        export LEARNHOME="/home/${USER}/Learning/"
         fi
     fi
 fi

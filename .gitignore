@@ -2,7 +2,10 @@ node_modules/
 *.log
 .config/
 !.config/coc/extensions/package.json
-!.config/nvim/
 !.config/powerline/
 !.config/inkscape/
 !.config/kitty/
+# Nvim Config
+!.config/nvim/
+!.config/nvim/lua/*
+!.config/nvim/lua

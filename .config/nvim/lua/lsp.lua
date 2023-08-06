@@ -631,10 +631,7 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             on_attach = on_attach,
             filetypes = {
                 "txt", "md", "mdx", "markdown"
-            },
-            diagnostics_postprocess = function(diagnostic)
-                diagnostic.severity = vim.diagnostic.severity["INFO"]
-            end
+            }
         })
         nullSources[#nullSources + 1] = code_actions.proselint.with({
             on_attach = on_attach,
