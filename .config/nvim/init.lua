@@ -705,6 +705,7 @@ local file_browser_configs = {
             ["<A-h>"] = fb_actions.toggle_hidden,
             ["<c-k>"] = tele_actions.move_selection_previous,
             ["<c-j>"] = tele_actions.move_selection_next,
+            ["<c-a>"] = fb_actions.create,
         },
     },
 }

@@ -399,7 +399,7 @@ local lsp_servers = { 'lua_ls', 'pyright',
     'rust_analyzer', 'terraformls' }
 -- Other Language Servers, Handled by Nullls
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter',
-    'rstcheck', 'write_good' }
+    'rstcheck', 'write_good', 'shellharden', 'proselint' }
 -- Ensure Installs
 ----------
 install.setup({
@@ -569,6 +569,11 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     -- Shellcheck
     if package == "shellcheck" then
         nullSources[#nullSources + 1] = code_actions.shellcheck.with({ on_attach = on_attach })
+        nullSources[#nullSources + 1] = diagnose.shellcheck.with({ on_attach = on_attach })
+    end
+    -- Shellharden
+    if package == "shellharden" then
+        nullSources[#nullSources + 1] = format.shellharden.with({ on_attach = on_attach })
     end
     -- Yaml
     ----------
@@ -619,6 +624,23 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             diagnostics_postprocess = function(diagnostic)
                 diagnostic.severity = vim.diagnostic.severity["INFO"]
             end
+        })
+    end
+    if package == "proselint" then
+        nullSources[#nullSources + 1] = diagnose.proselint.with({
+            on_attach = on_attach,
+            filetypes = {
+                "txt", "md", "mdx", "markdown"
+            },
+            diagnostics_postprocess = function(diagnostic)
+                diagnostic.severity = vim.diagnostic.severity["INFO"]
+            end
+        })
+        nullSources[#nullSources + 1] = code_actions.proselint.with({
+            on_attach = on_attach,
+            filetypes = {
+                "txt", "md", "mdx", "markdown"
+            }
         })
     end
 end

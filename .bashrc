@@ -36,7 +36,7 @@ shopt -s checkwinsize
 DIST_INFO=$(cat /proc/version)
 export DIST_INFO
 # set variable identifying the chroot you work in (used in the prompt below)
-[[ $(echo "$DIST_INFO" | grep --color=auto -c "UBUNTU") == 1 ]] && [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot)
+[[ $(echo "$DIST_INFO" | grep --color=auto -c "UBUNTU") == 1 ]] && [ "${debian_chroot:-}" = "" ] && [ -r /etc/debian_chroot ] && debian_chroot=$(cat /etc/debian_chroot)
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
@@ -48,7 +48,7 @@ esac
 # should be on the output of commands, not on the prompt
 #force_color_prompt=yes
 
-if [ -n "$force_color_prompt" ]; then
+if [ "$force_color_prompt" != "" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	# We have color support; assume it's compliant with Ecma-48
 	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
@@ -225,7 +225,14 @@ if [ "$USER" == "bowmanpete" ]; then
 	export PATH=$PATH:$HADOOP_HOME/bin
 	export PATH=$PATH:$CODE_HOME/bin
     # No LEARNHOME variable in home dir 
-    export LEARNHOME="/home/${USER}/dev/learning/"
+    if [ -d "/home/${USER}/dev/learning/" ]; then
+        export LEARNHOME="/home/${USER}/dev/learning/"
+    else
+        export LEARNHOME="/home/${USER}/dev/learning/"
+        if [ -d "/home/${USER}/dev/Learning/" ]; then
+        export LEARNHOME="/home/${USER}/dev/Learning/"
+        fi
+    fi
 fi
 
 
@@ -262,7 +269,7 @@ fi
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
 	# If you're running wsl send the display to the virtual output	
-    if [ "${WSL_VERSION}" == 2 ]; then
+    if [ "$WSL_VERSION" == 2 ]; then
         export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
         export LIBGL_ALWAYS_INDIRECT=1
     else
