@@ -703,16 +703,17 @@ keymap.set("n", "<leader>bx", "<cmd>lua require('dap').disconnect()<cr>", keyopt
 keymap.set("n", "<leader>bq", "<cmd>lua require('dap').close()<cr>", keyopts({ desc = "Close Debug Session" }))
 keymap.set("n", "<leader>bQ", "<cmd>lua require('dap').terminate()<cr>", keyopts({ desc = "Terminate Debug Session" }))
 -- Breakpoints (and pauses)
-keymap.set("n", "<leader>bb", "<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>",
-    keyopts({ desc = "Set BreakPoint" })) -- bug breakpoint
-keymap.set("n", "<leader>bB", "<cmd>lua require('dap').toggle_breakpoint()<cr>", keyopts({ desc = "Toggle Breakpoint" }))
+keymap.set("n", "<leader>bb", "<cmd>lua require('dap').set_breakpoint()<cr>", keyopts({ desc = "Set Breakpoint" }))
+keymap.set("n", "<leader>bB", "<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>",
+    keyopts({ desc = "Set Conditional BreakPoint" })) -- bug breakpoint
+keymap.set("n", "<leader>bt", "<cmd>lua require('dap').toggle_breakpoint()<cr>", keyopts({ desc = "Toggle Breakpoint" }))
 keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts({ desc = "Toggle Pause" }))
 -- Stepping commands
 keymap.set("n", "<leader>bC", "<cmd>lua require('dap').run_to_cursor()<cr>", keyopts({ desc = "Run Session To Cursor" })) -- run to here
-keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_back()<cr>", keyopts({ desc = "Step Back" }))                 -- bug previous
-keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_into()<cr>", keyopts({ desc = "Step Into" }))
+keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_back()<cr>", keyopts({ desc = "Step Back" }))                 -- bug previous
+keymap.set("n", "<leader>bl", "<cmd>lua require('dap').step_into()<cr>", keyopts({ desc = "Step Into" }))
 keymap.set("n", "<leader>bj", "<cmd>lua require('dap').step_over()<cr>", keyopts({ desc = "Step Over" }))
-keymap.set("n", "<leader>bo", "<cmd>lua require('dap').step_out()<cr>", keyopts({ desc = "Step Out" }))
+keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_out()<cr>", keyopts({ desc = "Step Out" }))
 -- Dap REPL
 keymap.set("n", "<leader>br", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts({ desc = "Toggle Debug REPL" }))
 ----------
@@ -748,7 +749,6 @@ keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frame
 local function load_dap_config()
     local workspace_folder = vim.api.nvim_call_function("getcwd", {})
     local config_file = io.open(workspace_folder .. "/.dap-config.lua", "r")
-
     if config_file then
         io.close(config_file)
         local success, dap_config = pcall(dofile, workspace_folder .. "/.dap-config.lua")
