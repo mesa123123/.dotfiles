@@ -5,16 +5,17 @@
 -- Variables
 ----------
 -- Api Exposures
-local cmd = vim.cmd       -- vim commands
-local api = vim.api       -- vim api (I'm not sure what this does)
-local fn = vim.fn         -- vim functions
-local keymap = vim.keymap -- keymaps
-local lsp = vim.lsp       -- Lsp inbuilt
+local cmd = vim.cmd        -- vim commands
+local api = vim.api        -- vim api (I'm not sure what this does)
+local fn = vim.fn          -- vim functions
+local keymap = vim.keymap  -- keymaps
+local lsp = vim.lsp        -- Lsp inbuilt
 -- Options
-local bo = vim.bo         -- bufferopts
+local bo = vim.bo          -- bufferopts
 -- For Variables
-local b = vim.b           -- buffer variables
-G = vim.g                 -- global variables
+local b = vim.b            -- buffer variables
+G = vim.g                  -- global variables
+local hl = api.nvim_set_hl -- highlighting
 --------
 
 -- Required Module Loading Core Lsp Stuff
@@ -34,7 +35,8 @@ local whichKey = require("which-key")
 local path = config.util.path
 local cmpsnip = require("cmp_luasnip")
 local telescope = require("telescope")
-
+local lspkind = require('lspkind')
+local fidget = require('fidget')
 --------------------------------
 -- Language Specific Settings and Helpers
 --------------------------------
@@ -160,7 +162,7 @@ cmp.setup({
         { name = 'cmdline' }
     },
     -- I'm not sure what this does, @TODO
-    completion = { completeopt = "menu,menuone,noinsert", keyword_length = 1 },
+    completion = { completeopt = "menu,menuone,noinsert,noselect", keyword_length = 1 },
     -- Set Snippets Engine
     snippet = {
         expand = function(args)
@@ -170,17 +172,16 @@ cmp.setup({
     -- Making autocomplete menu look nice
     formatting = {
         format = function(entry, vim_item)
-            vim_item.menu = ({
-                nvim_lsp = "[Lsp]",
-                buffer = "[Buffer]",
-                nvim_lua = "[Lua]",
-                luasnip = "[Snip]",
-                treesitter = "[Treesitter]",
-                path = "[Path]",
-                cmdline = "[CmdLine]"
-            })[entry.source.name]
-            return vim_item
-        end,
+            if vim.tbl_contains({ 'path' }, entry.source.name) then
+                local icon, hl_group = require('nvim-web-devicons').get_icon(entry:get_completion_item().label)
+                if icon then
+                    vim_item.kind = icon
+                    vim_item.kind_hl_group = hl_group
+                    return vim_item
+                end
+            end
+            return lspkind.cmp_format({ with_text = false })(entry, vim_item)
+        end
     },
     -- Mappings
     ----------
@@ -211,16 +212,15 @@ cmp.setup({
         ["<Esc>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.abort()
-                cmd('stopinsert')
             else
                 fallback()
             end
         end, { "i", "s", "c" }),
         -- Use Enter to Select
         ["<CR>"] = cmp.mapping(function(fallback)
-            if cmp.visible() and has_words_before() then
-                cmp.confirm()
-            elseif snip.expandable() and has_words_before then
+            if cmp.visible() and has_words_before() and cmp.get_active_entry() then
+                cmp.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false }
+            elseif snip.expandable() and has_words_before and cmp.get_active_entry() then
                 snip.expand_or_jump()
             else
                 fallback()
@@ -672,12 +672,15 @@ nullls.setup {
 --------------------------------
 -- Colors and Themes
 --------------------------------
-local hl = api.nvim_set_hl
 
 hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
 hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
+
+-- Fidget Integration
+----------
+fidget.setup()
 
 --------------------------------
 -- Debug Adapter Protocol

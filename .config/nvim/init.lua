@@ -78,6 +78,15 @@ function Filter(func, tbl)
     return newtbl
 end
 
+-- Concat two Tables
+----------
+local function tableConcat(t1, t2)
+    for _, v in ipairs(t2) do
+        table.insert(t1, v)
+    end
+    return t1
+end
+
 ----------
 
 --------------------------------
@@ -132,6 +141,7 @@ local plugins = {
             'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip' },
     },
     { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' },
+    { 'j-hui/fidget.nvim',               tag = "legacy", events = "LspAttach" },
     -- Debug Adapter Protocol
     ----------
     'mfussenegger/nvim-dap',
@@ -153,10 +163,10 @@ local plugins = {
     'yggdroot/indentline',
     'tpope/vim-fugitive',
     'editorconfig/editorconfig-vim',
-    { 'toppair/peek.nvim',               build = 'deno task --quiet build:fast' },
+    { 'toppair/peek.nvim',         build = 'deno task --quiet build:fast' },
     -- Colors and Themes
     ------------
-    { 'nvim-lualine/lualine.nvim',       dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true } },
+    { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true } },
     'altercation/vim-colors-solarized',
     'nvie/vim-flake8',
     -- DevIcons
@@ -174,6 +184,8 @@ local plugins = {
     'sheerun/vim-polyglot',
     'arzg/vim-rust-syntax-ext',
     'chrisbra/csv.vim',
+    -- LSP Icons
+    'onsails/lspkind.nvim',
     -- Dashboard
     {
         'goolord/alpha-nvim',
@@ -518,8 +530,9 @@ notify.setup({
 -- LuaLine Configuration
 -----------------------------
 
--- Config
+-- Helper Functions
 ----------
+-- Get accurate time on panel
 function Zonedtime(hours)
     -- Change time zone here (default seems to be +12 on home workstation)
     local zone_difference = 11
@@ -528,6 +541,36 @@ function Zonedtime(hours)
     return os.date('%H:%M %Y-%m-%d', d)
 end
 
+-- Functions to make an active lsp panel
+local active_lsp = {
+    function()
+        local lsps = vim.lsp.get_active_clients()
+        local icon = require("nvim-web-devicons").get_icon_by_filetype(
+            vim.api.nvim_buf_get_option(0, "filetype")
+        )
+        if lsps and #lsps > 0 then
+            local names = {}
+            for _, lsp in ipairs(lsps) do
+                table.insert(names, lsp.name)
+            end
+            return string.format("%s %s", icon or '', table.concat(names, ", "))
+        else
+            return icon or ""
+        end
+    end,
+    function()
+        vim.api.nvim_command("LspInfo")
+    end,
+    function()
+        local _, color = require("nvim-web-devicons").get_icon_cterm_color_by_filetype(
+            vim.api.nvim_buf_get_option(0, "filetype")
+        )
+        return { fg = color }
+    end,
+}
+
+-- Config
+----------
 require("lualine").setup({
     options = {
         section_separators = { left = '|', right = '|' },
@@ -537,7 +580,7 @@ require("lualine").setup({
         lualine_a = { { 'mode', fmt = function(res) return res:sub(1, 1) end } },
         lualine_b = { 'branch', 'diff', 'diagnostics' },
         lualine_c = { 'filename' },
-        lualine_x = { 'encoding', 'filetype' },
+        lualine_x = { active_lsp },
         lualine_y = { 'progress', 'location', },
         lualine_z = { "Zonedtime(11)" }
     },
@@ -697,10 +740,10 @@ local file_browser_configs = {
             ["<C-n>"] = tele_actions.close,
             ["<C-l>"] = fb_actions.change_cwd,
             ["<C-h>"] = fb_actions.goto_parent_dir,
+            ["<c-j>"] = tele_actions.move_selection_next,
+            ["<c-k>"] = tele_actions.move_selection_previous,
             ["<C-c>"] = fb_actions.goto_cwd,
             ["<A-h>"] = fb_actions.toggle_hidden,
-            ["<c-k>"] = tele_actions.move_selection_previous,
-            ["<c-j>"] = tele_actions.move_selection_next,
             ["<c-a>"] = fb_actions.create,
         },
     },
