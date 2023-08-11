@@ -835,6 +835,11 @@ local make_note_id = function(title)
     return suffix
 end
 
+local make_note_frontmatter = function(note)
+    local out = { tags = { "todo" } }
+    return out
+end
+
 
 -- Setup
 ----------
@@ -846,7 +851,8 @@ require("obsidian").setup({
         time_format = "%H:%M",
     },
     mappings = {},
-    note_id_func = make_note_id
+    note_id_func = make_note_id,
+    note_frontmatter_func = make_note_frontmatter
 })
 ----------
 

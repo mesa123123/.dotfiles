@@ -706,10 +706,10 @@ keymap.set("n", "<leader>bx", "<cmd>lua require('dap').disconnect()<cr>", keyopt
 keymap.set("n", "<leader>bq", "<cmd>lua require('dap').close()<cr>", keyopts({ desc = "Close Debug Session" }))
 keymap.set("n", "<leader>bQ", "<cmd>lua require('dap').terminate()<cr>", keyopts({ desc = "Terminate Debug Session" }))
 -- Breakpoints (and pauses)
-keymap.set("n", "<leader>bb", "<cmd>lua require('dap').set_breakpoint()<cr>", keyopts({ desc = "Set Breakpoint" }))
+keymap.set("n", "<leader>bb", "<cmd>lua require('dap').toggle_breakpoint()<cr>", keyopts({ desc = "Toggle Breakpoint" }))
 keymap.set("n", "<leader>bB", "<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>",
     keyopts({ desc = "Set Conditional BreakPoint" })) -- bug breakpoint
-keymap.set("n", "<leader>bt", "<cmd>lua require('dap').toggle_breakpoint()<cr>", keyopts({ desc = "Toggle Breakpoint" }))
+keymap.set("n", "<leader>bS", "<cmd>lua require('dap').set_breakpoint()<cr>", keyopts({ desc = "Set Breakpoint" }))
 keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts({ desc = "Toggle Pause" }))
 -- Stepping commands
 keymap.set("n", "<leader>bC", "<cmd>lua require('dap').run_to_cursor()<cr>", keyopts({ desc = "Run Session To Cursor" })) -- run to here
