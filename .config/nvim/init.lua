@@ -836,7 +836,13 @@ local make_note_id = function(title)
 end
 
 local make_note_frontmatter = function(note)
-    local out = { tags = { "todo" } }
+    note:add_tag "TODO"
+    local out = { id = note.id, aliases = note.aliases, tags = note.tags }
+    if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
+        for k, v in pairs(note.metadata) do
+            out[k] = v
+        end
+    end
     return out
 end
 
