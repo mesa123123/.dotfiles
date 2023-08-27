@@ -396,7 +396,7 @@ require("mason").setup({
 -- Core Language Servers
 local lsp_servers = { 'lua_ls', 'pyright',
     'bashls', 'cucumber_language_server', 'tsserver',
-    'rust_analyzer', 'terraformls' }
+    'rust_analyzer', 'terraformls', 'emmet_ls' }
 -- Other Language Servers, Handled by Nullls
 local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter',
     'rstcheck', 'write_good', 'shellharden', 'proselint' }
@@ -445,18 +445,26 @@ config.lua_ls.setup { on_attach = on_attach, capabilities = capabilities,
 config.pyright.setup { on_attach = on_attach, capabilities = capabilities,
     on_init = function(client)
         client.config.settings.python.pythonPath = get_python_path()
-    end
+    end,
 }
 ----------
 
--- Web: Tsserver
+-- Web
 ----------
+-- TSServer
 config.tsserver.setup({
     capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
     on_attach = function(client)
         client.server_capabilities.document_formatting = false
     end,
 })
+-- Emmet Integration
+config.emmet_ls.setup({
+    on_attach = on_attach, capabilities = capabilities
+})
+-- cssls
+config.cssls.setup({ on_attach = on_attach, capabilities = capabilities })
+
 ----------
 
 -- Cucumber
