@@ -145,6 +145,8 @@ local plugins = {
     -- Debug Adapter Protocol
     ----------
     'mfussenegger/nvim-dap',
+    'theHamsta/nvim-dap-virtual-text',
+    'mfussenegger/nvim-dap-python',
     -- Assitance Plugins
     ----------
     'folke/which-key.nvim',

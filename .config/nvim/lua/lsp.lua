@@ -37,6 +37,7 @@ local cmpsnip = require("cmp_luasnip")
 local telescope = require("telescope")
 local lspkind = require('lspkind')
 local fidget = require('fidget')
+local virtual_text = require('nvim-dap-virtual-text')
 --------------------------------
 -- Language Specific Settings and Helpers
 --------------------------------
@@ -736,7 +737,8 @@ keymap.set("n", "<leader>br", "<cmd>lua require('dap').repl.toggle()<cr>", keyop
 whichKey.register({
     ["<leader>"] = {
         b = {
-            f = { name = "UI Options" }
+            f = { name = "UI Options" },
+            w = { name = "Language Options" }
         }
     }
 })
@@ -754,24 +756,17 @@ keymap.set('n', '<leader>bfv', '<cmd>lua require"telescope".extensions.dap.varia
 keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>', keyopts({ desc = "Frames UI" }))
 ----------
 
--- Custom configs - Load per project .dap-cofig.lua
+-- Python DAP
 ----------
-local function load_dap_config()
-    local workspace_folder = vim.api.nvim_call_function("getcwd", {})
-    local config_file = io.open(workspace_folder .. "/.dap-config.lua", "r")
-    if config_file then
-        io.close(config_file)
-        local success, dap_config = pcall(dofile, workspace_folder .. "/.dap-config.lua")
-        if success then
-            print(dap_config)
-            dap.launch(dap_config())
-        else
-            print("Error loading .dap-config.lua: " .. dap_config)
-        end
-    end
-end
-
-load_dap_config()
+-- Setup
+local pydap = require('dap-python')
+pydap.setup()
+pydap.test_runner = 'pytest'
+-- Mappings
+keymap.set('n', '<leader>bwm', '<cmd>lua require("dap-python").test_method()<CR>', keyopts({desc = "Test Method"}))
+keymap.set('n', '<leader>bwM', '<cmd>lua require("dap-python").test_method()<CR>', keyopts({desc = "Test Class"}))
+keymap.set('n', '<leader>bwS', '<cmd>lua require("dap-python").debug_selection()<CR>', keyopts({desc = "Debug Selected"}))
+----------
 
 -------------------------------
 -- EOF
