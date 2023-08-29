@@ -756,7 +756,6 @@ keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frame
 
 -- Custom configs - Load per project .dap-cofig.lua
 ----------
-
 local function load_dap_config()
     local workspace_folder = vim.api.nvim_call_function("getcwd", {})
     local config_file = io.open(workspace_folder .. "/.dap-config.lua", "r")
