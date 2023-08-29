@@ -37,7 +37,7 @@ local cmpsnip = require("cmp_luasnip")
 local telescope = require("telescope")
 local lspkind = require('lspkind')
 local fidget = require('fidget')
-local virtual_text = require('nvim-dap-virtual-text')
+local dapui = require('dapui')
 --------------------------------
 -- Language Specific Settings and Helpers
 --------------------------------
@@ -695,12 +695,13 @@ fidget.setup()
 -- Debug Adapter Protocol
 --------------------------------
 
--- Languages
+-- Helper Funcs
 ----------
 local python_path = get_python_path()
 
 -- Mappings
 ----------
+
 local function keyopts(opts)
     local standardOpts = { silent = false, noremap = true }
     for k, v in pairs(standardOpts) do
@@ -754,18 +755,50 @@ keymap.set('n', '<leader>bfb', '<cmd>lua require"telescope".extensions.dap.list_
 keymap.set('n', '<leader>bfv', '<cmd>lua require"telescope".extensions.dap.variables{}<CR>',
     keyopts({ desc = "Variable UI" }))
 keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frames{}<CR>', keyopts({ desc = "Frames UI" }))
+
 ----------
 
--- Python DAP
+-- UI Integration
 ----------
 -- Setup
-local pydap = require('dap-python')
-pydap.setup()
-pydap.test_runner = 'pytest'
--- Mappings
-keymap.set('n', '<leader>bwm', '<cmd>lua require("dap-python").test_method()<CR>', keyopts({desc = "Test Method"}))
-keymap.set('n', '<leader>bwM', '<cmd>lua require("dap-python").test_method()<CR>', keyopts({desc = "Test Class"}))
-keymap.set('n', '<leader>bwS', '<cmd>lua require("dap-python").debug_selection()<CR>', keyopts({desc = "Debug Selected"}))
+dapui.setup()
+-- Auto-open
+dap.listeners.after.event_initialized["dapui_config"] = function()
+    dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+    dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+    dapui.close()
+end
+----------
+
+-- Adapter Selection
+----------
+
+-- Python
+dap.adapters.python = {
+    type = 'executable',
+    command = python_path,
+    args = { '-m', 'debugpy.adapter' }
+}
+
+----------
+
+-- Adapter Configuration
+----------
+
+-- Python
+dap.configurations.python = { {
+    type = 'python',
+    request = 'launch',
+    name = "Launch file",
+    program = "${file}",
+    cwd = fn.getcwd(),
+    pythonPath = python_path
+} }
+
 ----------
 
 -------------------------------
