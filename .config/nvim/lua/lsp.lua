@@ -465,7 +465,8 @@ config.emmet_ls.setup({
 })
 -- cssls
 config.cssls.setup({ on_attach = on_attach, capabilities = capabilities })
-
+-- Svelte Setup
+config.svelte.setup({ on_attach = on_attach, capabilities = capabilities })
 ----------
 
 -- Cucumber
@@ -605,13 +606,22 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
         })
     end
     ----------
-    -- Prettier
-    if package == "prettier" then
-        nullSources[#nullSources + 1] = format.prettier.with({
+    -- Web Dev
+    ----------
+    -- Eslint
+    if package == "eslint_d" then
+        local eslint_file_types = { "javascript", "typescript", "css", "scss", "html", "json", "graphql", "svelte" }
+        nullSources[#nullSources + 1] = code_actions.eslint_d.with({
             on_attach = on_attach,
-            filetypes = {
-                "javascript", "typescript", "css", "scss", "html", "json", "graphql"
-            },
+            filetypes = eslint_file_types
+        })
+        nullSources[#nullSources + 1] = diagnose.eslint_d.with({
+            on_attach = on_attach,
+            filetypes = eslint_file_types
+        })
+        nullSources[#nullSources + 1] = format.eslint_d.with({
+            on_attach = on_attach,
+            filetypes = eslint_file_types
         })
     end
     ----------
