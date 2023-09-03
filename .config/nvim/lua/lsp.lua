@@ -628,24 +628,24 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     -- Web Dev
     ----------
     -- Eslint
-    if package == "eslint_d" then
+    if package == "eslint-lsp" then
         local eslint_file_types = { "javascript", "typescript", "css", "scss", "html", "json", "graphql", "svelte" }
-        nullSources[#nullSources + 1] = code_actions.eslint_d.with({
+        nullSources[#nullSources + 1] = code_actions.eslint.with({
             on_attach = on_attach,
             filetypes = eslint_file_types
         })
-        nullSources[#nullSources + 1] = diagnose.eslint_d.with({
+        nullSources[#nullSources + 1] = diagnose.eslint.with({
             on_attach = on_attach,
             filetypes = eslint_file_types
         })
-        nullSources[#nullSources + 1] = format.eslint_d.with({
+        nullSources[#nullSources + 1] = format.eslint.with({
             on_attach = on_attach,
             filetypes = eslint_file_types
         })
     end
     -- Prettier
     if package == 'prettier' then
-        nullSources[#nullSources + 1] = format.eslint_d.with({
+        nullSources[#nullSources + 1] = format.prettier.with({
             on_attach = on_attach, })
     end
     ----------
