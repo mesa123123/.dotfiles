@@ -55,6 +55,8 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “bbe_guest” active: bbe_guest (47%)"/>
+        <value type="string" value="requesting a wi-fi network address for “bbe_guest”…"/>
         <value type="string" value="wi-fi network connection “avanti_free_wifi” active: avanti_free_wifi (74%)"/>
         <value type="string" value="wi-fi network connection “lg69-mesh-a_5g-1” active: lg69-mesh-a_5g-1 (62%)"/>
         <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (73%)"/>

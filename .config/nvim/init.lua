@@ -260,8 +260,24 @@ g['rainbow_active'] = 1
 
 -- Load Webdevicons
 ----------
-require 'nvim-web-devicons'.setup { default = true }
-require 'nvim-web-devicons'.get_icons()
+local devIcons = require('nvim-web-devicons')
+devIcons.setup { default = true }
+-- Setup Custom Icons
+devIcons.set_icon {
+    htmldjango = {
+        icon = "",
+        color = "#e44d26",
+        cterm_color = "196",
+        name = "Htmldjango",
+    },
+    jinja = {
+        icon = "",
+        color = "#e44d26",
+        cterm_color = "196",
+        name = "Jinja",
+    }
+}
+devIcons.get_icons()
 ----------
 
 -- Status Line Settings
@@ -546,28 +562,16 @@ end
 local active_lsp = {
     function()
         local lsps = vim.lsp.get_active_clients()
-        local icon = require("nvim-web-devicons").get_icon_by_filetype(
-            vim.api.nvim_buf_get_option(0, "filetype")
-        )
         if lsps and #lsps > 0 then
             local names = {}
             for _, lsp in ipairs(lsps) do
                 table.insert(names, lsp.name)
             end
-            return string.format("%s %s", icon or '', table.concat(names, ", "))
+            return string.format("󰯠 %s", table.concat(names, ", "))
         else
-            return icon or ""
+            return ""
         end
-    end,
-    function()
-        vim.api.nvim_command("LspInfo")
-    end,
-    function()
-        local _, color = require("nvim-web-devicons").get_icon_cterm_color_by_filetype(
-            vim.api.nvim_buf_get_option(0, "filetype")
-        )
-        return { fg = color }
-    end,
+    end
 }
 
 -- Config
@@ -580,7 +584,7 @@ require("lualine").setup({
     sections = {
         lualine_a = { { 'mode', fmt = function(res) return res:sub(1, 1) end } },
         lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { 'filename' },
+        lualine_c = { { 'filetype', colored = true, icon_only = true, icon = { align = 'right' } }, 'filename' },
         lualine_x = { active_lsp },
         lualine_y = { 'progress', 'location', },
         lualine_z = { "Zonedtime(11)" }

@@ -399,8 +399,8 @@ local lsp_servers = { 'lua_ls', 'pyright',
     'bashls', 'cucumber_language_server', 'tsserver',
     'rust_analyzer', 'terraformls', 'emmet_ls' }
 -- Other Language Servers, Handled by Nullls
-local other_servers = { 'pylint', 'depugpy', 'markdownlint', 'shellcheck', 'black', 'prettier', 'sql-formatter',
-    'rstcheck', 'write_good', 'shellharden', 'proselint' }
+local other_servers = { 'pylint', 'depugpy', 'djlint', 'markdownlint', 'shellcheck', 'black', 'prettier',
+    'sql-formatter', 'rstcheck', 'write_good', 'shellharden', 'proselint' }
 -- Ensure Installs
 ----------
 install.setup({
@@ -574,6 +574,25 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             on_attach = on_attach
         })
     end
+    -- DJlint
+    if package == 'djlint' then
+        nullSources[#nullSources + 1] = format.djlint.with({
+            filetypes = { "htmldjango" },
+            on_attach = on_attach,
+            command = get_venv_command("djlint"),
+            on_init = function(client)
+                client.config.settings.python.pythonPath = get_python_path()
+            end,
+        })
+        nullSources[#nullSources + 1] = diagnose.djlint.with({
+            on_attach = on_attach,
+            filetypes = { "htmldjango" },
+            command = get_venv_command("djlint"),
+            on_init = function(client)
+                client.config.settings.python.pythonPath = get_python_path()
+            end,
+        })
+    end
     -- Shell
     ----------
     -- Shellcheck
@@ -623,6 +642,11 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
             on_attach = on_attach,
             filetypes = eslint_file_types
         })
+    end
+    -- Prettier
+    if package == 'prettier' then
+        nullSources[#nullSources + 1] = format.eslint_d.with({
+            on_attach = on_attach, })
     end
     ----------
     -- Restructured Text
