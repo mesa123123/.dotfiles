@@ -25,6 +25,7 @@ local install = require("mason-lspconfig") -- Mason is the successor to lsp-inst
 local cmp = require "cmp"                  -- Autocompletion for the language servers
 local cmp_lsp = require("cmp_nvim_lsp")
 local dap = require("dap")
+local lint = require('lint')
 local snip = require("luasnip")
 local snipload_lua = require("luasnip.loaders.from_lua")
 local whichKey = require("which-key")
@@ -508,8 +509,23 @@ config.rust_analyzer.setup { on_attach = on_attach, capabilities = capabilities,
 config.terraformls.setup { on_attach = on_attach, capabilities = capabilities, filetypes = { "tf", "terraform" } }
 config.tflint.setup { on_attach = on_attach, capabilities = capabilities }
 
+
 --------------------------------
--- Setup of Null-ls
+-- Setup of Linters - nvim-lint
+--------------------------------
+-- Setup
+----------
+lint.linters_by_ft = {
+    python = { 'pylint', }
+}
+
+api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
+    callback = function()
+        require("lint").try_lint()
+    end,
+})
+--------------------------------
+-- Setup of Null-ls -- Third Party LSPs
 --------------------------------
 
 -- Import Null-ls
@@ -541,8 +557,6 @@ end
 ----------
 -- Builtin
 local nullSources = {}
--- Non builtin
-local newSources = {}
 ----------
 
 ----------
@@ -554,16 +568,6 @@ local mason_installed = require("mason-registry")
 for _, package in pairs(mason_installed.get_installed_package_names()) do
     -- Python Packages
     -----------
-    -- Pylint
-    if package == "pylint" then -- Pylint
-        nullSources[#nullSources + 1] = diagnose.pylint.with({
-            command = get_venv_command("pylint"),
-            on_init = function(client)
-                client.config.settings.python.pythonPath = get_python_path()
-            end,
-            on_attach = on_attach
-        })
-    end
     -- Black
     if package == "black" then --Python Formatter
         nullSources[#nullSources + 1] = format.black.with({

@@ -142,6 +142,9 @@ local plugins = {
     },
     { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' },
     { 'j-hui/fidget.nvim',               tag = "legacy", events = "LspAttach" },
+    -- Linting Plugins
+    ----------
+    'mfussenegger/nvim-lint',
     -- Debug Adapter Protocol
     ----------
     'mfussenegger/nvim-dap',
