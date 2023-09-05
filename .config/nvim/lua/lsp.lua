@@ -5,11 +5,12 @@
 -- Variables
 ----------
 -- Api Exposures
-local cmd = vim.cmd        -- vim commands
-local api = vim.api        -- vim api (I'm not sure what this does)
-local fn = vim.fn          -- vim functions
-local keymap = vim.keymap  -- keymaps
-local lsp = vim.lsp        -- Lsp inbuilt
+local cmd = vim.cmd       -- vim commands
+local api = vim.api       -- vim api (I'm not sure what this does)
+local fn = vim.fn         -- vim functions
+local keymap = vim.keymap -- keymaps
+local lsp = vim.lsp       -- Lsp inbuilt
+local log = vim.log
 -- Options
 local bo = vim.bo          -- bufferopts
 -- For Variables
@@ -103,6 +104,63 @@ cmd [[command! LuaSnipEdit :lua SnipEditFile()]]
 -- Mappings
 ----------
 keymap.set("n", "<leader>se", ":LuaSnipEdit<CR>", { desc = "Edit Snippets File" })
+----------
+
+--------------------------------
+-- Setup of Formatters - format.nvim
+--------------------------------
+
+---- Setup
+----------
+local formatter_util = require("formatter.util")
+require("formatter").setup {
+    log_level = log.levels.WARN,
+    filetype = {
+        python = {
+            require('formatter.filetypes.python').black
+            -- function()
+            --     py_path = find_python_path()
+            --     return {
+            --         exe = "" .. py_path .. " -m black"
+            --         args = { "--stdin-filename", formatter_util.escape_path(formatter_util.get_current_buffer_file_path()), "--quiet", "-" }
+            --    }
+
+        }
+    }
+}
+-- Save Configured Formatters in List
+local defined_formatter_types = require("formatter.config").values.filetype
+
+-- General Format Function
+----------
+function FormatWithConfirm()
+    if defined_formatter_types[vim.bo.filetype] == nil then
+        lsp.buf.format({ async = true })
+    else
+        cmd [[ Format ]]
+    end
+    print("Formatted")
+end
+
+----------
+
+--------------------------------
+-- Setup of Linters - nvim-lint
+--------------------------------
+
+-- Setup
+----------
+lint.linters_by_ft = {
+    -- Python
+    python = { 'pylint', }
+}
+
+api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
+    callback = function()
+        require("lint").try_lint()
+    end,
+})
+----------
 
 --------------------------------
 -- Completion
@@ -128,13 +186,6 @@ function ShortenLine()
         cmd [[ call cursor('.', b:max_line_length) ]]
         cmd [[ execute "normal! F i\n" ]]
     end
-end
-
--- Confirm Formatting
-----------
-function FormatWithConfirm()
-    vim.lsp.buf.format()
-    print("Formatted")
 end
 
 ----------
@@ -455,7 +506,7 @@ config.pyright.setup { on_attach = on_attach, capabilities = capabilities,
 ----------
 -- TSServer
 config.tsserver.setup({
-    capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
+    capabilities = require("cmp_nvim_lsp").default_capabilities(lsp.protocol.make_client_capabilities()),
     on_attach = function(client)
         client.server_capabilities.document_formatting = false
     end,
@@ -511,20 +562,6 @@ config.tflint.setup { on_attach = on_attach, capabilities = capabilities }
 
 
 --------------------------------
--- Setup of Linters - nvim-lint
---------------------------------
--- Setup
-----------
-lint.linters_by_ft = {
-    python = { 'pylint', }
-}
-
-api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
-    callback = function()
-        require("lint").try_lint()
-    end,
-})
---------------------------------
 -- Setup of Null-ls -- Third Party LSPs
 --------------------------------
 
@@ -569,15 +606,15 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     -- Python Packages
     -----------
     -- Black
-    if package == "black" then --Python Formatter
-        nullSources[#nullSources + 1] = format.black.with({
-            command = get_venv_command("black"),
-            on_init = function(client)
-                client.config.settings.python.pythonPath = get_python_path()
-            end,
-            on_attach = on_attach
-        })
-    end
+    -- if package == "black" then --Python Formatter
+    --     nullSources[#nullSources + 1] = format.black.with({
+    --         command = get_venv_command("black"),
+    --         on_init = function(client)
+    --             client.config.settings.python.pythonPath = get_python_path()
+    --         end,
+    --         on_attach = on_attach
+    --     })
+    -- end
     -- DJlint
     if package == 'djlint' then
         nullSources[#nullSources + 1] = format.djlint.with({

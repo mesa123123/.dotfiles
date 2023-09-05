@@ -145,6 +145,9 @@ local plugins = {
     -- Linting Plugins
     ----------
     'mfussenegger/nvim-lint',
+    -- Formatting
+    ----------
+    'mhartington/formatter.nvim',
     -- Debug Adapter Protocol
     ----------
     'mfussenegger/nvim-dap',
