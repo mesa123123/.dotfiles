@@ -281,3 +281,4 @@ fi
 # ----------------
 # End Of bashrc
 # ----------------
+export PATH=$PATH:/home/bowmanpete/.spicetify
