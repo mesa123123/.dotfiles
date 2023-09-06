@@ -403,9 +403,7 @@ local function keymappings(client)
     ----------
     whichKey.register({
         g = { name = "Code & Diagnostics Actions" },
-        ["<leader>"] = {
-            c = { name = "Code & Diagnostic Opts" }
-        }
+        ["<leader>c"] = { name = "Code & Diagnostics Actions" }
     })
     ----------
 end

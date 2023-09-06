@@ -181,7 +181,7 @@ local plugins = {
     -- DevIcons
     'nvim-tree/nvim-web-devicons',
     -- Theme
-    'ii14/onedark.nvim',
+    'ellisonleao/gruvbox.nvim',
     'mechatroner/rainbow_csv',
     -- Brackets Rainbowing
     'luochen1990/rainbow',
@@ -258,7 +258,8 @@ opt.termguicolors = true
 
 -- Load Color Scheme
 ----------
-cmd('colorscheme onedark')
+require("gruvbox").setup({ contrast = "hard" })
+cmd('colorscheme gruvbox')
 ----------
 
 -- Rainbow Brackets Options
@@ -600,6 +601,7 @@ require("lualine").setup({
     options = {
         section_separators = { left = '|', right = '|' },
         component_separators = { left = '', right = '' },
+        theme = 'gruvbox-material'
     },
     sections = {
         lualine_a = { { 'mode', fmt = function(res) return res:sub(1, 1) end } },
@@ -677,7 +679,6 @@ whichKey.register({
         d = { name = "Database" },
         b = { name = "Debugging" },
         x = { name = "Testing" },
-        c = { name = "+LSP Opts" },
         r = { name = "Flashcards" },
     }
 })
