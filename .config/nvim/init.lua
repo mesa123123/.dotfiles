@@ -187,12 +187,8 @@ local plugins = {
     'luochen1990/rainbow',
     -- Git Highlighting
     'itchyny/vim-gitbranch',
-    -- Language Syntaxes
-    'ekalinin/Dockerfile.vim',
-    'rust-lang/rust.vim',
-    'sheerun/vim-polyglot',
-    'arzg/vim-rust-syntax-ext',
-    'chrisbra/csv.vim',
+    -- Color Highlighting 
+    'norcalli/nvim-colorizer.lua',
     -- LSP Icons
     'onsails/lspkind.nvim',
     -- Dashboard
@@ -266,6 +262,11 @@ cmd('colorscheme gruvbox')
 ----------
 g['rainbow_active'] = 1
 ----------
+
+-- Colorize Colors
+---------
+require'colorizer'.setup()
+
 
 -- Load Webdevicons
 ----------

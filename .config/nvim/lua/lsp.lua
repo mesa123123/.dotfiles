@@ -667,7 +667,7 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     ----------
     -- Eslint
     if package == "eslint-lsp" then
-        local eslint_file_types = { "javascript", "typescript", "css", "scss", "html", "json", "graphql", "svelte" }
+        local eslint_file_types = { "javascript", "typescript", "html", "json", "graphql", "svelte" }
         nullSources[#nullSources + 1] = code_actions.eslint.with({
             on_attach = on_attach,
             filetypes = eslint_file_types

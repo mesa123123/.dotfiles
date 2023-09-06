@@ -13,7 +13,7 @@ LOGFILE=~/.dotfiles/synclogs.log
 # ------- Global Script Variables -------
 
 declare -a TRACKEDFILESFORSYNC
-TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf"  ".config/nvim" "./.profile")
+TRACKEDFILESFORSYNC=(".bashrc" ".bash_aliases" ".bash_functions" ".bash_exit" ".tmux.conf"  ".config/nvim" ".profile" ".eslintrc.json")
 # If its wsl add the wslbin directory too, the bashrc already has functionality to sort out the wsl_on variable
 if [[ $WSLON == true ]] && [[ -f "./wslbin/*" ]]; then
     WSLBINDIR=".wslbin/"
