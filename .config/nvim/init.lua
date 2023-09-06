@@ -668,6 +668,11 @@ alpha.setup(dashboard.config)
 
 -- Key Map Assitance
 ----------
+-- Disable some so I can recustomize them
+local presets = require("which-key.plugins.presets")
+presets.operators["<leader>c"] = nil
+
+-- Register Custom Menus
 whichKey.register({
     ["<leader>"] = {
         w = { name = "File Write" },
@@ -678,6 +683,7 @@ whichKey.register({
         f = { name = "Telescope" },
         d = { name = "Database" },
         b = { name = "Debugging" },
+        c = { name = "LSP Opts" },
         x = { name = "Testing" },
         r = { name = "Flashcards" },
     }
