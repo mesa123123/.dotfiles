@@ -114,8 +114,10 @@ opt.rtp:prepend(lazypath)
 -- Setup
 ----------------
 local plugins = {
+    -- Essentials
     'nvim-lua/plenary.nvim',
     'nvim-treesitter/nvim-treesitter',
+    'folke/neodev.nvim',
     -- Autocompletion
     ----------
     {
@@ -330,6 +332,18 @@ g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
 ----------
 cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
 cmd [[ set mouse= ]]
+----------
+
+
+-------------------------------
+-- Neovim Extender Plugings
+-------------------------------
+
+--Neodev
+local neodev = require("neodev")
+neodev.setup({
+    library = { plugins = { "nvim-dap-ui" }, types = true },
+})
 ----------
 
 -------------------------------
