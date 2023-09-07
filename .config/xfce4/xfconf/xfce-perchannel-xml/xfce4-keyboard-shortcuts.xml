@@ -56,7 +56,6 @@
       <property name="&lt;Alt&gt;F1" type="string" value="xfce4-popup-whiskermenu"/>
       <property name="&lt;Super&gt;1" type="string" value="/usr/bin/google-chrome-stable %U -password-store=basic "/>
       <property name="&lt;Super&gt;2" type="string" value="kitty"/>
-      <property name="&lt;Super&gt;3" type="string" value="thunar %f"/>
       <property name="&lt;Super&gt;e" type="string" value="thunar"/>
       <property name="&lt;Super&gt;s" type="string" value="xfce4-appfinder --collapsed">
         <property name="startup-notify" type="bool" value="true"/>
@@ -67,6 +66,7 @@
       <property name="&lt;Super&gt;f" type="string" value="xfce4-find-cursor"/>
       <property name="&lt;Super&gt;grave" type="string" value="xcolor -s clipboard"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;s" type="string" value="xfce4-screenshooter -r"/>
+      <property name="&lt;Super&gt;3" type="string" value="spotify"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
