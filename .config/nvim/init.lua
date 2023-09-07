@@ -814,7 +814,7 @@ keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true, d
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true, desc = "Telescope: Show Buffers" })  -- Find Buffer
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true, desc = "Telescope: Help Tags" })
 keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true, desc = "Telescope: Keymaps" })
-keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
+keymap.set("n", "<C-b>", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
 ----------
 
 ---------------------------------
@@ -829,7 +829,7 @@ require("telescope").setup {
             mappings = {
                 -- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
                 i = {
-                    ["<c-d>"] = "delete_buffer",
+                    ["<c-d>"] = tele_actions.delete_buffer,
                     ["<c-k>"] = tele_actions.move_selection_previous,
                     ["<c-j>"] = tele_actions.move_selection_next,
                 }
