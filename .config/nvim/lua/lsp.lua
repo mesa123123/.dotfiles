@@ -141,7 +141,11 @@ function FormatWithConfirm()
     end
     print("Formatted")
 end
+----------
 
+--Format Settings
+----------
+lsp.buf.format({ timeout = 10000 }) -- Format Timeout
 ----------
 
 --------------------------------
@@ -423,11 +427,6 @@ local function on_attach(client, bufnr)
     keymappings(client)
 end
 
-----------
-
--- General Config
-----------
-lsp.buf.format(nil, 10000) -- Format Timeout
 ----------
 
 --------------------------------
