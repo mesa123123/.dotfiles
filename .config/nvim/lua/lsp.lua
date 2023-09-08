@@ -141,6 +141,7 @@ function FormatWithConfirm()
     end
     print("Formatted")
 end
+
 ----------
 
 --Format Settings
@@ -831,8 +832,22 @@ keymap.set('n', '<leader>bff', '<cmd>lua require"telescope".extensions.dap.frame
 
 -- UI Integration
 ----------
+
 -- Setup
-dapui.setup()
+dapui.setup({
+    layouts = { {
+        elements = { {
+            id = "scopes",
+            size = 0.5
+        }, {
+            id = "breakpoints",
+            size = 0.5
+        }, },
+        position = "left",
+        size = 40
+    } },
+
+})
 -- Auto-open
 dap.listeners.after.event_initialized["dapui_config"] = function()
     dapui.open()

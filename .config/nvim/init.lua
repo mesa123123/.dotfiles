@@ -856,6 +856,11 @@ require('telescope').load_extension('project')
 -- Wiki Functionality: <leader>k - Obsidian.nvim
 ---------------------------------
 
+-- Variables
+----------
+local obsidian = require('obsidian')
+----------
+
 -- Functions
 ----------
 local make_note_id = function(title)
@@ -879,7 +884,6 @@ local make_note_frontmatter = function(note)
     return out
 end
 
-
 -- Setup
 ----------
 require("obsidian").setup({
@@ -899,7 +903,7 @@ require("obsidian").setup({
 -- Mappings
 ----------
 keymap.set("n", "<leader>kb", "<cmd>ObsidianBacklinks<cr>", { silent = true, desc = "Get References To Current" })
-keymap.set("n", "<leader>kct", "<cmd>ObsidianToday<cr>", { silent = true, desc = "Create New Daily Note" })
+keymap.set("n", "<leader>kt", "<cmd>ObsidianToday<cr>", { silent = true, desc = "Open (New) Daily Note" })
 keymap.set("n", "<leader>ky", "<cmd>ObsidianYesterday<cr>",
     { silent = true, desc = "Create New Daily Note For Yesterday" })
 keymap.set("n", "<leader>ko", "<cmd>ObsidianOpen<cr>", { silent = true, desc = "Open in Obisidian App" })
@@ -909,7 +913,7 @@ keymap.set("n", "<leader>ks", "<cmd>ObsidianSearch<cr>", { silent = true, desc =
 keymap.set("n", "<leader>kq", "<cmd>ObsidianQuickSwitch<cr>", { silent = true, desc = "Note Quick Switch" })
 keymap.set("n", "<leader>kll", "<cmd>ObsidianFollowLink<cr>", { silent = true, desc = "Go To Link Under Cursor" })
 keymap.set("v", "<leader>kla", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Link Note To Selection" })
-keymap.set("n", "<leader>kt", "<cmd>ObsidianTemplate<cr>", { silent = true, desc = "Insert Template Into Link" })
+keymap.set("n", "<leader>klt", "<cmd>ObsidianTemplate<cr>", { silent = true, desc = "Insert Template Into Link" })
 -- Mapping Assist
 whichKey.register({
     ["<leader>k"] = {
