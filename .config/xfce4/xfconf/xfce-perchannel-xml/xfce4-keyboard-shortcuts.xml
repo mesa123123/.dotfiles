@@ -67,6 +67,7 @@
       <property name="&lt;Super&gt;grave" type="string" value="xcolor -s clipboard"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;s" type="string" value="xfce4-screenshooter -r"/>
       <property name="&lt;Super&gt;3" type="string" value="spotify"/>
+      <property name="&lt;Super&gt;l" type="string" value="xflock4"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
