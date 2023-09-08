@@ -187,7 +187,7 @@ local plugins = {
     'luochen1990/rainbow',
     -- Git Highlighting
     'itchyny/vim-gitbranch',
-    -- Color Highlighting 
+    -- Color Highlighting
     'norcalli/nvim-colorizer.lua',
     -- LSP Icons
     'onsails/lspkind.nvim',
@@ -265,7 +265,7 @@ g['rainbow_active'] = 1
 
 -- Colorize Colors
 ---------
-require'colorizer'.setup()
+require 'colorizer'.setup()
 
 
 -- Load Webdevicons
@@ -650,6 +650,8 @@ alpha.setup(dashboard.config)
 ----------
 -- Configured Here
 -- Terminal - TerminalToggle : <leader>t & <leader> q (while in terminal mode)
+-- Other Terminal Apps: <leader>a
+--     Docker - lazydocker: <leader>ad
 -- Via Telescope
 -- Filetree - Telescope File Browser : <c-n>
 -- Project Management - telescope-project: <leader>p
@@ -680,6 +682,7 @@ whichKey.register({
         k = { name = "Wiki Opts" },
         q = { name = "Close and Quit" },
         t = { name = "Terminal" },
+        a = { name = "Terminal Applications" },
         s = { name = "Snippets" },
         f = { name = "Telescope" },
         d = { name = "Database" },
@@ -693,38 +696,85 @@ whichKey.register({
 
 
 ----------------------------------
--- Terminal Settings: <leader>t - toggleterm
+-- Terminal Settings: <leader>t & <leader>a - toggleterm
 ----------------------------------
 
--- Config
+-- Setup
 ----------
-require("toggleterm").setup {
-    -- Options
-    ----------
-    open_mapping = '<Leader>t',
-    direction = 'tab',
+local default_terminal_opts = {
     persist_mode = true,
     close_on_exit = true,
     terminal_mappings = true,
     hide_numbers = true,
+}
+
+require("toggleterm").setup(default_terminal_opts)
+----------
+
+-- Terminal Apps
+-----------------
+
+-- Vars
+----------
+local Terminal      = require('toggleterm.terminal').Terminal
+----------
+
+-- Basic Terminal
+----------
+local standard_term = Terminal:new {
+    cmd = "/bin/bash",
+    dir = fn.getcwd(),
+    direction = 'tab',
     on_open = function()
         cmd [[ TermExec cmd="source ~/.bashrc &&  clear" ]]
     end,
     on_exit = function()
         cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
-    end
+    end,
 }
+function Standard_term_toggle()
+    standard_term:toggle()
+end
+
+----------
+
+-- Docker - w/Lazydocker
+----------
+-- DockerCmd
+local docker_tui    = "lazydocker"
+-- Setup
+local docker_client = Terminal:new {
+    cmd = docker_tui,
+    dir = fn.getcwd(),
+    hidden = true,
+    direction = "float",
+    float_opts = {
+        border = "double",
+    },
+}
+-- toggle function
+function Docker_term_toggle()
+    docker_client:toggle()
+end
+
 ----------
 
 -- Mappings
 ----------
-keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true, desc = "Quit Terminal Instance" }) -- Send exit command
-keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true })                                           -- Use Esc to change modes in the terminal
-keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"", { noremap = true, silent = true })
+-- General
+keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true, desc = "Quit Terminal Instance" })
+keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true, desc = "Change to N mode" })
+keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"",
+    { noremap = true, silent = true, desc = "Stop you from inceptioning vim" })
 keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
-    { noremap = true, silent = true })
-----------
+    { noremap = true, silent = true, desc = "Stop you from inceptioning vim" })
+-- Standard Term Toggle
+keymap.set("n", "<leader>t", "<cmd>lua Standard_term_toggle()<CR>", { noremap = true, silent = true, desc = "Open Terminal" })
+-- Docker Toggle
+keymap.set("n", "<leader>ad", "<cmd>lua Docker_term_toggle()<CR>",
+    { noremap = true, silent = true, desc = "Open Docker" })
 
+----------
 
 ---------------------------------
 -- Functions Handled by Telescope
