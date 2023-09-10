@@ -770,9 +770,9 @@ keymap.set("t", "editvim", "say \"You're already in vim! This is why no one love
     { noremap = true, silent = true, desc = "Stop you from inceptioning vim" })
 -- Standard Term Toggle
 keymap.set("n", "<leader>t", "<cmd>lua Standard_term_toggle()<CR>", { noremap = true, silent = true, desc = "Open Terminal" })
--- Docker Toggle
+-- Docker Toggle 
 keymap.set("n", "<leader>ad", "<cmd>lua Docker_term_toggle()<CR>",
-    { noremap = true, silent = true, desc = "Open Docker" })
+    { noremap = true, silent = true, desc = "Open Docker Container Management" })
 
 ----------
 
