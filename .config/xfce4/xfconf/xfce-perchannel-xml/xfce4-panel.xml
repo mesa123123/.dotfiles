@@ -55,6 +55,7 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “black sheep coffee free wifi” active: black sheep coffee free wifi (56%)"/>
         <value type="string" value="wi-fi network connection “black sheep coffee free wifi” active: black sheep coffee free wifi (59%)"/>
         <value type="string" value="requesting a wi-fi network address for “_the cloud”…"/>
         <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (54%)"/>
@@ -120,7 +121,28 @@
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>
     </property>
-    <property name="plugin-16" type="string" value="whiskermenu"/>
+    <property name="plugin-16" type="string" value="whiskermenu">
+      <property name="button-icon" type="string" value="/home/bowmanpete/.dotfiles/assets/xfce4_logo.png"/>
+      <property name="favorites-in-recent" type="bool" value="true"/>
+      <property name="command-switchuser" type="string" value="dm-tool switch-to-greeter"/>
+      <property name="favorites" type="array">
+        <value type="string" value="xfce4-web-browser.desktop"/>
+        <value type="string" value="xfce4-mail-reader.desktop"/>
+        <value type="string" value="xfce4-file-manager.desktop"/>
+        <value type="string" value="xfce4-terminal-emulator.desktop"/>
+      </property>
+      <property name="recent" type="array">
+        <value type="string" value="chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"/>
+        <value type="string" value="obsidian.desktop"/>
+        <value type="string" value="google-chrome.desktop"/>
+        <value type="string" value="spotify.desktop"/>
+        <value type="string" value="org.bluesabre.Mugshot.desktop"/>
+        <value type="string" value="WebHTTrack.desktop"/>
+        <value type="string" value="com.github.xournalpp.xournalpp.desktop"/>
+        <value type="string" value="steam.desktop"/>
+        <value type="string" value="xfce-settings-manager.desktop"/>
+      </property>
+    </property>
     <property name="plugin-11" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>

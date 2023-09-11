@@ -1,3 +1,4 @@
+#!/bin/bash
 # Directory Commands
 alias ll='ls -alF'
 alias la='ls -A'
@@ -65,5 +66,4 @@ alias cls='clear'
 # If git-delta is installed, use that for diff
 [[ $(cargo install --list | grep -c "git-delta") == 1 ]] && alias diff="delta"
 # Certain Terminals get fiddily with TERM settings so this gets around it for kitty at least
-[[ "${TERM}" == *"kitty"* ]] && alias ssh="kitty +kitten ssh"
-
+[[ "$TERM" == *"kitty"* ]] && alias ssh="kitty +kitten ssh"
