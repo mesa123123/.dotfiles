@@ -133,6 +133,7 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="nm-connection-editor.desktop"/>
         <value type="string" value="google-chrome.desktop"/>
         <value type="string" value="chrome-kjgfgldnnfoeklkmfkjfagphfepbbdan-Profile_1.desktop"/>
         <value type="string" value="chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"/>
@@ -142,7 +143,6 @@
         <value type="string" value="WebHTTrack.desktop"/>
         <value type="string" value="com.github.xournalpp.xournalpp.desktop"/>
         <value type="string" value="steam.desktop"/>
-        <value type="string" value="xfce-settings-manager.desktop"/>
       </property>
     </property>
     <property name="plugin-11" type="string" value="separator">
@@ -159,7 +159,7 @@
     </property>
     <property name="clipman" type="empty">
       <property name="tweaks" type="empty">
-        <property name="never-confirm-history-clear" type="bool" value="false"/>
+        <property name="never-confirm-history-clear" type="bool" value="true"/>
       </property>
     </property>
     <property name="plugin-2" type="string" value="pager">
