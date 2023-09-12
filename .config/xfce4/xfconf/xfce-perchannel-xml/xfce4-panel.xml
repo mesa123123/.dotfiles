@@ -132,9 +132,10 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="google-chrome.desktop"/>
+        <value type="string" value="chrome-kjgfgldnnfoeklkmfkjfagphfepbbdan-Profile_1.desktop"/>
         <value type="string" value="chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"/>
         <value type="string" value="obsidian.desktop"/>
-        <value type="string" value="google-chrome.desktop"/>
         <value type="string" value="spotify.desktop"/>
         <value type="string" value="org.bluesabre.Mugshot.desktop"/>
         <value type="string" value="WebHTTrack.desktop"/>
