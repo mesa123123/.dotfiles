@@ -55,6 +55,7 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “colony guest” active: colony guest (72%)"/>
         <value type="string" value="wi-fi network connection “colony guest” active: colony guest (49%)"/>
         <value type="string" value="wi-fi network connection “black sheep coffee free wifi” active: black sheep coffee free wifi (56%)"/>
         <value type="string" value="wi-fi network connection “black sheep coffee free wifi” active: black sheep coffee free wifi (59%)"/>
@@ -133,6 +134,7 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="virtualbox.desktop"/>
         <value type="string" value="nm-connection-editor.desktop"/>
         <value type="string" value="google-chrome.desktop"/>
         <value type="string" value="chrome-kjgfgldnnfoeklkmfkjfagphfepbbdan-Profile_1.desktop"/>
@@ -142,7 +144,6 @@
         <value type="string" value="org.bluesabre.Mugshot.desktop"/>
         <value type="string" value="WebHTTrack.desktop"/>
         <value type="string" value="com.github.xournalpp.xournalpp.desktop"/>
-        <value type="string" value="steam.desktop"/>
       </property>
     </property>
     <property name="plugin-11" type="string" value="separator">
