@@ -423,9 +423,16 @@ keymap.set('n', '<leader>qaa', ':qa<CR>', { silent = false, noremap = true, desc
 keymap.set('n', '<leader>qa!', '<cmd>qa!<cr>', { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
 keymap.set('n', '<leader>qq', ':q<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
 keymap.set('n', '<leader>q!', ':q!<CR>', { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
+-- System Copy Set to Mappings
+keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { silent = true, noremap = true, desc = "Copy to System Clipboard" })
+keymap.set({ 'n', 'v' }, '<leader>yy', '"+yy', { silent = true, noremap = true, desc = "Copy Line to System Clipboard" })
+keymap.set('n', '<leader>Y', '"+yg_', { silent = true, noremap = true, desc = "Copy Rest of file to system Clipboard" })
+-- System Paste Set to Mappings
+keymap.set({ 'n', 'v' }, '<leader>p', '"+p', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
+keymap.set({ 'n', 'v' }, '<leader>P', '"+P', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
 ---------
 
--- Visual Mappings
+-- Highlighting Search Mappings
 ---------
 -- Trigger Highlight Searching Automatically
 keymap.set("n", "<cr>", ":nohlsearch<CR>", { silent = true })
@@ -436,25 +443,10 @@ keymap.set("n", "N", ":set hlsearch<CR>N", { silent = true })
 -- Pane Control Mappings
 ----------
 -- Tmux Pane Resizing Terminal Mode
-keymap.set("t", "<c-a><c-j>", "<c-\\><c-n>:res-5<CR>i", {})
-keymap.set("t", "<c-a><c-k>", "<c-\\><c-n>:res+5<CR>i", {})
-keymap.set("t", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("t", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Insert Mode
-keymap.set("i", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("i", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("i", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("i", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Command Mode
-keymap.set("c", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("c", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("c", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("c", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Normal Mode
-keymap.set("n", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("n", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("n", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+keymap.set({ "t", "i", "c", "n" }, "<c-a><c-j>", "<c-\\><c-n>:res-5<CR>i", {})
+keymap.set({ "t", "i", "c", "n" }, "<c-a><c-k>", "<c-\\><c-n>:res+5<CR>i", {})
+keymap.set({ "t", "i", "c", "n" }, "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
+keymap.set({ "t", "i", "c", "n" }, "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
 ----------
 
 -- Tab Control mappings
@@ -498,13 +490,13 @@ whichKey.register({
 
 
 -----------------------------------------
--- Tree-Sitter Config
+--  Syntax Highlighting: Tree-Sitter Config
 -----------------------------------------
 
 -- Plugin Setup
 ----------
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline", "rst" },
+    ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline", "rst", "python" },
     auto_install = true,
     highlight = {
         enable = true,
@@ -558,7 +550,7 @@ local notify = require("notify")
 ----------
 notify.setup({
     render = "simple",
-    timeout = 500,
+    timeout = 200,
     stages = "fade",
     minimum_width = 25,
     top_down = false
@@ -648,22 +640,24 @@ alpha.setup(dashboard.config)
 
 -- Mappings
 ----------
--- Configured Here
+-- Configured Here --
 -- Terminal - TerminalToggle : <leader>t & <leader> q (while in terminal mode)
 -- Other Terminal Apps: <leader>a
 --     Docker - lazydocker: <leader>ad
 -- Via Telescope
 -- Filetree - Telescope File Browser : <c-n>
--- Project Management - telescope-project: <leader>p
+-- Project Management - telescope-project: <leader>m
 -- Buffer Management - Telescope Nvim: <leader>f
 -- Database - DadBod: : <leader>d
 -- Testing - Ultest : <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
 -- Wiki Commands - Obsidian.nvim: <leader>k,
--- Previously Configured
+-- Previously Configured --
 -- Write Commands: <leader>w
 -- Quit Commands: <leader>q
--- Configured in init.lsp
+-- System Yank Commands: <leader>y
+-- System Paste Comnmands: <leader>p
+-- Configured in init.lsp --
 -- Snippets - LuaSnip : <leader>s
 -- Debugging - NvimDAP: <leader>b
 -- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c & g
@@ -678,6 +672,9 @@ presets.operators["<leader>c"] = nil
 -- Register Custom Menus
 whichKey.register({
     ["<leader>"] = {
+        y = { name = "System Copy" },
+        p = { name = "System Paste" },
+        m = { name = "Project Management @TODO" },
         w = { name = "File Write" },
         k = { name = "Wiki Opts" },
         q = { name = "Close and Quit" },
@@ -769,8 +766,9 @@ keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"",
 keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
     { noremap = true, silent = true, desc = "Stop you from inceptioning vim" })
 -- Standard Term Toggle
-keymap.set("n", "<leader>t", "<cmd>lua Standard_term_toggle()<CR>", { noremap = true, silent = true, desc = "Open Terminal" })
--- Docker Toggle 
+keymap.set("n", "<leader>t", "<cmd>lua Standard_term_toggle()<CR>",
+    { noremap = true, silent = true, desc = "Open Terminal" })
+-- Docker Toggle
 keymap.set("n", "<leader>ad", "<cmd>lua Docker_term_toggle()<CR>",
     { noremap = true, silent = true, desc = "Open Docker Container Management" })
 
@@ -839,7 +837,7 @@ keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { silent = true, noremap
 ----------
 
 -----------------------------
--- Project Management: <leader>p - telescope-project
+-- Project Management: <leader>p - telescope-project @TODO
 -----------------------------
 
 -- Functions
