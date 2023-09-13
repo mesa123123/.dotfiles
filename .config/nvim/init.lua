@@ -339,16 +339,16 @@ cmd [[ set mouse= ]]
 -- Setup Config for xfce4 desktops to use system keyboard
 ----------
 g['clipboard'] = {
-     'name' = 'xclip-xfce4-clipman',
-     'copy' = {
-        '+' = 'xclip -selection clipboard',
-        '*' = 'xclip -selection clipboard',
+     name = 'xclip-xfce4-clipman',
+     copy = {
+        ['+'] = 'xclip -selection clipboard',
+        ['*'] = 'xclip -selection clipboard',
       },
-     'paste' = {
-        '+' = 'xclip -selection clipboard -o',
-        '*' = 'xclip -selection clipboard -o',
+     paste = {
+        ['+'] = 'xclip -selection clipboard -o',
+        ['*'] = 'xclip -selection clipboard -o',
      },
-     'cache_enabled': 1,
+     cache_enabled = true,
    }
 -------------------------------
 -- Neovim Extender Plugings
