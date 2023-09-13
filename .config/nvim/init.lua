@@ -336,7 +336,20 @@ cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
 cmd [[ set mouse= ]]
 ----------
 
-
+-- Setup Config for xfce4 desktops to use system keyboard
+----------
+g['clipboard'] = {
+     'name' = 'xclip-xfce4-clipman',
+     'copy' = {
+        '+' = 'xclip -selection clipboard',
+        '*' = 'xclip -selection clipboard',
+      },
+     'paste' = {
+        '+' = 'xclip -selection clipboard -o',
+        '*' = 'xclip -selection clipboard -o',
+     },
+     'cache_enabled': 1,
+   }
 -------------------------------
 -- Neovim Extender Plugings
 -------------------------------
