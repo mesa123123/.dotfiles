@@ -676,8 +676,9 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     end
     -- Prettier
     if package == 'prettier' then
+        local prettier_file_types = { "javascript", "vue", "css", "scss", "less", "html", "yaml", "graphql", "handlebars" }
         nullSources[#nullSources + 1] = format.prettier.with({
-            on_attach = on_attach, })
+            on_attach = on_attach, filetypes = prettier_file_types })
     end
     ----------
     -- Restructured Text
