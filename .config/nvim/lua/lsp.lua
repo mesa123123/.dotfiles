@@ -27,6 +27,7 @@ local cmp = require "cmp"                  -- Autocompletion for the language se
 local cmp_lsp = require("cmp_nvim_lsp")
 local dap = require("dap")
 local lint = require('lint')
+local format = require('conform')
 local snip = require("luasnip")
 local snipload_lua = require("luasnip.loaders.from_lua")
 local whichKey = require("which-key")
@@ -72,6 +73,40 @@ local function tableConcat(t1, t2)
 end
 
 --------------------------------
+-- Installer and Package Management
+--------------------------------
+
+-- Dependent Modules Require
+----------
+local server_dir = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers"
+require("mason").setup({
+    install_root_dir = server_dir
+}) -- Mason is the engine the installer configs will run
+----------
+
+-- Package Installs
+----------
+-- Core Language Servers
+local lsp_servers_ei = { 'lua_ls', 'pyright',
+    'bashls', 'cucumber_language_server', 'tsserver',
+    'rust_analyzer', 'terraformls', 'emmet_ls' }
+-- Formatters
+local formatters_ei = { "markdownlint", "shellharden", "sql-formatter", "eslint", "prettier", "djlint",
+    "black" }
+-- Other Language Servers, Handled by Nullls
+local other_servers = { 'pylint', 'depugpy', 'shellcheck', 'prettier', 'rstcheck', 'write_good', 'proselint' }
+----------
+
+-- Install Packages
+----------
+all_lsp_servers = {} -- TODO Make this code work for all mason packages
+install.setup({
+    automatic_installation = true,
+    ensure_installed = lsp_servers_ei
+}) -- This is running through Mason_lsp-config
+----------
+
+--------------------------------
 -- Snippets
 --------------------------------
 
@@ -107,38 +142,31 @@ keymap.set("n", "<leader>se", ":LuaSnipEdit<CR>", { desc = "Edit Snippets File" 
 ----------
 
 --------------------------------
--- Setup of Formatters - format.nvim
+-- Setup of Formatters - conform.nvim
 --------------------------------
 
----- Setup
+-- Ensure Installed
 ----------
-local formatter_util = require("formatter.util")
-require("formatter").setup {
-    log_level = log.levels.WARN,
-    filetype = {
-        python = {
-            require('formatter.filetypes.python').black
-            -- function()
-            --     py_path = find_python_path()
-            --     return {
-            --         exe = "" .. py_path .. " -m black"
-            --         args = { "--stdin-filename", formatter_util.escape_path(formatter_util.get_current_buffer_file_path()), "--quiet", "-" }
-            --    }
 
-        }
-    }
-}
--- Save Configured Formatters in List
-local defined_formatter_types = require("formatter.config").values.filetype
+-- Check Installed and then Setup
+----------
+
+
+-- Setup
+----------
+-- TODO sort out how to get the custom pyenv into this formatter
+format.setup({
+    formatters_by_ft = {
+        python = { "black" },
+        javascript = { "prettier" },
+        shell = { "shellharden" }
+    },
+})
 
 -- General Format Function
 ----------
 function FormatWithConfirm()
-    if defined_formatter_types[vim.bo.filetype] == nil then
-        lsp.buf.format({ async = true })
-    else
-        cmd [[ Format ]]
-    end
+    format.format({ async = true, lsp_fallback = true })
     print("Formatted")
 end
 
@@ -431,32 +459,6 @@ end
 ----------
 
 --------------------------------
--- Configuration of Installer
---------------------------------
-
--- Dependent Modules Require
-----------
-local server_dir = os.getenv("HOME") .. "/.config/nvim/lua/lsp_servers"
-require("mason").setup({
-    install_root_dir = server_dir
-}) -- Mason is the engine the installer configs will run
-----------
--- List Necessary Installs
-----------
--- Core Language Servers
-local lsp_servers = { 'lua_ls', 'pyright',
-    'bashls', 'cucumber_language_server', 'tsserver',
-    'rust_analyzer', 'terraformls', 'emmet_ls' }
--- Other Language Servers, Handled by Nullls
-local other_servers = { 'pylint', 'depugpy', 'djlint', 'markdownlint', 'shellcheck', 'black', 'prettier',
-    'sql-formatter', 'rstcheck', 'write_good', 'shellharden', 'proselint' }
--- Ensure Installs
-----------
-install.setup({
-    automatic_installation = true,
-    ensure_installed = lsp_servers
-}) -- This is running through Mason_lsp-config
---------------------------------
 -- Setup of Language Servers
 --------------------------------
 
@@ -602,16 +604,6 @@ local mason_installed = require("mason-registry")
 for _, package in pairs(mason_installed.get_installed_package_names()) do
     -- Python Packages
     -----------
-    -- Black
-    -- if package == "black" then --Python Formatter
-    --     nullSources[#nullSources + 1] = format.black.with({
-    --         command = get_venv_command("black"),
-    --         on_init = function(client)
-    --             client.config.settings.python.pythonPath = get_python_path()
-    --         end,
-    --         on_attach = on_attach
-    --     })
-    -- end
     -- DJlint
     if package == 'djlint' then
         nullSources[#nullSources + 1] = format.djlint.with({

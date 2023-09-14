@@ -149,7 +149,7 @@ local plugins = {
     'mfussenegger/nvim-lint',
     -- Formatting
     ----------
-    'mhartington/formatter.nvim',
+    'stevearc/conform.nvim',
     -- Debug Adapter Protocol
     ----------
     'mfussenegger/nvim-dap',
