@@ -89,17 +89,17 @@ require("mason").setup({
 -- Core Language Servers
 local lsp_servers_ei = { 'lua_ls', 'pyright',
     'bashls', 'cucumber_language_server', 'tsserver',
-    'rust_analyzer', 'terraformls', 'emmet_ls' }
+    'rust_analyzer', 'terraformls', 'emmet_ls', 'jsonls' }
 -- Formatters
 local formatters_ei = { "markdownlint", "shellharden", "sql-formatter", "eslint", "prettier", "djlint",
-    "black" }
+    "black", "jq" }
 -- Other Language Servers, Handled by Nullls
-local other_servers = { 'pylint', 'depugpy', 'shellcheck', 'prettier', 'rstcheck', 'write_good', 'proselint' }
+local other_servers = { 'pylint', 'depugpy', 'shellcheck', 'prettier', 'rstcheck', 'write_good', 'proselint', 'jsonlint' }
 ----------
 
 -- Install Packages
 ----------
-all_lsp_servers = {} -- TODO Make this code work for all mason packages
+local all_lsp_servers = {} -- TODO Make this code work for all mason packages
 install.setup({
     automatic_installation = true,
     ensure_installed = lsp_servers_ei
@@ -145,13 +145,6 @@ keymap.set("n", "<leader>se", ":LuaSnipEdit<CR>", { desc = "Edit Snippets File" 
 -- Setup of Formatters - conform.nvim
 --------------------------------
 
--- Ensure Installed
-----------
-
--- Check Installed and then Setup
-----------
-
-
 -- Setup
 ----------
 -- TODO sort out how to get the custom pyenv into this formatter
@@ -159,7 +152,8 @@ format.setup({
     formatters_by_ft = {
         python = { "black" },
         javascript = { "prettier" },
-        shell = { "shellharden" }
+        shell = { "shellharden" },
+        json = { { "jq", "jsonls" }, }
     },
 })
 
@@ -185,7 +179,9 @@ lsp.buf.format({ timeout = 10000 }) -- Format Timeout
 ----------
 lint.linters_by_ft = {
     -- Python
-    python = { 'pylint', }
+    python = { 'pylint', },
+    -- Json
+    json = { 'jsonlint', },
 }
 
 api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
@@ -520,6 +516,11 @@ config.cssls.setup({ on_attach = on_attach, capabilities = capabilities })
 config.svelte.setup({ on_attach = on_attach, capabilities = capabilities })
 ----------
 
+-- Json
+----------
+config.jsonls.setup({ on_attach = on_attach, capabilities = capabilities })
+----------
+
 -- Cucumber
 ----------
 config.cucumber_language_server.setup { on_attach = on_attach, capabilities = capabilities }
@@ -659,7 +660,7 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
     ----------
     -- Eslint
     if package == "eslint-lsp" then
-        local eslint_file_types = { "javascript", "typescript", "html", "json", "graphql", "svelte" }
+        local eslint_file_types = { "javascript", "typescript", "html", "graphql", "svelte" }
         nullSources[#nullSources + 1] = code_actions.eslint.with({
             on_attach = on_attach,
             filetypes = eslint_file_types
