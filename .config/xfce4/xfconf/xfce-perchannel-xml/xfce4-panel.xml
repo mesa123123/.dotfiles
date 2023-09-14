@@ -108,7 +108,7 @@
       </property>
       <property name="icon-size" type="int" value="22"/>
       <property name="single-row" type="bool" value="true"/>
-      <property name="square-icons" type="bool" value="false"/>
+      <property name="square-icons" type="bool" value="true"/>
       <property name="hidden-legacy-items" type="array">
         <value type="string" value="pamac-tray"/>
       </property>
@@ -117,7 +117,8 @@
         <value type="string" value="MSM Notifier"/>
       </property>
       <property name="menu-is-primary" type="bool" value="true"/>
-      <property name="symbolic-icons" type="bool" value="false"/>
+      <property name="symbolic-icons" type="bool" value="true"/>
+      <property name="hide-new-items" type="bool" value="false"/>
     </property>
     <property name="plugin-6" type="string" value="battery"/>
     <property name="plugin-1" type="string" value="separator">
@@ -135,6 +136,7 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="xfce-display-settings.desktop"/>
         <value type="string" value="com.github.xournalpp.xournalpp.desktop"/>
         <value type="string" value="xfce-ui-settings.desktop"/>
         <value type="string" value="xfce4-color-settings.desktop"/>
@@ -144,7 +146,6 @@
         <value type="string" value="google-chrome.desktop"/>
         <value type="string" value="chrome-kjgfgldnnfoeklkmfkjfagphfepbbdan-Profile_1.desktop"/>
         <value type="string" value="chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"/>
-        <value type="string" value="obsidian.desktop"/>
       </property>
     </property>
     <property name="plugin-11" type="string" value="separator">
