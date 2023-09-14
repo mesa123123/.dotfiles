@@ -210,6 +210,12 @@ local plugins = {
         'nvim-telescope/telescope-project.nvim',
         dependencies = { 'nvim-telescope/telescope.nvim' },
     },
+    {
+        "jemag/telescope-diff.nvim",
+        dependencies = {
+            { "nvim-telescope/telescope.nvim" },
+        }
+    },
     -----------
     -- Study Functionality
     ----------
@@ -339,17 +345,17 @@ cmd [[ set mouse= ]]
 -- Setup Config for xfce4 desktops to use system keyboard
 ----------
 g['clipboard'] = {
-     name = 'xclip-xfce4-clipman',
-     copy = {
+    name = 'xclip-xfce4-clipman',
+    copy = {
         ['+'] = 'xclip -selection clipboard',
         ['*'] = 'xclip -selection clipboard',
-      },
-     paste = {
+    },
+    paste = {
         ['+'] = 'xclip -selection clipboard -o',
         ['*'] = 'xclip -selection clipboard -o',
-     },
-     cache_enabled = true,
-   }
+    },
+    cache_enabled = true,
+}
 -------------------------------
 -- Neovim Extender Plugings
 -------------------------------
@@ -658,9 +664,10 @@ alpha.setup(dashboard.config)
 -- Other Terminal Apps: <leader>a
 --     Docker - lazydocker: <leader>ad
 -- Via Telescope
--- Filetree - Telescope File Browser : <c-n>
--- Project Management - telescope-project: <leader>m
--- Buffer Management - Telescope Nvim: <leader>f
+--    Filetree - telescope-file-browser : <c-n>
+--    Project Management - telescope-project: <leader>m
+--    Buffer Management - Telescope Nvim: <leader>f
+--    Diff - telescope-diff: <leader>fd
 -- Database - DadBod: : <leader>d
 -- Testing - Ultest : <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
@@ -694,13 +701,16 @@ whichKey.register({
         t = { name = "Terminal" },
         a = { name = "Terminal Applications" },
         s = { name = "Snippets" },
-        f = { name = "Telescope" },
+        f = {
+            name = "Telescope",
+            d = { "Diff Options" }
+        },
         d = { name = "Database" },
         b = { name = "Debugging" },
         c = { name = "LSP Opts" },
         x = { name = "Testing" },
         r = { name = "Flashcards" },
-    }
+    },
 })
 ---------
 
@@ -793,7 +803,7 @@ keymap.set("n", "<leader>ad", "<cmd>lua Docker_term_toggle()<CR>",
 -- Projects
 -- File Tree
 -- Buffer Management
---
+-- Buffer Diff
 
 -- Telescope Variables
 ----------
@@ -850,7 +860,7 @@ keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { silent = true, noremap
 ----------
 
 -----------------------------
--- Project Management: <leader>p - telescope-project @TODO
+-- Project Management: <leader>m - telescope-project @TODO
 -----------------------------
 
 -- Functions
@@ -870,12 +880,20 @@ local project_configs = {}
 
 -- Mappings
 ----------
+-- Core Mappings
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true, desc = "Telescope: Find Files" }) -- Find File
 keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true, desc = "Telescope: Live Grep" })
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true, desc = "Telescope: Show Buffers" })  -- Find Buffer
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true, desc = "Telescope: Help Tags" })
 keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true, desc = "Telescope: Keymaps" })
 keymap.set("n", "<C-b>", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
+-- Diff Keymappings
+keymap.set("n", "<leader>fdf", function()
+    require("telescope").extensions.diff.diff_files({ hidden = true })
+end, { desc = "Compare 2 files" })
+keymap.set("n", "<leader>fdc", function()
+    require("telescope").extensions.diff.diff_current({ hidden = true })
+end, { desc = "Compare file with current" })
 ----------
 
 ---------------------------------
@@ -900,12 +918,13 @@ require("telescope").setup {
     },
     extensions = {
         file_browser = file_browser_configs,
-        project = project_configs
+        project = project_configs,
     }
 }
 
 -- Extension Setup (Must Go last)
 require('telescope').load_extension('file_browser')
+require('telescope').load_extension('diff')
 require('telescope').load_extension('project')
 ----------
 

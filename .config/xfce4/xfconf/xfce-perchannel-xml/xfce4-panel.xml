@@ -136,6 +136,7 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="xfce4-mime-settings.desktop"/>
         <value type="string" value="xfce-display-settings.desktop"/>
         <value type="string" value="com.github.xournalpp.xournalpp.desktop"/>
         <value type="string" value="xfce-ui-settings.desktop"/>
@@ -145,7 +146,6 @@
         <value type="string" value="nm-connection-editor.desktop"/>
         <value type="string" value="google-chrome.desktop"/>
         <value type="string" value="chrome-kjgfgldnnfoeklkmfkjfagphfepbbdan-Profile_1.desktop"/>
-        <value type="string" value="chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"/>
       </property>
     </property>
     <property name="plugin-11" type="string" value="separator">
