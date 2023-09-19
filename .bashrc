@@ -277,8 +277,10 @@ if [[ $WSLON == true ]]; then
 fi
 
 # McFly the History basically graphical history for the shell
-[[ "$(cargo install --list | grep "mcfly")" == "*mcfly*" ]] && eval "$(mcfly init bash)"
-
+[[ "$(cargo install --list | grep "mcfly")" == "*mcfly*" ]] && McFly=1 || McFly=0
+if [[ ${McFly} == 1 ]]; then
+    eval "$(mcfly init bash)"
+fi
 
 # ---- End Of Automated Shell Commands on Startup -----
 
