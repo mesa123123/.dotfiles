@@ -44,6 +44,12 @@ fi
 alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
 
+# Spotify Player Commands
+alias media_pp='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause'
+alias media_next='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next'
+alias media_last='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous'
+
+
 # --------
 # Fancy Commands
 # --------
@@ -65,5 +71,7 @@ alias cls='clear'
 [[ "$(cargo install --list | grep "tre")" == *"tre"* ]] && alias tree='tre'
 # If git-delta is installed, use that for diff
 [[ $(cargo install --list | grep -c "git-delta") == 1 ]] && alias diff="delta"
+# If mcfly is installed tie it to the command
+[[ $(cargo install --list | grep -c "mcfly") == 1 ]] && alias mcfly="eval $(mcfly init bash)"
 # Certain Terminals get fiddily with TERM settings so this gets around it for kitty at least
-[[ "$TERM" == *"kitty"* ]] && alias ssh="kitty +kitten ssh"
+[[ ""$TERM == *"kitty"* ]] && alias ssh="kitty +kitten ssh"
