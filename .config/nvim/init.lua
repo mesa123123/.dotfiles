@@ -182,7 +182,6 @@ local plugins = {
     'nvim-tree/nvim-web-devicons',
     -- Theme
     'ellisonleao/gruvbox.nvim',
-    'mechatroner/rainbow_csv',
     -- Brackets Rainbowing
     'luochen1990/rainbow',
     -- Git Highlighting
@@ -531,7 +530,6 @@ require('nvim-treesitter.configs').setup {
     modules = {},
     sync_install = true,
     ignore_install = {},
-
 }
 ----------
 
