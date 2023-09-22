@@ -146,6 +146,7 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="obsidian.desktop"/>
         <value type="string" value="org.manjaro.pamac.manager.desktop"/>
         <value type="string" value="xfce4-mime-settings.desktop"/>
         <value type="string" value="xfce-display-settings.desktop"/>
@@ -155,7 +156,6 @@
         <value type="string" value="chrome-nihgcgngighmigpelhpppjipmplpakhd-Profile_1.desktop"/>
         <value type="string" value="virtualbox.desktop"/>
         <value type="string" value="nm-connection-editor.desktop"/>
-        <value type="string" value="google-chrome.desktop"/>
       </property>
     </property>
     <property name="plugin-11" type="string" value="separator">
