@@ -57,6 +57,10 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “asteroid” active: asteroid (77%)"/>
+        <value type="string" value="wi-fi network connection “asteroid” active: asteroid (81%)"/>
+        <value type="string" value="wi-fi network connection “asteroid” active: asteroid (70%)"/>
+        <value type="string" value="wi-fi network connection “asteroid” active: asteroid (73%)"/>
         <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (68%)"/>
         <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (82%)"/>
         <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (80%)"/>
