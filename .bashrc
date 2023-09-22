@@ -161,7 +161,7 @@ export PATH=$PATH:~/.local/bin
 # Language Servcer Protocol
 export PATH=$PATH:~/lsp
 # JAVA
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+export JAVA_HOME="/usr/lib/jvm/java-20-openjdk"
 # SCALA
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME="/opt/spark"

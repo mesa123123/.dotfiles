@@ -21,7 +21,7 @@ alias edittmux="vim ~/.tmux.conf"
 # Package Management
 [[ $(cat /proc/version | grep -c "UBUNTU") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
 [[ $(cat /proc/version | grep -c "microsoft") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
-[[ $(cat /proc/version | grep -c "MANJARO") == 1 ]] && alias uur='sudo pacman -Syu && yay -Syu && sudo pamac update --no-confirm && sudo pamac clean --no-confirm && yay -Rns && sudo pacman -R $(pacman -Qdtq) ' && alias spacman='sudo pacman' 
+[[ $(cat /proc/version | grep -c "MANJARO") == 1 ]] && alias uur='sudo pacman -Syu && yay --noconfirm -Syu && sudo pamac update --no-confirm && sudo pamac clean --no-confirm && yay -Rns && sudo pacman -R $(pacman -Qdtq) ' && alias spacman='sudo pacman' 
 #  Programmes etc.
 alias gnpm='npm -g'
 alias pip='pip3'
@@ -70,6 +70,8 @@ alias media_last='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify 
 # If Broot is installed map it to the br command
 [[ "$(cargo install --list | grep "tre")" == *"tre"* ]] && alias tree='tre'
 # If git-delta is installed, use that for diff
-[[ $(cargo install --list | grep -c "git-delta") == 1 ]] && alias diff="delta"
+[[ $(cargo install --list | grep -c "git-delta") -ge 1 ]] && alias diff="delta"
+# If tidy-viewer is installed map to alias
+[[ $(cargo install --list | grep -c "tidy-viewer") -ge 1 ]] && alias tv="tidy-viewer"
 # Certain Terminals get fiddily with TERM settings so this gets around it for kitty at least
 [[ ""$TERM == *"kitty"* ]] && alias ssh="kitty +kitten ssh"

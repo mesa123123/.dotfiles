@@ -93,6 +93,8 @@ local lsp_servers_ei = { 'lua_ls', 'pyright',
 -- Formatters
 local formatters_ei = { "markdownlint", "shellharden", "sql-formatter", "eslint", "prettier", "djlint",
     "black", "jq" }
+-- Lineters
+local linters_ei = { 'pylint', 'jsonlint' }
 -- Other Language Servers, Handled by Nullls
 local other_servers = { 'pylint', 'depugpy', 'shellcheck', 'prettier', 'rstcheck', 'write_good', 'proselint', 'jsonlint' }
 ----------

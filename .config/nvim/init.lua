@@ -184,6 +184,27 @@ local plugins = {
     'ellisonleao/gruvbox.nvim',
     -- Brackets Rainbowing
     'luochen1990/rainbow',
+    -- Rainbow csv hl
+    {
+        'cameron-wags/rainbow_csv.nvim',
+        config = true,
+        ft = {
+            'csv',
+            'tsv',
+            'csv_semicolon',
+            'csv_whitespace',
+            'csv_pipe',
+            'rfc_csv',
+            'rfc_semicolon'
+        },
+        cmd = {
+            'RainbowDelim',
+            'RainbowDelimSimple',
+            'RainbowDelimQuoted',
+            'RainbowMultiDelim'
+        }
+
+    },
     -- Git Highlighting
     'itchyny/vim-gitbranch',
     -- Color Highlighting
