@@ -424,6 +424,8 @@ local function keymappings(client)
     keymap.set("n", "<leader>cd", "<Cmd>lua vim.lsp.buf.declaration()<CR>", bufopts({ desc = "LSP: Go To Declaration" }))
     keymap.set("n", "<leader>cr", "<cmd>lua require('telescope.builtin').lsp_references()<CR>",
         bufopts({ desc = "LSP: Go to References" }))
+    keymap.set("n", "<leader>cg", ":Telescope diagnostics<CR>",
+        bufopts({ desc = "LSP: Telescope Diagnositcs" }))
     keymap.set("n", "<leader>cs", "<cmd>lua vim.lsp.buf.signature_help()<CR>",
         bufopts({ desc = "LSP: Bring Up Signature Help" }))
     keymap.set("n", "<leader>ci", "<cmd>lua vim.lsp.buf.implementation()<CR>",

@@ -454,7 +454,7 @@ keymap.set("i", "<<", "<c-d>", {})
 -- Set Write/Quit to shortcuts
 keymap.set('n', '<leader>ww', ':w<CR>', { silent = false, noremap = true, desc = "Write" })
 keymap.set('n', '<leader>w!', ':w!<CR>', { silent = false, noremap = true, desc = "Over-Write" })
-keymap.set('n', '<leader>ws', ':source %<CR>', { silent = false, noremap = true, desc = "Write and Source to Nvim" })
+keymap.set('n', '<leader>ws', ':so<CR>', { silent = false, noremap = true, desc = "Write and Source to Nvim" })
 keymap.set('n', '<leader>wqq', ':wq<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
 keymap.set('n', '<leader>wqa', ':wqa<CR>', { silent = false, noremap = true, desc = "Write All & Quit Nvim" })
 keymap.set('n', '<leader>wa', ':wa<CR>', { silent = false, noremap = true, desc = "Write All" })
@@ -722,7 +722,8 @@ whichKey.register({
         s = { name = "Snippets" },
         f = {
             name = "Telescope",
-            d = { "Diff Options" }
+            d = { "Diff Options" },
+            g = { "Git Options" }
         },
         d = { name = "Database" },
         b = { name = "Debugging" },
@@ -875,7 +876,7 @@ local file_browser_configs = {
 
 -- Mappings
 ----------
-keymap.set("n", "<C-n>", ":Telescope file_browser<CR>", { silent = true, noremap = true, desc = "Toggle File Browser" }) -- Remap the open and close to C-n
+keymap.set("n", "<C-n>", ":Telescope file_browser theme=dropdown<CR>", { silent = true, noremap = true, desc = "Toggle File Browser" }) -- Remap the open and close to C-n
 ----------
 
 -----------------------------
@@ -899,13 +900,24 @@ local project_configs = {}
 
 -- Mappings
 ----------
--- Core Mappings
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true, desc = "Telescope: Find Files" }) -- Find File
-keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true, desc = "Telescope: Live Grep" })
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true, desc = "Telescope: Show Buffers" })  -- Find Buffer
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true, desc = "Telescope: Help Tags" })
-keymap.set("n", "<leader>fm", "<cmd>Telescope keymaps<cr>", { silent = true, desc = "Telescope: Keymaps" })
-keymap.set("n", "<C-b>", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
+-- Buffers Mappings
+keymap.set("n", "<leader>ff", "<cmd>Telescope find_files theme=dropdown<cr>", { silent = true, desc = "Telescope: Find Files" }) -- Find File
+keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep theme=dropdown<cr>", { silent = true, desc = "Telescope: Live Grep" })
+keymap.set("n", "<leader>fb", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, desc = "Telescope: Show Buffers" })  -- Find Buffer
+keymap.set("n", "<C-b>", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, noremap = true })
+keymap.set("n", "<leader>fv", "<cmd>Telescope registers theme=dropdown<cr>", { silent = true, desc = "Telescope: Registers" })
+-- Help Mappings
+keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags theme=dropdown<cr>", { silent = true, desc = "Telescope: Help Tags" })
+keymap.set("n", "<leader>fm", "<cmd>Telescope man_pages theme=dropdown<cr>", { silent = true, desc = "Telescope: Man Pages" })
+keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps theme=dropdown<cr>", { silent = true, desc = "Telescope: Keymaps" })
+-- Git Mappings
+keymap.set("n", "<leader>fgc", "<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>", { silent = true, desc = "Telescope: Git Commits" })
+keymap.set("n", "<leader>fgc", "<cmd>Telescope git_status theme=dropdown<cr>", { silent = true, desc = "Telescope: Git Status" })
+keymap.set("n", "<leader>fgb", "<cmd>Telescope git_branches theme=dropdown<cr>", { silent = true, desc = "Telescope: Git Branches" })
+-- Tree Sitter Mapping
+keymap.set("n", "<leader>fs", "<cmd>Telescope treesitter theme=dropdown<cr>", { silent = true, desc = "Telescope: Treesitter Insights" })
+-- Telescope Mapping
+keymap.set("n", "<leader>ft", "<cmd>Telescope builtin theme=dropdown<cr>", { silent = true, desc = "Telescope: Telescope" })
 -- Diff Keymappings
 keymap.set("n", "<leader>fdf", function()
     require("telescope").extensions.diff.diff_files({ hidden = true })
