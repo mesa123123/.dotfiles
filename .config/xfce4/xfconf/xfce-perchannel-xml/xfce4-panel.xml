@@ -57,6 +57,7 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (39%)"/>
         <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (46%)"/>
         <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (43%)"/>
         <value type="string" value="wi-fi network connection “freshapartments11” active: freshapartments11 (78%)"/>
