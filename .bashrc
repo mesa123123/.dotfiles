@@ -166,7 +166,7 @@ export JAVA_HOME="/usr/lib/jvm/java-11-openjdk"
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME=/opt/spark
 export PYSPARK_DRIVER_PYTHON=jupyter
-export PYSPARK_DRIVER_PYTHON_OPTS='notebook'
+export PYSPARK_DRIVER_PYTHON_OPTS='notebook --no-browser --port=8889'
 export SBT_HOME="/usr/bin/sbt"
 # RUST
 export CARGO_HOME="/home/$USER/.cargo"
