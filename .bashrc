@@ -164,14 +164,16 @@ export PATH=$PATH:~/lsp
 export JAVA_HOME="/usr/lib/jvm/java-11-openjdk"
 # SCALA
 export SCALA_HOME=/usr/share/scala
-export SPARK_HOME="/opt/apache-spark"
+export SPARK_HOME=/opt/spark
+export PYSPARK_DRIVER_PYTHON=jupyter
+export PYSPARK_DRIVER_PYTHON_OPTS='notebook'
 export SBT_HOME="/usr/bin/sbt"
 # RUST
 export CARGO_HOME="/home/$USER/.cargo"
 # PYTHON
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIPENV_VENV_IN_PROJECT=1
-export PYSPARK_PYTHON="/usr/bin/python3"
+export PYSPARK_PYTHON="/home/$USER/.pyenv/shims/python"
 export PYENV_ROOT="$HOME/.pyenv"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # CURL
@@ -239,7 +241,6 @@ fi
 export PATH="$JAVA_HOME/bin:$PATH"
 export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH="${PATH}:${SCALA_HOME}/bin"
-export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 export PATH=$PATH:$SBT_HOME
 export PATH="$PATH:$CODE_HOME/bin"
 export PATH="$PATH:$GEM_HOME/bin"
