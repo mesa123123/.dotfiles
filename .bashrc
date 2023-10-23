@@ -161,10 +161,10 @@ export PATH=$PATH:~/.local/bin
 # Language Servcer Protocol
 export PATH=$PATH:~/lsp
 # JAVA
-export JAVA_HOME="/usr/lib/jvm/java-20-openjdk"
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk"
 # SCALA
 export SCALA_HOME=/usr/share/scala
-export SPARK_HOME="/opt/spark"
+export SPARK_HOME="/opt/apache-spark"
 export SBT_HOME="/usr/bin/sbt"
 # RUST
 export CARGO_HOME="/home/$USER/.cargo"
