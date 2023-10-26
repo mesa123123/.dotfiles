@@ -253,6 +253,16 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 
 
 # ---- Automated Shell Commands For Startup ----
+# Helpful for settingn up certain things that may or may not be installed
+check_command() {
+    command
+    if [ $? -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 
 # Pyenv Setup
 eval "$(pyenv init -)"  
@@ -265,6 +275,14 @@ if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
   POWERLINE_BASH_SELECT=1
   source /usr/share/powerline/bindings/bash/powerline.sh
 fi
+
+# spicetify setup
+spice_installed=$(check_command spicetify)
+if [ "$spice_installed" == "0" ]; then
+    spicetify config current_theme Jackdaw
+    spicetify apply
+fi
+
 
 # WSL Display Commands
 if [[ $WSLON == true ]]; then
