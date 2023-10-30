@@ -168,10 +168,10 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="org.manjaro.pamac.manager.desktop"/>
         <value type="string" value="slack.desktop"/>
         <value type="string" value="spotify.desktop"/>
         <value type="string" value="obsidian.desktop"/>
-        <value type="string" value="org.manjaro.pamac.manager.desktop"/>
         <value type="string" value="xfce4-mime-settings.desktop"/>
         <value type="string" value="xfce-display-settings.desktop"/>
         <value type="string" value="com.github.xournalpp.xournalpp.desktop"/>
