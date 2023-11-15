@@ -12,6 +12,7 @@
       <value type="string" value="nm-applet"/>
       <value type="string" value="notify-send"/>
       <value type="string" value="org.freedesktop.network-manager-applet"/>
+      <value type="string" value="org.freedesktop.problems.applet"/>
       <value type="string" value="org.manjaro.pamac.manager"/>
       <value type="string" value="org.manjaro.pamac.tray"/>
       <value type="string" value="Package Manager"/>
