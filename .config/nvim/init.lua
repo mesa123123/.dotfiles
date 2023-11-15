@@ -172,7 +172,6 @@ local plugins = {
     'yggdroot/indentline',
     'tpope/vim-fugitive',
     'editorconfig/editorconfig-vim',
-    { 'toppair/peek.nvim',         build = 'deno task --quiet build:fast' },
     -- Colors and Themes
     ------------
     { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true } },
@@ -552,30 +551,6 @@ require('nvim-treesitter.configs').setup {
     sync_install = true,
     ignore_install = {},
 }
-----------
-
------------------------------------------
--- Markdown Preview, Peek.nvim
------------------------------------------
-
--- Plugin Setup
-----------
-require('peek').setup({
-    auto_load = true,        -- whether to automatically load preview when, entering another window
-    close_on_bdelete = true, -- close preview window on buffer delete
-    syntax = true,           -- enable syntax highlighting, affects performance
-    theme = 'dark',          -- 'dark' or 'light'
-    update_on_change = true,
-    throttle_at = 200000,    -- start throttling when file exceeds this
-    throttle_time = 'auto',  -- minimum amount of time in milliseconds
-})
-----------
-
--- Commands
----------
-api.nvim_create_user_command('PeekOpen', require('peek').open, {})
-api.nvim_create_user_command('PeekStatus', require('peek').is_open, {})
-api.nvim_create_user_command('PeekClose', require('peek').close, {})
 ----------
 
 -----------------------------------------
