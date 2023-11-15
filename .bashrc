@@ -161,7 +161,7 @@ export PATH=$PATH:~/.local/bin
 # Language Servcer Protocol
 export PATH=$PATH:~/lsp
 # JAVA
-export JAVA_HOME="/usr/lib/jvm/java-11-openjdk"
+export JAVA_HOME="/usr/lib/jvm/jre-17-openjdk"
 # SCALA
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME=/opt/spark
