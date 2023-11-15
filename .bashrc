@@ -301,3 +301,4 @@ fi
 # End Of bashrc
 # ----------------
 export PATH=$PATH:/home/bowmanpete/.spicetify
+. "$HOME/.cargo/env"
