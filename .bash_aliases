@@ -22,6 +22,7 @@ alias edittmux="vim ~/.tmux.conf"
 [[ $(cat /proc/version | grep -c "UBUNTU") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
 [[ $(cat /proc/version | grep -c "microsoft") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'
 [[ $(cat /proc/version | grep -c "MANJARO") == 1 ]] && alias uur='sudo pacman -Syu --noconfirm && yay --noconfirm -Syu && sudo pamac update --no-confirm && sudo pamac clean --no-confirm && sudo pacman --noconfirm -R $(pacman -Qdtq) ' && alias spacman='sudo pacman' 
+[[ $(cat /proc/version | grep -c "Red Hat") == 1 ]] && alias uur='sudo dnf update -y && sudo dnf upgrade -y && sudo dnf autoremove -y'
 #  Programmes etc.
 alias gnpm='npm -g'
 alias pip='pip3'
