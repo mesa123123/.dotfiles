@@ -5,6 +5,8 @@ node_modules/
 !.config/powerline/
 !.config/inkscape/
 !.config/kitty/
+!.config/xfce4/xfconf/*
+!.config/xfce4/panel/*
 # Nvim Config
 !.config/nvim/
 !.config/nvim/lua/*
