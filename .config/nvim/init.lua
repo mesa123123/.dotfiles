@@ -157,6 +157,7 @@ local plugins = {
     -- Assitance Plugins
     ----------
     'folke/which-key.nvim',
+    { 'numToStr/Comment.nvim',     lazy = false },
     -- Testing Plugins
     ----------
     'antoinemadec/FixCursorHold.nvim',
@@ -502,6 +503,11 @@ keymap.set("", "<C-t>o", ":tabo<cr>", {})
 keymap.set("", "<C-t><c-n>", ":tabnew<cr>", {})
 ----------
 
+-- Auto-Comment Mappings
+----------
+local auto_comment = require("Comment").setup()
+----------
+
 ----------------------------------
 -- Editor Mapping Assistance -- Which Key
 ----------------------------------
@@ -514,7 +520,7 @@ whichKey.setup()
 
 -- Mappings
 ---------------
-keymap.set("n", "<c-/>", "<cmd>WhichKey<CR>", { silent = true, noremap = false, desc = "Editor Mapping Assistance" })
+keymap.set("n", "<leader>?", "<cmd>WhichKey<CR>", { silent = true, noremap = false, desc = "Editor Mapping Assistance" })
 ---------------
 
 -- General Menu Keys Register
@@ -671,10 +677,12 @@ alpha.setup(dashboard.config)
 -- Quit Commands: <leader>q
 -- System Yank Commands: <leader>y
 -- System Paste Comnmands: <leader>p
+-- Key Mapping Assist - whichkey: <leader>?
 -- Configured in init.lsp --
 -- Snippets - LuaSnip : <leader>s
 -- Debugging - NvimDAP: <leader>b
--- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c & g
+-- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c
+-- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>g
 ----------
 
 -- Key Map Assitance
@@ -852,7 +860,7 @@ local file_browser_configs = {
 -- Mappings
 ----------
 keymap.set("n", "<C-n>", ":Telescope file_browser theme=dropdown<CR>",
-    { silent = true, noremap = true, desc = "Toggle File Browser" })                                                                    -- Remap the open and close to C-n
+    { silent = true, noremap = true, desc = "Toggle File Browser" }) -- Remap the open and close to C-n
 ----------
 
 -----------------------------
@@ -878,11 +886,11 @@ local project_configs = {}
 ----------
 -- Buffers Mappings
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Find Files" })                                                                           -- Find File
+    { silent = true, desc = "Telescope: Find Files" }) -- Find File
 keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Live Grep" })
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Show Buffers" })                                                                         -- Find Buffer
+    { silent = true, desc = "Telescope: Show Buffers" }) -- Find Buffer
 keymap.set("n", "<C-b>", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, noremap = true })
 keymap.set("n", "<leader>fv", "<cmd>Telescope registers theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Registers" })
