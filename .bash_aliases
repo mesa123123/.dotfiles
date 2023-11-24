@@ -4,6 +4,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias ..="cd ../"
+alias .-="cd -"
 alias winhome='cd $WINHOME'
 alias learnhome='cd $LEARNHOME'
 alias dothome='cd ~/.dotfiles'
@@ -65,7 +66,7 @@ alias media_last='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify 
 # If bottom is installed use that use that instead of top
 [[ "$(cargo install --list | grep "bottom")" == *"bottom"* ]] && alias top='btm'
 # If tldr is installed use that instead of man
-[[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]] && alias man='tldr'
+[[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]] && alias man='tldr' && tldr --update
 # If du-dust is installed use that instead
 [[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]] &&  alias du='dust'
 # If Broot is installed map it to the br command
