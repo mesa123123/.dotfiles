@@ -340,7 +340,6 @@ opt.number = true
 -- Other Enconding and Formatting settings
 opt.linebreak = true
 opt.autoindent = true
-opt.foldenable = false
 opt.encoding = 'UTF-8'
 opt.showmode = false
 opt.splitbelow = true
@@ -349,6 +348,10 @@ opt.signcolumn = 'yes'
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
+-- Folding Options
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldlevelstart = 99
 ----------
 
 -- Settings
@@ -418,7 +421,7 @@ cmd [[ au FileType markdown setlocal spell spelllang=en_gb ]]
 cmd [[ au FileType markdown inoremap <TAB> <C-t> ]]
 -- Markdown Syntax Highlighting
 g['vim_markdown_fenced_languages'] = [['csharp=cs', 'json=javascript', 'mermaid=mermaid']]
-g['vim_markdown_folding_disabled'] = 0
+g['vim_markdown_folding_disabled'] = 1
 g['vim_markdown_conceal_code_blocks'] = 0
 g['vim_markdown_conceal'] = 0
 g['indentLine_setConceal'] = 0

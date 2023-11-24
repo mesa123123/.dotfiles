@@ -96,7 +96,7 @@ local formatters_ei = { "markdownlint", "shellharden", "sql-formatter", "eslint"
 -- Lineters
 local linters_ei = { 'pylint', 'jsonlint' }
 -- Other Language Servers, Handled by Nullls
-local other_servers = { 'pylint', 'depugpy', 'shellcheck', 'prettier', 'rstcheck', 'write_good', 'proselint', 'jsonlint' }
+local other_servers = { 'pylint', 'depugpy', 'shellcheck', 'prettier', 'rstcheck', 'write_good', 'proselint' }
 ----------
 
 -- Install Packages
@@ -522,7 +522,13 @@ config.svelte.setup({ on_attach = on_attach, capabilities = capabilities })
 
 -- Json
 ----------
-config.jsonls.setup({ on_attach = on_attach, capabilities = capabilities })
+config.jsonls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    init_options = {
+        provideFormatter = true
+    }
+})
 ----------
 
 -- Cucumber
