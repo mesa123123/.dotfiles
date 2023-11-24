@@ -166,7 +166,7 @@ export JAVA_HOME="/usr/lib/jvm/jre-17-openjdk"
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME=/opt/spark
 export PYSPARK_DRIVER_PYTHON=jupyter-lab
-export PYSPARK_DRIVER_PYTHON_OPTS='--no-browser --port=8889'
+export PYSPARK_DRIVER_PYTHON_OPTS='--no-browser --port=8889 --NotebookApp.iopub_data_rate_limit=1.0e10'
 export SBT_HOME="/usr/bin/sbt"
 # RUST
 export CARGO_HOME="/home/$USER/.cargo"
