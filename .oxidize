@@ -1,0 +1,23 @@
+#!/bin/bash
+
+[[ "$(cargo install --list | grep "sccache")" == *sccache* ]] && cargo install sccache
+
+export RUSTC_WRAPPER="/home/$USER/.cargo/bin/sccache"
+
+
+# Install Cargo Crates
+function inventory() {
+    [[ "$(cargo install --list) | grep "${1}")" == *"${1}"* ]] || cargo install "${1}"
+}
+
+inventory bat
+inventory bottom
+inventory tealdeer
+inventory du-dust
+inventory tre
+inventory git-delta
+inventory tidy-viewer
+inventory ripgrep
+inventory gitui
+
+exit 0;
