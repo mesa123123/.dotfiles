@@ -1,23 +1,21 @@
 #!/bin/bash
 
-[[ "$(cargo install --list | grep "sccache")" == *sccache* ]] && cargo install sccache
+# Set Rust Env
+export CARGO_HOME="/home/$USER/.cargo"
+. "$HOME/.cargo/env"
 
-export RUSTC_WRAPPER="/home/$USER/.cargo/bin/sccache"
+# Package List
+packages=("bat" "bottom" "tealdeer" "du-dust" "tre" "git-delta" "tidy-viewer" "ripgrep" "gitui")
 
-
-# Install Cargo Crates
+# Repeatable Function
 function inventory() {
-    [[ "$(cargo install --list) | grep "${1}")" == *"${1}"* ]] || sccache cargo install "${1}"
+    if   [[ ! "$(cargo install --list) | grep \"${1}\")" == *"${1}"* ]]; then
+    cargo install "${1}"
+    fi
 }
 
-inventory bat
-inventory bottom
-inventory tealdeer
-inventory du-dust
-inventory tre
-inventory git-delta
-inventory tidy-viewer
-inventory ripgrep
-inventory gitui
-
-exit 0;
+# Business Logic
+ for package in "${packages[@]}";
+      do
+          inventory "$package"
+      done

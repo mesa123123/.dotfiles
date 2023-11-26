@@ -1,4 +1,4 @@
---------------------------
+-------------------------u
 -- ###################  --
 -- # Main Vim Config #  --
 -- ###################  --
@@ -379,6 +379,8 @@ g['clipboard'] = {
     },
     cache_enabled = true,
 }
+----------
+
 -------------------------------
 -- Neovim Extender Plugings
 -------------------------------
@@ -672,7 +674,7 @@ alpha.setup(dashboard.config)
 --    Buffer Management - Telescope Nvim: <leader>f
 --    Diff - telescope-diff: <leader>fd
 -- Database - DadBod: : <leader>d
--- Testing - Ultest : <leader>x (T is being used for the terminal)
+-- Code Execution & Testing - neotest: <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
 -- Wiki Commands - Obsidian.nvim: <leader>k,
 -- Previously Configured --
@@ -714,7 +716,7 @@ whichKey.register({
         d = { name = "Database" },
         b = { name = "Debugging" },
         c = { name = "LSP Opts" },
-        x = { name = "Testing" },
+        x = { name = "Code Execute/Test" },
         r = { name = "Flashcards" },
     },
 })
@@ -767,7 +769,7 @@ end
 -- Docker - w/Lazydocker
 ----------
 -- DockerCmd
-local docker_tui    = "lazydocker"
+local docker_tui = "lazydocker"
 -- Setup
 local docker_client = Terminal:new {
     cmd = docker_tui,
@@ -781,6 +783,28 @@ local docker_client = Terminal:new {
 -- toggle function
 function Docker_term_toggle()
     docker_client:toggle()
+end
+
+----------
+
+--  Git-UI - with Gitui
+----------
+-- GituiCmd
+local gitui = "gitui"
+-- Setup
+local gitui_client = Terminal:new {
+    cmd = gitui,
+    dir = fn.getcwd(),
+    hidden = true,
+    direction = "float",
+    float_opts = {
+        border = "double",
+    },
+}
+
+-- toggle function
+function Gitui_term_toggle()
+    gitui_client:toggle()
 end
 
 ----------
@@ -800,7 +824,9 @@ keymap.set("n", "<leader>t", "<cmd>lua Standard_term_toggle()<CR>",
 -- Docker Toggle
 keymap.set("n", "<leader>ad", "<cmd>lua Docker_term_toggle()<CR>",
     { noremap = true, silent = true, desc = "Open Docker Container Management" })
-
+-- Gitui Toggle
+keymap.set("n", "<leader>ag", "<cmd>lua Gitui_term_toggle()<CR>",
+    { noremap = true, silent = true, desc = "Open Git Ui" })
 ----------
 
 ---------------------------------
@@ -1062,6 +1088,36 @@ keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true, desc = "Fi
 keymap.set("n", "<leader>dr", ":DBUIRenameBuffer<CR>", { silent = true, desc = "Rename DB Buffer" })
 keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = "Run Last Query" })
 ---------
+
+---------------------------------"
+-- Code Execution and Testing - neotest
+---------------------------------"
+
+-- Commands
+----------
+
+GetBufferInfo = function()
+    return vim.bo.filetype  .. " " .. vim.api.nvim_buf_get_name(0)
+end
+
+local run_client = Terminal:new {
+    cmd = GetBufferInfo(),
+    dir = fn.getcwd(),
+    hidden = true,
+    direction = "float",
+    float_opts = {
+        border = "double",
+    },
+}
+-- toggle function
+function Run_Code()
+    run_client:toggle()
+end
+----------
+-- Mappings
+----------
+keymap.set("n", "<leader>xx", "lua Run_Code()<CR>", { silent = false, desc = "Run Current Buffer Code" })
+----------
 
 ---------------------------------"
 -- LSP Config

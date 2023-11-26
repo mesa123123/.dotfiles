@@ -152,8 +152,24 @@ function stenv() {
         echo "Can't find an unamed or env-named virtualenvironment"
     fi
 }
+ # Adds text to a file if its not there
+configadd() {
+    grep -qxF "${2}" "$1" || echo "${2}" >> "$1"
+}
+
+# Helpful for settingn up certain things that may or may not be installed
+check_command() {
+    command
+    if [ $? -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 # export the functions to the shell session
+export -f check_command
+export -f configadd
 export -f devhome
 export -f dvx
 export -f newscreen

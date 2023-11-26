@@ -1,3 +1,4 @@
+#!/bin/bash
 # -------------------------------- 
 # ------- BASH_PROFILE -----------
 # --------------------------------
@@ -98,6 +99,11 @@ if [[ -n "$PROFILE_PATH" ]]; then
     export PATH=$PROFILE_PATH
 fi
 
+# ---- Rust Env ----
+if [ -f ~/.oxidize ]; then
+    . /home/"$USER"/.oxidize
+fi
+
 # ---- Node Env ----
 # Putting Node here will help similar for node configs to load properly
 [ ! -d /home/"$USER"/.npm-global ] && mkdir /home/"$USER"/.npm-global 
@@ -146,10 +152,6 @@ fi
 
 # ---- End Of Bash Configuration Files ----
 
-# ---- Function that adds text to files if they are not currently there ----
-configadd() {
-    grep -qxF "${2}" "$1" || echo "${2}" >> "$1"
-}
 
 # ---------
 # ---- Start Of Environment Variables -----
@@ -168,8 +170,6 @@ export SPARK_HOME=/opt/spark
 export PYSPARK_DRIVER_PYTHON=jupyter-lab
 export PYSPARK_DRIVER_PYTHON_OPTS='--no-browser --port=8889 --NotebookApp.iopub_data_rate_limit=1.0e10'
 export SBT_HOME="/usr/bin/sbt"
-# RUST
-export CARGO_HOME="/home/$USER/.cargo"
 # PYTHON
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIPENV_VENV_IN_PROJECT=1
@@ -256,23 +256,13 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 
 
 # ---- Automated Shell Commands For Startup ----
-# Helpful for settingn up certain things that may or may not be installed
-check_command() {
-    command
-    if [ $? -eq 0 ]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
 
 # Pyenv Setup
 eval "$(pyenv init -)"  
 eval "$(pyenv virtualenv-init -)"
 
 # Powerline Setup
-if [ -f `which powerline-daemon` ]; then
+if [ -f "$(which powerline-daemon)" ]; then
   powerline-daemon -q
   POWERLINE_BASH_CONTINUATION=1
   POWERLINE_BASH_SELECT=1
@@ -304,4 +294,3 @@ fi
 # End Of bashrc
 # ----------------
 export PATH=$PATH:/home/bowmanpete/.spicetify
-. "$HOME/.cargo/env"
