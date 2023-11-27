@@ -162,7 +162,7 @@ format.setup({
 -- General Format Function
 ----------
 function FormatWithConfirm()
-    format.format({ async = true, lsp_fallback = true })
+    format.format({ async = true, lsp_fallback = false })
     print("Formatted")
 end
 

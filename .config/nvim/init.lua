@@ -1095,28 +1095,16 @@ keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = 
 
 -- Commands
 ----------
-
-GetBufferInfo = function()
-    return vim.bo.filetype  .. " " .. vim.api.nvim_buf_get_name(0)
-end
-
-local run_client = Terminal:new {
-    cmd = GetBufferInfo(),
-    dir = fn.getcwd(),
-    hidden = true,
-    direction = "float",
-    float_opts = {
-        border = "double",
-    },
-}
--- toggle function
-function Run_Code()
-    run_client:toggle()
-end
-----------
--- Mappings
-----------
-keymap.set("n", "<leader>xx", "lua Run_Code()<CR>", { silent = false, desc = "Run Current Buffer Code" })
+-- Python
+vim.api.nvim_create_autocmd('FileType', {
+    desc = 'On python filetypes create a command to run the current file',
+    pattern = 'python',
+    group = vim.api.nvim_create_augroup('Run Commands', { clear = true }),
+    callback = function()
+        vim.api.nvim_create_user_command('RunCode', '! python "%"', {})
+        keymap.set("n", "<leader>xx", ":RunCode<CR>", { silent = false, desc = "Run Current Buffer Code" })
+    end,
+})
 ----------
 
 ---------------------------------"

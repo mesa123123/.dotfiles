@@ -175,7 +175,7 @@
       <property name="style" type="uint" value="0"/>
     </property>
     <property name="plugin-16" type="string" value="whiskermenu">
-      <property name="button-icon" type="string" value="/home/bowmanpete/.dotfiles/assets/xfce4_logo.png"/>
+      <property name="button-icon" type="string" value="org.xfce.panel.whiskermenu"/>
       <property name="favorites-in-recent" type="bool" value="true"/>
       <property name="command-switchuser" type="string" value="dm-tool switch-to-greeter"/>
       <property name="favorites" type="array">
@@ -185,16 +185,8 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
-        <value type="string" value="nm-connection-editor.desktop"/>
-        <value type="string" value="xfce-backdrop-settings.desktop"/>
-        <value type="string" value="xfce-ui-settings.desktop"/>
-        <value type="string" value="org.fedoraproject.MediaWriter.desktop"/>
-        <value type="string" value="org.manjaro.pamac.manager.desktop"/>
-        <value type="string" value="slack.desktop"/>
-        <value type="string" value="spotify.desktop"/>
-        <value type="string" value="obsidian.desktop"/>
-        <value type="string" value="xfce4-mime-settings.desktop"/>
-        <value type="string" value="xfce-display-settings.desktop"/>
+        <value type="string" value="steam.desktop"/>
+        <value type="string" value="org.mageia.dnfdragora.desktop"/>
       </property>
     </property>
     <property name="plugin-11" type="string" value="separator">
