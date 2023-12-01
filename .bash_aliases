@@ -76,6 +76,6 @@ alias media_last='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify 
 # If tidy-viewer is installed map to alias
 [[ $(cargo install --list | grep -c "tidy-viewer") -ge 1 ]] && alias tv="tidy-viewer"
 # If ripgrep is available use that
-[[ "$(cargo install --list | grep -c "ripgrep")" -ge 1 ]] && alias grep='rg'
+[[ "$(cargo install --list | grep -c "ripgrep")" -ge 1 ]] && alias grep='rg --no-ignore'
 # Certain Terminals get fiddily with TERM settings so this gets around it for kitty at least
 [[ ""$TERM == *"kitty"* ]] && alias ssh="kitty +kitten ssh"

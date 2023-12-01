@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-exec node "/home/bowmanpete/.config/nvim/lua/lsp_servers/packages/bash-debug-adapter/extension/out/bashDebug.js" "$@"

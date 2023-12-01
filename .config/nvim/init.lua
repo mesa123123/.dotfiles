@@ -140,7 +140,7 @@ local plugins = {
     {
         'neovim/nvim-lspconfig',
         dependencies = { 'williamboman/mason-lspconfig.nvim', 'williamboman/mason.nvim', 'ray-x/lsp_signature.nvim',
-            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip' },
+            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip', 'WhoIsSethDaniel/mason-tool-installer.nvim' },
     },
     { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' },
     { 'j-hui/fidget.nvim',               tag = "legacy", events = "LspAttach" },
@@ -920,8 +920,8 @@ keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Live Grep" })
 keymap.set("n", "<leader>fb", "<cmd>Telescope buffers theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Show Buffers" }) -- Find Buffer
-keymap.set("n", "<C-b>", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, noremap = true })
-keymap.set("n", "<leader>fv", "<cmd>Telescope registers theme=dropdown<cr>",
+keymap.set("n", "<C-b>s", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, noremap = true })
+keymap.set("n", "<leader>fr", "<cmd>Telescope registers theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Registers" })
 -- Help Mappings
 keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags theme=dropdown<cr>",
@@ -930,11 +930,11 @@ keymap.set("n", "<leader>fm", "<cmd>Telescope man_pages theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Man Pages" })
 keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps theme=dropdown<cr>", { silent = true, desc = "Telescope: Keymaps" })
 -- Git Mappings
-keymap.set("n", "<leader>fgc", "<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
+keymap.set("n", "<leader>fvc", "<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Git Commits" })
-keymap.set("n", "<leader>fgc", "<cmd>Telescope git_status theme=dropdown<cr>",
+keymap.set("n", "<leader>fvs", "<cmd>Telescope git_status theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Git Status" })
-keymap.set("n", "<leader>fgb", "<cmd>Telescope git_branches theme=dropdown<cr>",
+keymap.set("n", "<leader>fvb", "<cmd>Telescope git_branches theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Git Branches" })
 -- Tree Sitter Mapping
 keymap.set("n", "<leader>fs", "<cmd>Telescope treesitter theme=dropdown<cr>",
