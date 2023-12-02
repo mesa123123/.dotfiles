@@ -205,7 +205,7 @@ NVIM=0
 #i If on WSL
 [[ $(echo "$DIST_INFO" | grep -c "microsoft") == 1 ]] && [[ $(dpkg-query -l neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
 # Fedora
-[[ $(echo "$DIST_INFO" | grep -c "Red Hat") == 1 ]] && [[ $(dnf list neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
+[[ $(echo "$DIST_INFO" | grep -c "Red Hat") == 1 ]] && [[ $(dnf list --installed neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
 
 
 if [[ ${NVIM} == 1 ]]; then  

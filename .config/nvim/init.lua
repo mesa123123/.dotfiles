@@ -1,4 +1,4 @@
--------------------------u
+--------------------------
 -- ###################  --
 -- # Main Vim Config #  --
 -- ###################  --
@@ -143,7 +143,7 @@ local plugins = {
             'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip', 'WhoIsSethDaniel/mason-tool-installer.nvim' },
     },
     { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' },
-    { 'j-hui/fidget.nvim',               tag = "legacy", events = "LspAttach" },
+    { 'j-hui/fidget.nvim', tag = "legacy", events = "LspAttach" },
     -- Linting Plugins
     ----------
     'mfussenegger/nvim-lint',
@@ -219,23 +219,11 @@ local plugins = {
     },
     -- Nvim Telescope
     ---------
-    { 'nvim-telescope/telescope.nvim', dependencies = { "BurntSushi/ripgrep", "sharkdp/fd", lazy = false } },
-    'nvim-telescope/telescope-dap.nvim',
-    {
-        'nvim-telescope/telescope-file-browser.nvim',
-        dependencies = { 'nvim-telescope/telescope.nvim',
-            'nvim-lua/plenary.nvim' }
-    },
-    {
-        'nvim-telescope/telescope-project.nvim',
-        dependencies = { 'nvim-telescope/telescope.nvim' },
-    },
-    {
-        "jemag/telescope-diff.nvim",
-        dependencies = {
-            { "nvim-telescope/telescope.nvim" },
-        }
-    },
+    { "nvim-telescope/telescope.nvim", dependencies = {"BurntSushi/ripgrep", "sharkdp/fd", lazy = false } },
+    -- Plugins
+    "nvim-telescope/telescope-dap.nvim",
+    "nvim-telescope/telescope-project.nvim",
+    "nvim-telescope/telescope-file-browser.nvim",
     -----------
     -- Study Functionality
     ----------
@@ -534,9 +522,7 @@ whichKey.register({
     ["]"] = { name = "Go To Next" },
     ["["] = { name = "Go To Previous" }
 })
-
-
-
+----------
 
 -----------------------------------------
 --  Syntax Highlighting: Tree-Sitter Config
@@ -600,7 +586,9 @@ end
 local active_lsp = {
     function()
         local lsps = vim.lsp.get_active_clients()
-        if lsps and #lsps > 0 then
+        local formatters = require('conform').list_formatters_for_buffer(0)
+        clients = tableConcat(lsps, formatters)
+        if clients and #clients > 0 then
             local names = {}
             for _, lsp in ipairs(lsps) do
                 table.insert(names, lsp.name)
@@ -672,7 +660,6 @@ alpha.setup(dashboard.config)
 --    Filetree - telescope-file-browser : <c-n>
 --    Project Management - telescope-project: <leader>m
 --    Buffer Management - Telescope Nvim: <leader>f
---    Diff - telescope-diff: <leader>fd
 -- Database - DadBod: : <leader>d
 -- Code Execution & Testing - neotest: <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
@@ -942,13 +929,6 @@ keymap.set("n", "<leader>fs", "<cmd>Telescope treesitter theme=dropdown<cr>",
 -- Telescope Mapping
 keymap.set("n", "<leader>ft", "<cmd>Telescope builtin theme=dropdown<cr>",
     { silent = true, desc = "Telescope: Telescope" })
--- Diff Keymappings
-keymap.set("n", "<leader>fdf", function()
-    require("telescope").extensions.diff.diff_files({ hidden = true })
-end, { desc = "Compare 2 files" })
-keymap.set("n", "<leader>fdc", function()
-    require("telescope").extensions.diff.diff_current({ hidden = true })
-end, { desc = "Compare file with current" })
 ----------
 
 ---------------------------------
@@ -979,7 +959,6 @@ require("telescope").setup {
 
 -- Extension Setup (Must Go last)
 require('telescope').load_extension('file_browser')
-require('telescope').load_extension('diff')
 require('telescope').load_extension('project')
 ----------
 
@@ -1093,13 +1072,17 @@ keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = 
 -- Code Execution and Testing - neotest
 ---------------------------------"
 
+-- Create AutoCommandGroup
+api.nvim_create_augroup("RunCodeCommands", { clear = true })
+----------
+
 -- Commands
 ----------
 -- Python
 vim.api.nvim_create_autocmd('FileType', {
     desc = 'On python filetypes create a command to run the current file',
     pattern = 'python',
-    group = vim.api.nvim_create_augroup('Run Commands', { clear = true }),
+    group = "RunCodeCommands",
     callback = function()
         vim.api.nvim_create_user_command('RunCode', '! python "%"', {})
         keymap.set("n", "<leader>xx", ":RunCode<CR>", { silent = false, desc = "Run Current Buffer Code" })

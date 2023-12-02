@@ -99,7 +99,7 @@ local lsp_servers_ei = {
 	"jsonls",
 }
 -- Formatters
-local formatters_ei = { "markdownlint", "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq" }
+local formatters_ei = { "markdownlint", "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua" }
 -- Lineters
 local linters_ei = { "pylint", "jsonlint" }
 -- Other Language Servers, Handled by Nullls
