@@ -66,7 +66,7 @@ alias media_last='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify 
 # If bottom is installed use that use that instead of top
 [[ "$(cargo install --list | grep "bottom")" == *"bottom"* ]] && alias top='btm'
 # If tldr is installed use that instead of man
-[[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]] && alias man='tldr' && tldr --update
+[[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]] && alias man='tldr'
 # If du-dust is installed use that instead
 [[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]] &&  alias du='dust'
 # If Broot is installed map it to the br command
