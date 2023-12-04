@@ -181,7 +181,10 @@ local plugins = {
 	"editorconfig/editorconfig-vim",
 	-- Colors and Themes
 	------------
-	{ "nvim-lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons", lazy = true } },
+	{
+		"nvim-lualine/lualine.nvim",
+		event = "VeryLazy",
+	},
 	"altercation/vim-colors-solarized",
 	"nvie/vim-flake8",
 	-- DevIcons
@@ -617,7 +620,7 @@ local active_formatter = {
 	function()
 		local formatters = require("conform").list_formatters_for_buffer(0)
 		if formatters ~= nil then
-			return string.format("󰉧 %s", table.concat(formatters, ", "))
+			return string.format(" %s", table.concat(formatters, ", "))
 		else
 			return ""
 		end
