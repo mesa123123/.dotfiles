@@ -99,9 +99,10 @@ local lsp_servers_ei = {
 	"jsonls",
 }
 -- Formatters
-local formatters_ei = { "markdownlint", "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua" }
+local formatters_ei =
+	{ "markdownlint", "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua" }
 -- Lineters
-local linters_ei = { "pylint", "jsonlint" }
+local linters_ei = { "pylint", "jsonlint", "luacheck" }
 -- Other Language Servers, Handled by Nullls
 local other_servers = { "debugpy", "shellcheck", "prettier", "rstcheck", "write-good", "proselint" }
 ----------
@@ -191,6 +192,8 @@ lint.linters_by_ft = {
 	python = { "pylint" },
 	-- Json
 	json = { "jsonlint" },
+    -- lua
+	lua = { "luacheck" },
 }
 
 api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {

@@ -1,4 +1,4 @@
---------------------------
+--------------------------job
 -- ###################  --
 -- # Main Vim Config #  --
 -- ###################  --
@@ -28,7 +28,7 @@ vim.g["mapleader"] = "\\"
 ----------
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
-local fn = vim.fn   -- vim functions
+local fn = vim.fn -- vim functions
 local keymap = vim.keymap
 local hl = api.nvim_set_hl
 local loop = vim.loop
@@ -38,9 +38,9 @@ local gopt = vim.go -- global options
 local bopt = vim.bo -- buffer options
 local wopt = vim.wo -- window options
 -- For Variables
-local g = vim.g     -- global variables
-local b = vim.b     -- buffer variables
-local w = vim.w     -- window variables
+local g = vim.g -- global variables
+local b = vim.b -- buffer variables
+local w = vim.w -- window variables
 ----------
 
 -- Functions
@@ -48,43 +48,43 @@ local w = vim.w     -- window variables
 
 -- ex (Currently this is a wrapper for everything not yet implemented in nvim)
 local ex = setmetatable({}, {
-    __index = function(t, k)
-        local command = k:gsub("_$", "!")
-        local f = function(...)
-            return api.nvim_cmd(table.concat(vim.tbl_flatten { command, ... }, " "))
-        end
-        rawset(t, k, f)
-        return f
-    end
-});
+	__index = function(t, k)
+		local command = k:gsub("_$", "!")
+		local f = function(...)
+			return api.nvim_cmd(table.concat(vim.tbl_flatten({ command, ... }), " "))
+		end
+		rawset(t, k, f)
+		return f
+	end,
+})
 
 -- Map(function, table)
 function Map(func, tbl)
-    local newtbl = {}
-    for i, v in pairs(tbl) do
-        newtbl[i] = func(v)
-    end
-    return newtbl
+	local newtbl = {}
+	for i, v in pairs(tbl) do
+		newtbl[i] = func(v)
+	end
+	return newtbl
 end
 
 -- Filter(function, table)
 function Filter(func, tbl)
-    local newtbl = {}
-    for i, v in pairs(tbl) do
-        if func(v) then
-            newtbl[i] = v
-        end
-    end
-    return newtbl
+	local newtbl = {}
+	for i, v in pairs(tbl) do
+		if func(v) then
+			newtbl[i] = v
+		end
+	end
+	return newtbl
 end
 
 -- Concat two Tables
 ----------
 local function tableConcat(t1, t2)
-    for _, v in ipairs(t2) do
-        table.insert(t1, v)
-    end
-    return t1
+	for _, v in ipairs(t2) do
+		table.insert(t1, v)
+	end
+	return t1
 end
 
 ----------
@@ -98,14 +98,14 @@ end
 -- Download
 local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not loop.fs_stat(lazypath) then
-    fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable", -- latest stable release
-        lazypath,
-    })
+	fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
+	})
 end
 -- Add to Runtime Path
 opt.rtp:prepend(lazypath)
@@ -114,133 +114,138 @@ opt.rtp:prepend(lazypath)
 -- Setup
 ----------------
 local plugins = {
-    -- Essentials
-    'nvim-lua/plenary.nvim',
-    'nvim-treesitter/nvim-treesitter',
-    'folke/neodev.nvim',
-    -- Autocompletion
-    ----------
-    {
-        'hrsh7th/nvim-cmp',
-        -- Extensions for NvimCmp
-        dependencies = {
-            'hrsh7th/cmp-nvim-lsp',
-            'hrsh7th/cmp-path',
-            'hrsh7th/cmp-buffer',
-            'hrsh7th/cmp-nvim-lua',
-            'hrsh7th/cmp-cmdline',
-            'ray-x/cmp-treesitter',
-            'L3MON4D3/LuaSnip',
-            'saadparwaiz1/cmp_luasnip',
-            'rcarriga/nvim-notify',
-        }
-    },
-    -- Language Server Protocol
-    ----------
-    {
-        'neovim/nvim-lspconfig',
-        dependencies = { 'williamboman/mason-lspconfig.nvim', 'williamboman/mason.nvim', 'ray-x/lsp_signature.nvim',
-            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip', 'WhoIsSethDaniel/mason-tool-installer.nvim' },
-    },
-    { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' },
-    { 'j-hui/fidget.nvim', tag = "legacy", events = "LspAttach" },
-    -- Linting Plugins
-    ----------
-    'mfussenegger/nvim-lint',
-    -- Formatting
-    ----------
-    'stevearc/conform.nvim',
-    -- Debug Adapter Protocol
-    ----------
-    'mfussenegger/nvim-dap',
-    'rcarriga/nvim-dap-ui',
-    -- Assitance Plugins
-    ----------
-    'folke/which-key.nvim',
-    { 'numToStr/Comment.nvim',     lazy = false },
-    -- Testing Plugins
-    ----------
-    'antoinemadec/FixCursorHold.nvim',
-    'nvim-neotest/neotest',
-    'nvim-neotest/neotest-python',
-    'tpope/vim-cucumber',
-    -- Database Workbench,
-    -----------
-    'tpope/vim-dadbod',
-    'kristijanhusak/vim-dadbod-ui',
-    -- File System and Plugins
-    ----------
-    'yggdroot/indentline',
-    'tpope/vim-fugitive',
-    'editorconfig/editorconfig-vim',
-    -- Colors and Themes
-    ------------
-    { 'nvim-lualine/lualine.nvim', dependencies = { 'nvim-tree/nvim-web-devicons', lazy = true } },
-    'altercation/vim-colors-solarized',
-    'nvie/vim-flake8',
-    -- DevIcons
-    'nvim-tree/nvim-web-devicons',
-    -- Theme
-    'ellisonleao/gruvbox.nvim',
-    -- Brackets Rainbowing
-    'luochen1990/rainbow',
-    -- Rainbow csv hl
-    {
-        'cameron-wags/rainbow_csv.nvim',
-        config = true,
-        ft = {
-            'csv',
-            'tsv',
-            'csv_semicolon',
-            'csv_whitespace',
-            'csv_pipe',
-            'rfc_csv',
-            'rfc_semicolon'
-        },
-        cmd = {
-            'RainbowDelim',
-            'RainbowDelimSimple',
-            'RainbowDelimQuoted',
-            'RainbowMultiDelim'
-        }
-
-    },
-    -- Git Highlighting
-    'itchyny/vim-gitbranch',
-    -- Color Highlighting
-    'norcalli/nvim-colorizer.lua',
-    -- LSP Icons
-    'onsails/lspkind.nvim',
-    -- Dashboard
-    {
-        'goolord/alpha-nvim',
-        event = "VimEnter",
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-    },
-    -- Nvim Telescope
-    ---------
-    { "nvim-telescope/telescope.nvim", dependencies = {"BurntSushi/ripgrep", "sharkdp/fd", lazy = false } },
-    -- Plugins
-    "nvim-telescope/telescope-dap.nvim",
-    "nvim-telescope/telescope-project.nvim",
-    "nvim-telescope/telescope-file-browser.nvim",
-    -----------
-    -- Study Functionality
-    ----------
-    -- Wiki - Obsidian nvim
-    "epwalsh/obsidian.nvim",
-    ----------
-    -- Dart/Flutter
-    'dart-lang/dart-vim-plugin',
-    'thosakwe/vim-flutter',
-    -- Alignment
-    'junegunn/vim-easy-align',
-    -- HardMode
-    'takac/vim-hardtime',
-    -- Working with Kitty
-    { "fladson/vim-kitty",             branch = "main" },
-    -- Terminal Behaviour
-    { 'akinsho/toggleterm.nvim',       version = 'v2.*' },
+	-- Essentials
+	"nvim-lua/plenary.nvim",
+	"nvim-treesitter/nvim-treesitter",
+	"folke/neodev.nvim",
+	-- Autocompletion
+	----------
+	{
+		"hrsh7th/nvim-cmp",
+		-- Extensions for NvimCmp
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-nvim-lua",
+			"hrsh7th/cmp-cmdline",
+			"ray-x/cmp-treesitter",
+			"L3MON4D3/LuaSnip",
+			"saadparwaiz1/cmp_luasnip",
+			"rcarriga/nvim-notify",
+		},
+	},
+	-- Language Server Protocol
+	----------
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			"williamboman/mason-lspconfig.nvim",
+			"williamboman/mason.nvim",
+			"ray-x/lsp_signature.nvim",
+			"hrsh7th/nvim-cmp",
+			"L3MON4D3/LuaSnip",
+			"WhoIsSethDaniel/mason-tool-installer.nvim",
+		},
+	},
+	{ "jose-elias-alvarez/null-ls.nvim", branch = "main" },
+	{ "j-hui/fidget.nvim", tag = "legacy", events = "LspAttach" },
+	-- Linting Plugins
+	----------
+	"mfussenegger/nvim-lint",
+	-- Formatting
+	----------
+	"stevearc/conform.nvim",
+	-- Debug Adapter Protocol
+	----------
+	"mfussenegger/nvim-dap",
+	"rcarriga/nvim-dap-ui",
+	-- Assitance Plugins
+	----------
+	"folke/which-key.nvim",
+	{ "numToStr/Comment.nvim", lazy = false },
+	-- Testing Plugins
+	----------
+	"antoinemadec/FixCursorHold.nvim",
+	"nvim-neotest/neotest",
+	"nvim-neotest/neotest-python",
+	"tpope/vim-cucumber",
+	-- Database Workbench,
+	-----------
+	"tpope/vim-dadbod",
+	"kristijanhusak/vim-dadbod-ui",
+	-- File System and Plugins
+	----------
+	"yggdroot/indentline",
+	"tpope/vim-fugitive",
+	"editorconfig/editorconfig-vim",
+	-- Colors and Themes
+	------------
+	{ "nvim-lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons", lazy = true } },
+	"altercation/vim-colors-solarized",
+	"nvie/vim-flake8",
+	-- DevIcons
+	"nvim-tree/nvim-web-devicons",
+	-- Theme
+	"ellisonleao/gruvbox.nvim",
+	-- Brackets Rainbowing
+	"luochen1990/rainbow",
+	-- Rainbow csv hl
+	{
+		"cameron-wags/rainbow_csv.nvim",
+		config = true,
+		ft = {
+			"csv",
+			"tsv",
+			"csv_semicolon",
+			"csv_whitespace",
+			"csv_pipe",
+			"rfc_csv",
+			"rfc_semicolon",
+		},
+		cmd = {
+			"RainbowDelim",
+			"RainbowDelimSimple",
+			"RainbowDelimQuoted",
+			"RainbowMultiDelim",
+		},
+	},
+	-- Git Highlighting
+	"itchyny/vim-gitbranch",
+	-- Color Highlighting
+	"norcalli/nvim-colorizer.lua",
+	-- LSP Icons
+	"onsails/lspkind.nvim",
+	-- Dashboard
+	{
+		"goolord/alpha-nvim",
+		event = "VimEnter",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+	},
+	-- Nvim Telescope
+	---------
+	{ "nvim-telescope/telescope.nvim", dependencies = { "BurntSushi/ripgrep", "sharkdp/fd", lazy = false } },
+	-- Plugins
+	"nvim-telescope/telescope-dap.nvim",
+	"nvim-telescope/telescope-project.nvim",
+	"nvim-telescope/telescope-file-browser.nvim",
+	-----------
+	-- Study Functionality
+	----------
+	-- Wiki - Obsidian nvim
+	"epwalsh/obsidian.nvim",
+	----------
+	-- Dart/Flutter
+	"dart-lang/dart-vim-plugin",
+	"thosakwe/vim-flutter",
+	-- Alignment
+	"junegunn/vim-easy-align",
+	-- HardMode
+	"takac/vim-hardtime",
+	-- Working with Kitty
+	{ "fladson/vim-kitty", branch = "main" },
+	-- Terminal Behaviour
+	{ "akinsho/toggleterm.nvim", version = "v2.*" },
 }
 -- Plugin Options
 local pluginOpts = {}
@@ -254,8 +259,8 @@ require("lazy").setup(plugins, pluginOpts)
 
 -- Commands
 ----------
-api.nvim_create_user_command('Editvim', 'e ~/.config/nvim/init.lua', {})    -- Edit Config
-api.nvim_create_user_command('Srcv', 'luafile ~/.config/nvim/init.lua', {}) -- Source Config
+api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {}) -- Edit Config
+api.nvim_create_user_command("Srcv", "luafile ~/.config/nvim/init.lua", {}) -- Source Config
 ----------
 
 --------------------------------
@@ -269,38 +274,37 @@ opt.termguicolors = true
 -- Load Color Scheme
 ----------
 require("gruvbox").setup({ contrast = "hard" })
-cmd('colorscheme gruvbox')
+cmd("colorscheme gruvbox")
 ----------
 
 -- Rainbow Brackets Options
 ----------
-g['rainbow_active'] = 1
+g["rainbow_active"] = 1
 ----------
 
 -- Colorize Colors
 ---------
-require 'colorizer'.setup()
-
+require("colorizer").setup()
 
 -- Load Webdevicons
 ----------
-local devIcons = require('nvim-web-devicons')
-devIcons.setup { default = true }
+local devIcons = require("nvim-web-devicons")
+devIcons.setup({ default = true })
 -- Setup Custom Icons
-devIcons.set_icon {
-    htmldjango = {
-        icon = "",
-        color = "#e44d26",
-        cterm_color = "196",
-        name = "Htmldjango",
-    },
-    jinja = {
-        icon = "",
-        color = "#e44d26",
-        cterm_color = "196",
-        name = "Jinja",
-    }
-}
+devIcons.set_icon({
+	htmldjango = {
+		icon = "",
+		color = "#e44d26",
+		cterm_color = "196",
+		name = "Htmldjango",
+	},
+	jinja = {
+		icon = "",
+		color = "#e44d26",
+		cterm_color = "196",
+		name = "Jinja",
+	},
+})
 devIcons.get_icons()
 ----------
 
@@ -311,10 +315,10 @@ opt.laststatus = 2
 
 -- Highlighting
 ---------
-hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
+hl(0, "LspDiagnosticsUnderlineError", { bg = "#EB4917", underline = true, blend = 50 })
+hl(0, "LspDiagnosticsUnderlineWarning", { bg = "#EBA217", underline = true, blend = 50 })
+hl(0, "LspDiagnosticsUnderlineInformation", { bg = "#17D6EB", underline = true, blend = 50 })
+hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend = 50 })
 ----------
 
 --------------------------------
@@ -328,10 +332,10 @@ opt.number = true
 -- Other Enconding and Formatting settings
 opt.linebreak = true
 opt.autoindent = true
-opt.encoding = 'UTF-8'
+opt.encoding = "UTF-8"
 opt.showmode = false
 opt.splitbelow = true
-opt.signcolumn = 'yes'
+opt.signcolumn = "yes"
 -- Default Tabstop & Shiftwidth
 opt.tabstop = 4
 opt.shiftwidth = 4
@@ -344,28 +348,28 @@ opt.foldlevelstart = 99
 
 -- Settings
 ----------
-g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
+g["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
 ----------
 
 -- Commands
 ----------
-cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
-cmd [[ set mouse= ]]
+cmd([[ au FileType gitcommit let b:EditorConfig_disable = 1 ]])
+cmd([[ set mouse= ]])
 ----------
 
 -- Setup Config for xfce4 desktops to use system keyboard
 ----------
-g['clipboard'] = {
-    name = 'xclip-xfce4-clipman',
-    copy = {
-        ['+'] = 'xclip -selection clipboard',
-        ['*'] = 'xclip -selection clipboard',
-    },
-    paste = {
-        ['+'] = 'xclip -selection clipboard -o',
-        ['*'] = 'xclip -selection clipboard -o',
-    },
-    cache_enabled = true,
+g["clipboard"] = {
+	name = "xclip-xfce4-clipman",
+	copy = {
+		["+"] = "xclip -selection clipboard",
+		["*"] = "xclip -selection clipboard",
+	},
+	paste = {
+		["+"] = "xclip -selection clipboard -o",
+		["*"] = "xclip -selection clipboard -o",
+	},
+	cache_enabled = true,
 }
 ----------
 
@@ -376,7 +380,7 @@ g['clipboard'] = {
 --Neodev
 local neodev = require("neodev")
 neodev.setup({
-    library = { plugins = { "nvim-dap-ui" }, types = true },
+	library = { plugins = { "nvim-dap-ui" }, types = true },
 })
 ----------
 
@@ -386,39 +390,39 @@ neodev.setup({
 
 -- Filetype Enable
 -----------
-cmd [[ filetype on ]]
-cmd [[ filetype plugin indent on ]]
+cmd([[ filetype on ]])
+cmd([[ filetype plugin indent on ]])
 ----------
 
 -- FileTypes
 ----------
-cmd [[ au FileType cpp setlocal et ts=2 sw=2 ]]                 -- C++ Language
-cmd [[ au BufRead,BufNewFile *.hcl set filetype=ini ]]          -- HCL Language
-cmd [[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]] -- JenkinsFile
-cmd [[ au FileType python setlocal et ts=4 sw=4 sts=4 ]]        -- Python Language
-cmd [[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]]       -- Typescript Settings
-cmd [[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]]   -- Vagrant Files
+cmd([[ au FileType cpp setlocal et ts=2 sw=2 ]]) -- C++ Language
+cmd([[ au BufRead,BufNewFile *.hcl set filetype=ini ]]) -- HCL Language
+cmd([[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]]) -- JenkinsFile
+cmd([[ au FileType python setlocal et ts=4 sw=4 sts=4 ]]) -- Python Language
+cmd([[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]]) -- Typescript Settings
+cmd([[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]]) -- Vagrant Files
 ----------
 
 -- Markdown
 ---------
 -- Set certain types to markdown
-cmd [[ au BufRead,BufNewFile *.draft set filetype=markdown ]]
-cmd [[ au BufRead,BufNewFile *.md set filetype=markdown ]]
+cmd([[ au BufRead,BufNewFile *.draft set filetype=markdown ]])
+cmd([[ au BufRead,BufNewFile *.md set filetype=markdown ]])
 -- Config
-cmd [[ au FileType markdown setlocal ts=2 sw=2 sts=2 ]]
-cmd [[ au FileType markdown setlocal spell spelllang=en_gb ]]
-cmd [[ au FileType markdown inoremap <TAB> <C-t> ]]
+cmd([[ au FileType markdown setlocal ts=2 sw=2 sts=2 ]])
+cmd([[ au FileType markdown setlocal spell spelllang=en_gb ]])
+cmd([[ au FileType markdown inoremap <TAB> <C-t> ]])
 -- Markdown Syntax Highlighting
-g['vim_markdown_fenced_languages'] = [['csharp=cs', 'json=javascript', 'mermaid=mermaid']]
-g['vim_markdown_folding_disabled'] = 1
-g['vim_markdown_conceal_code_blocks'] = 0
-g['vim_markdown_conceal'] = 0
-g['indentLine_setConceal'] = 0
+g["vim_markdown_fenced_languages"] = [['csharp=cs', 'json=javascript', 'mermaid=mermaid']]
+g["vim_markdown_folding_disabled"] = 1
+g["vim_markdown_conceal_code_blocks"] = 0
+g["vim_markdown_conceal"] = 0
+g["indentLine_setConceal"] = 0
 -- GitCommit
 ----------
-g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
-cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
+g["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
+cmd([[ au FileType gitcommit let b:EditorConfig_disable = 1 ]])
 ----------
 
 ----------------------------------
@@ -428,15 +432,15 @@ cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
 -- Autocorrect Mappings
 ----------
 -- Create Edit Command
-api.nvim_create_user_command('Editautocorrect', 'e ~/.config/nvim/lua/autocorrect.lua', {})
+api.nvim_create_user_command("Editautocorrect", "e ~/.config/nvim/lua/autocorrect.lua", {})
 -- Load File
-require('autocorrect')
+require("autocorrect")
 ----------
 
 -- Writing Mappings
 ----------
 -- Redo set to uppercase U
-keymap.set('n', 'U', ':redo<CR>', { silent = true, noremap = true })
+keymap.set("n", "U", ":redo<CR>", { silent = true, noremap = true })
 -- Remap Visual and Insert mode to use Normal Modes Tab Rules
 keymap.set("i", ">>", "<c-t>", {})
 keymap.set("i", "<<", "<c-d>", {})
@@ -445,23 +449,28 @@ keymap.set("i", "<<", "<c-d>", {})
 -- File Mappings
 ----------
 -- Set Write/Quit to shortcuts
-keymap.set('n', '<leader>ww', ':w<CR>', { silent = false, noremap = true, desc = "Write" })
-keymap.set('n', '<leader>w!', ':w!<CR>', { silent = false, noremap = true, desc = "Over-Write" })
-keymap.set('n', '<leader>ws', ':so<CR>', { silent = false, noremap = true, desc = "Write and Source to Nvim" })
-keymap.set('n', '<leader>wqq', ':wq<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
-keymap.set('n', '<leader>wqa', ':wqa<CR>', { silent = false, noremap = true, desc = "Write All & Quit Nvim" })
-keymap.set('n', '<leader>wa', ':wa<CR>', { silent = false, noremap = true, desc = "Write All" })
-keymap.set('n', '<leader>qaa', ':qa<CR>', { silent = false, noremap = true, desc = "Quit Nvim" })
-keymap.set('n', '<leader>qa!', '<cmd>qa!<cr>', { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
-keymap.set('n', '<leader>qq', ':q<CR>', { silent = false, noremap = true, desc = "Close Buffer" })
-keymap.set('n', '<leader>q!', ':q!<CR>', { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
+keymap.set("n", "<leader>ww", ":w<CR>", { silent = false, noremap = true, desc = "Write" })
+keymap.set("n", "<leader>w!", ":w!<CR>", { silent = false, noremap = true, desc = "Over-Write" })
+keymap.set("n", "<leader>ws", ":so<CR>", { silent = false, noremap = true, desc = "Write and Source to Nvim" })
+keymap.set("n", "<leader>wqq", ":wq<CR>", { silent = false, noremap = true, desc = "Close Buffer" })
+keymap.set("n", "<leader>wqa", ":wqa<CR>", { silent = false, noremap = true, desc = "Write All & Quit Nvim" })
+keymap.set("n", "<leader>wa", ":wa<CR>", { silent = false, noremap = true, desc = "Write All" })
+keymap.set("n", "<leader>qaa", ":qa<CR>", { silent = false, noremap = true, desc = "Quit Nvim" })
+keymap.set("n", "<leader>qa!", "<cmd>qa!<cr>", { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
+keymap.set("n", "<leader>qq", ":q<CR>", { silent = false, noremap = true, desc = "Close Buffer" })
+keymap.set("n", "<leader>q!", ":q!<CR>", { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
 -- System Copy Set to Mappings
-keymap.set({ 'n', 'v' }, '<leader>y', '"+y', { silent = true, noremap = true, desc = "Copy to System Clipboard" })
-keymap.set({ 'n', 'v' }, '<leader>yy', '"+yy', { silent = true, noremap = true, desc = "Copy Line to System Clipboard" })
-keymap.set('n', '<leader>Y', '"+yg_', { silent = true, noremap = true, desc = "Copy Rest of file to system Clipboard" })
+keymap.set({ "n", "v" }, "<leader>y", '"+y', { silent = true, noremap = true, desc = "Copy to System Clipboard" })
+keymap.set(
+	{ "n", "v" },
+	"<leader>yy",
+	'"+yy',
+	{ silent = true, noremap = true, desc = "Copy Line to System Clipboard" }
+)
+keymap.set("n", "<leader>Y", '"+yg_', { silent = true, noremap = true, desc = "Copy Rest of file to system Clipboard" })
 -- System Paste Set to Mappings
-keymap.set({ 'n', 'v' }, '<leader>p', '"+p', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
-keymap.set({ 'n', 'v' }, '<leader>P', '"+P', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
+keymap.set({ "n", "v" }, "<leader>p", '"+p', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
+keymap.set({ "n", "v" }, "<leader>P", '"+P', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
 ---------
 
 -- Highlighting Search Mappings
@@ -513,14 +522,19 @@ whichKey.setup()
 
 -- Mappings
 ---------------
-keymap.set("n", "<leader>?", "<cmd>WhichKey<CR>", { silent = true, noremap = false, desc = "Editor Mapping Assistance" })
+keymap.set(
+	"n",
+	"<leader>?",
+	"<cmd>WhichKey<CR>",
+	{ silent = true, noremap = false, desc = "Editor Mapping Assistance" }
+)
 ---------------
 
 -- General Menu Keys Register
 ---------------
 whichKey.register({
-    ["]"] = { name = "Go To Next" },
-    ["["] = { name = "Go To Previous" }
+	["]"] = { name = "Go To Next" },
+	["["] = { name = "Go To Previous" },
 })
 ----------
 
@@ -530,24 +544,24 @@ whichKey.register({
 
 -- Plugin Setup
 ----------
-require('nvim-treesitter.configs').setup {
-    ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline", "rst", "python" },
-    auto_install = true,
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { "markdown", "rst" },
-    },
-    ident = { enable = true },
-    rainbow = {
-        enable = true,
-        extended_mode = true,
-        max_file_lines = nil,
-        colors = {},
-    },
-    modules = {},
-    sync_install = true,
-    ignore_install = {},
-}
+require("nvim-treesitter.configs").setup({
+	ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline", "rst", "python" },
+	auto_install = true,
+	highlight = {
+		enable = true,
+		additional_vim_regex_highlighting = { "markdown", "rst" },
+	},
+	ident = { enable = true },
+	rainbow = {
+		enable = true,
+		extended_mode = true,
+		max_file_lines = nil,
+		colors = {},
+	},
+	modules = {},
+	sync_install = true,
+	ignore_install = {},
+})
 ----------
 
 -----------------------------------------
@@ -559,11 +573,11 @@ local notify = require("notify")
 -- Configuration
 ----------
 notify.setup({
-    render = "simple",
-    timeout = 200,
-    stages = "fade",
-    minimum_width = 25,
-    top_down = false
+	render = "simple",
+	timeout = 200,
+	stages = "fade",
+	minimum_width = 25,
+	top_down = false,
 })
 ----------
 
@@ -575,55 +589,85 @@ notify.setup({
 ----------
 -- Get accurate time on panel
 function Zonedtime(hours)
-    -- Change time zone here (default seems to be +12 on home workstation)
-    local zone_difference = 11
-    local t = os.time() - (zone_difference * 3600)
-    local d = t + hours * 3600
-    return os.date('%H:%M %Y-%m-%d', d)
+	-- Change time zone here (default seems to be +12 on home workstation)
+	local zone_difference = 11
+	local t = os.time() - (zone_difference * 3600)
+	local d = t + hours * 3600
+	return os.date("%H:%M %Y-%m-%d", d)
 end
 
 -- Functions to make an active lsp panel
 local active_lsp = {
-    function()
-        local lsps = vim.lsp.get_active_clients()
-        local formatters = require('conform').list_formatters_for_buffer(0)
-        clients = tableConcat(lsps, formatters)
-        if clients and #clients > 0 then
-            local names = {}
-            for _, lsp in ipairs(lsps) do
-                table.insert(names, lsp.name)
-            end
-            return string.format("󰯠 %s", table.concat(names, ", "))
-        else
-            return ""
-        end
-    end
+	function()
+		local bufnr = vim.api.nvim_get_current_buf()
+		local lsps = vim.lsp.get_active_clients({ bufnr })
+		if lsps and #lsps > 0 then
+			local names = {}
+			for _, lsp in ipairs(lsps) do
+				table.insert(names, lsp.name)
+			end
+			return string.format(" %s", table.concat(names, ", "))
+		else
+			return ""
+		end
+	end,
+}
+
+local active_formatter = {
+	function()
+		local formatters = require("conform").list_formatters_for_buffer(0)
+		if formatters ~= nil then
+			return string.format("󰉧 %s", table.concat(formatters, ", "))
+		else
+			return ""
+		end
+	end,
+}
+
+local active_lint = {
+	function()
+		local linters = require("lint").linters_by_ft[vim.bo.filetype][1]
+		if linters ~= nil then
+			return string.format("󰯠 %s", linters)
+		else
+			return ""
+		end
+	end,
 }
 
 -- Config
 ----------
 require("lualine").setup({
-    options = {
-        section_separators = { left = '|', right = '|' },
-        component_separators = { left = '', right = '' },
-        theme = 'gruvbox-material'
-    },
-    sections = {
-        lualine_a = { { 'mode', fmt = function(res) return res:sub(1, 1) end } },
-        lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { { 'filetype', colored = true, icon_only = true, icon = { align = 'right' } }, 'filename' },
-        lualine_x = { active_lsp },
-        lualine_y = { 'progress', 'location', },
-        lualine_z = { "Zonedtime(11)" }
-    },
-    inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
-        lualine_y = {},
-        lualine_z = {}
-    }
+	options = {
+		section_separators = { left = "|", right = "|" },
+		component_separators = { left = "", right = "" },
+		theme = "gruvbox-material",
+	},
+	sections = {
+		lualine_a = { {
+			"mode",
+			fmt = function(res)
+				return res:sub(1, 1)
+			end,
+		} },
+		lualine_b = {
+			"branch",
+			{ "diff", symbols = { added = "[+] ", modified = "[~] ", removed = "[-] " } },
+			"diagnostics",
+		},
+		lualine_c = { { "filetype", colored = true, icon_only = true, icon = { align = "right" } }, "filename" },
+		lualine_x = { active_lsp, active_lint, active_formatter },
+		lualine_y = { "progress", "location" },
+		lualine_z = { "Zonedtime(11)" },
+	},
+	inactive_sections = {
+		lualine_a = {},
+		lualine_b = {},
+		lualine_c = { "filename" },
+		lualine_x = { "location" },
+		lualine_y = {},
+		lualine_z = {},
+	},
 })
 ----------
 
@@ -685,30 +729,29 @@ presets.operators["<leader>c"] = nil
 
 -- Register Custom Menus
 whichKey.register({
-    ["<leader>"] = {
-        y = { name = "System Copy" },
-        p = { name = "System Paste" },
-        m = { name = "Project Management @TODO" },
-        w = { name = "File Write" },
-        k = { name = "Wiki Opts" },
-        q = { name = "Close and Quit" },
-        t = { name = "Terminal" },
-        a = { name = "Terminal Applications" },
-        s = { name = "Snippets" },
-        f = {
-            name = "Telescope",
-            d = { "Diff Options" },
-            g = { "Git Options" }
-        },
-        d = { name = "Database" },
-        b = { name = "Debugging" },
-        c = { name = "LSP Opts" },
-        x = { name = "Code Execute/Test" },
-        r = { name = "Flashcards" },
-    },
+	["<leader>"] = {
+		y = { name = "System Copy" },
+		p = { name = "System Paste" },
+		m = { name = "Project Management @TODO" },
+		w = { name = "File Write" },
+		k = { name = "Wiki Opts" },
+		q = { name = "Close and Quit" },
+		t = { name = "Terminal" },
+		a = { name = "Terminal Applications" },
+		s = { name = "Snippets" },
+		f = {
+			name = "Telescope",
+			d = { "Diff Options" },
+			g = { "Git Options" },
+		},
+		d = { name = "Database" },
+		b = { name = "Debugging" },
+		c = { name = "LSP Opts" },
+		x = { name = "Code Execute/Test" },
+		r = { name = "Flashcards" },
+	},
 })
 ---------
-
 
 ----------------------------------
 -- Terminal Settings: <leader>t & <leader>a - toggleterm
@@ -717,10 +760,10 @@ whichKey.register({
 -- Setup
 ----------
 local default_terminal_opts = {
-    persist_mode = true,
-    close_on_exit = true,
-    terminal_mappings = true,
-    hide_numbers = true,
+	persist_mode = true,
+	close_on_exit = true,
+	terminal_mappings = true,
+	hide_numbers = true,
 }
 
 require("toggleterm").setup(default_terminal_opts)
@@ -731,24 +774,24 @@ require("toggleterm").setup(default_terminal_opts)
 
 -- Vars
 ----------
-local Terminal      = require('toggleterm.terminal').Terminal
+local Terminal = require("toggleterm.terminal").Terminal
 ----------
 
 -- Basic Terminal
 ----------
-local standard_term = Terminal:new {
-    cmd = "/bin/bash",
-    dir = fn.getcwd(),
-    direction = 'tab',
-    on_open = function()
-        cmd [[ TermExec cmd="source ~/.bashrc &&  clear" ]]
-    end,
-    on_exit = function()
-        cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
-    end,
-}
+local standard_term = Terminal:new({
+	cmd = "/bin/bash",
+	dir = fn.getcwd(),
+	direction = "tab",
+	on_open = function()
+		cmd([[ TermExec cmd="source ~/.bashrc &&  clear" ]])
+	end,
+	on_exit = function()
+		cmd([[silent! ! unset HIGHER_TERM_CALLED ]])
+	end,
+})
 function Standard_term_toggle()
-    standard_term:toggle()
+	standard_term:toggle()
 end
 
 ----------
@@ -758,18 +801,18 @@ end
 -- DockerCmd
 local docker_tui = "lazydocker"
 -- Setup
-local docker_client = Terminal:new {
-    cmd = docker_tui,
-    dir = fn.getcwd(),
-    hidden = true,
-    direction = "float",
-    float_opts = {
-        border = "double",
-    },
-}
+local docker_client = Terminal:new({
+	cmd = docker_tui,
+	dir = fn.getcwd(),
+	hidden = true,
+	direction = "float",
+	float_opts = {
+		border = "double",
+	},
+})
 -- toggle function
 function Docker_term_toggle()
-    docker_client:toggle()
+	docker_client:toggle()
 end
 
 ----------
@@ -779,19 +822,19 @@ end
 -- GituiCmd
 local gitui = "gitui"
 -- Setup
-local gitui_client = Terminal:new {
-    cmd = gitui,
-    dir = fn.getcwd(),
-    hidden = true,
-    direction = "float",
-    float_opts = {
-        border = "double",
-    },
-}
+local gitui_client = Terminal:new({
+	cmd = gitui,
+	dir = fn.getcwd(),
+	hidden = true,
+	direction = "float",
+	float_opts = {
+		border = "double",
+	},
+})
 
 -- toggle function
 function Gitui_term_toggle()
-    gitui_client:toggle()
+	gitui_client:toggle()
 end
 
 ----------
@@ -801,19 +844,39 @@ end
 -- General
 keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true, desc = "Quit Terminal Instance" })
 keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true, desc = "Change to N mode" })
-keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"",
-    { noremap = true, silent = true, desc = "Stop you from inceptioning vim" })
-keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
-    { noremap = true, silent = true, desc = "Stop you from inceptioning vim" })
+keymap.set(
+	"t",
+	"vim",
+	"say \"You're already in vim! You're a dumb ass!\"",
+	{ noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
+)
+keymap.set(
+	"t",
+	"editvim",
+	'say "You\'re already in vim! This is why no one loves you!"',
+	{ noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
+)
 -- Standard Term Toggle
-keymap.set("n", "<leader>t", "<cmd>lua Standard_term_toggle()<CR>",
-    { noremap = true, silent = true, desc = "Open Terminal" })
+keymap.set(
+	"n",
+	"<leader>t",
+	"<cmd>lua Standard_term_toggle()<CR>",
+	{ noremap = true, silent = true, desc = "Open Terminal" }
+)
 -- Docker Toggle
-keymap.set("n", "<leader>ad", "<cmd>lua Docker_term_toggle()<CR>",
-    { noremap = true, silent = true, desc = "Open Docker Container Management" })
+keymap.set(
+	"n",
+	"<leader>ad",
+	"<cmd>lua Docker_term_toggle()<CR>",
+	{ noremap = true, silent = true, desc = "Open Docker Container Management" }
+)
 -- Gitui Toggle
-keymap.set("n", "<leader>ag", "<cmd>lua Gitui_term_toggle()<CR>",
-    { noremap = true, silent = true, desc = "Open Git Ui" })
+keymap.set(
+	"n",
+	"<leader>ag",
+	"<cmd>lua Gitui_term_toggle()<CR>",
+	{ noremap = true, silent = true, desc = "Open Git Ui" }
+)
 ----------
 
 ---------------------------------
@@ -826,7 +889,7 @@ keymap.set("n", "<leader>ag", "<cmd>lua Gitui_term_toggle()<CR>",
 
 -- Telescope Variables
 ----------
-local tele_actions = require "telescope.actions"
+local tele_actions = require("telescope.actions")
 ----------
 
 -----------------------------
@@ -835,48 +898,52 @@ local tele_actions = require "telescope.actions"
 
 -- Functions
 ----------
-local fb_actions = require "telescope._extensions.file_browser.actions"
+local fb_actions = require("telescope._extensions.file_browser.actions")
 ----------
 
 -- Config
 ----------
 local file_browser_configs = {
-    hijack_netrw = true,
-    initial_mode = 'insert',
-    git_status = true,
-    respect_gitignore = false,
-    -- Internal Mappings
-    ----------
-    mappings = {
-        -- Normal Mode
-        ['n'] = {
-            ["<C-n>"] = tele_actions.close,
-            ["l"] = fb_actions.change_cwd,
-            ["h"] = fb_actions.goto_parent_dir,
-            ["c"] = fb_actions.goto_cwd,
-            ["<C-h>"] = fb_actions.toggle_hidden,
-            ["a"] = fb_actions.create,
-            ["H"] = fb_actions.toggle_hidden,
-        },
-        -- Insert Mode
-        ['i'] = {
-            ["<C-n>"] = tele_actions.close,
-            ["<C-l>"] = fb_actions.change_cwd,
-            ["<C-h>"] = fb_actions.goto_parent_dir,
-            ["<c-j>"] = tele_actions.move_selection_next,
-            ["<c-k>"] = tele_actions.move_selection_previous,
-            ["<C-c>"] = fb_actions.goto_cwd,
-            ["<A-h>"] = fb_actions.toggle_hidden,
-            ["<c-a>"] = fb_actions.create,
-        },
-    },
+	hijack_netrw = true,
+	initial_mode = "insert",
+	git_status = true,
+	respect_gitignore = false,
+	-- Internal Mappings
+	----------
+	mappings = {
+		-- Normal Mode
+		["n"] = {
+			["<C-n>"] = tele_actions.close,
+			["l"] = fb_actions.change_cwd,
+			["h"] = fb_actions.goto_parent_dir,
+			["c"] = fb_actions.goto_cwd,
+			["<C-h>"] = fb_actions.toggle_hidden,
+			["a"] = fb_actions.create,
+			["H"] = fb_actions.toggle_hidden,
+		},
+		-- Insert Mode
+		["i"] = {
+			["<C-n>"] = tele_actions.close,
+			["<C-l>"] = fb_actions.change_cwd,
+			["<C-h>"] = fb_actions.goto_parent_dir,
+			["<c-j>"] = tele_actions.move_selection_next,
+			["<c-k>"] = tele_actions.move_selection_previous,
+			["<C-c>"] = fb_actions.goto_cwd,
+			["<A-h>"] = fb_actions.toggle_hidden,
+			["<c-a>"] = fb_actions.create,
+		},
+	},
 }
 ----------
 
 -- Mappings
 ----------
-keymap.set("n", "<C-n>", ":Telescope file_browser theme=dropdown<CR>",
-    { silent = true, noremap = true, desc = "Toggle File Browser" }) -- Remap the open and close to C-n
+keymap.set(
+	"n",
+	"<C-n>",
+	":Telescope file_browser theme=dropdown<CR>",
+	{ silent = true, noremap = true, desc = "Toggle File Browser" }
+) -- Remap the open and close to C-n
 ----------
 
 -----------------------------
@@ -885,14 +952,13 @@ keymap.set("n", "<C-n>", ":Telescope file_browser theme=dropdown<CR>",
 
 -- Functions
 ----------
-local project_actions = require "telescope._extensions.project.actions"
+local project_actions = require("telescope._extensions.project.actions")
 ----------
 
 -- Config
 ----------
 local project_configs = {}
 ----------
-
 
 ---------------------------------
 -- Buffer Management: <leader>f  - Telescope Core
@@ -901,34 +967,83 @@ local project_configs = {}
 -- Mappings
 ----------
 -- Buffers Mappings
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Find Files" }) -- Find File
-keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Live Grep" })
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Show Buffers" }) -- Find Buffer
+keymap.set(
+	"n",
+	"<leader>ff",
+	"<cmd>Telescope find_files theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Find Files" }
+) -- Find File
+keymap.set(
+	"n",
+	"<leader>fg",
+	"<cmd>Telescope live_grep theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Live Grep" }
+)
+keymap.set(
+	"n",
+	"<leader>fb",
+	"<cmd>Telescope buffers theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Show Buffers" }
+) -- Find Buffer
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, noremap = true })
-keymap.set("n", "<leader>fr", "<cmd>Telescope registers theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Registers" })
+keymap.set(
+	"n",
+	"<leader>fr",
+	"<cmd>Telescope registers theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Registers" }
+)
 -- Help Mappings
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Help Tags" })
-keymap.set("n", "<leader>fm", "<cmd>Telescope man_pages theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Man Pages" })
-keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps theme=dropdown<cr>", { silent = true, desc = "Telescope: Keymaps" })
+keymap.set(
+	"n",
+	"<leader>fh",
+	"<cmd>Telescope help_tags theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Help Tags" }
+)
+keymap.set(
+	"n",
+	"<leader>fm",
+	"<cmd>Telescope man_pages theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Man Pages" }
+)
+keymap.set(
+	"n",
+	"<leader>fk",
+	"<cmd>Telescope keymaps theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Keymaps" }
+)
 -- Git Mappings
-keymap.set("n", "<leader>fvc", "<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Git Commits" })
-keymap.set("n", "<leader>fvs", "<cmd>Telescope git_status theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Git Status" })
-keymap.set("n", "<leader>fvb", "<cmd>Telescope git_branches theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Git Branches" })
+keymap.set(
+	"n",
+	"<leader>fvc",
+	"<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Commits" }
+)
+keymap.set(
+	"n",
+	"<leader>fvs",
+	"<cmd>Telescope git_status theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Status" }
+)
+keymap.set(
+	"n",
+	"<leader>fvb",
+	"<cmd>Telescope git_branches theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Branches" }
+)
 -- Tree Sitter Mapping
-keymap.set("n", "<leader>fs", "<cmd>Telescope treesitter theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Treesitter Insights" })
+keymap.set(
+	"n",
+	"<leader>fs",
+	"<cmd>Telescope treesitter theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Treesitter Insights" }
+)
 -- Telescope Mapping
-keymap.set("n", "<leader>ft", "<cmd>Telescope builtin theme=dropdown<cr>",
-    { silent = true, desc = "Telescope: Telescope" })
+keymap.set(
+	"n",
+	"<leader>ft",
+	"<cmd>Telescope builtin theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Telescope" }
+)
 ----------
 
 ---------------------------------
@@ -937,29 +1052,28 @@ keymap.set("n", "<leader>ft", "<cmd>Telescope builtin theme=dropdown<cr>",
 
 -- Setup
 ----------
-require("telescope").setup {
-    pickers = {
-        buffers = {
-            mappings = {
-                -- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
-                i = {
-                    ["<c-d>"] = tele_actions.delete_buffer,
-                    ["<c-k>"] = tele_actions.move_selection_previous,
-                    ["<c-j>"] = tele_actions.move_selection_next,
-                }
-
-            }
-        }
-    },
-    extensions = {
-        file_browser = file_browser_configs,
-        project = project_configs,
-    }
-}
+require("telescope").setup({
+	pickers = {
+		buffers = {
+			mappings = {
+				-- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
+				i = {
+					["<c-d>"] = tele_actions.delete_buffer,
+					["<c-k>"] = tele_actions.move_selection_previous,
+					["<c-j>"] = tele_actions.move_selection_next,
+				},
+			},
+		},
+	},
+	extensions = {
+		file_browser = file_browser_configs,
+		project = project_configs,
+	},
+})
 
 -- Extension Setup (Must Go last)
-require('telescope').load_extension('file_browser')
-require('telescope').load_extension('project')
+require("telescope").load_extension("file_browser")
+require("telescope").load_extension("project")
 ----------
 
 ---------
@@ -972,54 +1086,57 @@ require('telescope').load_extension('project')
 
 -- Variables
 ----------
-local obsidian = require('obsidian')
+local obsidian = require("obsidian")
 ----------
 
 -- Functions
 ----------
 local make_note_id = function(title)
-    local suffix = ""
-    if title ~= nil then
-        suffix = title:gsub(" ", "-")
-    else
-        suffix = tostring(os.time())
-    end
-    return suffix
+	local suffix = ""
+	if title ~= nil then
+		suffix = title:gsub(" ", "-")
+	else
+		suffix = tostring(os.time())
+	end
+	return suffix
 end
 
 local make_note_frontmatter = function(note)
-    note:add_tag "TODO"
-    local out = { id = note.id, aliases = note.aliases, tags = note.tags }
-    if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
-        for k, v in pairs(note.metadata) do
-            out[k] = v
-        end
-    end
-    return out
+	note:add_tag("TODO")
+	local out = { id = note.id, aliases = note.aliases, tags = note.tags }
+	if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
+		for k, v in pairs(note.metadata) do
+			out[k] = v
+		end
+	end
+	return out
 end
 
 -- Setup
 ----------
 require("obsidian").setup({
-    dir = "~/Learning",
-    templates = {
-        subdir = "templates",
-        date_format = "%Y-%m-%d-%a",
-        time_format = "%H:%M",
-    },
-    mappings = {},
-    note_id_func = make_note_id,
-    note_frontmatter_func = make_note_frontmatter
+	dir = "~/Learning",
+	templates = {
+		subdir = "templates",
+		date_format = "%Y-%m-%d-%a",
+		time_format = "%H:%M",
+	},
+	mappings = {},
+	note_id_func = make_note_id,
+	note_frontmatter_func = make_note_frontmatter,
 })
 ----------
-
 
 -- Mappings
 ----------
 keymap.set("n", "<leader>kb", "<cmd>ObsidianBacklinks<cr>", { silent = true, desc = "Get References To Current" })
 keymap.set("n", "<leader>kt", "<cmd>ObsidianToday<cr>", { silent = true, desc = "Open (New) Daily Note" })
-keymap.set("n", "<leader>ky", "<cmd>ObsidianYesterday<cr>",
-    { silent = true, desc = "Create New Daily Note For Yesterday" })
+keymap.set(
+	"n",
+	"<leader>ky",
+	"<cmd>ObsidianYesterday<cr>",
+	{ silent = true, desc = "Create New Daily Note For Yesterday" }
+)
 keymap.set("n", "<leader>ko", "<cmd>ObsidianOpen<cr>", { silent = true, desc = "Open in Obisidian App" })
 keymap.set("n", "<leader>kcn", ":ObsidianNew ", { silent = false, desc = "Create New Note" })
 keymap.set("v", "<leader>kcl", ":ObsidianLinkNew ", { silent = false, desc = "Created New Linked Note" })
@@ -1030,10 +1147,10 @@ keymap.set("v", "<leader>kla", "<cmd>ObsidianLink<cr>", { silent = true, desc = 
 keymap.set("n", "<leader>klt", "<cmd>ObsidianTemplate<cr>", { silent = true, desc = "Insert Template Into Link" })
 -- Mapping Assist
 whichKey.register({
-    ["<leader>k"] = {
-        c = { name = "Create New" },
-        l = { name = "Links Opts" }
-    }
+	["<leader>k"] = {
+		c = { name = "Create New" },
+		l = { name = "Links Opts" },
+	},
 })
 -----------
 
@@ -1056,8 +1173,8 @@ keymap.set("n", "<leader>e", "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 
 -- Options
 ---------
-g['db_ui_save_location'] = '~/.config/db_ui'
-g['dd_ui_use_nerd_fonts'] = 1
+g["db_ui_save_location"] = "~/.config/db_ui"
+g["dd_ui_use_nerd_fonts"] = 1
 ----------
 
 -- Mappings
@@ -1079,14 +1196,14 @@ api.nvim_create_augroup("RunCodeCommands", { clear = true })
 -- Commands
 ----------
 -- Python
-vim.api.nvim_create_autocmd('FileType', {
-    desc = 'On python filetypes create a command to run the current file',
-    pattern = 'python',
-    group = "RunCodeCommands",
-    callback = function()
-        vim.api.nvim_create_user_command('RunCode', '! python "%"', {})
-        keymap.set("n", "<leader>xx", ":RunCode<CR>", { silent = false, desc = "Run Current Buffer Code" })
-    end,
+vim.api.nvim_create_autocmd("FileType", {
+	desc = "On python filetypes create a command to run the current file",
+	pattern = "python",
+	group = "RunCodeCommands",
+	callback = function()
+		vim.api.nvim_create_user_command("RunCode", '! python "%"', {})
+		keymap.set("n", "<leader>xx", ":RunCode<CR>", { silent = false, desc = "Run Current Buffer Code" })
+	end,
 })
 ----------
 
@@ -1101,7 +1218,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 -- Commands
 ----------
-api.nvim_create_user_command('Editlsp', 'e ~/.config/nvim/lua/lsp.lua', {})
+api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
 ----------
 
 -- Load File
