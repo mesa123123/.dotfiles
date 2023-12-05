@@ -1,4 +1,4 @@
---------------------------job
+--------------------------
 -- ###################  --
 -- # Main Vim Config #  --
 -- ###################  --
@@ -7,9 +7,7 @@
 --------------------------------
 -- TO DO
 --------------------------------
--- 1. Learn LuaSnip
---      a. Rewrite Snippets for Lua
---      b. Restructure Snippets so only that format of Snippets loads
+-- None
 ----------------------------------
 
 -------------------------------
@@ -115,10 +113,11 @@ opt.rtp:prepend(lazypath)
 ----------------
 local plugins = {
 	-- Essentials
+	----------
 	"nvim-lua/plenary.nvim",
 	"nvim-treesitter/nvim-treesitter",
 	"folke/neodev.nvim",
-	-- Autocompletion
+	-- Autocompletion & Snips
 	----------
 	{
 		"hrsh7th/nvim-cmp",
@@ -131,6 +130,7 @@ local plugins = {
 			"hrsh7th/cmp-cmdline",
 			"ray-x/cmp-treesitter",
 			"L3MON4D3/LuaSnip",
+			"rafamadriz/friendly-snippets",
 			"saadparwaiz1/cmp_luasnip",
 			"rcarriga/nvim-notify",
 		},
@@ -179,12 +179,15 @@ local plugins = {
 	"yggdroot/indentline",
 	"tpope/vim-fugitive",
 	"editorconfig/editorconfig-vim",
-	-- Colors and Themes
+	-- Status Bar
 	------------
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
 	},
+	------------
+	-- Colors and Themes
+	------------
 	"altercation/vim-colors-solarized",
 	"nvie/vim-flake8",
 	-- DevIcons
@@ -225,22 +228,40 @@ local plugins = {
 		event = "VimEnter",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
+	-- CmdLine
+	----------
+	{
+		"folke/noice.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+			"rcarriga/nvim-notify",
+		},
+	},
+	----------
 	-- Nvim Telescope
 	---------
-	{ "nvim-telescope/telescope.nvim", dependencies = { "BurntSushi/ripgrep", "sharkdp/fd", lazy = false } },
-	-- Plugins
-	"nvim-telescope/telescope-dap.nvim",
-	"nvim-telescope/telescope-project.nvim",
-	"nvim-telescope/telescope-file-browser.nvim",
-	-----------
+	{
+		"nvim-telescope/telescope.nvim",
+		dependencies = {
+			"BurntSushi/ripgrep",
+			"sharkdp/fd",
+			"nvim-telescope/telescope-dap.nvim",
+			"nvim-telescope/telescope-dap.nvim",
+			"nvim-telescope/telescope-project.nvim",
+			"nvim-telescope/telescope-file-browser.nvim",
+			"piersolenski/telescope-import.nvim",
+		},
+	},
+	-- Extras
+	----------
+	{ "stevearc/dressing.nvim", event = "VeryLazy" },
+	----------
 	-- Study Functionality
 	----------
 	-- Wiki - Obsidian nvim
 	"epwalsh/obsidian.nvim",
 	----------
-	-- Dart/Flutter
-	"dart-lang/dart-vim-plugin",
-	"thosakwe/vim-flutter",
 	-- Alignment
 	"junegunn/vim-easy-align",
 	-- HardMode
@@ -548,7 +569,7 @@ whichKey.register({
 -- Plugin Setup
 ----------
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline", "rst", "python" },
+	ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline", "rst", "python", "bash", "vim", "regex" },
 	auto_install = true,
 	highlight = {
 		enable = true,
@@ -580,12 +601,36 @@ notify.setup({
 	timeout = 200,
 	stages = "fade",
 	minimum_width = 25,
-	top_down = false,
+	top_down = true,
 })
 ----------
 
+--------------------------------
+-- CmdLine Settings - Noice.nvim
+--------------------------------
+
+require("noice").setup({
+	lsp = {
+		-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+		override = {
+			["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+			["vim.lsp.util.stylize_markdown"] = true,
+			["cmp.entry.get_documentation"] = true,
+		},
+	},
+	presets = {
+		bottom_search = true, -- use a classic bottom cmdline for search
+		command_palette = true, -- position the cmdline and popupmenu together
+		long_message_to_split = true, -- long messages will be sent to a split
+		inc_rename = false, -- enables an input dialog for inc-rename.nvim
+		lsp_doc_border = false, -- add a border to hover docs and signature help
+	},
+})
+
+----------
+
 -----------------------------
--- LuaLine Configuration
+-- Status Line - LuaLine
 -----------------------------
 
 -- Helper Functions
@@ -745,7 +790,7 @@ whichKey.register({
 		f = {
 			name = "Telescope",
 			d = { "Diff Options" },
-			g = { "Git Options" },
+			v = { "Git Options" },
 		},
 		d = { name = "Database" },
 		b = { name = "Debugging" },
@@ -975,20 +1020,23 @@ keymap.set(
 	"<leader>ff",
 	"<cmd>Telescope find_files theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Find Files" }
-) -- Find File
+)
+-- Find File
 keymap.set(
 	"n",
 	"<leader>fg",
 	"<cmd>Telescope live_grep theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Live Grep" }
 )
+-- Find Buffer
 keymap.set(
 	"n",
 	"<leader>fb",
 	"<cmd>Telescope buffers theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Show Buffers" }
-) -- Find Buffer
+)
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, noremap = true })
+-- Registers
 keymap.set(
 	"n",
 	"<leader>fr",
@@ -1002,36 +1050,26 @@ keymap.set(
 	"<cmd>Telescope help_tags theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Help Tags" }
 )
+-- Man Pages
 keymap.set(
 	"n",
 	"<leader>fm",
 	"<cmd>Telescope man_pages theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Man Pages" }
 )
+-- Keymaps
 keymap.set(
 	"n",
 	"<leader>fk",
 	"<cmd>Telescope keymaps theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Keymaps" }
 )
--- Git Mappings
+-- ColorScheme
 keymap.set(
 	"n",
-	"<leader>fvc",
-	"<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Commits" }
-)
-keymap.set(
-	"n",
-	"<leader>fvs",
-	"<cmd>Telescope git_status theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Status" }
-)
-keymap.set(
-	"n",
-	"<leader>fvb",
-	"<cmd>Telescope git_branches theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Branches" }
+	"<leader>fc",
+	"<cmd>Telescope colorscheme theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Keymaps" }
 )
 -- Tree Sitter Mapping
 keymap.set(
@@ -1040,12 +1078,50 @@ keymap.set(
 	"<cmd>Telescope treesitter theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Treesitter Insights" }
 )
--- Telescope Mapping
+-- Telescope Telescopes
 keymap.set(
 	"n",
 	"<leader>ft",
 	"<cmd>Telescope builtin theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Telescope" }
+)
+-- Imports
+----------
+keymap.set(
+	"n",
+	"<leader>fi",
+	"<cmd>Telescope import theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Imports" }
+)
+-- Version Control - git
+----------
+-- Commits
+keymap.set(
+	"n",
+	"<leader>fvc",
+	"<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Commits" }
+)
+-- Status
+keymap.set(
+	"n",
+	"<leader>fvs",
+	"<cmd>Telescope git_status theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Status" }
+)
+-- Branches
+keymap.set(
+	"n",
+	"<leader>fvb",
+	"<cmd>Telescope git_branches theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Branches" }
+)
+-- Git Files
+keymap.set(
+	"n",
+	"<leader>fvf",
+	"<cmd>Telescope git_files theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Branches" }
 )
 ----------
 
@@ -1077,6 +1153,7 @@ require("telescope").setup({
 -- Extension Setup (Must Go last)
 require("telescope").load_extension("file_browser")
 require("telescope").load_extension("project")
+require("telescope").load_extension("import")
 ----------
 
 ---------

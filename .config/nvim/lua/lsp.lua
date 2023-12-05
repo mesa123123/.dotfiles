@@ -1,3 +1,9 @@
+--------------------------
+-- ###################  --
+-- # Lsp Vim Config  #  --
+-- ###################  --
+--------------------------
+
 --------------------------------
 -- Luaisms for Vim Stuff
 --------------------------------
@@ -30,6 +36,7 @@ local lint = require("lint")
 local format = require("conform")
 local snip = require("luasnip")
 local snipload_lua = require("luasnip.loaders.from_lua")
+local snipload_vscode = require("luasnip.loaders.from_vscode")
 local whichKey = require("which-key")
 --------
 
@@ -124,12 +131,14 @@ tool_install.setup({
 snip.config.set_config({
 	updateevents = "TextChanged,TextChangedI",
 })
-----------
 
 -- Load Snippets
 ----------
 local snips_folder = fn.stdpath("config") .. "/lua/snippets/"
+snipload_vscode.lazy_load()
 snipload_lua.lazy_load({ paths = snips_folder })
+require("luasnip.loaders.from_vscode").lazy_load()
+----------
 
 -- Functions
 ----------
@@ -192,7 +201,7 @@ lint.linters_by_ft = {
 	python = { "pylint" },
 	-- Json
 	json = { "jsonlint" },
-    -- lua
+	-- lua
 	lua = { "luacheck" },
 }
 
@@ -214,11 +223,8 @@ local has_words_before = function()
 	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
 	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
-----------
 
--- Shorten Lines
-----------
--- Note this will be janky but its set for improvement
+-- Shorten Lines -- Note this will be janky but its set for improvement
 function ShortenLine()
 	if b["max_line_length"] == 0 then
 		b["max_line_length"] = fn.input("What is the line length? ")
@@ -228,7 +234,6 @@ function ShortenLine()
 		cmd([[ execute "normal! F i\n" ]])
 	end
 end
-
 ----------
 
 -- General Config
