@@ -188,6 +188,8 @@
         <value type="string" value="steam.desktop"/>
         <value type="string" value="org.mageia.dnfdragora.desktop"/>
       </property>
+      <property name="show-button-icon" type="bool" value="true"/>
+      <property name="show-button-title" type="bool" value="false"/>
     </property>
     <property name="plugin-11" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
