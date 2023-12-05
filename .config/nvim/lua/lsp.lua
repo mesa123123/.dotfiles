@@ -106,10 +106,9 @@ local lsp_servers_ei = {
 	"jsonls",
 }
 -- Formatters
-local formatters_ei =
-	{ "markdownlint", "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua" }
+local formatters_ei = { "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua" }
 -- Lineters
-local linters_ei = { "pylint", "jsonlint", "luacheck" }
+local linters_ei = { "pylint", "jsonlint", "luacheck", "markdownlint" }
 -- Other Language Servers, Handled by Nullls
 local other_servers = { "debugpy", "shellcheck", "prettier", "rstcheck", "write-good", "proselint" }
 ----------
@@ -173,6 +172,7 @@ format.setup({
 		javascript = { "prettier" },
 		shell = { "shellharden" },
 		json = { { "jq", "jsonls" } },
+		markdown = { "markdownlint" },
 	},
 })
 
@@ -194,6 +194,18 @@ lsp.buf.format({ timeout = 10000 }) -- Format Timeout
 -- Setup of Linters - nvim-lint
 --------------------------------
 
+-- Helper Functions
+----------
+-- Get Pyenv Packages if active
+local function get_venv_command(command)
+	if vim.env.VIRTUAL_ENV then
+		return path.join(vim.env.VIRTUAL_ENV, "bin", command)
+	else
+		return command
+	end
+end
+----------
+
 -- Setup
 ----------
 lint.linters_by_ft = {
@@ -203,6 +215,8 @@ lint.linters_by_ft = {
 	json = { "jsonlint" },
 	-- lua
 	lua = { "luacheck" },
+	-- Markdown
+	markdown = { "markdownlint" },
 }
 
 api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
@@ -210,6 +224,17 @@ api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnte
 		require("lint").try_lint()
 	end,
 })
+----------
+
+-- Configure Linters
+----------
+local markdownlint = lint.linters.markdownlint
+markdownlint.args = {
+	"--disable",
+	"MD013",
+	"MD012",
+	"MD041",
+}
 ----------
 
 --------------------------------
@@ -234,6 +259,7 @@ function ShortenLine()
 		cmd([[ execute "normal! F i\n" ]])
 	end
 end
+
 ----------
 
 -- General Config
@@ -253,11 +279,11 @@ cmp.setup({
 	},
 	-- Attach all the extensions
 	sources = {
+		{ name = "luasnip" },
 		{ name = "nvim_lsp" },
 		{ name = "path" },
 		{ name = "buffer" },
 		{ name = "nvim_lua" },
-		{ name = "luasnip" },
 		{ name = "treesitter" },
 		{ name = "cmdline" },
 	},
@@ -631,15 +657,11 @@ config.tflint.setup({ on_attach = on_attach, capabilities = capabilities })
 -- Import Null-ls
 ----------
 local nullls = require("null-ls")
-local method = nullls.methods
 local format = nullls.builtins.formatting -- Formatting
 local diagnose = nullls.builtins.diagnostics -- Diagnostics
 local code_actions = nullls.builtins.code_actions
-local generator = nullls.generator
 local hover = nullls.builtins.hover
 local completion = nullls.builtins.completion -- Code Completion
-local register = nullls.register
-local helpers = require("null-ls.helpers")
 ----------
 
 -- Functions
@@ -703,22 +725,6 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
 	if package == "yamllint" then
 		nullSources[#nullSources + 1] = diagnose.yamllint.with({ on_attach = on_attach })
 	end
-	-- Markdown
-	----------
-	if package == "markdownlint" then
-		nullSources[#nullSources + 1] = diagnose.markdownlint.with({
-			on_attach = on_attach,
-			autostart = true,
-			filetypes = { "markdown", "md", "mdx" },
-			extra_args = { "--disable", "MD013", "MD012", "MD041" },
-		})
-		nullSources[#nullSources + 1] = format.markdownlint.with({
-			on_attach = on_attach,
-			autostart = true,
-			filetypes = { "markdown", "md", "mdx" },
-		})
-	end
-	----------
 	-- Web Dev
 	----------
 	-- Eslint
