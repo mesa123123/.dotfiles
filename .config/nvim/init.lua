@@ -255,12 +255,12 @@ local plugins = {
 	},
 	-- Extras
 	----------
-	{ "stevearc/dressing.nvim", event = "VeryLazy" },
+	{ "stevearc/dressing.nvim" },
 	----------
 	-- Study Functionality
 	----------
 	-- Wiki - Obsidian nvim
-	"epwalsh/obsidian.nvim",
+    { "epwalsh/obsidian.nvim" },
 	----------
 	-- Alignment
 	"junegunn/vim-easy-align",
@@ -1194,7 +1194,7 @@ end
 
 -- Setup
 ----------
-require("obsidian").setup({
+obsidian.setup({
 	dir = "~/Learning",
 	templates = {
 		subdir = "templates",
@@ -1273,18 +1273,39 @@ keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = 
 api.nvim_create_augroup("RunCodeCommands", { clear = true })
 ----------
 
--- Commands
+-- Create Run Command on BufAttach
 ----------
--- Python
-vim.api.nvim_create_autocmd("FileType", {
-	desc = "On python filetypes create a command to run the current file",
-	pattern = "python",
-	group = "RunCodeCommands",
+api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufNew" }, {
 	callback = function()
-		vim.api.nvim_create_user_command("RunCode", '! python "%"', {})
-		keymap.set("n", "<leader>xx", ":RunCode<CR>", { silent = false, desc = "Run Current Buffer Code" })
+		vim.g.RunCommand = vim.bo.filetype .. " " .. vim.api.nvim_buf_get_name(0)
 	end,
 })
+----------
+
+-- Setup Terminal Runner
+----------
+-- Setup Toggle function
+function Runner_term_toggle()
+	local runner_client = Terminal:new({
+		cmd = vim.g.RunCommand,
+		dir = fn.getcwd(),
+		hidden = true,
+		direction = "float",
+		float_opts = {
+			border = "double",
+		},
+		close_on_exit = false,
+	})
+	runner_client:toggle()
+end
+
+-- Keymap to Run
+keymap.set(
+	"n",
+	"<leader>xx",
+	"<cmd>lua Runner_term_toggle()<CR>",
+	{ noremap = true, silent = true, desc = "Run Current Buffer" }
+)
 ----------
 
 ---------------------------------"
