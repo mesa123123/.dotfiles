@@ -170,7 +170,7 @@ keymap.set("n", "<leader>se", ":LuaSnipEdit<CR>", { desc = "Edit Snippets File" 
 format.setup({
     formatters_by_ft = {
         lua = { "stylua" },
-        python = { "black" },
+        python = { "isort", "black" },
         javascript = { "prettier" },
         shell = { "shellharden" },
         json = { { "jq", "jsonls" } },
@@ -212,7 +212,7 @@ end
 ----------
 lint.linters_by_ft = {
     -- Python
-    python = { "isort", "pylint" },
+    python = { "pylint" },
     -- Json
     json = { "jsonlint" },
     -- lua

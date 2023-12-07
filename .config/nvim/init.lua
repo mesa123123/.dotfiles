@@ -704,7 +704,7 @@ require("lualine").setup({
 			"diagnostics",
 		},
 		lualine_c = { { "filetype", colored = true, icon_only = true, icon = { align = "right" } }, "filename" },
-		lualine_x = { active_lsp, active_lint, active_formatter },
+		lualine_x = { active_lsp, active_lint, active_formatter, active_debug },
 		lualine_y = { "progress", "location" },
 		lualine_z = { "Zonedtime(11)" },
 	},

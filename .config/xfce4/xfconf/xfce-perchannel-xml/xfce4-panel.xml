@@ -57,6 +57,7 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="notes"/>
         <value type="string" value="seapplet"/>
         <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (59%)"/>
         <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (61%)"/>
@@ -218,6 +219,16 @@
     <property name="plugin-4" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="notes" type="empty">
+      <property name="global" type="empty">
+        <property name="font-description" type="string" value="FiraCode Nerd Font Light 14"/>
+        <property name="tabs-position" type="int" value="1"/>
+      </property>
+      <property name="new-window" type="empty">
+        <property name="width" type="int" value="300"/>
+        <property name="height" type="int" value="375"/>
+      </property>
     </property>
   </property>
   <property name="configver" type="int" value="2"/>
