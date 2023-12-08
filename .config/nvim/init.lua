@@ -260,7 +260,7 @@ local plugins = {
 	-- Study Functionality
 	----------
 	-- Wiki - Obsidian nvim
-    { "epwalsh/obsidian.nvim" },
+	{ "epwalsh/obsidian.nvim" },
 	----------
 	-- Alignment
 	"junegunn/vim-easy-align",
@@ -683,6 +683,12 @@ local active_lint = {
 	end,
 }
 
+local noice_mode = {
+	require("noice").api.statusline.mode.get,
+	cond = require("noice").api.statusline.mode.has,
+	color = { fg = "#ff9e64" },
+}
+
 -- Config
 ----------
 require("lualine").setup({
@@ -703,7 +709,11 @@ require("lualine").setup({
 			{ "diff", symbols = { added = "[+] ", modified = "[~] ", removed = "[-] " } },
 			"diagnostics",
 		},
-		lualine_c = { { "filetype", colored = true, icon_only = true, icon = { align = "right" } }, "filename" },
+		lualine_c = {
+			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
+			"filename",
+			noice_mode,
+		},
 		lualine_x = { active_lsp, active_lint, active_formatter, active_debug },
 		lualine_y = { "progress", "location" },
 		lualine_z = { "Zonedtime(11)" },
