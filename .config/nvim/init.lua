@@ -491,7 +491,13 @@ keymap.set(
 	'"+yy',
 	{ silent = true, noremap = true, desc = "Copy Line to System Clipboard" }
 )
-keymap.set("n", "<leader>Y", '"+yg_', { silent = true, noremap = true, desc = "Copy Rest of file to system Clipboard" })
+keymap.set("n", "<leader>yG", '"+yG', { silent = true, noremap = true, desc = "Copy Rest of file to system Clipboard" })
+keymap.set(
+	"n",
+	"<leader>y%",
+	'"+y%',
+	{ silent = true, noremap = true, desc = "Copy Whole of file to system Clipboard" }
+)
 -- System Paste Set to Mappings
 keymap.set({ "n", "v" }, "<leader>p", '"+p', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
 keymap.set({ "n", "v" }, "<leader>P", '"+P', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
