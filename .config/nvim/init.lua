@@ -255,7 +255,7 @@ local plugins = {
 	},
 	-- Extras
 	----------
-	{ "stevearc/dressing.nvim" },
+	{ "stevearc/dressing.nvim", event = "VeryLazy" },
 	----------
 	-- Study Functionality
 	----------
