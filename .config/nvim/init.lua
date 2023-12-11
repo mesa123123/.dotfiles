@@ -720,7 +720,7 @@ require("lualine").setup({
 			"filename",
 			noice_mode,
 		},
-		lualine_x = { active_lsp, active_lint, active_formatter, active_debug },
+		lualine_x = { active_lsp, active_lint, active_formatter },
 		lualine_y = { "progress", "location" },
 		lualine_z = { "Zonedtime(11)" },
 	},
