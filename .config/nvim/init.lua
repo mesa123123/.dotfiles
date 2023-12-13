@@ -687,11 +687,11 @@ local active_lint = {
 	end,
 }
 
-local noice_mode = {
-	require("noice").api.statusline.mode.get,
-	cond = require("noice").api.statusline.mode.has,
-	color = { fg = "#ff9e64" },
-}
+-- local noice_mode = {
+-- 	require("noice").api.statusline.mode.get,
+-- 	cond = require("noice").api.statusline.mode.has,
+-- 	color = { fg = "#ff9e64" },
+-- }
 
 -- Config
 ----------
