@@ -237,7 +237,7 @@ local plugins = {
 			"rcarriga/nvim-notify",
 		},
 	},
-    "stevearc/dressing.nvim",
+	"stevearc/dressing.nvim",
 	----------
 	-- Nvim Telescope
 	---------
@@ -610,7 +610,7 @@ notify.setup({
 ----------
 
 --------------------------------
--- CmdLine Settings - Noice.nvim
+-- CmdLine Settings - Noice.nvim/Dressing.nvim
 --------------------------------
 
 require("noice").setup({
@@ -685,13 +685,14 @@ local active_lint = {
 			return ""
 		end
 	end,
+    color = { fg = "#ff9e64" }
 }
 
--- local noice_mode = {
--- 	require("noice").api.statusline.mode.get,
--- 	cond = require("noice").api.statusline.mode.has,
--- 	color = { fg = "#ff9e64" },
--- }
+local noice_mode = {
+	require("noice").api.statusline.mode.get,
+	cond = require("noice").api.statusline.mode.has,
+	color = { fg = "#ff9e64" },
+}
 
 -- Config
 ----------
@@ -711,7 +712,7 @@ require("lualine").setup({
 		lualine_b = {
 			"branch",
 			{ "diff", symbols = { added = "[+] ", modified = "[~] ", removed = "[-] " } },
-			"diagnostics",
+            {"diagnostics"},
 		},
 		lualine_c = {
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
@@ -1026,11 +1027,6 @@ local project_configs = {}
 -- Ui-Select Management: - Ui Improvements, not mapped to a keybinding
 -----------------------------
 
--- Functions
-----------
-local ui_select_actions = require("telescope._extensions.project.actions")
-----------
-
 -- Config
 ----------
 local ui_select_configs = {}
@@ -1174,7 +1170,7 @@ require("telescope").setup({
 	extensions = {
 		file_browser = file_browser_configs,
 		project = project_configs,
-        ui_select = ui_select_configs,
+		ui_select = ui_select_configs,
 	},
 })
 
