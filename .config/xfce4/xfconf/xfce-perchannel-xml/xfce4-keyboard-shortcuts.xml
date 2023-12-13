@@ -73,7 +73,6 @@
       <property name="&lt;Shift&gt;&lt;Super&gt;Right" type="string" value="/usr/local/sbin/move-to-next-monitor"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;Left" type="string" value="/usr/local/sbin/move-to-next-monitor"/>
       <property name="&lt;Super&gt;f" type="string" value="xfce4-find-cursor"/>
-      <property name="&lt;Super&gt;grave" type="string" value="xcolor -s clipboard"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;s" type="string" value="xfce4-screenshooter -r"/>
       <property name="&lt;Super&gt;3" type="string" value="spotify"/>
       <property name="&lt;Super&gt;l" type="string" value="xflock4"/>
@@ -81,7 +80,7 @@
       <property name="&lt;Alt&gt;period" type="string" value="dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"/>
       <property name="&lt;Alt&gt;comma" type="string" value="dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous "/>
       <property name="&lt;Super&gt;2" type="string" value="kitty"/>
-      <property name="&lt;Primary&gt;grave" type="string" value="gpick"/>
+      <property name="&lt;Super&gt;grave" type="string" value="gpick -s"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
