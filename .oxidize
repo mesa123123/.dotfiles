@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Set Rust Env
 export CARGO_HOME="/home/$USER/.cargo"

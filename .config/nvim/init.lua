@@ -663,7 +663,7 @@ local active_lsp = {
 			return ""
 		end
 	end,
-    color = { fg = "F84935" }
+	color = { fg = "F84935" },
 }
 
 local active_formatter = {
@@ -690,10 +690,10 @@ local active_lint = {
 	color = { fg = "#EAB133" },
 }
 
-local noice_mode = {
+local noice_recording = {
 	require("noice").api.statusline.mode.get,
 	cond = require("noice").api.statusline.mode.has,
-	color = { fg = "#ff9e64" },
+	color = { fg = "#dccda7" },
 }
 
 -- Config
@@ -719,7 +719,7 @@ require("lualine").setup({
 		lualine_c = {
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
 			"filename",
-			noice_mode,
+			noice_recording,
 		},
 		lualine_x = { active_lsp, active_lint, active_formatter },
 		lualine_y = { "progress", "location" },
