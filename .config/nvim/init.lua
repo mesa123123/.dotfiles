@@ -663,6 +663,7 @@ local active_lsp = {
 			return ""
 		end
 	end,
+    color = { fg = "F84935" }
 }
 
 local active_formatter = {
@@ -674,6 +675,7 @@ local active_formatter = {
 			return ""
 		end
 	end,
+	color = { fg = "#8eC07C" },
 }
 
 local active_lint = {
@@ -685,7 +687,7 @@ local active_lint = {
 			return ""
 		end
 	end,
-    color = { fg = "#ff9e64" }
+	color = { fg = "#EAB133" },
 }
 
 local noice_mode = {
@@ -712,7 +714,7 @@ require("lualine").setup({
 		lualine_b = {
 			"branch",
 			{ "diff", symbols = { added = "[+] ", modified = "[~] ", removed = "[-] " } },
-            {"diagnostics"},
+			{ "diagnostics" },
 		},
 		lualine_c = {
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
