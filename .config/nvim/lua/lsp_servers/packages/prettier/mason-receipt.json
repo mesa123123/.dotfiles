@@ -1,1 +1,1 @@
-{"links":{"bin":{"prettier":"node_modules\/.bin\/prettier"},"share":{},"opt":{}},"secondary_sources":[],"schema_version":"1.1","name":"prettier","metrics":{"completion_time":1700584827961,"start_time":1700584819999},"primary_source":{"id":"pkg:npm\/prettier@3.1.0","type":"registry+v1"}}
+{"secondary_sources":[],"schema_version":"1.1","name":"prettier","metrics":{"completion_time":1702452778853,"start_time":1702452768134},"primary_source":{"id":"pkg:npm\/prettier@3.1.1","type":"registry+v1"},"links":{"share":{},"opt":{},"bin":{"prettier":"node_modules\/.bin\/prettier"}}}

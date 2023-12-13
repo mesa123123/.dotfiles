@@ -149,7 +149,6 @@ local plugins = {
 		},
 	},
 	{ "jose-elias-alvarez/null-ls.nvim", branch = "main" },
-	{ "j-hui/fidget.nvim", tag = "legacy", events = "LspAttach" },
 	-- Linting Plugins
 	----------
 	"mfussenegger/nvim-lint",
@@ -238,6 +237,7 @@ local plugins = {
 			"rcarriga/nvim-notify",
 		},
 	},
+    "stevearc/dressing.nvim",
 	----------
 	-- Nvim Telescope
 	---------
@@ -251,11 +251,9 @@ local plugins = {
 			"nvim-telescope/telescope-project.nvim",
 			"nvim-telescope/telescope-file-browser.nvim",
 			"piersolenski/telescope-import.nvim",
+			"nvim-telescope/telescope-ui-select.nvim",
 		},
 	},
-	-- Extras
-	----------
-	{ "stevearc/dressing.nvim", event = "VeryLazy" },
 	----------
 	-- Study Functionality
 	----------
@@ -1024,6 +1022,19 @@ local project_actions = require("telescope._extensions.project.actions")
 local project_configs = {}
 ----------
 
+-----------------------------
+-- Ui-Select Management: - Ui Improvements, not mapped to a keybinding
+-----------------------------
+
+-- Functions
+----------
+local ui_select_actions = require("telescope._extensions.project.actions")
+----------
+
+-- Config
+----------
+local ui_select_configs = {}
+----------
 ---------------------------------
 -- Buffer Management: <leader>f  - Telescope Core
 ---------------------------------
@@ -1163,6 +1174,7 @@ require("telescope").setup({
 	extensions = {
 		file_browser = file_browser_configs,
 		project = project_configs,
+        ui_select = ui_select_configs,
 	},
 })
 
@@ -1170,6 +1182,7 @@ require("telescope").setup({
 require("telescope").load_extension("file_browser")
 require("telescope").load_extension("project")
 require("telescope").load_extension("import")
+require("telescope").load_extension("ui-select")
 ----------
 
 ---------
