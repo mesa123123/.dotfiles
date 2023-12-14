@@ -174,6 +174,7 @@ api.nvim_create_user_command("LuaSnipEdit", ":lua SnipEditFile()<CR>", {})
 -- Setup
 ----------
 format.setup({
+    log_level = log.levels.TRACE,
     formatters = {
         black = { args = get_venv_command("black") },
         isort = { args = get_venv_command("isort") },

@@ -58,6 +58,7 @@
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “spark-b9gzfv-ext” active: spark-b9gzfv-ext (66%)"/>
         <value type="string" value="gpick"/>
         <value type="string" value="notes"/>
         <value type="string" value="seapplet"/>
