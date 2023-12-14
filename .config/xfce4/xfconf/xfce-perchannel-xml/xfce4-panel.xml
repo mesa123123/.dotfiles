@@ -35,6 +35,7 @@
         <value type="double" value="0.20784313725490197"/>
         <value type="double" value="1"/>
       </property>
+      <property name="enter-opacity" type="uint" value="100"/>
     </property>
     <property name="dark-mode" type="bool" value="true"/>
   </property>
@@ -177,7 +178,7 @@
       <property name="style" type="uint" value="0"/>
     </property>
     <property name="plugin-16" type="string" value="whiskermenu">
-      <property name="button-icon" type="string" value="org.xfce.panel.whiskermenu"/>
+      <property name="button-icon" type="string" value="fedora-logo-sprite"/>
       <property name="favorites-in-recent" type="bool" value="true"/>
       <property name="command-switchuser" type="string" value="dm-tool switch-to-greeter"/>
       <property name="favorites" type="array">
