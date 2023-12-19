@@ -168,17 +168,13 @@ api.nvim_create_user_command("LuaSnipEdit", ":lua SnipEditFile()<CR>", {})
 ----------
 
 --------------------------------
--- Setup of Formatters - conform.nvim
+-- Setup of Formatters - formatter.nvim
 --------------------------------
 
 -- Setup
 ----------
 format.setup({
     log_level = log.levels.TRACE,
-    formatters = {
-        black = { args = get_venv_command("black") },
-        isort = { args = get_venv_command("isort") },
-    },
     formatters_by_ft = {
         python = { "black", "isort" },
         lua = { "stylua" },
