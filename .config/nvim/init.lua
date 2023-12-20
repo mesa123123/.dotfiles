@@ -778,12 +778,12 @@ alpha.setup(dashboard.config)
 -- Quit Commands: <leader>q
 -- System Yank Commands: <leader>y
 -- System Paste Comnmands: <leader>p
+-- Version Control Commands -- fugitive: <leader>v
 -- Key Mapping Assist - whichkey: <leader>?
 -- Configured in init.lsp --
 -- Snippets - LuaSnip : <leader>s
 -- Debugging - NvimDAP: <leader>b
 -- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c
--- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>g
 ----------
 
 -- Key Map Assitance
@@ -795,25 +795,26 @@ presets.operators["<leader>c"] = nil
 -- Register Custom Menus
 whichKey.register({
 	["<leader>"] = {
-		y = { name = "System Copy" },
-		p = { name = "System Paste" },
-		m = { name = "Project Management @TODO" },
-		w = { name = "File Write" },
-		k = { name = "Wiki Opts" },
-		q = { name = "Close and Quit" },
-		t = { name = "Terminal" },
 		a = { name = "Terminal Applications" },
-		s = { name = "Snippets" },
+		b = { name = "Debugging" },
+		c = { name = "LSP Opts" },
+		d = { name = "Database" },
 		f = {
 			name = "Telescope",
 			d = { "Diff Options" },
 			v = { "Git Options" },
 		},
-		d = { name = "Database" },
-		b = { name = "Debugging" },
-		c = { name = "LSP Opts" },
-		x = { name = "Code Execute/Test" },
+		k = { name = "Wiki Opts" },
+		m = { name = "Project Management @TODO" },
+		p = { name = "System Paste" },
+		q = { name = "Close and Quit" },
 		r = { name = "Flashcards" },
+		s = { name = "Snippets" },
+		t = { name = "Terminal" },
+		v = { name = "Version Control" },
+		w = { name = "File Write" },
+		x = { name = "Code Execute/Test" },
+		y = { name = "System Copy" },
 	},
 })
 ---------
@@ -1185,6 +1186,19 @@ require("telescope").load_extension("ui-select")
 
 ---------
 -- End of Telescope Setup
+---------
+
+---------------------------------
+-- Version Control Functionality: <leader>v - fugitive
+---------------------------------
+
+-- Keymappings
+------------------
+keymap.set("n", "<leader>vb", "<cmd>G blame<CR>", { silent = true, desc = "Git Blame" })
+
+
+---------
+-- End of VC setup
 ---------
 
 ---------------------------------
