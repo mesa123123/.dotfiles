@@ -115,12 +115,13 @@ local lsp_servers_ei = {
 	"emmet_ls",
 	"jsonls",
 	"yamlls",
+	"cssls",
 }
 -- Formatters
 local formatters_ei =
 	{ "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua", "yamlfmt" }
 -- Lineters
-local linters_ei = { "pylint", "jsonlint", "luacheck", "markdownlint", "yamllint" }
+local linters_ei = { "eslint", "pylint", "jsonlint", "luacheck", "markdownlint", "yamllint" }
 -- Other Language Servers, Handled by Nullls
 local other_servers = { "debugpy", "shellcheck", "prettier", "rstcheck", "write-good", "proselint" }
 ----------
@@ -161,12 +162,29 @@ function SnipEditFile()
 	end
 	cmd("e " .. snips_file)
 end
-
 ----------
 
 -- Commands
 ----------
 api.nvim_create_user_command("LuaSnipEdit", ":lua SnipEditFile()<CR>", {})
+----------
+
+-- Mappings
+----------
+keymap.set({ "i" }, "<C-J>", function()
+	snip.expand()
+end, { silent = true })
+keymap.set({ "i", "s" }, "<C-L>", function()
+	snip.jump(1)
+end, { silent = true })
+keymap.set({ "i", "s" }, "<C-H>", function()
+	snip.jump(-1)
+end, { silent = true })
+keymap.set({ "i", "s" }, "<C-E>", function()
+	if snip.choice_active() then
+		snip.change_choice(1)
+	end
+end, { silent = true })
 ----------
 
 --------------------------------
@@ -181,6 +199,8 @@ format.setup({
 		python = { "black", "isort" },
 		lua = { "stylua" },
 		javascript = { "prettier" },
+		typescript = { "prettier" },
+		html = { "prettier" },
 		shell = { "shellharden" },
 		json = { { "jq", "jsonls" } },
 		markdown = { "markdownlint" },
@@ -225,6 +245,10 @@ lint.linters_by_ft = {
 	-- Markdown
 	markdown = { "markdownlint" },
 	yaml = { "yamllint" },
+	javascript = { "eslint" },
+	typescript = { "eslint" },
+	html = { "eslint" },
+	css = { "eslint" },
 }
 
 api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
@@ -301,9 +325,7 @@ local cmp_formatting = {
 ----------
 -- Next Selection
 local snip_cmp_next = cmp.mapping(function(fallback)
-	if snip.jumpable(1) then
-		snip.jump(1)
-	elseif cmp.visible() then
+	if cmp.visible() then
 		cmp.select_next_item()
 	elseif has_words_before() then
 		cmp.complete()
@@ -313,9 +335,7 @@ local snip_cmp_next = cmp.mapping(function(fallback)
 end, { "i", "s", "c" })
 -- Previous Selection
 local snip_cmp_previous = cmp.mapping(function(fallback)
-	if snip.jumpable(-1) then
-		snip.jump(-1)
-	elseif cmp.visible() then
+	if cmp.visible() then
 		cmp.select_prev_item()
 	else
 		fallback()
@@ -630,8 +650,8 @@ config.emmet_ls.setup({
 })
 -- cssls
 config.cssls.setup({ on_attach = on_attach, capabilities = capabilities })
--- Svelte Setup
-config.svelte.setup({ on_attach = on_attach, capabilities = capabilities })
+-- eslint-lsp
+config.eslint.setup({ on_attach = on_attach, capabilities = capabilities })
 ----------
 
 -- Json
@@ -727,34 +747,6 @@ for _, package in pairs(mason_installed.get_installed_package_names()) do
 	if package == "shellharden" then
 		nullSources[#nullSources + 1] = format.shellharden.with({ on_attach = on_attach })
 	end
-	-- Web Dev
-	----------
-	-- Eslint
-	if package == "eslint-lsp" then
-		local eslint_file_types = { "javascript", "typescript", "html", "graphql", "svelte" }
-		nullSources[#nullSources + 1] = code_actions.eslint.with({
-			on_attach = on_attach,
-			filetypes = eslint_file_types,
-		})
-		nullSources[#nullSources + 1] = diagnose.eslint.with({
-			on_attach = on_attach,
-			filetypes = eslint_file_types,
-		})
-		nullSources[#nullSources + 1] = format.eslint.with({
-			on_attach = on_attach,
-			filetypes = eslint_file_types,
-		})
-	end
-	-- Prettier
-	if package == "prettier" then
-		local prettier_file_types =
-			{ "javascript", "vue", "css", "scss", "less", "html", "graphql", "handlebars" }
-		nullSources[#nullSources + 1] = format.prettier.with({
-			on_attach = on_attach,
-			filetypes = prettier_file_types,
-		})
-	end
-	----------
 	-- Restructured Text
 	if package == "rstcheck" then
 		nullSources[#nullSources + 1] = diagnose.rstcheck.with({
