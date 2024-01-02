@@ -607,6 +607,8 @@ notify.setup({
 	minimum_width = 25,
 	top_down = true,
 })
+-- Highlighting
+hl(0, "NotifyBackground", { bg = "#414141", })
 ----------
 
 --------------------------------

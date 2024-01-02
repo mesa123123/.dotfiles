@@ -116,12 +116,13 @@ local lsp_servers_ei = {
     "jsonls",
     "yamlls",
     "cssls",
+    "sqlls",
 }
 -- Formatters
 local formatters_ei =
 { "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua", "yamlfmt" }
 -- Lineters
-local linters_ei = { "eslint", "pylint", "jsonlint", "luacheck", "markdownlint", "yamllint" }
+local linters_ei = { "eslint", "pylint", "jsonlint", "luacheck", "markdownlint", "yamllint", }
 -- Other Language Servers, Handled by Nullls
 local other_servers = { "debugpy", "shellcheck", "prettier", "rstcheck", "write-good", "proselint" }
 ----------
@@ -206,6 +207,7 @@ format.setup({
         json = { { "jq", "jsonls" } },
         markdown = { "markdownlint" },
         yaml = { "yamlfmt" },
+        sql = { "sql_formatter" },
     },
 })
 
@@ -279,7 +281,7 @@ markdownlint.args = {
 -- Enablement for General Setup
 local general_enabled = function()
     local context = require("cmp.config.context") -- disable completion in comments
-    if vim.api.nvim_get_mode().mode == "c" then -- keep command mode completion enabled when cursor is in a comment
+    if vim.api.nvim_get_mode().mode == "c" then   -- keep command mode completion enabled when cursor is in a comment
         return true
     else
         return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
