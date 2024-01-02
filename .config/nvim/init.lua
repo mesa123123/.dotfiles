@@ -295,7 +295,7 @@ opt.termguicolors = true
 
 -- Load Color Scheme
 ----------
-require("gruvbox").setup({ contrast = "hard" })
+require("gruvbox").setup({ contrast = "hard", transparent_mode = true })
 cmd("colorscheme gruvbox")
 ----------
 
