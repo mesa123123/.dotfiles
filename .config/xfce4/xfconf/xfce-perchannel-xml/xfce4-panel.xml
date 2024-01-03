@@ -189,6 +189,7 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="xfce4-notes.desktop"/>
         <value type="string" value="xfce-ui-settings.desktop"/>
         <value type="string" value="nordvpn.desktop"/>
         <value type="string" value="steam.desktop"/>
@@ -231,8 +232,8 @@
         <property name="tabs-position" type="int" value="1"/>
       </property>
       <property name="new-window" type="empty">
-        <property name="width" type="int" value="300"/>
-        <property name="height" type="int" value="375"/>
+        <property name="width" type="int" value="270"/>
+        <property name="height" type="int" value="337"/>
       </property>
     </property>
   </property>
