@@ -120,11 +120,11 @@ local lsp_servers_ei = {
 }
 -- Formatters
 local formatters_ei =
-{ "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua", "yamlfmt" }
+{ "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua", "yamlfmt", }
 -- Lineters
-local linters_ei = { "eslint", "pylint", "jsonlint", "luacheck", "markdownlint", "yamllint", }
+local linters_ei = { "eslint", "pylint", "jsonlint", "luacheck", "markdownlint", "yamllint", "shellcheck" }
 -- Other Language Servers, Handled by Nullls
-local other_servers = { "debugpy", "shellcheck", "prettier", "rstcheck", "write-good", "proselint" }
+local other_servers = { "debugpy", "prettier", "rstcheck", "write-good", "proselint" }
 ----------
 
 -- Install Packages
@@ -203,7 +203,7 @@ format.setup({
         javascript = { "prettier" },
         typescript = { "prettier" },
         html = { "prettier" },
-        shell = { "shellharden" },
+        sh = { "shellharden" },
         json = { { "jq", "jsonls" } },
         markdown = { "markdownlint" },
         yaml = { "yamlfmt" },
@@ -252,6 +252,7 @@ lint.linters_by_ft = {
     typescript = { "eslint" },
     html = { "eslint" },
     css = { "eslint" },
+    sh = { "shellcheck" },
 }
 
 api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
@@ -741,15 +742,6 @@ local mason_installed = require("mason-registry")
 for _, package in pairs(mason_installed.get_installed_package_names()) do
     -- Shell
     ----------
-    -- Shellcheck
-    if package == "shellcheck" then
-        nullSources[#nullSources + 1] = code_actions.shellcheck.with({ on_attach = on_attach })
-        nullSources[#nullSources + 1] = diagnose.shellcheck.with({ on_attach = on_attach })
-    end
-    -- Shellharden
-    if package == "shellharden" then
-        nullSources[#nullSources + 1] = format.shellharden.with({ on_attach = on_attach })
-    end
     -- Restructured Text
     if package == "rstcheck" then
         nullSources[#nullSources + 1] = diagnose.rstcheck.with({
