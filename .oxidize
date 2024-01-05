@@ -2,20 +2,22 @@
 
 # Set Rust Env
 export CARGO_HOME="/home/$USER/.cargo"
-. "$HOME/.cargo/env"
+. "$CARGO_HOME/env"
 
 # Package List
 packages=("bat" "bottom" "tealdeer" "du-dust" "tre" "git-delta" "tidy-viewer" "ripgrep" "gitui" "rtx-cli" "xcolor" "spotify-tui")
 
 # Repeatable Function
 function inventory() {
+    package=${1}
     if   [[ ! "$(cargo install --list) | grep \"${1}\")" == *"${1}"* ]]; then
-    cargo install "${1}"
+        cargo install "${1}"
     fi
 }
 
 # Business Logic
  for package in "${packages[@]}";
       do
+          echo "Hello"
           inventory "$package"
       done

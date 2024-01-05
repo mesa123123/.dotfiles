@@ -6,6 +6,7 @@
     <property name="known_applications" type="array">
       <value type="string" value=""/>
       <value type="string" value="blueman"/>
+      <value type="string" value="com.spotify.Client"/>
       <value type="string" value="Fedora Media Writer"/>
       <value type="string" value="google-chrome"/>
       <value type="string" value="MSM Notifier"/>
