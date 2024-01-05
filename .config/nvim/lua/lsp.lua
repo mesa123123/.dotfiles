@@ -627,7 +627,7 @@ config.lua_ls.setup({
 })
 ----------
 
--- Python: Pyright
+-- Python: Pyright, Jedi
 ----------
 config.pyright.setup({
 	on_attach = on_attach,
