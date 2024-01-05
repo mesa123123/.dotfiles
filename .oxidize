@@ -18,6 +18,5 @@ function inventory() {
 # Business Logic
  for package in "${packages[@]}";
       do
-          echo "Hello"
           inventory "$package"
       done
