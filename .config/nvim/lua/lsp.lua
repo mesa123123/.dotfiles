@@ -32,6 +32,7 @@ local tool_install = require("mason-tool-installer")
 local cmp = require("cmp") -- Autocompletion for the language servers
 local cmp_lsp = require("cmp_nvim_lsp")
 local dap = require("dap")
+local daptext = require("nvim-dap-virtual-text")
 local lint = require("lint")
 local format = require("conform")
 local snip = require("luasnip")
@@ -46,7 +47,6 @@ local path = config.util.path
 local cmpsnip = require("cmp_luasnip")
 local telescope = require("telescope")
 local lspkind = require("lspkind")
-local dapui = require("dapui")
 --------------------------------
 -- Language Specific Settings and Helpers
 --------------------------------
@@ -814,14 +814,15 @@ nullls.setup({
 })
 ----------
 
---------------------------------
 -- Colors and Themes
---------------------------------
+----------
 
 hl(0, "LspDiagnosticsUnderlineError", { bg = "#EB4917", underline = true, blend = 50 })
 hl(0, "LspDiagnosticsUnderlineWarning", { bg = "#EBA217", underline = true, blend = 50 })
 hl(0, "LspDiagnosticsUnderlineInformation", { bg = "#17D6EB", underline = true, blend = 50 })
 hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend = 50 })
+
+----------
 
 --------------------------------
 -- Debug Adapter Protocol
@@ -831,9 +832,22 @@ hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend =
 ----------
 local python_path = get_python_path()
 
--- Mappings
+-- Colors and Symbols
+----------
+hl(0, "DapBreakpoint", { ctermbg = 0, fg = "#993939", bg = "#31353f" })
+hl(0, "DapLogPoint", { ctermbg = 0, fg = "#61afef", bg = "#31353f" })
+hl(0, "DapStopped", { ctermbg = 0, fg = "#98c379", bg = "#31353f" })
+
+-- Display Custom
+fn.sign_define(
+	"DapBreakpoint",
+	{ text = "󰃤", texthl = "DapBreakpoint", linehl = "DapBreakpoint", numhl = "DapBreakpoint" }
+)
+fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "DapStopped", numhl = "DapStopped" })
 ----------
 
+-- Mappings
+----------
 local function keyopts(opts)
 	local standardOpts = { silent = false, noremap = true }
 	for k, v in pairs(standardOpts) do
@@ -841,6 +855,7 @@ local function keyopts(opts)
 	end
 	return opts
 end
+
 -- Session Commands
 keymap.set("n", "<leader>bs", "<cmd>lua require('dap').session()<cr>", keyopts({ desc = "Start Debug Session" }))
 keymap.set("n", "<leader>bc", "<cmd>lua require('dap').continue()<cr>", keyopts({ desc = "Continue Debug Run" })) -- bug continue
@@ -924,44 +939,6 @@ keymap.set(
 
 ----------
 
--- UI Integration
-----------
-
--- Setup
-dapui.setup({
-	layouts = {
-		{
-			elements = {
-				{
-					id = "scopes",
-					size = 0.5,
-				},
-				{
-					id = "breakpoints",
-					size = 0.5,
-				},
-				{
-					id = "watches",
-					size = 0.5,
-				},
-			},
-			position = "left",
-			size = 40,
-		},
-	},
-})
--- Auto-open
-dap.listeners.after.event_initialized["dapui_config"] = function()
-	dapui.open()
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-	dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-	dapui.close()
-end
-----------
-
 -- Adapter Selection
 ----------
 
@@ -1009,11 +986,18 @@ dap.configurations.sh = {
 		pathPkill = "pkill",
 		env = {},
 		args = {},
-		-- showDebugOutput = true,
-		-- trace = true,
 	},
 }
 ----------
+
+--------------------------------
+-- Virtual Text Dap
+--------------------------------
+
+daptext.setup()
+
+----------
+
 
 -------------------------------
 -- EOF

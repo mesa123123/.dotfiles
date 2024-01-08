@@ -158,7 +158,7 @@ local plugins = {
 	-- Debug Adapter Protocol
 	----------
 	"mfussenegger/nvim-dap",
-	"rcarriga/nvim-dap-ui",
+    "theHamsta/nvim-dap-virtual-text",
 	-- Assitance Plugins
 	----------
 	"folke/which-key.nvim",
@@ -246,7 +246,6 @@ local plugins = {
 		dependencies = {
 			"BurntSushi/ripgrep",
 			"sharkdp/fd",
-			"nvim-telescope/telescope-dap.nvim",
 			"nvim-telescope/telescope-dap.nvim",
 			"nvim-telescope/telescope-project.nvim",
 			"nvim-telescope/telescope-file-browser.nvim",
