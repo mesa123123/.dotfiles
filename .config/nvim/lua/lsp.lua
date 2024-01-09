@@ -521,9 +521,15 @@ local function keymappings(client)
 	)
 	keymap.set(
 		"n",
-		"gs",
+		"gh",
 		"<cmd>lua vim.lsp.buf.signature_help()<CR>",
 		bufopts({ desc = "LSP: Bring Up LSP Explanation" })
+	)
+	keymap.set(
+		"n",
+		"gs",
+		":lua require('telescope.builtin').lsp_document_symbols()<CR>",
+		bufopts({ desc = "LSP: Get Workspace Symbols" })
 	)
 	keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts({ desc = "LSP: Take Code Action" }))
 	keymap.set("n", "gi", ":lua vim.lsp.buf.hover()<CR>", bufopts({ desc = "LSP: Function & Library Info" }))
@@ -577,6 +583,7 @@ local function keymappings(client)
 		"<cmd>lua require('telescope.builtin').lsp_type_definitions()<CR>",
 		bufopts({ desc = "LSP: Go To Type Definition" })
 	)
+
 	-- Mapping Assistance
 	----------
 	whichKey.register({
@@ -892,8 +899,9 @@ keymap.set(
 	"<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>",
 	keyopts({ desc = "Set Conditional BreakPoint" })
 )
-keymap.set("n", "<leader>bS", "<cmd>lua require('dap').set_breakpoint()<cr>", keyopts({ desc = "Set Breakpoint" }))
+keymap.set("n", "<leader>bs", "<cmd>lua require('dap').set_breakpoint()<cr>", keyopts({ desc = "Set Breakpoint" }))
 keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts({ desc = "Toggle Pause" }))
+keymap.set("n", "<leader>br", "<cmd>lua require('dap').restart()<cr>", keyopts({ desc = "Restart Debugger" }))
 keymap.set(
 	"n",
 	"<leader>bC",
@@ -923,7 +931,7 @@ keymap.set("n", "<leader>bss", "<cmd>lua require('dap').session()<cr>", keyopts(
 keymap.set("n", "<leader>bsc", "<cmd>lua require('dap').close()<cr>", keyopts({ desc = "Close Debug Session" }))
 keymap.set("n", "<leader>bsa", "<cmd>lua require('dap').attach()<cr>", keyopts({ desc = "Attach Debug Session" }))
 keymap.set("n", "<leader>bsd", "<cmd>lua require('dap').disconnect()<cr>", keyopts({ desc = "Deattach Debug Session" }))
-keymap.set("n", "<leader>bsq", "<cmd>lua require('dap').terminate()<cr>", keyopts({ desc = "Quit Debug Session" }))
+keymap.set("n", "<leader>bq", "<cmd>lua require('dap').terminate()<cr>", keyopts({ desc = "Quit Debug Session" }))
 ----------
 
 -- UI Commands
@@ -932,19 +940,19 @@ keymap.set("n", "<leader>bv", "<cmd>lua require('dap.ui.widgets').hover()<CR>", 
 keymap.set(
 	"n",
 	"<leader>bS",
-	"<cmd> lua require ('dap.ui.widgets').cursor_float(dap_widgets.scopes)<CR>",
+	"<cmd> lua require ('dap.ui.widgets').cursor_float(require('dap.ui.widgets').scopes)<CR>",
 	keyopts({ desc = "Scope Info" })
 )
 keymap.set(
 	"n",
 	"<leader>bF",
-	"<cmd> lua require ('dap.ui.widgets').cursor_float(dap_widgets.frames)<CR>",
+	"<cmd> lua require ('dap.ui.widgets').cursor_float(require('dap.ui.widgets').frames)<CR>",
 	keyopts({ desc = "Frame Info" })
 )
 keymap.set(
 	"n",
 	"<leader>be",
-	"<cmd> lua require ('dap.ui.widgets').cursor_float(dap_widgets.expressions)<CR>",
+	"<cmd> lua require ('dap.ui.widgets').cursor_float(require('dap.ui.widgets').expressions)<CR>",
 	keyopts({ desc = "Expression Info" })
 )
 ----------
