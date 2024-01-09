@@ -190,6 +190,7 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="pavucontrol.desktop"/>
         <value type="string" value="xfce4-notes.desktop"/>
         <value type="string" value="xfce-ui-settings.desktop"/>
         <value type="string" value="nordvpn.desktop"/>

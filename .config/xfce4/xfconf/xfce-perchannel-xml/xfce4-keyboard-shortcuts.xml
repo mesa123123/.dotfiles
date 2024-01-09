@@ -76,11 +76,11 @@
       <property name="&lt;Shift&gt;&lt;Super&gt;s" type="string" value="xfce4-screenshooter -r"/>
       <property name="&lt;Super&gt;3" type="string" value="spotify"/>
       <property name="&lt;Super&gt;l" type="string" value="xflock4"/>
-      <property name="&lt;Alt&gt;space" type="string" value="dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"/>
-      <property name="&lt;Alt&gt;period" type="string" value="dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"/>
-      <property name="&lt;Alt&gt;comma" type="string" value="dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous "/>
       <property name="&lt;Super&gt;2" type="string" value="kitty"/>
       <property name="&lt;Super&gt;grave" type="string" value="xcolor -s clipboard"/>
+      <property name="&lt;Alt&gt;comma" type="string" value="spotify playback previous"/>
+      <property name="&lt;Alt&gt;period" type="string" value="spotify playback next"/>
+      <property name="&lt;Alt&gt;space" type="string" value="spotify playback play-pause"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">

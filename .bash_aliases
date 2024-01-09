@@ -47,9 +47,9 @@ alias tmux="TERM=screen-256color-bce tmux"
 alias cls='clear'
 
 # Spotify Player Commands
-alias media_pp='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause'
-alias media_next='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next'
-alias media_last='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous'
+alias media_pp='spotify playback play-pause'
+alias media_next='spotify playback next'
+alias media_last='spotify playback previous'
 
 
 # --------
