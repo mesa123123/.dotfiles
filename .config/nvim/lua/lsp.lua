@@ -47,12 +47,7 @@ local path = config.util.path
 local cmpsnip = require("cmp_luasnip")
 local telescope = require("telescope")
 local lspkind = require("lspkind")
-local dapui = require("dapui")
---------------------------------
--- Language Specific Settings and Helpers
---------------------------------
-
--- Empty
+----------
 
 --------------------------------
 -- Utility Functions
@@ -90,6 +85,17 @@ local function get_venv_command(command)
 end
 ----------
 
+-- Applies a standard set of options to a keymap.set call rather than having to type everything out, is extensible
+----------
+local function keyopts(opts)
+	local standardOpts = { silent = false, noremap = true }
+	for k, v in pairs(standardOpts) do
+		opts[k] = v
+	end
+	return opts
+end
+----------
+
 --------------------------------
 -- Installer and Package Management
 --------------------------------
@@ -124,14 +130,19 @@ local formatters_ei =
 	{ "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua", "yamlfmt" }
 -- Lineters
 local linters_ei = { "eslint", "pylint", "jsonlint", "luacheck", "markdownlint", "yamllint", "shellcheck" }
+-- Debuggers
+local debuggers_ei = { "debugpy", "bash-debug-adapter" }
 -- Other Language Servers, Handled by Nullls DAP exc
-local other_servers = { "bash-debug-adapter", "debugpy", "prettier", "rstcheck", "write-good", "proselint" }
+local other_servers = { "prettier", "rstcheck", "write-good", "proselint" }
 ----------
 
 -- Install Packages
 ----------
 tool_install.setup({
-	ensure_installed = tableConcat(formatters_ei, tableConcat(linters_ei, tableConcat(other_servers, lsp_servers_ei))),
+	ensure_installed = tableConcat(
+		formatters_ei,
+		tableConcat(linters_ei, tableConcat(other_servers, tableConcat(debuggers_ei, lsp_servers_ei)))
+	),
 	auto_update = true,
 }) -- This is running through Mason_Tools_Installer
 ----------
@@ -832,14 +843,16 @@ hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend =
 -- Helper Funcs
 ----------
 local python_path = get_python_path()
-
--- Colors and Symbols
+local dap_widgets = require("dap.ui.widgets")
 ----------
+
+-- Colors and Themes
+----------
+-- Colors
 hl(0, "DapBreakpoint", { ctermbg = 0, fg = "#993939", bg = "#31353f" })
 hl(0, "DapLogPoint", { ctermbg = 0, fg = "#61afef", bg = "#31353f" })
 hl(0, "DapStopped", { ctermbg = 0, fg = "#98c379", bg = "#31353f" })
-
--- Display Custom
+-- Symbols
 fn.sign_define(
 	"DapBreakpoint",
 	{ text = "󰃤", texthl = "DapBreakpoint", linehl = "DapBreakpoint", numhl = "DapBreakpoint" }
@@ -847,23 +860,26 @@ fn.sign_define(
 fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "DapStopped", numhl = "DapStopped" })
 ----------
 
+----------
 -- Mappings
 ----------
-local function keyopts(opts)
-	local standardOpts = { silent = false, noremap = true }
-	for k, v in pairs(standardOpts) do
-		opts[k] = v
-	end
-	return opts
-end
 
--- Session Commands
-keymap.set("n", "<leader>bs", "<cmd>lua require('dap').session()<cr>", keyopts({ desc = "Start Debug Session" }))
-keymap.set("n", "<leader>bc", "<cmd>lua require('dap').continue()<cr>", keyopts({ desc = "Continue Debug Run" })) -- bug continue
-keymap.set("n", "<leader>bx", "<cmd>lua require('dap').disconnect()<cr>", keyopts({ desc = "Deattach Debug Session" })) -- bug exit
-keymap.set("n", "<leader>bq", "<cmd>lua require('dap').stop()<cr>", keyopts({ desc = "Close Debug Session" }))
-keymap.set("n", "<leader>bQ", "<cmd>lua require('dap').terminate()<cr>", keyopts({ desc = "Terminate Debug Session" }))
--- Breakpoints (and pauses)
+-- Assistance Menus
+----------
+whichKey.register({
+	["<leader>"] = {
+		b = {
+			f = { name = "Debug Widgets" },
+			s = { name = "Session Commands" },
+			w = { name = "Language Options" },
+		},
+	},
+})
+----------
+
+-- Running Commands (and pauses)
+----------
+keymap.set("n", "<leader>bc", "<cmd>lua require('dap').continue()<cr>", keyopts({ desc = "Continue/Start Debug Run" }))
 keymap.set(
 	"n",
 	"<leader>bb",
@@ -875,112 +891,104 @@ keymap.set(
 	"<leader>bB",
 	"<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>",
 	keyopts({ desc = "Set Conditional BreakPoint" })
-) -- bug breakpoint
+)
 keymap.set("n", "<leader>bS", "<cmd>lua require('dap').set_breakpoint()<cr>", keyopts({ desc = "Set Breakpoint" }))
 keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts({ desc = "Toggle Pause" }))
--- Stepping commands
 keymap.set(
 	"n",
 	"<leader>bC",
 	"<cmd>lua require('dap').run_to_cursor()<cr>",
 	keyopts({ desc = "Run Session To Cursor" })
-) -- run to here
-keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_back()<cr>", keyopts({ desc = "Step Back" })) -- bug previous
-keymap.set("n", "<leader>bl", "<cmd>lua require('dap').step_into()<cr>", keyopts({ desc = "Step Into" }))
-keymap.set("n", "<leader>bj", "<cmd>lua require('dap').step_over()<cr>", keyopts({ desc = "Step Over" }))
-keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_out()<cr>", keyopts({ desc = "Step Out" }))
+)
+----------
+
+-- Stepping Commands
+------------
+keymap.set("n", "<leader>bh", "<cmd>lua require('dap').step_back()<cr>", keyopts({ desc = "Step Back" }))
+keymap.set("n", "<leader>bk", "<cmd>lua require('dap').step_into()<cr>", keyopts({ desc = "Step Into" }))
+keymap.set("n", "<leader>bl", "<cmd>lua require('dap').step_over()<cr>", keyopts({ desc = "Step Over" }))
+keymap.set("n", "<leader>bj", "<cmd>lua require('dap').step_out()<cr>", keyopts({ desc = "Step Out" }))
+keymap.set("n", "<leader>bK", "<cmd>lua require('dap').up()<cr>", keyopts({ desc = "Step Up Call Stack" }))
+keymap.set("n", "<leader>bJ", "<cmd>lua require('dap').down()<cr>", keyopts({ desc = "Step Down Call Stack" }))
+------------
+
 -- Dap REPL
-keymap.set("n", "<leader>br", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts({ desc = "Toggle Debug REPL" }))
+------------
+keymap.set("n", "<leader>bx", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts({ desc = "Toggle Debug REPL" }))
+------------
+
+-- Session Commands
+------------
+keymap.set("n", "<leader>bss", "<cmd>lua require('dap').session()<cr>", keyopts({ desc = "Start Debug Session" }))
+keymap.set("n", "<leader>bsc", "<cmd>lua require('dap').close()<cr>", keyopts({ desc = "Close Debug Session" }))
+keymap.set("n", "<leader>bsa", "<cmd>lua require('dap').attach()<cr>", keyopts({ desc = "Attach Debug Session" }))
+keymap.set("n", "<leader>bsd", "<cmd>lua require('dap').disconnect()<cr>", keyopts({ desc = "Deattach Debug Session" }))
+keymap.set("n", "<leader>bsq", "<cmd>lua require('dap').terminate()<cr>", keyopts({ desc = "Quit Debug Session" }))
 ----------
 
--- Telescope Integration
+-- UI Commands
+----------
+keymap.set("n", "<leader>bv", "<cmd>lua require('dap.ui.widgets').hover()<CR>", keyopts({ desc = "Variable Info" }))
+keymap.set(
+	"n",
+	"<leader>bS",
+	"<cmd> lua require ('dap.ui.widgets').cursor_float(dap_widgets.scopes)<CR>",
+	keyopts({ desc = "Scope Info" })
+)
+keymap.set(
+	"n",
+	"<leader>bF",
+	"<cmd> lua require ('dap.ui.widgets').cursor_float(dap_widgets.frames)<CR>",
+	keyopts({ desc = "Frame Info" })
+)
+keymap.set(
+	"n",
+	"<leader>be",
+	"<cmd> lua require ('dap.ui.widgets').cursor_float(dap_widgets.expressions)<CR>",
+	keyopts({ desc = "Expression Info" })
+)
 ----------
 
--- Adding Assistance Menus
-whichKey.register({
-	["<leader>"] = {
-		b = {
-			f = { name = "UI Options" },
-			w = { name = "Language Options" },
-		},
-	},
-})
-
--- telescope-dap loaded in init.lua
+-- Telescope Commands
+----------
 keymap.set(
 	"n",
 	"<leader>bfc",
 	'<cmd>lua require"telescope".extensions.dap.commands{}<CR>',
-	keyopts({ desc = "Debug Command Palette UI" })
+	keyopts({ desc = "Show Debug Command Palette" })
 )
 keymap.set(
 	"n",
 	"<leader>bfo",
 	'<cmd>lua require"telescope".extensions.dap.configurations{}<CR>',
-	keyopts({ desc = "Debug Config UI" })
+	keyopts({ desc = "Show Debug Options" })
 )
 keymap.set(
 	"n",
 	"<leader>bfb",
 	'<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>',
-	keyopts({ desc = "List All BreakPoints UI" })
+	keyopts({ desc = "Show All BreakPoints" })
 )
 keymap.set(
 	"n",
 	"<leader>bfv",
 	'<cmd>lua require"telescope".extensions.dap.variables{}<CR>',
-	keyopts({ desc = "Variable UI" })
+	keyopts({ desc = "Show All Variables" })
 )
 keymap.set(
 	"n",
 	"<leader>bff",
 	'<cmd>lua require"telescope".extensions.dap.frames{}<CR>',
-	keyopts({ desc = "Frames UI" })
+	keyopts({ desc = "Show All Frames" })
 )
-
 ----------
 
--- UI Integration
+----------
+-- Adapter Setup
 ----------
 
--- Setup
-dapui.setup({
-	layouts = {
-		{
-			elements = {
-				{
-					id = "scopes",
-					size = 0.5,
-				},
-				{
-					id = "breakpoints",
-					size = 0.2,
-				},
-				{
-					id = "watches",
-					size = 0.2,
-				},
-			},
-			position = "left",
-			size = 40,
-		},
-	},
-})
--- Auto-open
-dap.listeners.after.event_initialized["dapui_config"] = function()
-	dapui.open()
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-	dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-	dapui.close()
-end
+-- Selection
 ----------
-
--- Adapter Selection
-----------
-
 -- Python
 dap.adapters.python = {
 	type = "executable",
@@ -996,7 +1004,7 @@ dap.adapters.sh = {
 }
 ----------
 
--- Adapter Configuration
+-- Configuration
 ----------
 -- Python
 dap.configurations.python = {
@@ -1030,7 +1038,7 @@ dap.configurations.sh = {
 ----------
 
 --------------------------------
--- Virtual Text Dap
+-- Virtual Text DAP
 --------------------------------
 
 daptext.setup()
