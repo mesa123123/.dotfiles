@@ -28,7 +28,7 @@ local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap
-local hl = api.nvim_set_hl
+local hl = vim.api.nvim_set_hl
 local loop = vim.loop
 local diagnostics = vim.diagnostic
 -- For Options

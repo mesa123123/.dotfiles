@@ -208,7 +208,8 @@ NVIM=0
 [[ $(echo "$DIST_INFO" | grep -c "Red Hat") == 1 ]] && [[ $(dnf list --installed neovim 2>/dev/null | grep -c "neovim") == 1 ]] && NVIM=1
 
 
-if [[ ${NVIM} == 1 ]]; then  
+if [[ ${NVIM} == 1 ]]; then
+    alias vim='nvim'
     export EDITOR=nvim
     # and am I using lua?
     [[ -f "/home/$USER/.config/nvim/init.lua" ]] && export VIMINIT="luafile /home/$USER/.config/nvim/init.lua" || export VIMINIT="source /home/$USER/.config/nvim/init.vim"
