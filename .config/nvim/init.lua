@@ -22,7 +22,7 @@ vim.g["mapleader"] = "\\"
 -- Luaisms for Vim Stuff
 --------------------------------
 
--- Variables
+-- Apis, Functions, Commands
 ----------
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
@@ -30,15 +30,16 @@ local fn = vim.fn -- vim functions
 local keymap = vim.keymap
 local hl = api.nvim_set_hl
 local loop = vim.loop
+local diagnostics = vim.diagnostic
 -- For Options
 local opt = vim.opt -- vim options
 local gopt = vim.go -- global options
 local bopt = vim.bo -- buffer options
 local wopt = vim.wo -- window options
 -- For Variables
-local g = vim.g -- global variables
-local b = vim.b -- buffer variables
-local w = vim.w -- window variables
+local gv = vim.g -- global variables
+local bv = vim.b -- buffer variables
+local wv = vim.w -- window variables
 ----------
 
 -- Functions
@@ -303,7 +304,7 @@ cmd("colorscheme gruvbox")
 
 -- Rainbow Brackets Options
 ----------
-g["rainbow_active"] = 1
+gv["rainbow_active"] = 1
 ----------
 
 -- Colorize Colors
@@ -372,7 +373,9 @@ opt.foldlevelstart = 99
 
 -- Settings
 ----------
-g["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
+gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
+-- Virtual Text Enabled Globally
+diagnostics.config({ virtual_text = true })
 ----------
 
 -- Commands
@@ -383,7 +386,7 @@ cmd([[ set mouse= ]])
 
 -- Setup Config for xfce4 desktops to use system keyboard
 ----------
-g["clipboard"] = {
+gv["clipboard"] = {
 	name = "xclip-xfce4-clipman",
 	copy = {
 		["+"] = "xclip -selection clipboard",
@@ -398,7 +401,7 @@ g["clipboard"] = {
 ----------
 
 -------------------------------
--- Neovim Extender Plugings
+-- Neovim Extender Plug-ins
 -------------------------------
 
 --Neodev
@@ -439,14 +442,14 @@ cmd([[ au FileType markdown setlocal ts=2 sw=2 sts=2 ]])
 cmd([[ au FileType markdown setlocal spell spelllang=en_gb ]])
 cmd([[ au FileType markdown inoremap <TAB> <C-t> ]])
 -- Markdown Syntax Highlighting
-g["vim_markdown_fenced_languages"] = [['csharp=cs', 'json=javascript', 'mermaid=mermaid']]
-g["vim_markdown_folding_disabled"] = 1
-g["vim_markdown_conceal_code_blocks"] = 0
-g["vim_markdown_conceal"] = 0
-g["indentLine_setConceal"] = 0
+gv["vim_markdown_fenced_languages"] = [['csharp=cs', 'json=javascript', 'mermaid=mermaid']]
+gv["vim_markdown_folding_disabled"] = 1
+gv["vim_markdown_conceal_code_blocks"] = 0
+gv["vim_markdown_conceal"] = 0
+gv["indentLine_setConceal"] = 0
 -- GitCommit
 ----------
-g["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
+gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
 cmd([[ au FileType gitcommit let b:EditorConfig_disable = 1 ]])
 ----------
 
@@ -1311,8 +1314,8 @@ keymap.set("n", "<leader>e", "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 
 -- Options
 ---------
-g["db_ui_save_location"] = "~/.config/db_ui"
-g["dd_ui_use_nerd_fonts"] = 1
+gv["db_ui_save_location"] = "~/.config/db_ui"
+gv["dd_ui_use_nerd_fonts"] = 1
 ----------
 
 -- Mappings
@@ -1338,7 +1341,7 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufNew" }, {
 		-- Check if test
 		local filetype = vim.bo.filetype
 		local filename = vim.api.nvim_buf_get_name(0)
-		g.RunCommand = filetype .. " " .. filename
+		gv.RunCommand = filetype .. " " .. filename
 	end,
 })
 ----------
@@ -1354,6 +1357,11 @@ require("neotest").setup({
 			dap = { justMyCode = false },
 		}),
 	},
+    status = {
+        enabled = true,
+        virtual_text = true,
+        signs = false
+    },
 })
 ----------
 
@@ -1361,7 +1369,7 @@ require("neotest").setup({
 ----------
 function Runner_term_toggle()
 	local runner_client = Terminal:new({
-		cmd = g.RunCommand,
+		cmd = gv.RunCommand,
 		dir = fn.getcwd(),
 		hidden = true,
 		direction = "float",
@@ -1398,7 +1406,7 @@ keymap.set(
 keymap.set(
 	"n",
 	"<leader>xto",
-	"<cmd>lua require('neotest').output.open()<CR>",
+	"<cmd>lua require('neotest').output.open({ enter = true, auto_close = true })<CR>",
 	{ noremap = true, silent = true, desc = "Test Output" }
 )
 keymap.set(
@@ -1434,7 +1442,7 @@ keymap.set(
 keymap.set(
 	"n",
 	"<leader>xtb",
-	"<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
+	"<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<CR>",
 	{ noremap = true, silent = true, desc = "Debug Closest Test" }
 )
 ----------
