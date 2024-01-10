@@ -158,7 +158,7 @@ local plugins = {
 	-- Debug Adapter Protocol
 	----------
 	"mfussenegger/nvim-dap",
-    "theHamsta/nvim-dap-virtual-text",
+	"theHamsta/nvim-dap-virtual-text",
 	-- Assitance Plugins
 	----------
 	"folke/which-key.nvim",
@@ -166,7 +166,10 @@ local plugins = {
 	-- Testing Plugins
 	----------
 	"antoinemadec/FixCursorHold.nvim",
-	"nvim-neotest/neotest",
+	{
+		"nvim-neotest/neotest",
+		dependencies = { "nvim-lua/plenary.nvim", "antoinemadec/FixCursorHold.nvim", "nvim-treesitter/nvim-treesitter" },
+	},
 	"nvim-neotest/neotest-python",
 	"tpope/vim-cucumber",
 	-- Database Workbench,
@@ -401,7 +404,7 @@ g["clipboard"] = {
 --Neodev
 local neodev = require("neodev")
 neodev.setup({
-	library = { plugins = { "nvim-dap-ui" }, types = true },
+	library = { plugins = { "nvim-dap-ui", "neotest" }, types = true },
 })
 ----------
 
@@ -423,7 +426,7 @@ cmd([[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]]) -- JenkinsFile
 cmd([[ au FileType python setlocal et ts=4 sw=4 sts=4 ]]) -- Python Language
 cmd([[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]]) -- Typescript Settings
 cmd([[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]]) -- Vagrant Files
-vim.filetype.add({extension = { env = "config" }})
+vim.filetype.add({ extension = { env = "config" } })
 ----------
 
 -- Markdown
@@ -573,7 +576,20 @@ whichKey.register({
 -- Plugin Setup
 ----------
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "lua", "rust", "toml", "markdown", "markdown_inline", "rst", "python", "bash", "vim", "regex", "javascript", "typescript", },
+	ensure_installed = {
+		"lua",
+		"rust",
+		"toml",
+		"markdown",
+		"markdown_inline",
+		"rst",
+		"python",
+		"bash",
+		"vim",
+		"regex",
+		"javascript",
+		"typescript",
+	},
 	auto_install = true,
 	highlight = {
 		enable = true,
@@ -608,7 +624,7 @@ notify.setup({
 	top_down = true,
 })
 -- Highlighting
-hl(0, "NotifyBackground", { bg = "#414141", })
+hl(0, "NotifyBackground", { bg = "#414141" })
 ----------
 
 --------------------------------
@@ -1198,7 +1214,6 @@ require("telescope").load_extension("ui-select")
 ------------------
 keymap.set("n", "<leader>vb", "<cmd>G blame<CR>", { silent = true, desc = "Git Blame" })
 
-
 ---------
 -- End of VC setup
 ---------
@@ -1320,17 +1335,33 @@ api.nvim_create_augroup("RunCodeCommands", { clear = true })
 ----------
 api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufNew" }, {
 	callback = function()
-		vim.g.RunCommand = vim.bo.filetype .. " " .. vim.api.nvim_buf_get_name(0)
+		-- Check if test
+		local filetype = vim.bo.filetype
+		local filename = vim.api.nvim_buf_get_name(0)
+		g.RunCommand = filetype .. " " .. filename
 	end,
 })
 ----------
 
--- Setup Terminal Runner
+-- Setup Terminal and Test Runners
 ----------
--- Setup Toggle function
+
+-- Setup
+----------
+require("neotest").setup({
+	adapters = {
+		require("neotest-python")({
+			dap = { justMyCode = false },
+		}),
+	},
+})
+----------
+
+-- Functions
+----------
 function Runner_term_toggle()
 	local runner_client = Terminal:new({
-		cmd = vim.g.RunCommand,
+		cmd = g.RunCommand,
 		dir = fn.getcwd(),
 		hidden = true,
 		direction = "float",
@@ -1341,13 +1372,70 @@ function Runner_term_toggle()
 	})
 	runner_client:toggle()
 end
+----------
 
--- Keymap to Run
+-- Mappings
+----------
+-- WhichKey
+whichKey.register({
+	["<leader>x"] = {
+		["t"] = { name = "Testing" },
+	},
+})
+-- Mappings
 keymap.set(
 	"n",
 	"<leader>xx",
 	"<cmd>lua Runner_term_toggle()<CR>",
 	{ noremap = true, silent = true, desc = "Run Current Buffer" }
+)
+keymap.set(
+	"n",
+	"<leader>xtx",
+	"<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>",
+	{ noremap = true, silent = true, desc = "Test Current Buffer" }
+)
+keymap.set(
+	"n",
+	"<leader>xto",
+	"<cmd>lua require('neotest').output.open()<CR>",
+	{ noremap = true, silent = true, desc = "Test Output" }
+)
+keymap.set(
+	"n",
+	"<leader>xts",
+	"<cmd>lua require('neotest').summary.toggle()<CR>",
+	{ noremap = true, silent = true, desc = "Test Output (All Tests)" }
+)
+keymap.set(
+	"n",
+	"<leader>xtq",
+	"<cmd>lua require('neotest').run.stop()<CR>",
+	{ noremap = true, silent = true, desc = "Quit Test Run" }
+)
+keymap.set(
+	"n",
+	"<leader>xtw",
+	"<cmd>lua require('neotest').watch.toggle(vim.fn.expand('%'))<CR>",
+	{ noremap = true, silent = true, desc = "Toggle Test Refreshing" }
+)
+keymap.set(
+	"n",
+	"<leader>xtc",
+	"<cmd>lua require('neotest').run.run()<CR>",
+	{ noremap = true, silent = true, desc = "Run Closest Test" }
+)
+keymap.set(
+	"n",
+	"<leader>xtr",
+	"<cmd>lua require('neotest').run.run_last()<CR>",
+	{ noremap = true, silent = true, desc = "Repeat Last Test Run" }
+)
+keymap.set(
+	"n",
+	"<leader>xtb",
+	"<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
+	{ noremap = true, silent = true, desc = "Debug Closest Test" }
 )
 ----------
 
