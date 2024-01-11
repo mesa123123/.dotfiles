@@ -684,7 +684,7 @@ local active_lsp = {
 			return ""
 		end
 	end,
-	color = { fg = "F84935" },
+	color = { fg = "f84935" },
 }
 
 local active_formatter = {
@@ -696,7 +696,7 @@ local active_formatter = {
 			return ""
 		end
 	end,
-	color = { fg = "#8eC07C" },
+	color = { fg = "#8ec07c" },
 }
 
 local active_lint = {
@@ -708,8 +708,21 @@ local active_lint = {
 			return ""
 		end
 	end,
-	color = { fg = "#EAB133" },
+	color = { fg = "#eab133" },
 }
+
+local debug_status = {
+        function()
+            local status = require('dap').status()
+            if status ~= "" then
+                return string.format("󰃤 %s", status)
+            else
+                return ""
+            end
+        end,
+        color = { fg = "#f84935" }
+    }
+
 
 local noice_recording = {
 	require("noice").api.statusline.mode.get,
@@ -721,7 +734,7 @@ local noice_recording = {
 ----------
 require("lualine").setup({
 	options = {
-		section_separators = { left = "|", right = "|" },
+		section_separators = { left = " ", right = " " },
 		component_separators = { left = "", right = "" },
 		theme = "gruvbox-material",
 	},
@@ -741,6 +754,7 @@ require("lualine").setup({
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
 			"filename",
 			noice_recording,
+            debug_status
 		},
 		lualine_x = { active_lsp, active_lint, active_formatter },
 		lualine_y = { "progress", "location" },

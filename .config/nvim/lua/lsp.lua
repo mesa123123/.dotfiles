@@ -947,7 +947,7 @@ keymap.set(
 	"n",
 	"<leader>bF",
 	"<cmd> lua require ('dap.ui.widgets').cursor_float(require('dap.ui.widgets').frames)<CR>",
-	keyopts({ desc = "Frame Info" })
+	keyopts({ desc = "Stack Frame Info" })
 )
 keymap.set(
 	"n",
