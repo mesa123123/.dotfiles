@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bash-language-server": "^5.1.1"
+    "bash-language-server": "^5.1.2"
   }
 }
