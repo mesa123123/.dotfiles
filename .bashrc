@@ -114,6 +114,11 @@ if [ -d /home/"$USER"/.deno ]; then
     export DENO_INSTALL="/home/pbowman/.deno"
     export PATH="$DENO_INSTALL/bin:$PATH"
 fi
+# ---- Bun Env ----
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH
+# --------
+
 
 # --------
 # ---- Bash Configuration Files ----
@@ -295,3 +300,7 @@ fi
 # End Of bashrc
 # ----------------
 export PATH=$PATH:/home/bowmanpete/.spicetify
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH=$BUN_INSTALL/bin:$PATH

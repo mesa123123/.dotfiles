@@ -883,7 +883,7 @@ local Terminal = require("toggleterm.terminal").Terminal
 local standard_term = Terminal:new({
 	cmd = "/bin/bash",
 	dir = fn.getcwd(),
-	direction = "tab",
+	direction = "float",
 	on_open = function()
 		cmd([[ TermExec cmd="source ~/.bashrc &&  clear" ]])
 	end,
