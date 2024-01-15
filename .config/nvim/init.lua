@@ -27,6 +27,8 @@ vim.g["mapleader"] = "\\"
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
+local ui = vim.ui -- vim ui options
+local system = vim.system
 local keymap = vim.keymap
 local hl = vim.api.nvim_set_hl
 local loop = vim.loop
@@ -469,9 +471,11 @@ require("autocorrect")
 ----------
 -- Redo set to uppercase U
 keymap.set("n", "U", ":redo<CR>", { silent = true, noremap = true })
--- Remap Visual and Insert mode to use Normal Modes Tab Rules
-keymap.set("i", ">>", "<c-t>", {})
-keymap.set("i", "<<", "<c-d>", {})
+-- Remap Tabbing Rules, helps for typed languages <> becomes really annoying to type
+keymap.set("i", "<c-.>", "<c-t>", {})
+keymap.set("i", "<c-,>", "<c-d>", {})
+keymap.set("n", "<c-.>", ">>", {})
+keymap.set("n", "<c-,>", "<<", {})
 ----------
 
 -- File Mappings
@@ -709,6 +713,10 @@ local active_lint = {
 		end
 	end,
 	color = { fg = "#eab133" },
+}
+
+local active_debug = {
+
 }
 
 local debug_status = {
