@@ -23,6 +23,18 @@ alias editexit="vim ~/.bash_exit && source ~/.bash_exit"
 alias edittmux="vim ~/.tmux.conf"
 # --------
 
+# Editor Stuff
+# --------
+[[ -f "/home/$USER/.config/nvim/init.lua" ]] && alias editvim="vim /home/${USER}/.config/nvim/init.lua" || alias editvim="vim /home/${USER}/.vim/.vimrc"
+if [[ $(dnf list installed 2>/dev/null | grep -c "neovim") ]]; then
+    alias vim='nvim'
+    alias svim='sudo nvim'
+    alias oldvim='\vim'
+else
+    alias svim='sudo vim'
+fi
+# --------
+
 # Package Management
 # --------
 [[ $(cat /proc/version | grep -c "UBUNTU") == 1 ]] && alias uur='sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y && npm --location=global update'

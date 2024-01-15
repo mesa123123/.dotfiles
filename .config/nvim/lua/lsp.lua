@@ -1,4 +1,3 @@
--------------------------
 -- ###################  --
 -- # Lsp Vim Config  #  --
 -- ###################  --
@@ -926,7 +925,6 @@ keymap.set(
     "<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>",
     keyopts({ desc = "Set Conditional BreakPoint" })
 )
-keymap.set("n", "<leader>bs", "<cmd>lua require('dap').set_breakpoint()<cr>", keyopts({ desc = "Set Breakpoint" }))
 keymap.set("n", "<leader>bp", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts({ desc = "Toggle Pause" }))
 keymap.set("n", "<leader>br", "<cmd>lua require('dap').restart()<cr>", keyopts({ desc = "Restart Debugger" }))
 keymap.set(

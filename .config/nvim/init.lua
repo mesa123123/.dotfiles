@@ -174,6 +174,7 @@ local plugins = {
 		dependencies = { "nvim-lua/plenary.nvim", "antoinemadec/FixCursorHold.nvim", "nvim-treesitter/nvim-treesitter" },
 	},
 	"nvim-neotest/neotest-python",
+	"andythigpen/nvim-coverage",
 	"tpope/vim-cucumber",
 	-- Database Workbench,
 	-----------
@@ -715,22 +716,19 @@ local active_lint = {
 	color = { fg = "#eab133" },
 }
 
-local active_debug = {
-
-}
+local active_debug = {}
 
 local debug_status = {
-        function()
-            local status = require('dap').status()
-            if status ~= "" then
-                return string.format("󰃤 %s", status)
-            else
-                return ""
-            end
-        end,
-        color = { fg = "#f84935" }
-    }
-
+	function()
+		local status = require("dap").status()
+		if status ~= "" then
+			return string.format("󰃤 %s", status)
+		else
+			return ""
+		end
+	end,
+	color = { fg = "#f84935" },
+}
 
 local noice_recording = {
 	require("noice").api.statusline.mode.get,
@@ -762,7 +760,7 @@ require("lualine").setup({
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
 			"filename",
 			noice_recording,
-            debug_status
+			debug_status,
 		},
 		lualine_x = { active_lsp, active_lint, active_formatter },
 		lualine_y = { "progress", "location" },
@@ -1373,17 +1371,18 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufNew" }, {
 
 -- Setup
 ----------
+-- Neotest
 require("neotest").setup({
 	adapters = {
 		require("neotest-python")({
 			dap = { justMyCode = false },
 		}),
 	},
-    status = {
-        enabled = true,
-        virtual_text = true,
-        signs = false
-    },
+	status = {
+		enabled = true,
+		virtual_text = true,
+		signs = false,
+	},
 })
 ----------
 
@@ -1410,6 +1409,7 @@ end
 whichKey.register({
 	["<leader>x"] = {
 		["t"] = { name = "Testing" },
+		["c"] = { name = "Coverage" },
 	},
 })
 -- Mappings
@@ -1453,7 +1453,7 @@ keymap.set(
 	"n",
 	"<leader>xtc",
 	"<cmd>lua require('neotest').run.run()<CR>",
-	{ noremap = true, silent = true, desc = "Run Closest Test" }
+	{ noremap = true, silent = true, desc = "Run Nearest Test" }
 )
 keymap.set(
 	"n",
@@ -1466,6 +1466,47 @@ keymap.set(
 	"<leader>xtb",
 	"<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<CR>",
 	{ noremap = true, silent = true, desc = "Debug Closest Test" }
+)
+----------
+
+---------------------------------"
+-- Code Coverage
+---------------------------------"
+require("coverage").setup({
+	commands = true, -- create commands
+	highlights = {
+		-- customize highlight groups created by the plugin
+		covered = { fg = "#c3e88d" }, -- supports style, fg, bg, sp (see :h highlight-gui)
+		uncovered = { fg = "#f07178" },
+	},
+	signs = {
+		-- use your own highlight groups or text markers
+		covered = { hl = "CoverageCovered", text = "▎" },
+		uncovered = { hl = "CoverageUncovered", text = "▎" },
+	},
+	summary = {
+		-- customize the summary pop-up
+		min_coverage = 80.0, -- minimum coverage threshold (used for highlighting)
+	},
+	lang = {
+		-- customize language specific settings
+	},
+})
+
+-- Mappings
+----------
+keymap.set("n", "<leader>xcr", "<cmd>Coverage<CR>", { noremap = true, silent = true, desc = "Run Coverage Report" })
+keymap.set(
+	"n",
+	"<leader>xcs",
+	"<cmd>CoverageSummary<CR>",
+	{ noremap = true, silent = true, desc = "Show Coverage Report" }
+)
+keymap.set(
+	"n",
+	"<leader>xct",
+	"<cmd>CoverageToggle<CR>",
+	{ noremap = true, silent = true, desc = "Toggle Coverage Signs" }
 )
 ----------
 
@@ -1499,4 +1540,4 @@ require("lsp")
 
 --------------------------------
 -- EOF
---------------------------------
+-------------------------------
