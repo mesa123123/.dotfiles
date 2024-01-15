@@ -563,13 +563,13 @@ local function keymappings(client)
     keymap.set(
         "n",
         "[G",
-        ":lua vim.diagnostic.goto_prev({severity = diagnostic.severity.ERROR})<CR>",
+        ":lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>",
         bufopts({ desc = "LSP: Next Error" })
     )
     keymap.set(
         "n",
         "]G",
-        ":lua vim.diagnostic.goto_next({severity = diagnostic.severity.ERROR})<CR>",
+        ":lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>",
         bufopts({ desc = "LSP: Previous Error" })
     )
     -- Commands where you leave current buffer `<leader>c`

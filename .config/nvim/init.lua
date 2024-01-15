@@ -48,6 +48,7 @@ local wv = vim.w -- window variables
 ----------
 
 -- ex (Currently this is a wrapper for everything not yet implemented in nvim)
+----------
 local ex = setmetatable({}, {
 	__index = function(t, k)
 		local command = k:gsub("_$", "!")
@@ -60,6 +61,7 @@ local ex = setmetatable({}, {
 })
 
 -- Map(function, table)
+----------
 function Map(func, tbl)
 	local newtbl = {}
 	for i, v in pairs(tbl) do
@@ -69,6 +71,7 @@ function Map(func, tbl)
 end
 
 -- Filter(function, table)
+----------
 function Filter(func, tbl)
 	local newtbl = {}
 	for i, v in pairs(tbl) do
@@ -88,7 +91,16 @@ local function tableConcat(t1, t2)
 	return t1
 end
 
+-- Python Path
 ----------
+local function get_python_path()
+	-- Use Activated Environment
+	if vim.env.VIRTUAL_ENV then
+		return vim.env.VIRTUAL_ENV ..  "/bin/" .. "python"
+	end
+	-- Fallback to System Python
+	return fn.exepath("python3") or fn.exepath("python") or "python"
+end
 
 --------------------------------
 -- Plugin Loading and Settings -- lazy.nvim
@@ -1376,6 +1388,9 @@ require("neotest").setup({
 	adapters = {
 		require("neotest-python")({
 			dap = { justMyCode = false },
+			runner = "pytest",
+			python = get_python_path(),
+			pytest_discover_instances = true,
 		}),
 	},
 	status = {
