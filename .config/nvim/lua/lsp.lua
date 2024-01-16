@@ -50,6 +50,7 @@ local cmpsnip = require("cmp_luasnip")
 local telescope = require("telescope")
 local lspkind = require("lspkind")
 local dap_widgets = require("dap.ui.widgets")
+local dappy = require("dap-python")
 ----------
 
 --------------------------------
@@ -878,7 +879,6 @@ local find_exe = function()
     return fn.getcwd() .. "/target/debug/" .. exe_name
 end
 
-
 -- Colors and Themes
 ----------
 -- Colors
@@ -905,6 +905,7 @@ whichKey.register({
             f = { name = "Debug Widgets" },
             s = { name = "Session Commands" },
             w = { name = "Language Options" },
+            P = { name = "Python Debug" },
         },
     },
 })
@@ -947,7 +948,7 @@ keymap.set("n", "<leader>bJ", "<cmd>lua require('dap').down()<cr>", keyopts({ de
 
 -- Dap REPL
 ------------
-keymap.set("n", "<leader>bx", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts({ desc = "Toggle Debug REPL" }))
+keymap.set("n", "<leader>bx", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts({ desc = "Debug REPL Toggle" }))
 ------------
 
 -- Session Commands
@@ -1016,18 +1017,37 @@ keymap.set(
 )
 ----------
 
+-- Language Specific Commands
+----------
+keymap.set(
+    "n",
+    "<leader>bPm",
+    "<cmd>lua require('dap-python').test_method()<CR>",
+    keyopts({ desc = "Test Method" })
+)
+keymap.set(
+    "n",
+    "<leader>bPc",
+    "<cmd>lua require('dap-python').test_class()<CR>",
+    keyopts({ desc = "Test Class" })
+)
+keymap.set(
+    "n",
+    "<leader>bPs",
+    "<cmd>lua require('dap-python').debug_selection()<CR>",
+    keyopts({ desc = "Debug Selected" })
+)
+----------
+
 ----------
 -- DAP Setup
 ----------
 
 -- Selection
 ----------
--- Python
-dap.adapters.python = {
-    type = "executable",
-    command = python_path,
-    args = { "-m", "debugpy.adapter" },
-}
+-- Python - with dap-python
+dappy.setup(python_path)
+dappy.test_runner = "pytest"
 -- Bash
 local bash_debug_adapter_bin = tool_dir .. "/packages/bash-debug-adapter/bash-debug-adapter"
 local bashdb_dir = tool_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"

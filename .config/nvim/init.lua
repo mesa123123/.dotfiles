@@ -96,7 +96,7 @@ end
 local function get_python_path()
 	-- Use Activated Environment
 	if vim.env.VIRTUAL_ENV then
-		return vim.env.VIRTUAL_ENV ..  "/bin/" .. "python"
+		return vim.env.VIRTUAL_ENV .. "/bin/" .. "python"
 	end
 	-- Fallback to System Python
 	return fn.exepath("python3") or fn.exepath("python") or "python"
@@ -172,8 +172,10 @@ local plugins = {
 	"stevearc/conform.nvim",
 	-- Debug Adapter Protocol
 	----------
-	"mfussenegger/nvim-dap",
-	"theHamsta/nvim-dap-virtual-text",
+	{
+		"mfussenegger/nvim-dap",
+		dependencies = { "mfussenegger/nvim-dap-python", "theHamsta/nvim-dap-virtual-text" },
+	},
 	-- Assitance Plugins
 	----------
 	"folke/which-key.nvim",
