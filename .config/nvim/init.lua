@@ -504,7 +504,8 @@ keymap.set("n", "<leader>wqa", ":wqa<CR>", { silent = false, noremap = true, des
 keymap.set("n", "<leader>wa", ":wa<CR>", { silent = false, noremap = true, desc = "Write All" })
 keymap.set("n", "<leader>qaa", ":qa<CR>", { silent = false, noremap = true, desc = "Quit Nvim" })
 keymap.set("n", "<leader>qa!", "<cmd>qa!<cr>", { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
-keymap.set("n", "<leader>qq", ":q<CR>", { silent = false, noremap = true, desc = "Close Buffer" })
+keymap.set("n", "<leader>qq", ":q<CR>", { silent = false, noremap = true, desc = "Close Buffer and Pane" })
+keymap.set("n", "<leader>qb", ":bd<CR>", { silent = false, noremap = true, desc = "Close Buffer w/o Pane" })
 keymap.set("n", "<leader>q!", ":q!<CR>", { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
 -- System Copy Set to Mappings
 keymap.set({ "n", "v" }, "<leader>y", '"+y', { silent = true, noremap = true, desc = "Copy to System Clipboard" })
@@ -730,8 +731,6 @@ local active_lint = {
 	color = { fg = "#eab133" },
 }
 
-local active_debug = {}
-
 local debug_status = {
 	function()
 		local status = require("dap").status()
@@ -745,9 +744,16 @@ local debug_status = {
 }
 
 local noice_recording = {
-	require("noice").api.statusline.mode.get,
+	function()
+		local noice_stats = require("noice").api.statusline.mode.get()
+		if string.find(noice_stats, "recording") ~= nil then
+			return string.format("󰑋 %s", string.sub(noice_stats, string.len(noice_stats)))
+		else
+			return ""
+		end
+	end,
 	cond = require("noice").api.statusline.mode.has,
-	color = { fg = "#dccda7" },
+	color = { fg = "#282828" },
 }
 
 -- Config
@@ -764,7 +770,7 @@ require("lualine").setup({
 			fmt = function(res)
 				return res:sub(1, 1)
 			end,
-		} },
+		}, noice_recording },
 		lualine_b = {
 			"branch",
 			{ "diff", symbols = { added = "[+] ", modified = "[~] ", removed = "[-] " } },
@@ -773,7 +779,6 @@ require("lualine").setup({
 		lualine_c = {
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
 			"filename",
-			noice_recording,
 			debug_status,
 		},
 		lualine_x = { active_lsp, active_lint, active_formatter },
