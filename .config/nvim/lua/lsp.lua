@@ -198,7 +198,7 @@ api.nvim_create_user_command("LuaSnipEdit", ":lua SnipEditFile()<CR>", {})
 
 -- Mappings
 ----------
-keymap.set({ "i" }, "<C-J>", function()
+keymap.set({ "i", "s" }, "<C-J>", function()
     snip.expand()
 end, { silent = true })
 keymap.set({ "i", "s" }, "<C-L>", function()
@@ -257,13 +257,6 @@ lsp.buf.format({ timeout = 10000 }) -- Format Timeout
 -- Setup of Linters - nvim-lint
 --------------------------------
 
--- Custom Linters Command
-----------
--- Venved Pylint
-local pylint = lint.linters.pylint
-pylint.cmd = get_venv_command("pylint")
-----------
-
 -- Setup
 ----------
 lint.linters_by_ft = {
@@ -300,6 +293,7 @@ keymap.set("n", "gl", ":Relint<CR>", keyopts({ desc = "Refresh Linter" }))
 
 -- Configure Linters
 ----------
+-- Makdownlint
 local markdownlint = lint.linters.markdownlint
 markdownlint.args = {
     "--disable",
@@ -307,6 +301,12 @@ markdownlint.args = {
     "MD012",
     "MD041",
 }
+
+-- Pylint
+local pylint = lint.linters.pylint
+pylint.cmd = get_venv_command("pylint")
+-- find pylintrc if its there and add to args
+pylint.args = { "--rcfile", ".pylintrc.toml", "-f", "json" }
 ----------
 
 --------------------------------
@@ -1019,18 +1019,8 @@ keymap.set(
 
 -- Language Specific Commands
 ----------
-keymap.set(
-    "n",
-    "<leader>bPm",
-    "<cmd>lua require('dap-python').test_method()<CR>",
-    keyopts({ desc = "Test Method" })
-)
-keymap.set(
-    "n",
-    "<leader>bPc",
-    "<cmd>lua require('dap-python').test_class()<CR>",
-    keyopts({ desc = "Test Class" })
-)
+keymap.set("n", "<leader>bPm", "<cmd>lua require('dap-python').test_method()<CR>", keyopts({ desc = "Test Method" }))
+keymap.set("n", "<leader>bPc", "<cmd>lua require('dap-python').test_class()<CR>", keyopts({ desc = "Test Class" }))
 keymap.set(
     "n",
     "<leader>bPs",
