@@ -13,8 +13,10 @@
         <value type="int" value="3"/>
         <value type="int" value="9"/>
         <value type="int" value="1"/>
-        <value type="int" value="11"/>
+        <value type="int" value="8"/>
         <value type="int" value="5"/>
+        <value type="int" value="10"/>
+        <value type="int" value="7"/>
         <value type="int" value="12"/>
         <value type="int" value="14"/>
         <value type="int" value="4"/>
@@ -52,14 +54,13 @@
       <property name="digital-format" type="string" value="%a %_d %b, %R"/>
       <property name="timezone" type="string" value="UTC"/>
       <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
-      <property name="digital-time-format" type="string" value="%T"/>
+      <property name="digital-time-format" type="string" value="UK - %T"/>
       <property name="digital-layout" type="uint" value="3"/>
       <property name="digital-time-font" type="string" value="FiraCode Nerd Font Propo Bold Italic 8"/>
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
-        <value type="string" value="wi-fi network connection “spark-b9gzfv” active: spark-b9gzfv (69%)
-vpn connection active"/>
+        <value type="string" value="wi-fi network connection “spark-b9gzfv” active: spark-b9gzfv (69%) vpn connection active"/>
         <value type="string" value="selinux troubleshooter"/>
         <value type="string" value="wi-fi network connection “spark-b9gzfv-ext” active: spark-b9gzfv-ext (66%)"/>
         <value type="string" value="gpick"/>
@@ -203,10 +204,6 @@ vpn connection active"/>
       <property name="show-button-icon" type="bool" value="true"/>
       <property name="show-button-title" type="bool" value="false"/>
     </property>
-    <property name="plugin-11" type="string" value="separator">
-      <property name="expand" type="bool" value="true"/>
-      <property name="style" type="uint" value="0"/>
-    </property>
     <property name="plugin-12" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>
@@ -240,6 +237,20 @@ vpn connection active"/>
         <property name="width" type="int" value="270"/>
         <property name="height" type="int" value="337"/>
       </property>
+    </property>
+    <property name="plugin-7" type="string" value="clock">
+      <property name="timezone" type="string" value="Pacific/Auckland"/>
+      <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
+      <property name="digital-layout" type="uint" value="3"/>
+      <property name="digital-time-font" type="string" value="FiraCode Nerd Font Propo Bold Italic 8"/>
+      <property name="digital-time-format" type="string" value="NZ - %T"/>
+    </property>
+    <property name="plugin-8" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-10" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
     </property>
   </property>
   <property name="configver" type="int" value="2"/>
