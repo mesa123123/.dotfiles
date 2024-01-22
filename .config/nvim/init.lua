@@ -559,6 +559,13 @@ keymap.set("", "<C-t>o", ":tabo<cr>", {})
 keymap.set("", "<C-t><c-n>", ":tabnew<cr>", {})
 ----------
 
+-- Scroll Control Mappings
+----------
+-- Super Charge up and down scroll
+keymap.set({"n", "v"}, "<C-e>", "5<c-e>", {})
+keymap.set({"n", "v"}, "<C-y>", "5<c-y>", {})
+----------
+
 -- Auto-Comment Mappings
 ----------
 local auto_comment = require("Comment").setup()
