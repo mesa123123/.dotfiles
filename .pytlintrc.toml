@@ -8,13 +8,17 @@ ignore="third_party"
 persistent="no"
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
-load-plugins= [ "pylint.extensions.pylint_pydantic",
-                "pytline.extensions.pylint_pytest" ]
+# load-plugins= 
+
 # Use multiple processes to speed up Pylint.
 jobs=4
 # Allow loading of arbitrary C extensions. Extensions are imported into the
 # active Python interpreter and may run arbitrary code.
 unsafe-load-any-extension="no"
+
+init-hook='''try: import pylint_venv
+    except ImportError: pass
+    else: pylint_venv.inithook()'''
 
 [tool.pylint.messaages_control]
 # Only show warnings with the listed confidence levels. Leave empty to show
