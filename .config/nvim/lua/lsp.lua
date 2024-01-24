@@ -553,7 +553,7 @@ local function keymappings(client)
         "n",
         "gs",
         ":lua require('telescope.builtin').lsp_document_symbols()<CR>",
-        bufopts({ desc = "LSP: Get Workspace Symbols" })
+        bufopts({ desc = "LSP: Get Current Buffer Symbols" })
     )
     keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts({ desc = "LSP: Take Code Action" }))
     keymap.set("n", "gi", ":lua vim.lsp.buf.hover()<CR>", bufopts({ desc = "LSP: Function & Library Info" }))
