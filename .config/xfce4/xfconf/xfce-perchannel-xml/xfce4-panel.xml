@@ -232,6 +232,7 @@
       <property name="global" type="empty">
         <property name="font-description" type="string" value="FiraCode Nerd Font Light 14"/>
         <property name="tabs-position" type="int" value="1"/>
+        <property name="version" type="string" value="1.11.0"/>
       </property>
       <property name="new-window" type="empty">
         <property name="width" type="int" value="270"/>
