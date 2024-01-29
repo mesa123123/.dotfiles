@@ -67,9 +67,9 @@
           <property name="image-style" type="int" value="1"/>
           <property name="last-image" type="string" value="/home/bowmanpete/.dotfiles/assets/Xfce4 WallPaper.svg"/>
           <property name="rgba1" type="array">
-            <value type="double" value="0.10196078431372549"/>
-            <value type="double" value="0.10196078431372549"/>
-            <value type="double" value="0.10196078431372549"/>
+            <value type="double" value="0.20784313725490197"/>
+            <value type="double" value="0.20784313725490197"/>
+            <value type="double" value="0.20784313725490197"/>
             <value type="double" value="1"/>
           </property>
         </property>
