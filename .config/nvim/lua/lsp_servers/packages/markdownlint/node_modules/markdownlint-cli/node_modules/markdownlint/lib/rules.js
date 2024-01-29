@@ -6,9 +6,11 @@ const { homepage, version } = require("./constants");
 
 const rules = [
   require("./md001"),
+  // md002: Deprecated and removed
   require("./md003"),
   require("./md004"),
   require("./md005"),
+  // md006: Deprecated and removed
   require("./md007"),
   require("./md009"),
   require("./md010"),
@@ -51,9 +53,9 @@ const rules = [
   require("./md051"),
   require("./md052"),
   require("./md053"),
-  require("./md054")
-  // md055: See https://github.com/markdownlint/markdownlint
-  // md056: See https://github.com/markdownlint/markdownlint
+  require("./md054"),
+  require("./md055"),
+  require("./md056")
   // md057: See https://github.com/markdownlint/markdownlint
 ];
 for (const rule of rules) {

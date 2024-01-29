@@ -30,7 +30,7 @@ module.exports = {
       unorderedListTypes
     );
     for (const token of tokens) {
-      const { parent, startColumn, startLine, type } = token;
+      const { endColumn, parent, startColumn, startLine, type } = token;
       if (type === "blockQuotePrefix") {
         lastBlockQuotePrefix = token;
       } else if (type === "listUnordered") {
@@ -42,6 +42,7 @@ module.exports = {
         ) {
           if (current.type === "listUnordered") {
             nesting++;
+            // eslint-disable-next-line no-continue
             continue;
           } else if (current.type === "listOrdered") {
             nesting = -1;
@@ -63,7 +64,7 @@ module.exports = {
               (lastBlockQuotePrefix.endColumn - 1) :
               0;
           const actualIndent = startColumn - 1 - blockQuoteAdjustment;
-          const range = [ 1, startColumn + 1 ];
+          const range = [ 1, endColumn - 1 ];
           const fixInfo = {
             "editColumn": startColumn - actualIndent,
             "deleteCount": Math.max(actualIndent - expectedIndent, 0),

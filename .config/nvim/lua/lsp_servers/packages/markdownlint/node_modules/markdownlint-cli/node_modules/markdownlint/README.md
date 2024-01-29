@@ -134,6 +134,8 @@ playground for learning and exploring.
 - **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
 - **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
 - **[MD054](doc/md054.md)** *link-image-style* - Link and image style
+- **[MD055](doc/md055.md)** *table-pipe-style* - Table pipe style
+- **[MD056](doc/md056.md)** *table-column-count* - Table column count
 
 <!-- markdownlint-restore -->
 
@@ -175,6 +177,7 @@ rules at once.
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`
+- **`table`** - `MD055`, `MD056`
 - **`ul`** - `MD004`, `MD005`, `MD007`, `MD030`, `MD032`
 - **`url`** - `MD034`
 - **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,
@@ -402,6 +405,9 @@ See the [style](style) directory for more samples.
 See [markdownlint-config-schema.json](schema/markdownlint-config-schema.json)
 for the [JSON Schema](https://json-schema.org/) of the `options.config`
 object.
+
+See [ValidatingConfiguration.md](schema/ValidatingConfiguration.md) for ways to
+use the JSON Schema to validate configuration.
 
 For more advanced scenarios, styles can reference and extend other styles.
 The `readConfig` and `readConfigSync` functions can be used to read such

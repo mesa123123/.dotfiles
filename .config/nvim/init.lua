@@ -386,6 +386,8 @@ opt.expandtab = true
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldlevelstart = 99
+-- Conceal Level
+opt.conceallevel = 1
 ----------
 
 -- Settings
@@ -493,7 +495,7 @@ keymap.set("n", "<c-.>", ">>", {})
 keymap.set("n", "<c-,>", "<<", {})
 ----------
 
--- File Mappings
+-- File/Buffer Mappings
 ----------
 -- Set Write/Quit to shortcuts
 keymap.set("n", "<leader>ww", ":w<CR>", { silent = false, noremap = true, desc = "Write" })
@@ -559,11 +561,17 @@ keymap.set("", "<C-t>o", ":tabo<cr>", {})
 keymap.set("", "<C-t><c-n>", ":tabnew<cr>", {})
 ----------
 
+-- Buffer Control Mappings
+----------
+keymap.set("n", "<c-b>l", "<cmd>bnext<CR>", { silent = true, desc = "Next Buff" })
+keymap.set("n", "<c-b>h", "<cmd>bprev<CR>", { silent = true, desc = "Prev Buff" })
+----------
+
 -- Scroll Control Mappings
 ----------
 -- Super Charge up and down scroll
-keymap.set({"n", "v"}, "<C-e>", "5<c-e>", {})
-keymap.set({"n", "v"}, "<C-y>", "5<c-y>", {})
+keymap.set({ "n", "v" }, "<C-e>", "5<c-e>", {})
+keymap.set({ "n", "v" }, "<C-y>", "5<c-y>", {})
 ----------
 
 -- Auto-Comment Mappings
@@ -596,6 +604,7 @@ keymap.set(
 whichKey.register({
 	["]"] = { name = "Go To Next" },
 	["["] = { name = "Go To Previous" },
+    ["<C-b>"] = { name = "Buffer Changes" },
 })
 ----------
 
@@ -1059,11 +1068,11 @@ local file_browser_configs = {
 			["<C-n>"] = tele_actions.close,
 			["<C-l>"] = fb_actions.change_cwd,
 			["<C-h>"] = fb_actions.goto_parent_dir,
-			["<c-j>"] = tele_actions.move_selection_next,
-			["<c-k>"] = tele_actions.move_selection_previous,
+			["<C-j>"] = tele_actions.move_selection_next,
+			["<C-k>"] = tele_actions.move_selection_previous,
 			["<C-c>"] = fb_actions.goto_cwd,
 			["<A-h>"] = fb_actions.toggle_hidden,
-			["<c-a>"] = fb_actions.create,
+			["<C-a>"] = fb_actions.create,
 		},
 	},
 }
@@ -1230,7 +1239,7 @@ require("telescope").setup({
 			mappings = {
 				-- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
 				i = {
-					["<c-d>"] = tele_actions.delete_buffer,
+					["<a-d>"] = tele_actions.delete_buffer,
 					["<c-k>"] = tele_actions.move_selection_previous,
 					["<c-j>"] = tele_actions.move_selection_next,
 				},
