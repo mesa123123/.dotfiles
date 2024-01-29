@@ -21,6 +21,7 @@ alias editsecs="vim ~/.bash_secrets && source ~/.bash_secrets"
 alias editaptsource='sudo vim /etc/apt/sources.list'
 alias editexit="vim ~/.bash_exit && source ~/.bash_exit"
 alias edittmux="vim ~/.tmux.conf"
+alias editkitty="vim ~/.config/kitty/kitty.conf"
 # --------
 
 # Editor Stuff
