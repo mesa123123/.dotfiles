@@ -878,7 +878,6 @@ whichKey.register({
 		f = {
 			name = "Telescope",
 			d = { "Diff Options" },
-			v = { "Git Options" },
 		},
 		k = { name = "Wiki Opts" },
 		m = { name = "Project Management @TODO" },
@@ -1195,37 +1194,6 @@ keymap.set(
 	"<cmd>Telescope import theme=dropdown<cr>",
 	{ silent = true, desc = "Telescope: Imports" }
 )
--- Version Control - git
-----------
--- Commits
-keymap.set(
-	"n",
-	"<leader>fvc",
-	"<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Commits" }
-)
--- Status
-keymap.set(
-	"n",
-	"<leader>fvs",
-	"<cmd>Telescope git_status theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Status" }
-)
--- Branches
-keymap.set(
-	"n",
-	"<leader>fvb",
-	"<cmd>Telescope git_branches theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Branches" }
-)
--- Git Files
-keymap.set(
-	"n",
-	"<leader>fvf",
-	"<cmd>Telescope git_files theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Branches" }
-)
-----------
 
 ---------------------------------
 -- Telescope Setup
@@ -1270,7 +1238,40 @@ require("telescope").load_extension("ui-select")
 
 -- Keymappings
 ------------------
-keymap.set("n", "<leader>vb", "<cmd>G blame<CR>", { silent = true, desc = "Git Blame" })
+keymap.set("n", "<leader>vw", "<cmd>G blame<CR>", { silent = true, desc = "Git Who? (Blame)" })
+keymap.set("n", "<leader>vm", "<cmd>G mergetool<CR>", { silent = true, desc = "Git Mergetool" })
+
+-- Telescope Functions - git
+----------
+-- Commits
+keymap.set(
+	"n",
+	"<leader>vc",
+	"<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Commits" }
+)
+-- Status
+keymap.set(
+	"n",
+	"<leader>vs",
+	"<cmd>Telescope git_status theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Status" }
+)
+-- Branches
+keymap.set(
+	"n",
+	"<leader>vb",
+	"<cmd>Telescope git_branches theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Branches" }
+)
+-- Git Files
+keymap.set(
+	"n",
+	"<leader>vf",
+	"<cmd>Telescope git_files theme=dropdown<cr>",
+	{ silent = true, desc = "Telescope: Git Branches" }
+)
+----------
 
 ---------
 -- End of VC setup

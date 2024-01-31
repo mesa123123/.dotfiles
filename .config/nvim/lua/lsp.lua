@@ -623,7 +623,7 @@ local function keymappings(client)
         "n",
         "<leader>csd",
         "<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>",
-        bufopts({ desc = "Show Workspace Symbols" })
+        bufopts({ desc = "Show Document Symbols" })
     )
     -- Mapping Assistance
     ----------
