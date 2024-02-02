@@ -494,6 +494,12 @@ keymap.set("n", "L", "$", {})
 -- Remap what the last commands unmapped
 keymap.set("n", "0", "K", {})
 keymap.set("n", "$", "J", {})
+-- Remap/Yank for delete too -_-
+keymap.set("n", "dL", "d$", {})
+keymap.set("n", "dH", "d0", {})
+keymap.set("n", "yH", "y0", {})
+keymap.set("n", "yL", "y$", {})
+
 
 -- Paste, Yank, Quit, Save Mappings
 ----------
@@ -507,7 +513,8 @@ keymap.set("n", "<leader>wa", ":wa<CR>", { silent = false, noremap = true, desc 
 keymap.set("n", "<leader>qaa", ":qa<CR>", { silent = false, noremap = true, desc = "Quit Nvim" })
 keymap.set("n", "<leader>qa!", "<cmd>qa!<cr>", { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
 keymap.set("n", "<leader>qq", ":q<CR>", { silent = false, noremap = true, desc = "Close Buffer and Pane" })
-keymap.set("n", "<leader>qb", ":bd<CR>", { silent = false, noremap = true, desc = "Close Buffer w/o Pane" })
+keymap.set("n", "<leader>qbb", ":bd<CR>", { silent = false, noremap = true, desc = "Close Buffer w/o Pane" })
+keymap.set("n", "<leader>qb!", ":bd<CR>", { silent = false, noremap = true, desc = "Close Buffer w/o Pane" })
 keymap.set("n", "<leader>q!", ":q!<CR>", { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
 -- System Copy Set to Mappings
 keymap.set({ "n", "v" }, "<leader>y", '"+y', { silent = true, noremap = true, desc = "Copy to System Clipboard" })
