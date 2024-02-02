@@ -182,7 +182,6 @@ local plugins = {
 	{ "numToStr/Comment.nvim", lazy = false },
 	-- Testing Plugins
 	----------
-	"antoinemadec/FixCursorHold.nvim",
 	{
 		"nvim-neotest/neotest",
 		dependencies = { "nvim-lua/plenary.nvim", "antoinemadec/FixCursorHold.nvim", "nvim-treesitter/nvim-treesitter" },
@@ -194,11 +193,9 @@ local plugins = {
 	-----------
 	"tpope/vim-dadbod",
 	"kristijanhusak/vim-dadbod-ui",
-	-- File System and Plugins
+	-- Verions Control
 	----------
-	"yggdroot/indentline",
 	"tpope/vim-fugitive",
-	"editorconfig/editorconfig-vim",
 	-- Status Bar
 	------------
 	{
@@ -238,8 +235,6 @@ local plugins = {
 	},
 	-- Git Highlighting
 	"itchyny/vim-gitbranch",
-	-- Color Highlighting
-	"norcalli/nvim-colorizer.lua",
 	-- LSP Icons
 	"onsails/lspkind.nvim",
 	-- Dashboard
@@ -282,8 +277,6 @@ local plugins = {
 	----------
 	-- Alignment
 	"junegunn/vim-easy-align",
-	-- HardMode
-	"takac/vim-hardtime",
 	-- Working with Kitty
 	{ "fladson/vim-kitty", branch = "main" },
 	-- Terminal Behaviour
@@ -323,10 +316,6 @@ cmd("colorscheme gruvbox")
 ----------
 gv["rainbow_active"] = 1
 ----------
-
--- Colorize Colors
----------
-require("colorizer").setup()
 
 -- Load Webdevicons
 ----------
@@ -495,7 +484,18 @@ keymap.set("n", "<c-.>", ">>", {})
 keymap.set("n", "<c-,>", "<<", {})
 ----------
 
--- File/Buffer Mappings
+-- Screen Navigation Mappings
+----------
+-- Lazier Screen/Line Jumping
+keymap.set("n", "K", "H", {})
+keymap.set("n", "J", "L", {})
+keymap.set("n", "H", "0", {})
+keymap.set("n", "L", "$", {})
+-- Remap what the last commands unmapped
+keymap.set("n", "0", "K", {})
+keymap.set("n", "$", "J", {})
+
+-- Paste, Yank, Quit, Save Mappings
 ----------
 -- Set Write/Quit to shortcuts
 keymap.set("n", "<leader>ww", ":w<CR>", { silent = false, noremap = true, desc = "Write" })
@@ -604,7 +604,7 @@ keymap.set(
 whichKey.register({
 	["]"] = { name = "Go To Next" },
 	["["] = { name = "Go To Previous" },
-    ["<C-b>"] = { name = "Buffer Changes" },
+	["<C-b>"] = { name = "Buffer Changes" },
 })
 ----------
 
@@ -1116,84 +1116,42 @@ local ui_select_configs = {}
 -- Mappings
 ----------
 -- Buffers Mappings
-keymap.set(
-	"n",
-	"<leader>ff",
-	"<cmd>Telescope find_files theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Find Files" }
-)
+keymap.set("n", "<leader>ff", "<cmd>Telescope find_files theme=dropdown<cr>", { silent = true, desc = "Find Files" })
+-- Vim Options
+keymap.set("n", "<leader>fo", "<cmd>Telescope vim_options theme=dropdown<CR>", { silent = true, desc = "Vim Options" })
 -- Find File
-keymap.set(
-	"n",
-	"<leader>fg",
-	"<cmd>Telescope live_grep theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Live Grep" }
-)
+keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep theme=dropdown<cr>", { silent = true, desc = "Live Grep" })
 -- Find Buffer
-keymap.set(
-	"n",
-	"<leader>fb",
-	"<cmd>Telescope buffers theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Show Buffers" }
-)
+keymap.set("n", "<leader>fb", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, desc = "Show Buffers" })
 keymap.set("n", "<C-b>s", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, noremap = true })
 -- Registers
-keymap.set(
-	"n",
-	"<leader>fr",
-	"<cmd>Telescope registers theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Registers" }
-)
+keymap.set("n", "<leader>fr", "<cmd>Telescope registers theme=dropdown<cr>", { silent = true, desc = "Registers" })
 -- Help Mappings
-keymap.set(
-	"n",
-	"<leader>fh",
-	"<cmd>Telescope help_tags theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Help Tags" }
-)
+keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags theme=dropdown<cr>", { silent = true, desc = "Help Tags" })
 -- Man Pages
-keymap.set(
-	"n",
-	"<leader>fm",
-	"<cmd>Telescope man_pages theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Man Pages" }
-)
+keymap.set("n", "<leader>fm", "<cmd>Telescope man_pages theme=dropdown<cr>", { silent = true, desc = "Man Pages" })
 -- Keymaps
-keymap.set(
-	"n",
-	"<leader>fk",
-	"<cmd>Telescope keymaps theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Keymaps" }
-)
+keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps theme=dropdown<cr>", { silent = true, desc = "Keymaps" })
 -- ColorScheme
-keymap.set(
-	"n",
-	"<leader>fc",
-	"<cmd>Telescope colorscheme theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Keymaps" }
-)
+keymap.set("n", "<leader>fc", "<cmd>Telescope colorscheme theme=dropdown<cr>", { silent = true, desc = "Themes" })
 -- Tree Sitter Mapping
 keymap.set(
 	"n",
 	"<leader>fs",
 	"<cmd>Telescope treesitter theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Treesitter Insights" }
+	{ silent = true, desc = "Treesitter Insights" }
 )
 -- Telescope Telescopes
 keymap.set(
 	"n",
 	"<leader>ft",
 	"<cmd>Telescope builtin theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Telescope" }
+	{ silent = true, desc = "Telescope Commands" }
 )
 -- Imports
-----------
-keymap.set(
-	"n",
-	"<leader>fi",
-	"<cmd>Telescope import theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Imports" }
-)
+keymap.set("n", "<leader>fi", "<cmd>Telescope import theme=dropdown<cr>", { silent = true, desc = "Imports" })
+-- Jumplist
+keymap.set("n", "<leader>fj", "<cmd>Telescope jumplist theme=dropdown<CR>", { silent = true, desc = "Jumplist" })
 
 ---------------------------------
 -- Telescope Setup
@@ -1233,7 +1191,7 @@ require("telescope").load_extension("ui-select")
 ---------
 
 ---------------------------------
--- Version Control Functionality: <leader>v - fugitive
+-- Version Control Functionality: <leader>v - fugitive & Telescope
 ---------------------------------
 
 -- Keymappings
@@ -1248,29 +1206,19 @@ keymap.set(
 	"n",
 	"<leader>vc",
 	"<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Commits" }
+	{ silent = true, desc = "Git Commits" }
 )
 -- Status
-keymap.set(
-	"n",
-	"<leader>vs",
-	"<cmd>Telescope git_status theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Status" }
-)
+keymap.set("n", "<leader>vs", "<cmd>Telescope git_status theme=dropdown<cr>", { silent = true, desc = "Git Status" })
 -- Branches
 keymap.set(
 	"n",
 	"<leader>vb",
 	"<cmd>Telescope git_branches theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Branches" }
+	{ silent = true, desc = "Git Branches" }
 )
 -- Git Files
-keymap.set(
-	"n",
-	"<leader>vf",
-	"<cmd>Telescope git_files theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope: Git Branches" }
-)
+keymap.set("n", "<leader>vf", "<cmd>Telescope git_files theme=dropdown<cr>", { silent = true, desc = "Git Files" })
 ----------
 
 ---------
@@ -1427,7 +1375,7 @@ require("neotest").setup({
 
 -- Functions
 ----------
-function Runner_term_toggle()
+function RunnerTermToggle()
 	local runner_client = Terminal:new({
 		cmd = gv.RunCommand,
 		dir = fn.getcwd(),
@@ -1455,7 +1403,7 @@ whichKey.register({
 keymap.set(
 	"n",
 	"<leader>xx",
-	"<cmd>lua Runner_term_toggle()<CR>",
+	"<cmd>lua RunnerTermToggle()<CR>",
 	{ noremap = true, silent = true, desc = "Run Current Buffer" }
 )
 keymap.set(
