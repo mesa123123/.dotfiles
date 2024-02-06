@@ -500,7 +500,6 @@ keymap.set("n", "dH", "d0", {})
 keymap.set("n", "yH", "y0", {})
 keymap.set("n", "yL", "y$", {})
 
-
 -- Paste, Yank, Quit, Save Mappings
 ----------
 -- Set Write/Quit to shortcuts
@@ -508,6 +507,12 @@ keymap.set("n", "<leader>ww", ":w<CR>", { silent = false, noremap = true, desc =
 keymap.set("n", "<leader>w!", ":w!<CR>", { silent = false, noremap = true, desc = "Over-Write" })
 keymap.set("n", "<leader>ws", ":so<CR>", { silent = false, noremap = true, desc = "Write and Source to Nvim" })
 keymap.set("n", "<leader>wqq", ":wq<CR>", { silent = false, noremap = true, desc = "Close Buffer" })
+keymap.set(
+	"n",
+	"<leader>wqb",
+	":w<CR>:bd<CR>",
+	{ silent = false, noremap = true, desc = "Write and Close Buffer w/o Pane" }
+)
 keymap.set("n", "<leader>wqa", ":wqa<CR>", { silent = false, noremap = true, desc = "Write All & Quit Nvim" })
 keymap.set("n", "<leader>wa", ":wa<CR>", { silent = false, noremap = true, desc = "Write All" })
 keymap.set("n", "<leader>qaa", ":qa<CR>", { silent = false, noremap = true, desc = "Quit Nvim" })
