@@ -499,7 +499,6 @@ keymap.set("n", "dL", "d$", {})
 keymap.set("n", "dH", "d0", {})
 keymap.set("n", "yH", "y0", {})
 keymap.set("n", "yL", "y$", {})
-
 -- Paste, Yank, Quit, Save Mappings
 ----------
 -- Set Write/Quit to shortcuts
