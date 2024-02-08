@@ -897,7 +897,7 @@ whichKey.register({
 		r = { name = "Flashcards" },
 		s = { name = "Snippets" },
 		t = { name = "Terminal" },
-		v = { name = "Version Control" },
+		v = { name = "Version Control", f = { "Telescope Options" } },
 		w = { name = "File Write" },
 		x = { name = "Code Execute/Test" },
 		y = { name = "System Copy" },
@@ -1209,27 +1209,28 @@ require("telescope").load_extension("ui-select")
 ------------------
 keymap.set("n", "<leader>vw", "<cmd>G blame<CR>", { silent = true, desc = "Git Who? (Blame)" })
 keymap.set("n", "<leader>vm", "<cmd>G mergetool<CR>", { silent = true, desc = "Git Mergetool" })
-
+keymap.set("n", "<leader>va", "<cmd>Gwrite<CR>", {silent = true, desc = "Add Current File"})
+keymap.set("n", "<leader>vc", ":Git commit -m ", {silent = true, desc = "Make a commit"})
 -- Telescope Functions - git
 ----------
 -- Commits
 keymap.set(
 	"n",
-	"<leader>vc",
+	"<leader>vfc",
 	"<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
 	{ silent = true, desc = "Git Commits" }
 )
 -- Status
-keymap.set("n", "<leader>vs", "<cmd>Telescope git_status theme=dropdown<cr>", { silent = true, desc = "Git Status" })
+keymap.set("n", "<leader>vfs", "<cmd>Telescope git_status theme=dropdown<cr>", { silent = true, desc = "Git Status" })
 -- Branches
 keymap.set(
 	"n",
-	"<leader>vb",
+	"<leader>vfb",
 	"<cmd>Telescope git_branches theme=dropdown<cr>",
 	{ silent = true, desc = "Git Branches" }
 )
 -- Git Files
-keymap.set("n", "<leader>vf", "<cmd>Telescope git_files theme=dropdown<cr>", { silent = true, desc = "Git Files" })
+keymap.set("n", "<leader>vff", "<cmd>Telescope git_files theme=dropdown<cr>", { silent = true, desc = "Git Files" })
 ----------
 
 ---------

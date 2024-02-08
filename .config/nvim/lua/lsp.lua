@@ -902,7 +902,8 @@ end
 -- Colors and Themes
 ----------
 -- Colors
-hl(0, "DapBreakpoint", { ctermbg = 0, fg = "#993939", bg = "#31353f" })
+hl(0, "DapBreakpoint", { ctermbg = 0, fg = "#cc3939", bg = "#31353f" })
+hl(0, "DapBreakpointCondition", { ctermbg = 0, fg = "#993939", bg = "#31353f" })
 hl(0, "DapLogPoint", { ctermbg = 0, fg = "#61afef", bg = "#31353f" })
 hl(0, "DapStopped", { ctermbg = 0, fg = "#98c379", bg = "#31353f" })
 -- Symbols
@@ -910,6 +911,12 @@ fn.sign_define(
     "DapBreakpoint",
     { text = "󰃤", texthl = "DapBreakpoint", linehl = "DapBreakpoint", numhl = "DapBreakpoint" }
 )
+fn.sign_define("DapBreakpointCondition", {
+    text = "󱏛",
+    texthl = "DapBreakpointCondition",
+    linehl = "DapBreakpointCondition",
+    numhl = "DapBreakpointCondition",
+})
 fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "DapStopped", numhl = "DapStopped" })
 ----------
 
