@@ -194,6 +194,7 @@
         <value type="string" value="xfce4-terminal-emulator.desktop"/>
       </property>
       <property name="recent" type="array">
+        <value type="string" value="com.bitwig.BitwigStudio.desktop"/>
         <value type="string" value="xfce-backdrop-settings.desktop"/>
         <value type="string" value="xfce4-about.desktop"/>
         <value type="string" value="setroubleshoot.desktop"/>
