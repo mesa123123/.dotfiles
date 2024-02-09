@@ -47,18 +47,23 @@ local wv = vim.w -- window variables
 -- Functions
 ----------
 
--- ex (Currently this is a wrapper for everything not yet implemented in nvim)
+-- Keyopts
 ----------
-local ex = setmetatable({}, {
-	__index = function(t, k)
-		local command = k:gsub("_$", "!")
-		local f = function(...)
-			return api.nvim_cmd(table.concat(vim.tbl_flatten({ command, ... }), " "))
-		end
-		rawset(t, k, f)
-		return f
-	end,
-})
+local function keyopts(opts)
+	local standardOpts = { silent = true, noremap = true }
+	for k, v in pairs(standardOpts) do
+		opts[k] = v
+	end
+	return opts
+end
+
+local function loudkeyopts(opts)
+	local standardOpts = { silent = false, noremap = true }
+	for k, v in pairs(standardOpts) do
+		opts[k] = v
+	end
+	return opts
+end
 
 -- Map(function, table)
 ----------
@@ -273,10 +278,10 @@ local plugins = {
 	-- Study Functionality
 	----------
 	-- Wiki - Obsidian nvim
-	{ "epwalsh/obsidian.nvim" },
+	{ "epwalsh/obsidian.nvim", event = "VeryLazy" },
 	----------
 	-- Alignment
-	"junegunn/vim-easy-align",
+    { "junegunn/vim-easy-align", event = "VeryLazy" },
 	-- Working with Kitty
 	{ "fladson/vim-kitty", branch = "main" },
 	-- Terminal Behaviour
@@ -352,6 +357,17 @@ hl(0, "LspDiagnosticsUnderlineInformation", { bg = "#17D6EB", underline = true, 
 hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend = 50 })
 ----------
 
+-----------------------------
+-- Start Page - alpha.nvim
+-----------------------------
+
+-- Config
+----------
+local alpha = require("alpha")
+local dashboard = require("alpha.themes.startify")
+alpha.setup(dashboard.config)
+----------
+
 --------------------------------
 -- Editor Options, Settings, Commands
 --------------------------------
@@ -415,7 +431,7 @@ gv["clipboard"] = {
 --Neodev
 local neodev = require("neodev")
 neodev.setup({
-	library = { plugins = { "nvim-dap-ui", "neotest" }, types = true },
+	library = { plugins = { "neotest" }, types = true },
 })
 ----------
 
@@ -476,7 +492,7 @@ require("autocorrect")
 -- Writing Mappings
 ----------
 -- Redo set to uppercase U
-keymap.set("n", "U", ":redo<CR>", { silent = true, noremap = true })
+keymap.set("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
 -- Remap Tabbing Rules, helps for typed languages <> becomes really annoying to type
 keymap.set("i", "<c-.>", "<c-t>", {})
 keymap.set("i", "<c-,>", "<c-d>", {})
@@ -502,42 +518,27 @@ keymap.set("n", "yL", "y$", {})
 -- Paste, Yank, Quit, Save Mappings
 ----------
 -- Set Write/Quit to shortcuts
-keymap.set("n", "<leader>ww", ":w<CR>", { silent = false, noremap = true, desc = "Write" })
-keymap.set("n", "<leader>w!", ":w!<CR>", { silent = false, noremap = true, desc = "Over-Write" })
-keymap.set("n", "<leader>ws", ":so<CR>", { silent = false, noremap = true, desc = "Write and Source to Nvim" })
-keymap.set("n", "<leader>wqq", ":wq<CR>", { silent = false, noremap = true, desc = "Close Buffer" })
-keymap.set(
-	"n",
-	"<leader>wqb",
-	":w<CR>:bd<CR>",
-	{ silent = false, noremap = true, desc = "Write and Close Buffer w/o Pane" }
-)
-keymap.set("n", "<leader>wqa", ":wqa<CR>", { silent = false, noremap = true, desc = "Write All & Quit Nvim" })
-keymap.set("n", "<leader>wa", ":wa<CR>", { silent = false, noremap = true, desc = "Write All" })
-keymap.set("n", "<leader>qaa", ":qa<CR>", { silent = false, noremap = true, desc = "Quit Nvim" })
-keymap.set("n", "<leader>qa!", "<cmd>qa!<cr>", { silent = false, noremap = true, desc = "Quit Nvim Without Writing" })
-keymap.set("n", "<leader>qq", ":q<CR>", { silent = false, noremap = true, desc = "Close Buffer and Pane" })
-keymap.set("n", "<leader>qbb", ":bd<CR>", { silent = false, noremap = true, desc = "Close Buffer w/o Pane" })
-keymap.set("n", "<leader>qb!", ":bd<CR>", { silent = false, noremap = true, desc = "Close Buffer w/o Pane" })
-keymap.set("n", "<leader>q!", ":q!<CR>", { silent = false, noremap = true, desc = "Close Buffer Without Writing" })
+keymap.set("n", "<leader>ww", ":w<CR>", loudkeyopts({ desc = "Write" }))
+keymap.set("n", "<leader>w!", ":w!<CR>", loudkeyopts({ desc = "Over-Write" }))
+keymap.set("n", "<leader>ws", ":so<CR>", loudkeyopts({ desc = "Write and Source to Nvim" }))
+keymap.set("n", "<leader>wqq", ":wq<CR>", loudkeyopts({ desc = "Close Buffer" }))
+keymap.set("n", "<leader>wqb", ":w<CR>:bd<CR>", loudkeyopts({ desc = "Write and Close Buffer w/o Pane" }))
+keymap.set("n", "<leader>wqa", ":wqa<CR>", loudkeyopts({ desc = "Write All & Quit Nvim" }))
+keymap.set("n", "<leader>wa", ":wa<CR>", loudkeyopts({ desc = "Write All" }))
+keymap.set("n", "<leader>qaa", ":qa<CR>", loudkeyopts({ desc = "Quit Nvim" }))
+keymap.set("n", "<leader>qa!", "<cmd>qa!<cr>", loudkeyopts({ desc = "Quit Nvim Without Writing" }))
+keymap.set("n", "<leader>qq", ":q<CR>", loudkeyopts({ desc = "Close Buffer and Pane" }))
+keymap.set("n", "<leader>qbb", ":bd<CR>", loudkeyopts({ desc = "Close Buffer w/o Pane" }))
+keymap.set("n", "<leader>qb!", ":bd<CR>", loudkeyopts({ desc = "Close Buffer w/o Pane" }))
+keymap.set("n", "<leader>q!", ":q!<CR>", loudkeyopts({ desc = "Close Buffer Without Writing" }))
 -- System Copy Set to Mappings
-keymap.set({ "n", "v" }, "<leader>y", '"+y', { silent = true, noremap = true, desc = "Copy to System Clipboard" })
-keymap.set(
-	{ "n", "v" },
-	"<leader>yy",
-	'"+yy',
-	{ silent = true, noremap = true, desc = "Copy Line to System Clipboard" }
-)
-keymap.set("n", "<leader>yG", '"+yG', { silent = true, noremap = true, desc = "Copy Rest of file to system Clipboard" })
-keymap.set(
-	"n",
-	"<leader>y%",
-	'"+y%',
-	{ silent = true, noremap = true, desc = "Copy Whole of file to system Clipboard" }
-)
+keymap.set({ "n", "v" }, "<leader>y", '"+y', keyopts({ desc = "Copy to System Clipboard" }))
+keymap.set({ "n", "v" }, "<leader>yy", '"+yy', keyopts({ desc = "Copy Line to System Clipboard" }))
+keymap.set("n", "<leader>yG", '"+yG', keyopts({ desc = "Copy Rest of file to system Clipboard" }))
+keymap.set("n", "<leader>y%", '"+y%', keyopts({ desc = "Copy Whole of file to system Clipboard" }))
 -- System Paste Set to Mappings
-keymap.set({ "n", "v" }, "<leader>p", '"+p', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
-keymap.set({ "n", "v" }, "<leader>P", '"+P', { silent = true, noremap = true, desc = "Paste from System Clipboard" })
+keymap.set({ "n", "v" }, "<leader>p", '"+p', keyopts({ desc = "Paste from System Clipboard" }))
+keymap.set({ "n", "v" }, "<leader>P", '"+P', keyopts({ desc = "Paste from System Clipboard" }))
 ---------
 
 -- Highlighting Search Mappings
@@ -823,16 +824,6 @@ require("lualine").setup({
 })
 ----------
 
------------------------------
--- Start Page - alpha.nvim
------------------------------
-
--- Config
-----------
-local alpha = require("alpha")
-local dashboard = require("alpha.themes.dashboard")
-alpha.setup(dashboard.config)
-----------
 
 -----------------------------------------
 -- Leader Remappings, Plugin Commands
@@ -1090,12 +1081,7 @@ local file_browser_configs = {
 
 -- Mappings
 ----------
-keymap.set(
-	"n",
-	"<C-n>",
-	":Telescope file_browser theme=dropdown<CR>",
-	{ silent = true, noremap = true, desc = "Toggle File Browser" }
-) -- Remap the open and close to C-n
+keymap.set("n", "<C-n>", ":Telescope file_browser theme=dropdown<CR>", keyopts({ desc = "Toggle File Browser" })) -- Remap the open and close to C-n
 ----------
 
 -----------------------------
@@ -1209,8 +1195,8 @@ require("telescope").load_extension("ui-select")
 ------------------
 keymap.set("n", "<leader>vw", "<cmd>G blame<CR>", { silent = true, desc = "Git Who? (Blame)" })
 keymap.set("n", "<leader>vm", "<cmd>G mergetool<CR>", { silent = true, desc = "Git Mergetool" })
-keymap.set("n", "<leader>va", "<cmd>Gwrite<CR>", {silent = true, desc = "Add Current File"})
-keymap.set("n", "<leader>vc", ":Git commit -m ", {silent = true, desc = "Make a commit"})
+keymap.set("n", "<leader>va", "<cmd>Gwrite<CR>", { silent = true, desc = "Add Current File" })
+keymap.set("n", "<leader>vc", ":Git commit -m ", { silent = true, desc = "Make a commit" })
 -- Telescope Functions - git
 ----------
 -- Commits
