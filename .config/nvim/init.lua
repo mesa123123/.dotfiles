@@ -1057,18 +1057,19 @@ local file_browser_configs = {
 		-- Normal Mode
 		["n"] = {
 			["<C-n>"] = tele_actions.close,
-			["l"] = fb_actions.change_cwd,
+			["<A-c>"] = fb_actions.change_cwd,
 			["h"] = fb_actions.goto_parent_dir,
+			["l"] = require("telescope.actions.set").select,
 			["c"] = fb_actions.goto_cwd,
-			["<C-h>"] = fb_actions.toggle_hidden,
-			["a"] = fb_actions.create,
-			["H"] = fb_actions.toggle_hidden,
+			["<C-a>"] = fb_actions.create,
+			["<A-h>"] = fb_actions.toggle_hidden,
 		},
 		-- Insert Mode
 		["i"] = {
 			["<C-n>"] = tele_actions.close,
-			["<C-l>"] = fb_actions.change_cwd,
+			["<A-c>"] = fb_actions.change_cwd,
 			["<C-h>"] = fb_actions.goto_parent_dir,
+			["<C-l>"] = require("telescope.actions.set").select,
 			["<C-j>"] = tele_actions.move_selection_next,
 			["<C-k>"] = tele_actions.move_selection_previous,
 			["<C-c>"] = fb_actions.goto_cwd,
@@ -1165,6 +1166,10 @@ require("telescope").setup({
 					["<a-d>"] = tele_actions.delete_buffer,
 					["<c-k>"] = tele_actions.move_selection_previous,
 					["<c-j>"] = tele_actions.move_selection_next,
+                    ["<C-J>"] = tele_actions.preview_scrolling_down,
+                    ["<C-K>"] = tele_actions.preview_scrolling_up,
+                    ["<C-L>"] = tele_actions.preview_scrolling_right,
+                    ["<C-H>"] = tele_actions.preview_scrolling_left,
 				},
 			},
 		},
@@ -1176,7 +1181,7 @@ require("telescope").setup({
 	},
 })
 
--- Extension Setup (Must Go last)
+-- Extension setup (must Go last)
 require("telescope").load_extension("file_browser")
 require("telescope").load_extension("project")
 require("telescope").load_extension("import")
