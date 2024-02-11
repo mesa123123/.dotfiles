@@ -281,7 +281,7 @@ local plugins = {
 	{ "epwalsh/obsidian.nvim", event = "VeryLazy" },
 	----------
 	-- Alignment
-    { "junegunn/vim-easy-align", event = "VeryLazy" },
+	{ "junegunn/vim-easy-align", event = "VeryLazy" },
 	-- Working with Kitty
 	{ "fladson/vim-kitty", branch = "main" },
 	-- Terminal Behaviour
@@ -365,6 +365,18 @@ hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend =
 ----------
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.startify")
+dashboard.section.header.val = {
+	"<-.(`-')    _       (`-')  _                    (`-')   (`-')  _           (`-')  _            ",
+	" __( OO)   (_)      (OO ).-/           .->   <-.(OO )   (OO ).-/           (OO ).-/       .->   ",
+	"'-'. ,--.  ,-(`-')  / ,---.       (`-')----. ,------,)  / ,---.            / ,---.   (`-')----. ",
+	"|  .'   /  | ( OO)  | \\ /`.\\      ( OO).-.  '|   /`. '  | \\ /`.\\           | \\ /`.\\  ( OO).-.  '",
+	"|      /)  |  |  )  '-'|_.' |     ( _) | |  ||  |_.' |  '-'|_.' |          '-'|_.' | ( _) | |  |",
+	"|  .   '  (|  |_/  (|  .-.  |      \\|  |)|  ||  .   .' (|  .-.  |         (|  .-.  |  \\|  |)|  |",
+	"|  |\\   \\  |  |'->  |  | |  |       '  '-'  '|  |\\  \\   |  | |  | ,-.      |  | |  |   '  '-'  '",
+	"`--' '--'  `--'     `--' `--'        `-----' `--' '--'  `--' `--' './      `--' `--'    `-----' ",
+    "                                                                                                ", 
+    "------------------------------------------------------------------------------------------------",
+}
 alpha.setup(dashboard.config)
 ----------
 
@@ -824,7 +836,6 @@ require("lualine").setup({
 })
 ----------
 
-
 -----------------------------------------
 -- Leader Remappings, Plugin Commands
 -----------------------------------------
@@ -877,10 +888,7 @@ whichKey.register({
 		b = { name = "Debugging" },
 		c = { name = "LSP Opts" },
 		d = { name = "Database" },
-		f = {
-			name = "Telescope",
-			d = { "Diff Options" },
-		},
+		f = { name = "Telescope" },
 		k = { name = "Wiki Opts" },
 		m = { name = "Project Management @TODO" },
 		p = { name = "System Paste" },
@@ -1132,6 +1140,8 @@ keymap.set("n", "<leader>fm", "<cmd>Telescope man_pages theme=dropdown<cr>", { s
 keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps theme=dropdown<cr>", { silent = true, desc = "Keymaps" })
 -- ColorScheme
 keymap.set("n", "<leader>fc", "<cmd>Telescope colorscheme theme=dropdown<cr>", { silent = true, desc = "Themes" })
+-- Diagnostics (Also thorugh \cp
+keymap.set("n", "<leader>fd", "<cmd>Telescope diagnostics theme=dropdown<cr>", { silent = true, desc = "Diagnostics" })
 -- Tree Sitter Mapping
 keymap.set(
 	"n",
@@ -1166,10 +1176,10 @@ require("telescope").setup({
 					["<a-d>"] = tele_actions.delete_buffer,
 					["<c-k>"] = tele_actions.move_selection_previous,
 					["<c-j>"] = tele_actions.move_selection_next,
-                    ["<C-J>"] = tele_actions.preview_scrolling_down,
-                    ["<C-K>"] = tele_actions.preview_scrolling_up,
-                    ["<C-L>"] = tele_actions.preview_scrolling_right,
-                    ["<C-H>"] = tele_actions.preview_scrolling_left,
+					["<C-J>"] = tele_actions.preview_scrolling_down,
+					["<C-K>"] = tele_actions.preview_scrolling_up,
+					["<C-L>"] = tele_actions.preview_scrolling_right,
+					["<C-H>"] = tele_actions.preview_scrolling_left,
 				},
 			},
 		},
