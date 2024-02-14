@@ -13,6 +13,7 @@
 local cmd = vim.cmd       -- vim commands
 local api = vim.api       -- vim api (I'm not sure what this does)
 local fn = vim.fn         -- vim functions
+local fs = vim.fs         -- vim filesystem
 local ui = vim.ui
 local keymap = vim.keymap -- keymaps
 local lsp = vim.lsp       -- Lsp inbuilt
@@ -319,7 +320,7 @@ pylint.args = { "--rcfile", ".pylintrc.toml", "-f", "json" }
 -- Enablement for General Setup
 local general_enabled = function()
     local context = require("cmp.config.context") -- disable completion in comments
-    if vim.api.nvim_get_mode().mode == "c" then -- keep command mode completion enabled when cursor is in a comment
+    if vim.api.nvim_get_mode().mode == "c" then   -- keep command mode completion enabled when cursor is in a comment
         return true
     else
         return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
@@ -768,15 +769,15 @@ config.sqlls.setup({
 --     },
 -- }
 config.rust_analyzer.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-	settings = {
-		["rust-analyzer"] = {
-			checkOnSave = {
-				command = "clippy",
-			},
-		},
-	},
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        ["rust-analyzer"] = {
+            checkOnSave = {
+                command = "clippy",
+            },
+        },
+    },
 })
 ----------
 
@@ -902,11 +903,6 @@ hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend =
 -- Helper Funcs
 ----------
 local python_path = get_python_path()
-
-local find_exe = function()
-    local exe_name = fn.system("echo $(basename $(pwd))")
-    return fn.getcwd() .. "/target/debug/" .. exe_name
-end
 
 -- Colors and Themes
 ----------
@@ -1082,13 +1078,11 @@ dap.adapters.sh = {
     command = bash_debug_adapter_bin,
 }
 -- C, Cpp, Rust
-local codelldb = tool_installed_packages.get_package("codelldb")
-local codelldb_dir = codelldb:get_install_path()
-local codelldb_adapter_path = codelldb_dir .. "/extension/lldb/bin/lldb"
 dap.adapters.lldb = {
-    type = "executable",
-    command = codelldb_adapter_path,
-    name = "lldb"
+    type = "server",
+    command = "codelldb", -- This cannot be installed through mason, requires you to do it yourself
+    args = { port = "3000" },
+    name = "lldb",
 }
 ----------
 
@@ -1127,14 +1121,36 @@ dap.configurations.sh = {
 -- Rust
 dap.configurations.rust = {
     {
-        name = "Launch File",
+        name = "Debug Main",
         type = "lldb",
         request = "launch",
-        program = find_exe(),
+        program = function()
+            local exe_path = fn.getcwd() .. "/target/debug/" .. fs.basename(fn.getcwd())
+            return exe_path
+        end,
         cwd = "${workspaceFolder}",
         stopOnEntry = false,
-        showDiassembly = "never",
-        terminal = "integrated",
+    },
+    {
+        name = "Debug Test",
+        type = "lldb",
+        request = "launch",
+        program = function()
+            local exe_path = fn.getcwd()
+                .. "/target/debug/deps/"
+                .. fn.input(
+                    "Please Copy One Into The Input Box:\n" .. fn.system("ls " .. fn.getcwd() .. "/target/debug/deps/")
+                )
+            return exe_path
+        end,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+        cargo = {
+            args = {
+                "test",
+                "--lib",
+            },
+        },
     },
 }
 ----------
