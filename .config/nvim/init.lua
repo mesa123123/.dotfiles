@@ -8,11 +8,11 @@
 -- TO DO
 --------------------------------
 -- None
-----------------------------------
+--------------------------------
 
 -------------------------------
 -- Priority Settings
---------------------------------
+-------------------------------
 -- Set the config path
 vim.g["config_path"] = "~/.config/nvim"
 -- Set the mapleader
@@ -27,6 +27,7 @@ vim.g["mapleader"] = "\\"
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
+local fs = vim.fs -- vim filesystem
 local ui = vim.ui -- vim ui options
 local system = vim.system
 local keymap = vim.keymap
@@ -184,20 +185,24 @@ local plugins = {
 	-- Assistance Plugins
 	----------
 	"folke/which-key.nvim",
+	{ "folke/todo-comments.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
 	{ "numToStr/Comment.nvim", lazy = false },
 	-- Testing Plugins
 	----------
 	{
 		"nvim-neotest/neotest",
-		dependencies = { "nvim-lua/plenary.nvim", "antoinemadec/FixCursorHold.nvim", "nvim-treesitter/nvim-treesitter" },
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"antoinemadec/FixCursorHold.nvim",
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-neotest/neotest-python",
+			"andythigpen/nvim-coverage",
+		},
+		event = "VeryLazy",
 	},
-	"nvim-neotest/neotest-python",
-	"andythigpen/nvim-coverage",
-	"tpope/vim-cucumber",
 	-- Database Workbench,
 	-----------
-	"tpope/vim-dadbod",
-	"kristijanhusak/vim-dadbod-ui",
+	{ "tpope/vim-dadbod", event = "VeryLazy", dependencies = "kristijanhusak/vim-dadbod-ui" },
 	-- Versions Control
 	----------
 	"tpope/vim-fugitive",
@@ -211,7 +216,6 @@ local plugins = {
 	-- Colors and Themes
 	------------
 	"altercation/vim-colors-solarized",
-	"nvie/vim-flake8",
 	-- DevIcons
 	"nvim-tree/nvim-web-devicons",
 	-- Theme
@@ -713,6 +717,15 @@ require("noice").setup({
 	},
 })
 
+----------
+
+-----------------------------
+-- Todo Comment Highlighting
+-----------------------------
+
+-- Config
+----------
+require("todo-comments").setup()
 ----------
 
 -----------------------------

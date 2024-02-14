@@ -1080,8 +1080,12 @@ dap.adapters.sh = {
 -- C, Cpp, Rust
 dap.adapters.lldb = {
     type = "server",
-    command = "codelldb", -- This cannot be installed through mason, requires you to do it yourself
-    args = { port = "3000" },
+    port = "${port}",
+    executable = {
+        command = "codelldb", -- This cannot be installed through mason, requires you to do it yourself
+        args = { "--port", "${port}" },
+        detached = false,
+    },
     name = "lldb",
 }
 ----------
@@ -1135,6 +1139,7 @@ dap.configurations.rust = {
         name = "Debug Test",
         type = "lldb",
         request = "launch",
+        -- TODO: use nui to sort this into a dorpdown menu you can use to pick the right target
         program = function()
             local exe_path = fn.getcwd()
                 .. "/target/debug/deps/"
