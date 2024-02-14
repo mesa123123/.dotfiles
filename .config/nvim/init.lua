@@ -181,7 +181,7 @@ local plugins = {
 		"mfussenegger/nvim-dap",
 		dependencies = { "mfussenegger/nvim-dap-python", "theHamsta/nvim-dap-virtual-text" },
 	},
-	-- Assitance Plugins
+	-- Assistance Plugins
 	----------
 	"folke/which-key.nvim",
 	{ "numToStr/Comment.nvim", lazy = false },
@@ -198,7 +198,7 @@ local plugins = {
 	-----------
 	"tpope/vim-dadbod",
 	"kristijanhusak/vim-dadbod-ui",
-	-- Verions Control
+	-- Versions Control
 	----------
 	"tpope/vim-fugitive",
 	-- Status Bar
@@ -366,17 +366,17 @@ hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend =
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.startify")
 dashboard.section.header.val = {
-"<-.(`-')    _       (`-')  _                    (`-')   (`-')  _          (`-')       (`-')  _      (`-')  _             ",
-" __( OO)   (_)      (OO ).-/           .->   <-.(OO )   (OO ).-/          ( OO).->    ( OO).-/      (OO ).-/       .->   ",
-"'-'. ,--.  ,-(`-')  / ,---.       (`-')----. ,------,)  / ,---.           /    '._   (,------.      / ,---.   (`-')----. ",
-"|  .'   /  | ( OO)  | \\ /`.\\      ( OO).-.  '|   /`. '  | \\ /`.\\          |'--...__)  |  .---'      | \\ /`.\\  ( OO).-.  '",
-"|      /)  |  |  )  '-'|_.' |     ( _) | |  ||  |_.' |  '-'|_.' |         `--.  .--' (|  '--.       '-'|_.' | ( _) | |  |",
-"|  .   '  (|  |_/  (|  .-.  |      \\|  |)|  ||  .   .' (|  .-.  |            |  |     |  .--'      (|  .-.  |  \\|  |)|  |",
-"|  |\\   \\  |  |'->  |  | |  |       '  '-'  '|  |\\  \\   |  | |  | ,-.        |  |     |  `---.      |  | |  |   '  '-'  '",
-"`--' '--'  `--'     `--' `--'        `-----' `--' '--'  `--' `--' './        `--'     `------'      `--' `--'    `-----' ",
-    "                                                                                                ", 
-    "-------------------------------------------------------------------------------------------------------------------",
-    "                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                  ",
+	"<-.(`-')    _       (`-')  _                    (`-')   (`-')  _          (`-')       (`-')  _      (`-')  _             ",
+	" __( OO)   (_)      (OO ).-/           .->   <-.(OO )   (OO ).-/          ( OO).->    ( OO).-/      (OO ).-/       .->   ",
+	"'-'. ,--.  ,-(`-')  / ,---.       (`-')----. ,------,)  / ,---.           /    '._   (,------.      / ,---.   (`-')----. ",
+	"|  .'   /  | ( OO)  | \\ /`.\\      ( OO).-.  '|   /`. '  | \\ /`.\\          |'--...__)  |  .---'      | \\ /`.\\  ( OO).-.  '",
+	"|      /)  |  |  )  '-'|_.' |     ( _) | |  ||  |_.' |  '-'|_.' |         `--.  .--' (|  '--.       '-'|_.' | ( _) | |  |",
+	"|  .   '  (|  |_/  (|  .-.  |      \\|  |)|  ||  .   .' (|  .-.  |            |  |     |  .--'      (|  .-.  |  \\|  |)|  |",
+	"|  |\\   \\  |  |'->  |  | |  |       '  '-'  '|  |\\  \\   |  | |  | ,-.        |  |     |  `---.      |  | |  |   '  '-'  '",
+	"`--' '--'  `--'     `--' `--'        `-----' `--' '--'  `--' `--' './        `--'     `------'      `--' `--'    `-----' ",
+	"                                                                                                ",
+	"-------------------------------------------------------------------------------------------------------------------",
+	"                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                  ",
 }
 alpha.setup(dashboard.config)
 ----------
@@ -389,7 +389,7 @@ alpha.setup(dashboard.config)
 ----------
 -- Line Numbers On
 opt.number = true
--- Other Enconding and Formatting settings
+-- Other Encoding and Formatting settings
 opt.linebreak = true
 opt.autoindent = true
 opt.encoding = "UTF-8"
@@ -516,10 +516,10 @@ keymap.set("n", "<c-,>", "<<", {})
 -- Screen Navigation Mappings
 ----------
 -- Lazier Screen/Line Jumping
-keymap.set({"n","v"}, "K", "H", {})
-keymap.set({"n","v"}, "J", "L", {})
-keymap.set({"n","v"}, "H", "0", {})
-keymap.set({"n","v"}, "L", "$", {})
+keymap.set({ "n", "v" }, "K", "H", {})
+keymap.set({ "n", "v" }, "J", "L", {})
+keymap.set({ "n", "v" }, "H", "0", {})
+keymap.set({ "n", "v" }, "L", "$", {})
 -- Remap what the last commands unmapped
 keymap.set("n", "0", "K", {})
 keymap.set("n", "$", "J", {})
@@ -575,7 +575,7 @@ keymap.set({ "t", "i", "c", "n" }, "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5
 ----------
 -- Navigation
 keymap.set("", "<C-t>k", ":tabr<cr>", {})
-keymap.set("", "<C-t>j", ":tabl<cr>", {})
+keymap.set("", "<C-t>j", ":table<cr>", {})
 keymap.set("", "<C-t>l", ":tabn<cr>", {})
 keymap.set("", "<C-t>h", ":tabp<cr>", {})
 -- Close Current Tab
@@ -876,7 +876,7 @@ require("lualine").setup({
 -- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c
 ----------
 
--- Key Map Assitance
+-- Key Map Assistance
 ----------
 -- Disable some so I can recustomize them
 local presets = require("which-key.plugins.presets")

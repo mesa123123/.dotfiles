@@ -342,7 +342,6 @@ local general_sources = {
     { name = "buffer" },
     { name = "nvim_lua" },
     { name = "treesitter" },
-    { name = "cmdline" },
 }
 
 -- Cmp-Ui
@@ -759,16 +758,25 @@ config.sqlls.setup({
 
 -- Rust Server
 ----------
+-- G.rustaceanvim = {
+--     server = {
+--         on_attach = on_attach,
+--         -- capabilities = capabilities,
+--     },
+--     ["rust-analyzer"] = {
+--         checkOnSave = { command = "clippy" },
+--     },
+-- }
 config.rust_analyzer.setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-        ["rust-analyzer"] = {
-            checkOnSave = {
-                command = "clippy",
-            },
-        },
-    },
+	on_attach = on_attach,
+	capabilities = capabilities,
+	settings = {
+		["rust-analyzer"] = {
+			checkOnSave = {
+				command = "clippy",
+			},
+		},
+	},
 })
 ----------
 
@@ -943,7 +951,7 @@ whichKey.register({
 ----------
 keymap.set("n", "<leader>bc", "<cmd>lua require('dap').continue()<cr>", keyopts({ desc = "Continue/Start Debug Run" }))
 keymap.set(
-    { "n"},
+    { "n" },
     "<leader>bb",
     "<cmd>lua require('dap').toggle_breakpoint()<cr>",
     keyopts({ desc = "Toggle Breakpoint" })
@@ -1076,16 +1084,11 @@ dap.adapters.sh = {
 -- C, Cpp, Rust
 local codelldb = tool_installed_packages.get_package("codelldb")
 local codelldb_dir = codelldb:get_install_path()
-local codelldb_adapter_path = codelldb_dir .. "/extension/adapter/codelldb"
-local codelldb_port = 13000
-dap.adapters.codelldb = {
-    type = "server",
-    host = "127.0.0.1",
-    port = codelldb_port,
-    executable = {
-        command = codelldb_adapter_path,
-        args = { "--port", codelldb_port },
-    },
+local codelldb_adapter_path = codelldb_dir .. "/extension/lldb/bin/lldb"
+dap.adapters.lldb = {
+    type = "executable",
+    command = codelldb_adapter_path,
+    name = "lldb"
 }
 ----------
 
@@ -1124,8 +1127,8 @@ dap.configurations.sh = {
 -- Rust
 dap.configurations.rust = {
     {
-        name = "Launch file",
-        type = "codelldb",
+        name = "Launch File",
+        type = "lldb",
         request = "launch",
         program = find_exe(),
         cwd = "${workspaceFolder}",
