@@ -516,10 +516,10 @@ keymap.set("n", "<c-,>", "<<", {})
 -- Screen Navigation Mappings
 ----------
 -- Lazier Screen/Line Jumping
-keymap.set("n", "K", "H", {})
-keymap.set("n", "J", "L", {})
-keymap.set("n", "H", "0", {})
-keymap.set("n", "L", "$", {})
+keymap.set({"n","v"}, "K", "H", {})
+keymap.set({"n","v"}, "J", "L", {})
+keymap.set({"n","v"}, "H", "0", {})
+keymap.set({"n","v"}, "L", "$", {})
 -- Remap what the last commands unmapped
 keymap.set("n", "0", "K", {})
 keymap.set("n", "$", "J", {})
