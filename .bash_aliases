@@ -98,6 +98,8 @@ alias media_last='spotify playback previous'
 [[ "$(cargo install --list | grep -c "ripgrep")" -ge 1 ]] && alias grep='rg --no-ignore'
 # If rtx-cli is installed use that over asdf
 [[ "$(cargo install --list | grep -c "rtx-cli")" -ge 1 ]] && alias asdf='rtx'
+# If broot is installed use that over rtee
+[[ "$(cargo install --list | grep -c "broot")" -ge 1 ]] && alias tree='broot'
 # --------
 
 # NordVpn Commands
