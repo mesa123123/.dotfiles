@@ -14,7 +14,7 @@ local cmd = vim.cmd       -- vim commands
 local api = vim.api       -- vim api (I'm not sure what this does)
 local fn = vim.fn         -- vim functions
 local fs = vim.fs         -- vim filesystem
-local ui = vim.ui
+local ft = vim.filetype
 local keymap = vim.keymap -- keymaps
 local lsp = vim.lsp       -- Lsp inbuilt
 local log = vim.log
@@ -42,6 +42,7 @@ local snip = require("luasnip")
 local snipload_lua = require("luasnip.loaders.from_lua")
 local snipload_vscode = require("luasnip.loaders.from_vscode")
 local whichKey = require("which-key")
+local ui_menu = require("nui.menu")
 --------
 
 -- Required Extras
@@ -98,6 +99,49 @@ local function keyopts(opts)
     end
     return opts
 end
+----------
+
+-- Get a folders files as members of a table
+----------
+local function scandir_menu(title, dir, sub_func)
+    local scan = require("plenary.scandir")
+    local Menu = require("nui.menu")
+    local scan_results = scan.scan_dir(dir, { hidden = false })
+    local menu_lines = { Menu.separator("Sep1") }
+    for _, v in pairs(scan_results) do
+        local item = Menu.item(v)
+        table.insert(menu_lines, item)
+    end
+    local dir_menu = Menu({
+        position = "50%",
+        border = {
+            style = "single",
+            text = {
+                top = "[ " .. title .. " ]",
+                top_align = "center",
+            },
+        },
+        win_options = {
+            winhighlight = "Normal:Normal,FloatBorder:Normal",
+        },
+    }, {
+        lines = menu_lines,
+        keymap = {
+            focus_next = { "j", "<Down>", "<Tab>" },
+            focus_prev = { "k", "<Up>", "<S-Tab>" },
+            close = { "<Esc>", "<C-c>" },
+            submit = { "<CR>", "<Space>" },
+        },
+        on_close = function()
+            print("Closed Menu, operation cancelled")
+        end,
+        on_submit = function(item)
+            sub_func(item.text)
+        end,
+    })
+    return dir_menu
+end
+
 ----------
 
 -- On Exit for Sys Calls
@@ -1140,12 +1184,13 @@ dap.configurations.rust = {
         type = "lldb",
         request = "launch",
         -- TODO: use nui to sort this into a dorpdown menu you can use to pick the right target
+        --  - menu is showing up but the thread doesn't wait for me to give an answer
+        -- LOOKUP: Co-routines in lua
         program = function()
-            local exe_path = fn.getcwd()
-                .. "/target/debug/deps/"
-                .. fn.input(
-                    "Please Copy One Into The Input Box:\n" .. fn.system("ls " .. fn.getcwd() .. "/target/debug/deps/")
-                )
+            local runtime = scandir_menu("Choose Runtime", "./target/debug/deps", function(item)
+                return item
+            end):mount()
+            local exe_path = fn.getcwd() .. runtime
             return exe_path
         end,
         cwd = "${workspaceFolder}",

@@ -222,6 +222,8 @@ local plugins = {
 	"ellisonleao/gruvbox.nvim",
 	-- Brackets Rainbowing
 	"luochen1990/rainbow",
+	-- Highlights Hex Colors as their color
+	"norcalli/nvim-colorizer.lua",
 	-- Rainbow csv hl
 	{
 		"cameron-wags/rainbow_csv.nvim",
@@ -313,6 +315,7 @@ api.nvim_create_user_command("Srcv", "luafile ~/.config/nvim/init.lua", {}) -- S
 -- Set TermGuiColors true
 ----------
 opt.termguicolors = true
+----------
 
 -- Load Color Scheme
 ----------
@@ -359,6 +362,12 @@ hl(0, "LspDiagnosticsUnderlineWarning", { bg = "#EBA217", underline = true, blen
 hl(0, "LspDiagnosticsUnderlineInformation", { bg = "#17D6EB", underline = true, blend = 50 })
 hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend = 50 })
 ----------
+
+-- Highlight Colors as their Color
+----------
+require("colorizer").setup()
+----------
+
 
 -----------------------------
 -- Start Page - alpha.nvim
@@ -692,12 +701,35 @@ hl(0, "NotifyBackground", { bg = "#414141" })
 --------------------------------
 
 require("noice").setup({
+	views = {
+		cmdline_popup = {
+			border = {
+				style = "rounded",
+			},
+			position = {
+				row = 5,
+				col = "50%",
+			},
+			size = {
+				width = 60,
+				height = "auto",
+			},
+		},
+		win_options = {
+			winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+		},
+	},
 	lsp = {
 		-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
 		override = {
 			["vim.lsp.util.convert_input_to_markdown_lines"] = true,
 			["vim.lsp.util.stylize_markdown"] = true,
 			["cmp.entry.get_documentation"] = true,
+		},
+		progress = {
+			enabled = true,
+			view = "mini",
+			throttle = 1000,
 		},
 	},
 	presets = {
@@ -1105,7 +1137,16 @@ local ui_select_configs = {}
 
 -- Config
 ----------
-require("todo-comments").setup()
+require("todo-comments").setup({
+	keywords = {
+		LOOKUP = { icon = "󱛉", color = "lookup" },
+        TODO = { icon = "󰟃", color = "todo" },
+	},
+	colors = {
+		lookup = { "#8800bb" },
+        todo = { "#3080b0" },
+	},
+})
 ----------
 
 -- Mappings
