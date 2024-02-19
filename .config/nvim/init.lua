@@ -31,6 +31,7 @@ local fs = vim.fs -- vim filesystem
 local ui = vim.ui -- vim ui options
 local system = vim.system
 local keymap = vim.keymap
+local ft = vim.filetype
 local hl = vim.api.nvim_set_hl
 local loop = vim.loop
 local diagnostics = vim.diagnostic
@@ -185,7 +186,7 @@ local plugins = {
 	-- Assistance Plugins
 	----------
 	"folke/which-key.nvim",
-	{ "folke/todo-comments.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+	{ "folke/todo-comments.nvim", dependencies = { "nvim-lua/plenary.nvim" }, event = "VeryLazy" },
 	{ "numToStr/Comment.nvim", lazy = false },
 	-- Testing Plugins
 	----------
@@ -205,7 +206,7 @@ local plugins = {
 	{ "tpope/vim-dadbod", event = "VeryLazy", dependencies = "kristijanhusak/vim-dadbod-ui" },
 	-- Versions Control
 	----------
-	"tpope/vim-fugitive",
+	{ "tpope/vim-fugitive", event = "VeryLazy" },
 	-- Status Bar
 	------------
 	{
@@ -215,7 +216,6 @@ local plugins = {
 	------------
 	-- Colors and Themes
 	------------
-	"altercation/vim-colors-solarized",
 	-- DevIcons
 	"nvim-tree/nvim-web-devicons",
 	-- Theme
@@ -272,7 +272,6 @@ local plugins = {
 			"BurntSushi/ripgrep",
 			"sharkdp/fd",
 			"nvim-telescope/telescope-dap.nvim",
-			"nvim-telescope/telescope-project.nvim",
 			"nvim-telescope/telescope-file-browser.nvim",
 			"piersolenski/telescope-import.nvim",
 			"nvim-telescope/telescope-ui-select.nvim",
@@ -456,12 +455,6 @@ neodev.setup({
 -- Language Specific Settings
 -------------------------------
 
--- Filetype Enable
------------
-cmd([[ filetype on ]])
-cmd([[ filetype plugin indent on ]])
-----------
-
 -- FileTypes
 ----------
 cmd([[ au FileType cpp setlocal et ts=2 sw=2 ]]) -- C++ Language
@@ -470,7 +463,7 @@ cmd([[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]]) -- JenkinsFile
 cmd([[ au FileType python setlocal et ts=4 sw=4 sts=4 ]]) -- Python Language
 cmd([[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]]) -- Typescript Settings
 cmd([[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]]) -- Vagrant Files
-vim.filetype.add({ extension = { env = "config" } })
+ft.add({ extension = { env = "config" } })
 ----------
 
 -- Markdown
@@ -549,13 +542,12 @@ keymap.set("n", "<leader>qbb", ":bd<CR>", loudkeyopts({ desc = "Close Buffer w/o
 keymap.set("n", "<leader>qb!", ":bd<CR>", loudkeyopts({ desc = "Close Buffer w/o Pane" }))
 keymap.set("n", "<leader>q!", ":q!<CR>", loudkeyopts({ desc = "Close Buffer Without Writing" }))
 -- System Copy Set to Mappings
-keymap.set({ "n", "v" }, "<leader>y", '"+y', keyopts({ desc = "Copy to System Clipboard" }))
-keymap.set({ "n", "v" }, "<leader>yy", '"+yy', keyopts({ desc = "Copy Line to System Clipboard" }))
-keymap.set("n", "<leader>yG", '"+yG', keyopts({ desc = "Copy Rest of file to system Clipboard" }))
-keymap.set("n", "<leader>y%", '"+y%', keyopts({ desc = "Copy Whole of file to system Clipboard" }))
+keymap.set({ "n", "v" }, "<leader>y", '"+y', keyopts({ desc = "System Copy" }))
+keymap.set({ "n", "v" }, "<leader>yy", '"+yy', keyopts({ desc = "System Copy: Line" }))
+keymap.set("n", "<leader>yG", '"+yG', keyopts({ desc = "System Copy: Rest of File" }))
+keymap.set("n", "<leader>y%", '"+y%', keyopts({ desc = "System Copy: Whole of File" }))
 -- System Paste Set to Mappings
-keymap.set({ "n", "v" }, "<leader>p", '"+p', keyopts({ desc = "Paste from System Clipboard" }))
-keymap.set({ "n", "v" }, "<leader>P", '"+P', keyopts({ desc = "Paste from System Clipboard" }))
+keymap.set({ "n", "v" }, "<leader>p", '"+p', keyopts({ desc = "System Paste" }))
 ---------
 
 -- Highlighting Search Mappings
@@ -720,15 +712,6 @@ require("noice").setup({
 ----------
 
 -----------------------------
--- Todo Comment Highlighting
------------------------------
-
--- Config
-----------
-require("todo-comments").setup()
-----------
-
------------------------------
 -- Status Line - LuaLine
 -----------------------------
 
@@ -868,9 +851,9 @@ require("lualine").setup({
 -- Terminal - TerminalToggle : <leader>t & <leader> q (while in terminal mode)
 -- Other Terminal Apps: <leader>a
 --     Docker - lazydocker: <leader>ad
+--     GitUi - Gitui: <leader>ag
 -- Via Telescope
 --    Filetree - telescope-file-browser : <c-n>
---    Project Management - telescope-project: <leader>m
 --    Buffer Management - Telescope Nvim: <leader>f
 -- Database - DadBod: : <leader>d
 -- Code Execution & Testing - neotest: <leader>x (T is being used for the terminal)
@@ -882,6 +865,7 @@ require("lualine").setup({
 -- System Yank Commands: <leader>y
 -- System Paste Comnmands: <leader>p
 -- Version Control Commands -- fugitive: <leader>v
+-- Todo Highilights -- todocomments.nvim: <leader>m
 -- Key Mapping Assist - whichkey: <leader>?
 -- Configured in init.lsp --
 -- Snippets - LuaSnip : <leader>s
@@ -904,12 +888,11 @@ whichKey.register({
 		d = { name = "Database" },
 		f = { name = "Telescope" },
 		k = { name = "Wiki Opts" },
-		m = { name = "Project Management @TODO" },
+		m = { name = "Todos" },
 		p = { name = "System Paste" },
 		q = { name = "Close and Quit" },
 		r = { name = "Flashcards" },
 		s = { name = "Snippets" },
-		t = { name = "Terminal" },
 		v = { name = "Version Control", f = { "Telescope Options" } },
 		w = { name = "File Write" },
 		x = { name = "Code Execute/Test" },
@@ -1108,20 +1091,6 @@ keymap.set("n", "<C-n>", ":Telescope file_browser theme=dropdown<CR>", keyopts({
 ----------
 
 -----------------------------
--- Project Management: <leader>m - telescope-project @TODO
------------------------------
-
--- Functions
-----------
-local project_actions = require("telescope._extensions.project.actions")
-----------
-
--- Config
-----------
-local project_configs = {}
-----------
-
------------------------------
 -- Ui-Select Management: - Ui Improvements, not mapped to a keybinding
 -----------------------------
 
@@ -1129,6 +1098,29 @@ local project_configs = {}
 ----------
 local ui_select_configs = {}
 ----------
+
+-----------------------------
+-- Todo Highlighting: - <leader>m - TodoComments
+-----------------------------
+
+-- Config
+----------
+require("todo-comments").setup()
+----------
+
+-- Mappings
+----------
+keymap.set("n", "]t", function()
+	require("todo-comments").jump_next()
+end, { desc = "Next todo comment" })
+
+keymap.set("n", "[t", function()
+	require("todo-comments").jump_prev()
+end, { desc = "Previous todo comment" })
+
+keymap.set("n", "<leader>m", "<cmd>TodoTelescope<CR>", keyopts({ desc = "List Todos" }))
+----------
+
 ---------------------------------
 -- Buffer Management: <leader>f  - Telescope Core
 ---------------------------------
@@ -1200,14 +1192,12 @@ require("telescope").setup({
 	},
 	extensions = {
 		file_browser = file_browser_configs,
-		project = project_configs,
 		ui_select = ui_select_configs,
 	},
 })
 
 -- Extension setup (must Go last)
 require("telescope").load_extension("file_browser")
-require("telescope").load_extension("project")
 require("telescope").load_extension("import")
 require("telescope").load_extension("ui-select")
 ----------
