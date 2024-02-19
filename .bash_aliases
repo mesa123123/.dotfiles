@@ -99,7 +99,7 @@ alias media_last='spotify playback previous'
 # If broot is installed use that over tree
 [[ "$(cargo install --list | grep -c "broot")" -ge 1 ]] && alias tree='broot'
 # If zoxide is installed use that over cd
-[[ "$(cargo install --list | grep -c "zoxide")" -ge 1 ]] && alias cd='zoxide' && eval "$(zoxide init bash)"
+[[ "$(cargo install --list | grep -c "zoxide")" -ge 1 ]] && alias cd='z' && eval "$(zoxide init bash)"
 # --------
 
 # NordVpn Commands
