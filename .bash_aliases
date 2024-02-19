@@ -88,8 +88,6 @@ alias media_last='spotify playback previous'
 [[ "$(cargo install --list | grep "tealdeer")" == *"tealdeer"* ]] && alias man='tldr'
 # If du-dust is installed use that instead
 [[ "$(cargo install --list | grep "du-dust")" == *"du-dust"* ]] &&  alias du='dust'
-# If Broot is installed map it to the br command
-[[ "$(cargo install --list | grep "tre")" == *"tre"* ]] && alias tree='tre'
 # If git-delta is installed, use that for diff
 [[ $(cargo install --list | grep -c "git-delta") -ge 1 ]] && alias diff="delta"
 # If tidy-viewer is installed map to alias
@@ -98,8 +96,10 @@ alias media_last='spotify playback previous'
 [[ "$(cargo install --list | grep -c "ripgrep")" -ge 1 ]] && alias grep='rg --no-ignore'
 # If rtx-cli is installed use that over asdf
 [[ "$(cargo install --list | grep -c "rtx-cli")" -ge 1 ]] && alias asdf='rtx'
-# If broot is installed use that over rtee
+# If broot is installed use that over tree
 [[ "$(cargo install --list | grep -c "broot")" -ge 1 ]] && alias tree='broot'
+# If zoxide is installed use that over cd
+[[ "$(cargo install --list | grep -c "zoxide")" -ge 1 ]] && alias cd='zoxide' && eval "$(zoxide init bash)"
 # --------
 
 # NordVpn Commands
