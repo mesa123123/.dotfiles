@@ -3,7 +3,7 @@
 # ------- BASH_PROFILE -----------
 # --------------------------------
 
-# ~/.bashrc: executed by bash(1) for non-login shells. see /usr/share/doc/bash/examples/startup-files (in the 
+# "/home/$USER/.bashrc: executed by bash(1) for non-login shells. see /usr/share/doc/bash/examples/startup-files (in the 
 # package bash-doc) for examples
 # If not running interactively, don't do anything
 case $- in
@@ -70,7 +70,7 @@ unset color_prompt force_color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    test -r "/home/$USER/.dircolors" && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
@@ -88,7 +88,7 @@ alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias alert='notify-send --urgency=low -i ""$([ $? = 0 ] && echo terminal || echo error) ""$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # --------
 # ---- Priority Environment Configs ----
@@ -99,24 +99,32 @@ if [[ -n "$PROFILE_PATH" ]]; then
     export PATH=$PROFILE_PATH
 fi
 
+# function to help create my path variable
+add_to_path () { if [[ -e "${1}" ]]; then export PATH=$PATH:"${1}"; fi }
+
+# --- User Env ---
+add_to_path "/home/$USER/local/bin"
+add_to_path "/home/$USER/.local/bin"
+
 # ---- Rust Env ----
-if [ -f ~/.oxidize ]; then
-    . /home/"$USER"/.oxidize
+if [ -f "/home/$USER/.oxidize" ]; then
+    /home/"$USER"/.oxidize
 fi
 
 # ---- Node Env ----
 # Putting Node here will help similar for node configs to load properly
-[ ! -d /home/"$USER"/.npm-global ] && mkdir /home/"$USER"/.npm-global 
+[ ! -d "/home/$USER/.npm-global" ] && mkdir "/home/$USER/.npm-global"
 export NPM_CONFIG_PREFIX=/home/$USER/.npm-global
+add_to_path "$NPM_CONFIG_PREFIX/bin"
 # --------
 # ---- Deno Env ----
 if [ -d /home/"$USER"/.deno ]; then 
-    export DENO_INSTALL="/home/pbowman/.deno"
-    export PATH="$DENO_INSTALL/bin:$PATH"
+    export DENO_INSTALL="/home/$USER/.deno"
+    add_to_path "$DENO_INSTALL/bin"
 fi
 # ---- Bun Env ----
 export BUN_INSTALL="$HOME/.bun"
-export PATH=$BUN_INSTALL/bin:$PATH
+add_to_path "$BUN_INSTALL/bin"
 # --------
 
 
@@ -125,8 +133,8 @@ export PATH=$BUN_INSTALL/bin:$PATH
 # --------
 
 # Alias definitions.
-if [ -f ~/.bash_aliases ]; then
-    . /home/"$USER"/.bash_aliases
+if [ -f "/home/$USER/.bash_aliases" ]; then
+    . "/home/$USER/.bash_aliases"
 fi
 
 # Bash Completion
@@ -140,19 +148,19 @@ fi
 
 # User Defined Functions Import
 # I've decided to copy the idea from bash_aliases in order to keep them seperate from here
-if [ -f ~/.bash_functions ]; then
-	. ~/.bash_functions
+if [ -f "/home/$USER/.bash_functions" ]; then
+	. "/home/$USER/.bash_functions"
 fi
 
 # Load Client Sensitive Data 
-if [ -f ~/.bash_secrets ]; then
-	. ~/.bash_secrets
-    alias editsecrets='vim ~/.bash_secrets && source ~/.bash_secrets'
+if [ -f "/home/$USER/.bash_secrets" ]; then
+	. "/home/$USER/.bash_secrets"
+    alias editsecrets='vim /home/$USER/.bash_secrets && source /home/$USER/.bash_secrets'
 fi
 
 # Define the on_exit functions
-if [ -f ~/.bash_exit ]; then
-	trap ~/.bash_exit EXIT
+if [ -f "/home/$USER/.bash_exit" ]; then
+	trap "/home/$USER/.bash_exit" EXIT
 fi
 
 # ---- End Of Bash Configuration Files ----
@@ -162,13 +170,12 @@ fi
 # ---- Start Of Environment Variables -----
 # ---------
 
-# Universal Environment Variables
-export PATH=$PATH:~/local/bin
-export PATH=$PATH:~/.local/bin
-# Language Servcer Protocol
-export PATH=$PATH:~/lsp
+# Defining Variables
+# ----------
 # JAVA
 export JAVA_HOME="/usr/lib/jvm/jre-17-openjdk"
+# ANDRIOD
+export ANDROID_SDK_ROOT="/usr/lib/android-sdk"
 # SCALA
 export SCALA_HOME=/usr/share/scala
 export SPARK_HOME=/opt/spark
@@ -185,7 +192,12 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
 export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+# ORCA
+export ORCA_HOME=/opt/orca/
+# Exercism
+export EXERCISM_HOME="/home/$USER/.exercism"
 # Special WSL envvars that would just annoy a pure linux system
+# ----------
 if [[ ${WSLON} == true ]]; then
 	export CODE_HOME="/c/Users/$USER/AppData/Local/Programs/Microsoft VS Code"
 	export REAL_DOCKER_HOME='/mnt/wsl/docker-desktop-data/data'
@@ -199,8 +211,17 @@ if [[ ${WSLON} == true ]]; then
     export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
     export VARANT_WSL_WINDOWS_ACCESS_USER_HOME_PATH="/c/Users/${USER}/VirtualBox VMs"
 fi
+# Wiki Home
+if [ -d "/home/${USER}/dev/learning/" ]; then
+    export LEARNHOME="/home/${USER}/dev/learning/"
+else
+    if [ -d "/home/${USER}/Learning/" ]; then
+    export LEARNHOME="/home/${USER}/Learning/"
+    fi
+fi
 
 # Editor Settings VIM or NEOVIM?
+# ----------
 # Set Nvim default to 0
 NVIM=0
 # If on Manjaro
@@ -223,45 +244,29 @@ else
     export VIMINIT="source /home/$USER/.vim/.vimrc"
 fi
 
-# Home User Environment Variables
-if [ "$USER" == "bowmanpete" ]; then
-	# User Environment Vars for Home PC	
-	export EXERCISM_HOME="/home/$USER/.exercism"
-	export ANDROID_SDK_ROOT="/usr/lib/android-sdk"
-	# Adding Home User Variables to Path
-	export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
-    export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin
-	export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
-	export PATH=$PATH:$EXERCISM_HOME/
-	export PATH=$PATH:$HADOOP_HOME/bin
-	export PATH=$PATH:$CODE_HOME/bin
-    # No LEARNHOME variable in home dir 
-    if [ -d "/home/${USER}/dev/learning/" ]; then
-        export LEARNHOME="/home/${USER}/dev/learning/"
-    else
-        if [ -d "/home/${USER}/Learning/" ]; then
-        export LEARNHOME="/home/${USER}/Learning/"
-        fi
-    fi
-fi
 
-
-# Appending Variables Variables to Path
-export PATH="$JAVA_HOME/bin:$PATH"
-export PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
-export PATH="${PATH}:${SCALA_HOME}/bin"
-export PATH=$PATH:$SBT_HOME
-export PATH="$PATH:$CODE_HOME/bin"
-export PATH="$PATH:$GEM_HOME/bin"
-export PATH="$PATH:/c/Program Files/Oracle/VirtualBox"
-export PATH="$PATH:$NPM_CONFIG_PREFIX/bin"
-export PATH="$PYENV_ROOT/bin:$PATH"
+# Path Additions
+# ----------
+add_to_path "$JAVA_HOME/bin"
+add_to_path "$SPARK_HOME/bin:$SPARK_HOME/sbin"
+add_to_path "${SCALA_HOME}/bin"
+add_to_path "$SBT_HOME"
+add_to_path "$CODE_HOME/bin"
+add_to_path "$GEM_HOME/bin"
+add_to_path "/c/Program Files/Oracle/VirtualBox"
+add_to_path "$PYENV_ROOT/bin"
+add_to_path "$ORCA_HOME" 
+add_to_path "$HADOOP_HOME/bin"
+add_to_path "$ANDROID_SDK_ROOT/platform-tools"
+add_to_path "$ANDROID_SDK_ROOT/cmdline-tools/tools/bin"
+add_to_path "$ANDROID_SDK_ROOT/emulator"
+add_to_path "$EXERCISM_HOME/"
 
 # ---- End Of Environment Variables -----
 
-
-
+# ---------
 # ---- Automated Shell Commands For Startup ----
+# ---------
 
 # Pyenv Setup
 eval "$(pyenv init -)"  
@@ -270,8 +275,8 @@ eval "$(pyenv virtualenv-init -)"
 # Powerline Setup
 if [ -f "$(which powerline-daemon)" ]; then
   powerline-daemon -q
-  POWERLINE_BASH_CONTINUATION=1
-  POWERLINE_BASH_SELECT=1
+  export POWERLINE_BASH_CONTINUATION=1
+  export POWERLINE_BASH_SELECT=1
   source /usr/share/powerline/bash/powerline.sh
 fi
 
@@ -299,8 +304,3 @@ fi
 # ----------------
 # End Of bashrc
 # ----------------
-export PATH=$PATH:/home/bowmanpete/.spicetify
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH=$BUN_INSTALL/bin:$PATH

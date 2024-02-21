@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# --------------------------------
+# Bash Aliases
+# --------------------------------
+
 # Directory Commands
 # --------
 alias ll='ls -alF'
@@ -110,7 +115,11 @@ alias media_last='spotify playback previous'
 # --------
 alias norduk="nordvpn connect United_Kingdom London"
 # --------
+
 # Terminal Flavours
 # --------
 [[ ""$TERM == *"kitty"* ]] && alias ssh="kitty +kitten ssh"
-# ----------
+# --------
+
+# --------
+# EndofAlias

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --------------------------------
+# Environment Functions
+# --------------------------------
+
 function wsldevcheck() {
 	if [ "${WSLON}" == "true" ]; then
         [[ ! -d ~/dev  ]] && ln -s "$WINHOME"/dev ~/dev
@@ -176,3 +180,6 @@ export -f newscreen
 export -f stenv
 export -f cocfinstall
 export -f standardterm
+
+# --------
+# EndofAliases
