@@ -27,9 +27,9 @@ vim.g["mapleader"] = "\\"
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
+local system = vim.fn.system
 local fs = vim.fs -- vim filesystem
 local ui = vim.ui -- vim ui options
-local system = vim.system
 local keymap = vim.keymap
 local ft = vim.filetype
 local hl = vim.api.nvim_set_hl
@@ -359,6 +359,71 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 ----------
 
 --------------------------------
+-- Editor Options, Settings, Commands
+--------------------------------
+
+-- Options
+----------
+-- Line Numbers On
+opt.number = true
+-- Other Encoding and Formatting settings
+opt.linebreak = true
+opt.autoindent = true
+opt.encoding = "UTF-8"
+opt.showmode = false
+opt.splitbelow = true
+opt.signcolumn = "yes"
+-- Default Tabstop & Shiftwidth
+opt.tabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = true
+-- Folding Options
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldlevelstart = 99
+-- Conceal Level
+opt.conceallevel = 1
+-- Mouse off
+opt.mouse = ""
+----------
+
+-- Settings
+----------
+gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
+-- Virtual Text Enabled Globally
+diagnostics.config({ virtual_text = true })
+----------
+
+-- Commands
+----------
+api.nvim_create_user_command("DepInstall", function()
+	if vim.bo.filetype == "python" then
+		vim.fn.system("pip install -r " .. vim.fn.getcwd() .. "/requirements.txt")
+	end
+end, { nargs = 0 })
+----------
+
+--------------------------------
+-- Register Settings (Copy, Paste)
+--------------------------------
+
+-- Setup Config for xfce4 desktops to use system keyboard
+----------
+gv["clipboard"] = {
+	name = "xclip-xfce4-clipman",
+	copy = {
+		["+"] = "xclip -selection clipboard",
+		["*"] = "xclip -selection clipboard",
+	},
+	paste = {
+		["+"] = "xclip -selection clipboard -o",
+		["*"] = "xclip -selection clipboard -o",
+	},
+	cache_enabled = true,
+}
+----------
+
+--------------------------------
 -- Color Schemes and Themes
 --------------------------------
 
@@ -457,58 +522,6 @@ dashboard.section.header.val = {
 	"                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                  ",
 }
 alpha.setup(dashboard.config)
-----------
-
---------------------------------
--- Editor Options, Settings, Commands
---------------------------------
-
--- Options
-----------
--- Line Numbers On
-opt.number = true
--- Other Encoding and Formatting settings
-opt.linebreak = true
-opt.autoindent = true
-opt.encoding = "UTF-8"
-opt.showmode = false
-opt.splitbelow = true
-opt.signcolumn = "yes"
--- Default Tabstop & Shiftwidth
-opt.tabstop = 4
-opt.shiftwidth = 4
-opt.expandtab = true
--- Folding Options
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldlevelstart = 99
--- Conceal Level
-opt.conceallevel = 1
--- Mouse off
-opt.mouse = ""
-----------
-
--- Settings
-----------
-gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
--- Virtual Text Enabled Globally
-diagnostics.config({ virtual_text = true })
-----------
-
--- Setup Config for xfce4 desktops to use system keyboard
-----------
-gv["clipboard"] = {
-	name = "xclip-xfce4-clipman",
-	copy = {
-		["+"] = "xclip -selection clipboard",
-		["*"] = "xclip -selection clipboard",
-	},
-	paste = {
-		["+"] = "xclip -selection clipboard -o",
-		["*"] = "xclip -selection clipboard -o",
-	},
-	cache_enabled = true,
-}
 ----------
 
 -------------------------------
