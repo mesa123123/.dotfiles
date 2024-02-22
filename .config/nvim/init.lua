@@ -37,13 +37,8 @@ local loop = vim.loop
 local diagnostics = vim.diagnostic
 -- For Options
 local opt = vim.opt -- vim options
-local gopt = vim.go -- global options
-local bopt = vim.bo -- buffer options
-local wopt = vim.wo -- window options
 -- For Variables
 local gv = vim.g -- global variables
-local bv = vim.b -- buffer variables
-local wv = vim.w -- window variables
 ----------
 
 -- Functions
@@ -136,7 +131,7 @@ opt.rtp:prepend(lazypath)
 local plugins = {
 	-- Essentials
 	----------
-	"nvim-lua/plenary.nvim",
+	{ "nvim-lua/plenary.nvim", event = "VeryLazy" },
 	"nvim-treesitter/nvim-treesitter",
 	"folke/neodev.nvim",
 	-- Autocompletion & Snips
@@ -173,10 +168,10 @@ local plugins = {
 	{ "jose-elias-alvarez/null-ls.nvim", branch = "main" },
 	-- Linting Plugins
 	----------
-	"mfussenegger/nvim-lint",
+	{ "mfussenegger/nvim-lint", event = "VeryLazy" },
 	-- Formatting
 	----------
-	"stevearc/conform.nvim",
+	{ "stevearc/conform.nvim", event = "VeryLazy" },
 	-- Debug Adapter Protocol
 	----------
 	{
@@ -247,7 +242,7 @@ local plugins = {
 	-- Git Highlighting
 	"itchyny/vim-gitbranch",
 	-- LSP Icons
-	"onsails/lspkind.nvim",
+	{ "onsails/lspkind.nvim", event = "VeryLazy" },
 	-- Dashboard
 	{
 		"goolord/alpha-nvim",
@@ -278,6 +273,7 @@ local plugins = {
 			"piersolenski/telescope-import.nvim",
 			"nvim-telescope/telescope-ui-select.nvim",
 		},
+		event = "VeryLazy",
 	},
 	----------
 	-- Study Functionality
@@ -308,6 +304,60 @@ api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {}) -- Edit
 api.nvim_create_user_command("Srcv", "luafile ~/.config/nvim/init.lua", {}) -- Source Config
 ----------
 
+-------------------------------
+-- Filetype Settings
+-------------------------------
+
+-- Custom Filetypes
+----------
+gv["do_filetype_lua"] = 1
+gv["did_load_filetypes"] = 0
+ft.add({
+	filename = {
+		["Vagrantfile"] = "ruby",
+		["Jenkinsfile"] = "groovy",
+	},
+	pattern = { [".*req.*.txt"] = "requirements" },
+	extension = { hcl = "ini", draft = "markdown", env = "config" },
+})
+----------
+
+-- Tabs and Shiftwidth
+----------
+api.nvim_create_augroup("ShiftAndTabWidth", {})
+-- Autocommand for shifts and tabs
+local function set_shift_and_tab(length, patterns)
+	api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+		pattern = patterns,
+		callback = function()
+			vim.bo.tabstop = length
+			vim.bo.shiftwidth = length
+			vim.bo.expandtab = true
+		end,
+		group = "ShiftAndTabWidth",
+	})
+end
+-- Set them for various File extensions
+set_shift_and_tab(2, { "*.cpp", "*.ts", "*.md", ".draft" })
+set_shift_and_tab(4, { "*.py" })
+-- Filetype specific autocommands
+api.nvim_create_augroup("FileSpecs", {})
+api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+	callback = function()
+		local buftype = ft.match({ buf = 0 })
+		if buftype == "gitcommit" then
+			vim.bo.EditorConfig_disable = 1
+		end
+		if buftype == "markdown" then
+			vim.wo.spell = true
+			vim.bo.spelllang = "en_gb"
+			vim.keymap.set("i", "<TAB>", "<C-t>", {})
+		end
+	end,
+	group = "FileSpecs",
+})
+----------
+
 --------------------------------
 -- Color Schemes and Themes
 --------------------------------
@@ -331,7 +381,24 @@ gv["rainbow_active"] = 1
 -- Load Webdevicons
 ----------
 local devIcons = require("nvim-web-devicons")
-devIcons.setup({ default = true })
+devIcons.setup({
+	default = true,
+	-- CustomFileTypes
+	override_by_filename = {
+		["requirements.txt"] = {
+			icon = "",
+			color = "#51a0cf",
+			cterm_color = "196",
+			name = "requirements",
+		},
+		["dev-requirements.txt"] = {
+			icon = "",
+			color = "#51a0cf",
+			cterm_color = "196",
+			name = "requirements",
+		},
+	},
+})
 -- Setup Custom Icons
 devIcons.set_icon({
 	htmldjango = {
@@ -367,7 +434,6 @@ hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend =
 ----------
 require("colorizer").setup()
 ----------
-
 
 -----------------------------
 -- Start Page - alpha.nvim
@@ -418,6 +484,8 @@ opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldlevelstart = 99
 -- Conceal Level
 opt.conceallevel = 1
+-- Mouse off
+opt.mouse = ""
 ----------
 
 -- Settings
@@ -425,12 +493,6 @@ opt.conceallevel = 1
 gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
 -- Virtual Text Enabled Globally
 diagnostics.config({ virtual_text = true })
-----------
-
--- Commands
-----------
-cmd([[ au FileType gitcommit let b:EditorConfig_disable = 1 ]])
-cmd([[ set mouse= ]])
 ----------
 
 -- Setup Config for xfce4 desktops to use system keyboard
@@ -458,42 +520,6 @@ local neodev = require("neodev")
 neodev.setup({
 	library = { plugins = { "neotest" }, types = true },
 })
-----------
-
--------------------------------
--- Language Specific Settings
--------------------------------
-
--- FileTypes
-----------
-cmd([[ au FileType cpp setlocal et ts=2 sw=2 ]]) -- C++ Language
-cmd([[ au BufRead,BufNewFile *.hcl set filetype=ini ]]) -- HCL Language
-cmd([[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]]) -- JenkinsFile
-cmd([[ au FileType python setlocal et ts=4 sw=4 sts=4 ]]) -- Python Language
-cmd([[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]]) -- Typescript Settings
-cmd([[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]]) -- Vagrant Files
-ft.add({ extension = { env = "config" } })
-----------
-
--- Markdown
----------
--- Set certain types to markdown
-cmd([[ au BufRead,BufNewFile *.draft set filetype=markdown ]])
-cmd([[ au BufRead,BufNewFile *.md set filetype=markdown ]])
--- Config
-cmd([[ au FileType markdown setlocal ts=2 sw=2 sts=2 ]])
-cmd([[ au FileType markdown setlocal spell spelllang=en_gb ]])
-cmd([[ au FileType markdown inoremap <TAB> <C-t> ]])
--- Markdown Syntax Highlighting
-gv["vim_markdown_fenced_languages"] = [['csharp=cs', 'json=javascript', 'mermaid=mermaid']]
-gv["vim_markdown_folding_disabled"] = 1
-gv["vim_markdown_conceal_code_blocks"] = 0
-gv["vim_markdown_conceal"] = 0
-gv["indentLine_setConceal"] = 0
--- GitCommit
-----------
-gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
-cmd([[ au FileType gitcommit let b:EditorConfig_disable = 1 ]])
 ----------
 
 ----------------------------------
@@ -658,6 +684,7 @@ require("nvim-treesitter.configs").setup({
 		"regex",
 		"javascript",
 		"typescript",
+		"requirements",
 	},
 	auto_install = true,
 	highlight = {
@@ -700,6 +727,8 @@ hl(0, "NotifyBackground", { bg = "#414141" })
 -- CmdLine Settings - Noice.nvim/Dressing.nvim
 --------------------------------
 
+-- Config
+----------
 require("noice").setup({
 	views = {
 		cmdline_popup = {
@@ -731,6 +760,7 @@ require("noice").setup({
 			view = "mini",
 			throttle = 1000,
 		},
+		"requirements",
 	},
 	presets = {
 		bottom_search = true, -- use a classic bottom cmdline for search
@@ -740,6 +770,12 @@ require("noice").setup({
 		lsp_doc_border = false, -- add a border to hover docs and signature help
 	},
 })
+----------
+
+-- Mappings
+----------
+keymap.set("n", "<leader>:", ":lua ", keyopts({ desc = "Run Lua Command" }))
+keymap.set("n", "<leader>;", ":h ", keyopts({ desc = "Open Help Reference" }))
 
 ----------
 
@@ -842,8 +878,8 @@ require("lualine").setup({
 		}, noice_recording },
 		lualine_b = {
 			"branch",
-			{ "diff", symbols = { added = "[+] ", modified = "[~] ", removed = "[-] " } },
-			{ "diagnostics" },
+			{ "diff", symbols = { added = "+", modified = "~", removed = "-" } },
+			{ "diagnostics", symbols = { error = "E-", warn = "W-", info = "I-", hint = "H-" } },
 		},
 		lualine_c = {
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
@@ -858,7 +894,7 @@ require("lualine").setup({
 		lualine_a = {},
 		lualine_b = {},
 		lualine_c = { "filename" },
-		lualine_x = { "location" },
+		lualine_x = {},
 		lualine_y = {},
 		lualine_z = {},
 	},
@@ -1140,11 +1176,11 @@ local ui_select_configs = {}
 require("todo-comments").setup({
 	keywords = {
 		LOOKUP = { icon = "󱛉", color = "lookup" },
-        TODO = { icon = "󰟃", color = "todo" },
+		TODO = { icon = "󰟃", color = "todo" },
 	},
 	colors = {
 		lookup = { "#8800bb" },
-        todo = { "#3080b0" },
+		todo = { "#3080b0" },
 	},
 })
 ----------
