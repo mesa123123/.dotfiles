@@ -5,7 +5,7 @@ export CARGO_HOME="/home/$USER/.cargo"
 . "$CARGO_HOME/env"
 
 # Package List
-packages=("sccache" "bat" "bottom" "tealdeer" "du-dust" "tre" "git-delta" "tidy-viewer" "ripgrep" "gitui" "rtx-cli" "xcolor"  "ncspot" "zoxide" "html2pdf")
+packages=("cargo-update" "sccache" "bat" "bottom" "tealdeer" "du-dust" "tre" "git-delta" "tidy-viewer" "ripgrep" "gitui" "rtx-cli" "xcolor"  "ncspot" "zoxide" "html2pdf")
 
 # Repeatable Function
 function inventory() {
