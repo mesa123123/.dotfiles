@@ -396,9 +396,12 @@ diagnostics.config({ virtual_text = true })
 
 -- Commands
 ----------
+-- #FIX: This doesn't seem to do anything, or output to console
 api.nvim_create_user_command("DepInstall", function()
 	if vim.bo.filetype == "python" then
-		vim.fn.system("pip install -r " .. vim.fn.getcwd() .. "/requirements.txt")
+		print("Installing via pip")
+		local output = vim.fn.system("pip install -r " .. vim.fn.getcwd() .. "/requirements.txt")
+		print(output)
 	end
 end, { nargs = 0 })
 ----------
@@ -789,6 +792,7 @@ require("noice").setup({
 ----------
 keymap.set("n", "<leader>:", ":lua ", keyopts({ desc = "Run Lua Command" }))
 keymap.set("n", "<leader>;", ":h ", keyopts({ desc = "Open Help Reference" }))
+keymap.set("n", "<leader>!", ":! ", keyopts({ desc = "Run System Command" }))
 
 ----------
 
@@ -1190,10 +1194,14 @@ require("todo-comments").setup({
 	keywords = {
 		LOOKUP = { icon = "󱛉", color = "lookup" },
 		TODO = { icon = "󰟃", color = "todo" },
+		BUG = { icon = "󱗜", color = "JiraBug" },
+		TASK = { icon = "", color = "JiraTask" },
 	},
 	colors = {
 		lookup = { "#8800bb" },
 		todo = { "#3080b0" },
+		JiraBug = { "#e5493a" },
+		JiraTask = { "#4bade8" },
 	},
 })
 ----------
