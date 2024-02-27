@@ -182,6 +182,7 @@ local lsp_servers_ei = {
 	"yamlls",
 	"cssls",
 	"sqlls",
+	"taplo",
 }
 -- Formatters
 local formatters_ei =
@@ -791,6 +792,11 @@ config.bashls.setup({ on_attach = on_attach, capabilities = capabilities })
 config.yamlls.setup({ on_attach = on_attach, capabilities = capabilities })
 ----------
 
+-- Toml
+----------
+config.taplo.setup({ on_attach = on_attach, capabilities = capabilities })
+----------
+
 -- SQL
 ----------
 config.sqlls.setup({
@@ -800,17 +806,8 @@ config.sqlls.setup({
 })
 ----------
 
--- Rust Server
+-- Rust
 ----------
--- G.rustaceanvim = {
---     server = {
---         on_attach = on_attach,
---         -- capabilities = capabilities,
---     },
---     ["rust-analyzer"] = {
---         checkOnSave = { command = "clippy" },
---     },
--- }
 config.rust_analyzer.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
@@ -824,11 +821,6 @@ config.rust_analyzer.setup({
 })
 ----------
 
--- Terraform
----------
-config.terraformls.setup({ on_attach = on_attach, capabilities = capabilities, filetypes = { "tf", "terraform" } })
-config.tflint.setup({ on_attach = on_attach, capabilities = capabilities })
-
 --------------------------------
 -- Setup of Null-ls -- Third Party LSPs
 --------------------------------
@@ -836,9 +828,6 @@ config.tflint.setup({ on_attach = on_attach, capabilities = capabilities })
 -- Import Null-ls
 ----------
 local nullls = require("null-ls")
-local format = nullls.builtins.formatting -- Formatting
-local diagnose = nullls.builtins.diagnostics -- Diagnostics
-local code_actions = nullls.builtins.code_actions
 local hover = nullls.builtins.hover
 local completion = nullls.builtins.completion -- Code Completion
 ----------
@@ -849,69 +838,17 @@ local completion = nullls.builtins.completion -- Code Completion
 local nullSources = {}
 ----------
 
-----------
-
--- Setup Various Servers/Packages
-----------
--- Installed Mason Managed Sources (I prefer these because they'll sit with everything else)
-for _, package in pairs(tool_installed_packages.get_installed_package_names()) do
-	-- Shell
-	----------
-	-- Restructured Text
-	if package == "rstcheck" then
-		nullSources[#nullSources + 1] = diagnose.rstcheck.with({
-			on_attach = on_attach,
-			filetypes = { "rst" },
-		})
-	end
-	-- English
-	----------
-	if package == "write-good" then
-		nullSources[#nullSources + 1] = diagnose.write_good.with({
-			on_attach = on_attach,
-			filetypes = {
-				"txt",
-				"md",
-				"mdx",
-				"markdown",
-			},
-			diagnostics_postprocess = function(diagnostic)
-				diagnostic.severity = vim.diagnostic.severity["INFO"]
-			end,
-		})
-	end
-	if package == "proselint" then
-		nullSources[#nullSources + 1] = diagnose.proselint.with({
-			on_attach = on_attach,
-			filetypes = {
-				"txt",
-				"md",
-				"mdx",
-				"markdown",
-			},
-		})
-		nullSources[#nullSources + 1] = code_actions.proselint.with({
-			on_attach = on_attach,
-			filetypes = {
-				"txt",
-				"md",
-				"mdx",
-				"markdown",
-			},
-		})
-	end
-end
-------------
-
 -- Builtin Sources (Not Managed By Mason)
 ----------
 -- English Completion
+-- TASK: Recreate this with LspConfig, under the hood it uses vim.fn.spellsuggest
 nullSources[#nullSources + 1] = completion.spell.with({
 	on_attach = on_attach,
 	autostart = true,
 	filetypes = { "txt", "markdown", "md", "mdx" },
 })
 -- -- Dictionary Definitions
+-- TASK: Recreate this with LspConfig, under the hood it uses a call to dictionary.api website
 nullSources[#nullSources + 1] = hover.dictionary.with({
 	on_attach = on_attach,
 	autostart = true,
