@@ -701,6 +701,7 @@ require("nvim-treesitter.configs").setup({
 		"javascript",
 		"typescript",
 		"requirements",
+		"jsonc",
 	},
 	auto_install = true,
 	highlight = {
