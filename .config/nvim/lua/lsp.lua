@@ -185,25 +185,33 @@ local lsp_servers_ei = {
 	"cssls",
 	"sqlls",
 	"taplo",
+	"html-lsp",
+	"htmx-lsp",
+	"tailwindcss-language-server",
 }
 -- Formatters
-local formatters_ei =
-	{ "shellharden", "sql-formatter", "eslint", "prettier", "djlint", "black", "jq", "stylua", "yamlfmt" }
+local formatters_ei = { "prettier", "shellharden", "sql-formatter", "djlint", "black", "jq", "stylua", "yamlfmt" }
 -- Lineters
-local linters_ei = { "eslint", "pylint", "jsonlint", "luacheck", "markdownlint", "yamllint", "shellcheck" }
+local linters_ei = {
+	"pylint",
+	"jsonlint",
+	"luacheck",
+	"markdownlint",
+	"yamllint",
+	"shellcheck",
+	"htmlhint",
+	"stylelint",
+	"proselint",
+	"write-good",
+}
 -- Debuggers
 local debuggers_ei = { "debugpy", "bash-debug-adapter", "codelldb" }
--- Other Language Servers, Handled by Nullls DAP exc
-local other_servers = { "prettier", "rstcheck", "write-good", "proselint" }
 ----------
 
 -- Install Packages
 ----------
 tool_installer.setup({
-	ensure_installed = tableConcat(
-		formatters_ei,
-		tableConcat(linters_ei, tableConcat(other_servers, tableConcat(debuggers_ei, lsp_servers_ei)))
-	),
+	ensure_installed = tableConcat(formatters_ei, tableConcat(linters_ei, tableConcat(debuggers_ei, lsp_servers_ei))),
 	auto_update = true,
 }) -- This is running through Mason_Tools_Installer
 ----------
@@ -284,6 +292,8 @@ format.setup({
 		yaml = { "yamlfmt" },
 		sql = { "sql_formatter" },
 		rust = { "rustfmt" },
+		jinja = { "djlint" },
+		["*"] = { "injected" },
 	},
 })
 
@@ -315,13 +325,12 @@ lint.linters_by_ft = {
 	-- lua
 	lua = { "luacheck" },
 	-- Markdown
-	markdown = { "markdownlint" },
+	markdown = { "markdownlint", "proselint", "write-good" },
 	yaml = { "yamllint" },
-	javascript = { "eslint" },
-	typescript = { "eslint" },
-	html = { "eslint" },
-	css = { "eslint" },
+	html = { "htmlhint" },
+	css = { "stylelint" },
 	sh = { "shellcheck" },
+	jinja = { "djlint" },
 }
 
 -- Auto-Lint on Save, Enter, and InsertLeave
@@ -383,13 +392,16 @@ end
 -- Sources for General Cmp
 ----------
 local general_sources = {
-	{ name = cmpsnip },
+	{ name = "luasnip" },
 	{ name = "nvim_lsp" },
+	{ name = "nvim_lsp_document_symbol" },
 	{ name = "path" },
 	{ name = "buffer" },
-	{ name = cmplua },
-	{ name = cmphtmx },
+	{ name = "nvim_lua" },
+	{ name = "spell" },
+	{ name = "htmx" },
 	{ name = "treesitter" },
+	{ name = "dotenv" },
 }
 
 -- Cmp-Ui
@@ -516,6 +528,7 @@ cmp.setup.cmdline("/", {
 cmp.setup.cmdline(":", {
 	sources = {
 		{ name = "cmdline" },
+		{ name = "cmdline_history" },
 		{ name = "path" },
 	},
 	mapping = {
@@ -702,10 +715,6 @@ end
 
 ----------
 
---------------------------------
--- Setup of Language Servers
---------------------------------
-
 -- Functions
 ----------
 -- Find Python Virutal_Env
@@ -717,12 +726,36 @@ local function get_python_path()
 	-- Fallback to System Python
 	return fn.exepath("python3") or fn.exepath("python") or "python"
 end
+-- Standard Opts
+local function lsp_opts(opts)
+	local standardOpts = { on_attach = on_attach, capabilities = capabilities }
+	for k, v in pairs(standardOpts) do
+		opts[k] = v
+	end
+	return opts
+end
+----------
+
+--------------------------------
+-- Setup of Language Servers
+--------------------------------
+
+-- Config Languages
+----------
+-- Yaml
+config.yamlls.setup(lsp_opts({}))
+-- Toml
+config.taplo.setup(lsp_opts({}))
+----------
+
+-- Bash
+----------
+config.bashls.setup(lsp_opts({}))
+----------
 
 -- Lua: Language Server
 ----------
-config.lua_ls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
+config.lua_ls.setup(lsp_opts({
 	-- Config
 	settings = {
 		Lua = {
@@ -735,23 +768,21 @@ config.lua_ls.setup({
 			telemetry = { enable = false }, -- Don't steal my data
 		},
 	},
-})
+}))
 ----------
 
 -- Python: Pyright, Jedi
 ----------
-config.pyright.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
+config.pyright.setup(lsp_opts({
 	on_init = function(client)
 		client.config.settings.python.pythonPath = get_python_path()
 	end,
-})
+}))
 ----------
 
 -- Web
 ----------
--- TSServer
+-- Typescript
 config.tsserver.setup({
 	capabilities = require("cmp_nvim_lsp").default_capabilities(lsp.protocol.make_client_capabilities()),
 	on_attach = function(client)
@@ -759,61 +790,33 @@ config.tsserver.setup({
 	end,
 })
 -- Emmet Integration
-config.emmet_ls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
--- cssls
-config.cssls.setup({ on_attach = on_attach, capabilities = capabilities })
--- eslint-lsp
-config.eslint.setup({ on_attach = on_attach, capabilities = capabilities })
+config.emmet_ls.setup(lsp_opts({ filetypes = { "css", "html", "htmldjango", "jinja" } }))
+-- Html
+config.html.setup(lsp_opts({ filetypes = { "html", "htmldjango", "jinja" } }))
+config.htmx.setup(lsp_opts({ filetypes = { "html", "htmldjango", "jinja" } }))
+-- Css
+config.cssls.setup(lsp_opts({}))
 ----------
 
 -- Json
 ----------
-config.jsonls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
+config.jsonls.setup(lsp_opts({
 	init_options = {
 		provideFormatter = true,
 	},
-})
-----------
-
--- Cucumber
-----------
-config.cucumber_language_server.setup({ on_attach = on_attach, capabilities = capabilities })
-----------
-
--- Bash
-----------
-config.bashls.setup({ on_attach = on_attach, capabilities = capabilities })
-----------
-
--- Yaml
-----------
-config.yamlls.setup({ on_attach = on_attach, capabilities = capabilities })
-----------
-
--- Toml
-----------
-config.taplo.setup({ on_attach = on_attach, capabilities = capabilities })
+}))
 ----------
 
 -- SQL
 ----------
-config.sqlls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
+config.sqlls.setup(lsp_opts({
 	root_dir = config.util.root_pattern("*.sql"),
-})
+}))
 ----------
 
 -- Rust
 ----------
-config.rust_analyzer.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
+config.rust_analyzer.setup(lsp_opts({
 	settings = {
 		["rust-analyzer"] = {
 			checkOnSave = {
@@ -821,28 +824,17 @@ config.rust_analyzer.setup({
 			},
 		},
 	},
-})
+}))
 ----------
 
---------------------------------
--- Setup of Null-ls -- Third Party LSPs
---------------------------------
-
+-- Null-ls : Third Party LSPs
+----------
 -- Import Null-ls
-----------
 local nullls = require("null-ls")
 local hover = nullls.builtins.hover
 local completion = nullls.builtins.completion -- Code Completion
-----------
-
 -- Variables
-----------
--- Builtin
 local nullSources = {}
-----------
-
--- Builtin Sources (Not Managed By Mason)
-----------
 -- English Completion
 -- TASK: Recreate this with LspConfig, under the hood it uses vim.fn.spellsuggest
 nullSources[#nullSources + 1] = completion.spell.with({
@@ -850,33 +842,23 @@ nullSources[#nullSources + 1] = completion.spell.with({
 	autostart = true,
 	filetypes = { "txt", "markdown", "md", "mdx" },
 })
--- -- Dictionary Definitions
+-- Dictionary Definitions
 -- TASK: Recreate this with LspConfig, under the hood it uses a call to dictionary.api website
 nullSources[#nullSources + 1] = hover.dictionary.with({
 	on_attach = on_attach,
 	autostart = true,
 	filetypes = { "txt", "markdown", "md", "mdx" },
 })
------------
-
--- Load the Packages into the Null-ls engine
-----------
-nullls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-	debug = true,
-	sources = { sources = nullSources },
-})
+-- Package Load
+nullls.setup(lsp_opts({ debug = true, sources = { sources = nullSources } }))
 ----------
 
 -- Colors and Themes
 ----------
-
 hl(0, "LspDiagnosticsUnderlineError", { bg = "#EB4917", underline = true, blend = 50 })
 hl(0, "LspDiagnosticsUnderlineWarning", { bg = "#EBA217", underline = true, blend = 50 })
 hl(0, "LspDiagnosticsUnderlineInformation", { bg = "#17D6EB", underline = true, blend = 50 })
 hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend = 50 })
-
 ----------
 
 --------------------------------

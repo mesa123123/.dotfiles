@@ -138,18 +138,23 @@ local plugins = {
 	----------
 	{
 		"hrsh7th/nvim-cmp",
-		-- Extensions for NvimCmp
 		dependencies = {
+			-- Sources
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-nvim-lsp-document-symbol",
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-cmdline",
 			"ray-x/cmp-treesitter",
-            "yochem/cmp-htmx",
+			"SergioRibera/cmp-dotenv",
+			"dmitmel/cmp-cmdline-history",
+			"yochem/cmp-htmx",
+			"saadparwaiz1/cmp_luasnip",
+			"f3fora/cmp-spell",
+			-- Dependencies
 			"L3MON4D3/LuaSnip",
 			"rafamadriz/friendly-snippets",
-			"saadparwaiz1/cmp_luasnip",
 			"rcarriga/nvim-notify",
 		},
 	},
@@ -260,7 +265,7 @@ local plugins = {
 			"rcarriga/nvim-notify",
 		},
 	},
-	"stevearc/dressing.nvim",
+	{ "stevearc/dressing.nvim", event = "VeryLazy" },
 	----------
 	-- Nvim Telescope
 	---------
@@ -319,7 +324,7 @@ ft.add({
 		["Jenkinsfile"] = "groovy",
 	},
 	pattern = { [".*req.*.txt"] = "requirements" },
-	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "htmldjango" },
+	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja" },
 })
 ----------
 
@@ -471,13 +476,13 @@ devIcons.setup({
 -- Setup Custom Icons
 devIcons.set_icon({
 	htmldjango = {
-		icon = "",
+		icon = "",
 		color = "#e44d26",
 		cterm_color = "196",
 		name = "Htmldjango",
 	},
 	jinja = {
-		icon = "",
+		icon = "",
 		color = "#e44d26",
 		cterm_color = "196",
 		name = "Jinja",
@@ -577,6 +582,9 @@ keymap.set("n", "dL", "d$", {})
 keymap.set("n", "dH", "d0", {})
 keymap.set("n", "yH", "y0", {})
 keymap.set("n", "yL", "y$", {})
+-- Search in Visual Mode
+keymap.set("v", "<leader>/", '"fy/\\V<C-R>f<CR>', {})
+
 -- Paste, Yank, Quit, Save Mappings
 ----------
 -- Set Write/Quit to shortcuts
@@ -685,6 +693,8 @@ whichKey.register({
 --  Syntax Highlighting: Tree-Sitter Config
 -----------------------------------------
 
+local treesitter = vim.treesitter
+
 -- Plugin Setup
 ----------
 require("nvim-treesitter.configs").setup({
@@ -720,6 +730,8 @@ require("nvim-treesitter.configs").setup({
 	sync_install = true,
 	ignore_install = {},
 })
+-- Custom Filetypes
+treesitter.language.register("htmldjango", "jinja")
 ----------
 
 -----------------------------------------
