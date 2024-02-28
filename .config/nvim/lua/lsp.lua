@@ -49,6 +49,8 @@ local ui_menu = require("nui.menu")
 ----------
 local path = config.util.path
 local cmpsnip = require("cmp_luasnip")
+local cmphtmx = require("cmp-htmx")
+local cmplua = require("cmp_nvim_lua")
 local telescope = require("telescope")
 local lspkind = require("lspkind")
 local dap_widgets = require("dap.ui.widgets")
@@ -385,7 +387,8 @@ local general_sources = {
 	{ name = "nvim_lsp" },
 	{ name = "path" },
 	{ name = "buffer" },
-	{ name = "nvim_lua" },
+	{ name = cmplua },
+	{ name = cmphtmx },
 	{ name = "treesitter" },
 }
 

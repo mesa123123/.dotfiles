@@ -146,6 +146,7 @@ local plugins = {
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-cmdline",
 			"ray-x/cmp-treesitter",
+            "yochem/cmp-htmx",
 			"L3MON4D3/LuaSnip",
 			"rafamadriz/friendly-snippets",
 			"saadparwaiz1/cmp_luasnip",
@@ -318,7 +319,7 @@ ft.add({
 		["Jenkinsfile"] = "groovy",
 	},
 	pattern = { [".*req.*.txt"] = "requirements" },
-	extension = { hcl = "ini", draft = "markdown", env = "config" },
+	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "htmldjango" },
 })
 ----------
 
