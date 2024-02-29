@@ -132,7 +132,9 @@ local plugins = {
 	-- Essentials
 	----------
 	{ "nvim-lua/plenary.nvim", event = "VeryLazy" },
-	"nvim-treesitter/nvim-treesitter",
+	{ "nvim-treesitter/nvim-treesitter", dependencies = {
+		"nvim-treesitter/playground",
+	} },
 	"folke/neodev.nvim",
 	-- Autocompletion & Snips
 	----------
@@ -729,6 +731,11 @@ require("nvim-treesitter.configs").setup({
 	modules = {},
 	sync_install = true,
 	ignore_install = {},
+	query_linter = {
+		enable = true,
+		use_virtual_text = true,
+		lint_events = { "BufWrite", "CursorHold" },
+	},
 })
 -- Custom Filetypes
 treesitter.language.register("htmldjango", "jinja")
