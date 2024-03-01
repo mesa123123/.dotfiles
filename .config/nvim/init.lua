@@ -8,6 +8,7 @@
 -- TO DO
 --------------------------------
 -- None
+--
 --------------------------------
 
 -------------------------------
@@ -287,10 +288,12 @@ local plugins = {
 		event = "VeryLazy",
 	},
 	----------
-	-- Study Functionality
+	-- Writing Functionality
 	----------
 	-- Wiki - Obsidian nvim
 	{ "epwalsh/obsidian.nvim", event = "VeryLazy" },
+	-- Latex - VimTex
+	"lervag/vimtex",
 	----------
 	-- Alignment
 	{ "junegunn/vim-easy-align", event = "VeryLazy" },
@@ -734,6 +737,7 @@ require("nvim-treesitter.configs").setup({
 		"typescript",
 		"requirements",
 		"jsonc",
+		"latex",
 	},
 	auto_install = true,
 	highlight = {
@@ -1014,6 +1018,7 @@ whichKey.register({
 		d = { name = "Database" },
 		f = { name = "Telescope" },
 		k = { name = "Wiki Opts" },
+		l = { name = "VimTex" },
 		m = { name = "Todos" },
 		p = { name = "System Paste" },
 		q = { name = "Close and Quit" },
@@ -1454,6 +1459,18 @@ whichKey.register({
 	},
 })
 -----------
+
+---------------------------------
+-- Latex Functionality: <leader>l - Vimtex
+---------------------------------
+-- Setup (Currently not supported in Lua)
+
+api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+	pattern = { "*.tex" },
+	callback = function()
+		vim.g["vimtext_view_method"] = "zathura"
+	end,
+})
 
 ---------------------------------
 -- Easy Align
