@@ -840,7 +840,7 @@ local nullSources = {}
 nullSources[#nullSources + 1] = completion.spell.with({
     on_attach = on_attach,
     autostart = true,
-    filetypes = { "txt", "markdown", "md", "mdx" },
+    filetypes = { "txt", "markdown", "md", "mdx", "tex" },
 })
 -- Dictionary Definitions
 -- TASK: Recreate this with LspConfig, under the hood it uses a call to dictionary.api website

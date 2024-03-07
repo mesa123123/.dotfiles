@@ -399,8 +399,12 @@ opt.foldlevelstart = 99
 opt.conceallevel = 1
 -- Mouse off
 opt.mouse = ""
-----------
-
+-- Spell Check On
+opt.spell = true
+-- toggle spellcheck
+api.nvim_create_user_command("SpellCheckToggle", function()
+	vim.opt.spell = not (vim.opt.spell:get())
+end, { nargs = 0 })
 -- Settings
 ----------
 gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
