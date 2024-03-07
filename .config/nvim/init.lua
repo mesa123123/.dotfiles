@@ -332,7 +332,7 @@ ft.add({
 		["Jenkinsfile"] = "groovy",
 	},
 	pattern = { [".*req.*.txt"] = "requirements" },
-	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja" },
+	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja", vy = "python" },
 })
 ----------
 
