@@ -158,6 +158,7 @@ local plugins = {
 			"yochem/cmp-htmx",
 			"saadparwaiz1/cmp_luasnip",
 			"f3fora/cmp-spell",
+			"jmbuhr/otter.nvim",
 			-- Dependencies
 			"L3MON4D3/LuaSnip",
 			"rafamadriz/friendly-snippets",
@@ -184,12 +185,37 @@ local plugins = {
 	-- Formatting
 	----------
 	{ "stevearc/conform.nvim", event = "VeryLazy" },
+	-- Inejected Languages
+	----------
+	"jmbuhr/otter.nvim",
 	-- Debug Adapter Protocol
 	----------
 	{
 		"mfussenegger/nvim-dap",
 		dependencies = { "mfussenegger/nvim-dap-python", "theHamsta/nvim-dap-virtual-text" },
 	},
+	-- Code Running
+	----------
+	{
+		"Zeioth/compiler.nvim",
+		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+		dependencies = { "stevearc/overseer.nvim" },
+		opts = {},
+	},
+	{
+		"stevearc/overseer.nvim",
+		commit = "68a2d344cea4a2e11acfb5690dc8ecd1a1ec0ce0",
+		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
+		opts = {
+			task_list = {
+				direction = "bottom",
+				min_height = 15,
+				max_height = 15,
+				default_detail = 1,
+			},
+		},
+	},
+	----------
 	-- Assistance Plugins
 	----------
 	"folke/which-key.nvim",
@@ -752,7 +778,6 @@ require("nvim-treesitter.configs").setup({
 -- Custom Filetypes
 treesitter.language.register("htmldjango", "jinja")
 ----------
-
 
 -----------------------------------------
 -- Notification Settings - Notify.nvim
@@ -1493,26 +1518,22 @@ keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = 
 ---------
 
 ---------------------------------"
--- Code Execution and Testing - neotest
+-- Code Execution - compiler.nvim, overseer
 ---------------------------------"
 
--- Create AutoCommandGroup
-api.nvim_create_augroup("RunCodeCommands", { clear = true })
+-- Mappings
+----------
+keymap.set("n", "<leader>xx", "<cmd>CompilerOpen<cr>", keyopts({ desc = "Run Code" }))
+keymap.set("n", "<leader>xq", "<cmd>CompilerStop<cr>", keyopts({ desc = "Stop Code Runner" }))
+keymap.set("n", "<leader>xi", "<cmd>CompilerToggleResults<cr>", keyopts({ desc = "Show Code Run" }))
+keymap.set("n", "<leader>xr", "<cmd>CompilerStop<cr>" .. "<cmd>CompilerRedo<cr>", keyopts({ desc = "Re-Run Code" }))
 ----------
 
--- Create Run Command on BufAttach
-----------
-api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "BufNew" }, {
-	callback = function()
-		-- Check if test
-		local filetype = vim.bo.filetype
-		local filename = vim.api.nvim_buf_get_name(0)
-		gv.RunCommand = filetype .. " " .. filename
-	end,
-})
-----------
+---------------------------------"
+-- Code Testing - neotest
+---------------------------------"
 
--- Setup Terminal and Test Runners
+-- Setup Test Runners
 ----------
 
 -- Setup
@@ -1535,23 +1556,6 @@ require("neotest").setup({
 })
 ----------
 
--- Functions
-----------
-function RunnerTermToggle()
-	local runner_client = Terminal:new({
-		cmd = gv.RunCommand,
-		dir = fn.getcwd(),
-		hidden = true,
-		direction = "float",
-		float_opts = {
-			border = "double",
-		},
-		close_on_exit = false,
-	})
-	runner_client:toggle()
-end
-----------
-
 -- Mappings
 ----------
 -- WhichKey
@@ -1562,12 +1566,6 @@ whichKey.register({
 	},
 })
 -- Mappings
-keymap.set(
-	"n",
-	"<leader>xx",
-	"<cmd>lua RunnerTermToggle()<CR>",
-	{ noremap = true, silent = true, desc = "Run Current Buffer" }
-)
 keymap.set(
 	"n",
 	"<leader>xtx",

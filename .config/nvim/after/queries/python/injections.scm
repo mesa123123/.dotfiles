@@ -4,3 +4,7 @@
 
 (_ (comment) @_comment . (block (expression_statement (assignment (string (string_content) @injection.content (#set! injection.language "sql")))))(#match? @_comment "TS:sql"))
 (_ (comment) @_comment . (expression_statement (assignment (string(string_content) @injection.content (#set! injection.language "sql"))))(#match? @_comment "TS:sql"))
+
+
+(_ (comment) @_comment . (block (expression_statement (assignment (string (string_content) @injection.content (#set! injection.language "htmldjango")))))(#match? @_comment "TS:jinja"))
+(_ (comment) @_comment . (expression_statement (assignment (string(string_content) @injection.content (#set! injection.language "htmldjango"))))(#match? @_comment "TS:jinja"))
