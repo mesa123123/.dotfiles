@@ -753,19 +753,6 @@ require("nvim-treesitter.configs").setup({
 treesitter.language.register("htmldjango", "jinja")
 ----------
 
--- Injections
-----------
-local python_injections = treesitter.query.parse(
-	"python",
-	[[
-; extends
-(_ (comment) @_comment . (block (expression_statement (assignment (string (string_content) @injection.content (#set! injection.language "html")))))(#match? @_comment "TS:html"))
-((_ (comment) @_comment . (expression_statement (assignment (string(string_content)))) @string_content (#match? @_comment "TS:html")) @html)
-
-((_ (comment) @_comment . (block (expression_statement (assignment (string (string_content))))) @string_content(#match? @_comment "TS:sql")) @sql)
-((_ (comment) @_comment . (expression_statement (assignment (string(string_content)))) @string_content (#match? @_comment "TS:sql")) @sql)
-    ]]
-)
 
 -----------------------------------------
 -- Notification Settings - Notify.nvim
