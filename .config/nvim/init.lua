@@ -62,6 +62,11 @@ local function loudkeyopts(opts)
 	end
 	return opts
 end
+-- Abstraction for the vast majority of my keymappings
+local function norm_keyset(key, command, wkdesc)
+	keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = true, desc = wkdesc })
+end
+----------
 
 -- Map(function, table)
 ----------
@@ -72,6 +77,7 @@ function Map(func, tbl)
 	end
 	return newtbl
 end
+----------
 
 -- Filter(function, table)
 ----------
@@ -84,6 +90,7 @@ function Filter(func, tbl)
 	end
 	return newtbl
 end
+----------
 
 -- Concat two Tables
 ----------
@@ -93,6 +100,7 @@ local function tableConcat(t1, t2)
 	end
 	return t1
 end
+----------
 
 -- Python Path
 ----------
@@ -104,6 +112,7 @@ local function get_python_path()
 	-- Fallback to System Python
 	return fn.exepath("python3") or fn.exepath("python") or "python"
 end
+----------
 
 --------------------------------
 -- Plugin Loading and Settings -- lazy.nvim
@@ -137,6 +146,7 @@ local plugins = {
 		"nvim-treesitter/nvim-treesitter",
 		dependencies = {
 			"nvim-treesitter/playground",
+			"nvim-treesitter/nvim-treesitter-context",
 		},
 	},
 	"folke/neodev.nvim",
@@ -234,17 +244,29 @@ local plugins = {
 		},
 		event = "VeryLazy",
 	},
+	{
+		"rest-nvim/rest.nvim",
+		dependencies = "nvim-lua/plenary.nvim",
+		ft = "http",
+	},
 	-- Database Workbench,
 	-----------
 	{ "tpope/vim-dadbod", event = "VeryLazy", dependencies = "kristijanhusak/vim-dadbod-ui" },
 	-- Versions Control
 	----------
 	{ "tpope/vim-fugitive", event = "VeryLazy" },
-	-- Status Bar
+	-- Status/Window Lines
 	------------
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
+	},
+	{
+		"utilyre/barbecue.nvim",
+		dependencies = {
+			"SmiteshP/nvim-navic",
+			"nvim-tree/nvim-web-devicons", -- optional dependency
+		},
 	},
 	------------
 	-- Colors and Themes
@@ -277,8 +299,6 @@ local plugins = {
 			"RainbowMultiDelim",
 		},
 	},
-	-- Git Highlighting
-	"itchyny/vim-gitbranch",
 	-- LSP Icons
 	{ "onsails/lspkind.nvim", event = "VeryLazy" },
 	-- Dashboard
@@ -651,9 +671,9 @@ keymap.set({ "n", "v" }, "<leader>p", '"+p', keyopts({ desc = "System Paste" }))
 -- Highlighting Search Mappings
 ---------
 -- Trigger Highlight Searching Automatically
-keymap.set("n", "<cr>", ":nohlsearch<CR>", { silent = true })
-keymap.set("n", "n", ":set hlsearch<CR>n", { silent = true })
-keymap.set("n", "N", ":set hlsearch<CR>N", { silent = true })
+keymap.set("n", "<cr>", ":nohlsearch<CR>", keyopts({}))
+keymap.set("n", "n", ":set hlsearch<CR>n", keyopts({}))
+keymap.set("n", "N", ":set hlsearch<CR>N", keyopts({}))
 ---------
 
 -- Pane Control Mappings
@@ -752,6 +772,12 @@ require("nvim-treesitter.configs").setup({
 		"requirements",
 		"jsonc",
 		"latex",
+		"http",
+		"git_config",
+		"git_rebase",
+		"gitattributes",
+		"gitcommit",
+		"gitignore",
 	},
 	auto_install = true,
 	highlight = {
@@ -777,6 +803,15 @@ require("nvim-treesitter.configs").setup({
 
 -- Custom Filetypes
 treesitter.language.register("htmldjango", "jinja")
+----------
+
+-- Mappings
+----------
+-- Context Bar - W/TS Context
+norm_keyset("<leader>hc", "TSContextEnable", "Context Highlight On")
+norm_keyset("<leader>hs", "TSContextDisable", "Context Highlight Off")
+norm_keyset("<leader>ht", "TSContextToggle", "Context Highlight Toggle")
+norm_keyset("[c", 'lua require(treesitter-context").go_to_context(vim.v.count1)', "Context Highlight Toggle")
 ----------
 
 -----------------------------------------
@@ -849,19 +884,31 @@ require("noice").setup({
 
 -- Mappings
 ----------
-keymap.set("n", "<leader>:", ":lua ", keyopts({ desc = "Run Lua Command" }))
+keymap.set("n", "<leader>:", ":lua print(", keyopts({ desc = "Print Lua Command" }))
 keymap.set("n", "<leader>;", ":h ", keyopts({ desc = "Open Help Reference" }))
 keymap.set("n", "<leader>!", ":! ", keyopts({ desc = "Run System Command" }))
 
 ----------
 
 -----------------------------
--- Status Line - LuaLine
+-- Window Line - barbecue
 -----------------------------
 
+-- Setup
+----------
+require("barbecue").setup()
+----------
+
+-----------------------------
+-- Status Line - lualine
+-----------------------------
+
+----------
 -- Helper Functions
 ----------
+
 -- Get accurate time on panel
+----------
 function Zonedtime(hours)
 	-- Change time zone here (default seems to be +12 on home workstation)
 	local zone_difference = 11
@@ -869,8 +916,26 @@ function Zonedtime(hours)
 	local d = t + hours * 3600
 	return os.date("%H:%M %Y-%m-%d", d)
 end
+----------
 
--- Functions to make an active lsp panel
+-- Truncate components on smaller windows
+------------------
+local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
+	return function(str)
+		local win_width = vim.fn.winwidth(0)
+		if hide_width and win_width < hide_width then
+			return ""
+		elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
+			return str:sub(1, trunc_len) .. (no_ellipsis and "" or "...")
+		end
+		return str
+	end
+end
+------------------
+
+-- Linting, Formatting, Lsp, Dap Info
+------------------
+-- LSP
 local active_lsp = {
 	function()
 		local bufnr = vim.api.nvim_get_current_buf()
@@ -886,8 +951,9 @@ local active_lsp = {
 		end
 	end,
 	color = { fg = "f84935" },
+	fmt = trunc(120, 3, 90, true),
 }
-
+-- Formatter
 local active_formatter = {
 	function()
 		local formatters = require("conform").list_formatters_for_buffer(0)
@@ -898,8 +964,9 @@ local active_formatter = {
 		end
 	end,
 	color = { fg = "#8ec07c" },
+	fmt = trunc(120, 3, 90, true),
 }
-
+-- Linter
 local active_lint = {
 	function()
 		local linters = require("lint").linters_by_ft[vim.bo.filetype][1]
@@ -910,8 +977,9 @@ local active_lint = {
 		end
 	end,
 	color = { fg = "#eab133" },
+	fmt = trunc(120, 4, 90, true),
 }
-
+-- Debugger
 local debug_status = {
 	function()
 		local status = require("dap").status()
@@ -922,8 +990,12 @@ local debug_status = {
 		end
 	end,
 	color = { fg = "#f84935" },
+	fmt = trunc(120, 4, 90, true),
 }
+------------------
 
+-- Show if a macro is recording
+------------------
 local noice_recording = {
 	function()
 		local noice_stats = require("noice").api.statusline.mode.get()
@@ -936,6 +1008,7 @@ local noice_recording = {
 	cond = require("noice").api.statusline.mode.has,
 	color = { fg = "#282828" },
 }
+------------------
 
 -- Config
 ----------
@@ -954,25 +1027,26 @@ require("lualine").setup({
 		}, noice_recording },
 		lualine_b = {
 			"branch",
-			{ "diff", symbols = { added = "+", modified = "~", removed = "-" } },
-			{ "diagnostics", symbols = { error = "E-", warn = "W-", info = "I-", hint = "H-" } },
+			{
+				"diff",
+				symbols = { added = "+", modified = "~", removed = "-" },
+				fmt = trunc(120, 10000, 120, true),
+			},
+			{
+				"diagnostics",
+				symbols = { error = "E-", warn = "W-", info = "I-", hint = "H-" },
+				fmt = trunc(120, 10000, 120, true),
+			},
 		},
 		lualine_c = {
-			{ "filetype", colored = true, icon_only = true, icon = { align = "right" } },
-			"filename",
+			{ "filetype", colored = true, icon_only = true, icon = { align = "right" }, fmt = trunc(120, 4, 90, true) },
+			{ "filename",  },
 			debug_status,
+			{ "overseer", colored = true },
 		},
 		lualine_x = { active_lsp, active_lint, active_formatter },
-		lualine_y = { "progress", "location" },
+		lualine_y = { {"progress", fmt = trunc(120, 10000, 120, true)},{ "location" }},
 		lualine_z = { "Zonedtime(11)" },
-	},
-	inactive_sections = {
-		lualine_a = {},
-		lualine_b = {},
-		lualine_c = { "filename" },
-		lualine_x = {},
-		lualine_y = {},
-		lualine_z = {},
 	},
 })
 ----------
@@ -996,25 +1070,27 @@ require("lualine").setup({
 -- Other Terminal Apps: <leader>a
 --     Docker - lazydocker: <leader>ad
 --     GitUi - Gitui: <leader>ag
--- Via Telescope
---    Filetree - telescope-file-browser : <c-n>
---    Buffer Management - Telescope Nvim: <leader>f
 -- Database - DadBod: : <leader>d
--- Code Execution & Testing - neotest: <leader>x (T is being used for the terminal)
 -- Code Alignment - EasyAlign : <leader>e
 -- Wiki Commands - Obsidian.nvim: <leader>k,
+-- Code Execution & Http Calls & Testing - compiler, rest, neotest: <leader>x (T is being used for the terminal)
+-- Via Telescope --
+--    Filetree - telescope-file-browser : <c-n>
+--    Buffer Management - Telescope Nvim: <leader>f
 -- Previously Configured --
--- Write Commands: <leader>w
--- Quit Commands: <leader>q
--- System Yank Commands: <leader>y
--- System Paste Comnmands: <leader>p
--- Version Control Commands -- fugitive: <leader>v
--- Todo Highilights -- todocomments.nvim: <leader>m
--- Key Mapping Assist - whichkey: <leader>?
+--    Key Mapping Assist - whichkey: <leader>?
+--    Highlighting Options - Treesitter: <leader>h
+--    Todo Highlights -- todocomments.nvim: <leader>m
+--    System Paste Comnmands: <leader>p
+--    Quit Commands: <leader>q
+--    Version Control Commands -- fugitive: <leader>v
+--    Write Commands: <leader>w
+--    System Yank Commands: <leader>y
 -- Configured in init.lsp --
--- Snippets - LuaSnip : <leader>s
--- Debugging - NvimDAP: <leader>b
--- Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c
+--    Debugging - NvimDAP: <leader>b
+--    Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c
+--    Snippets - LuaSnip : <leader>s
+-- ---------- --
 ----------
 
 -- Key Map Assistance
@@ -1031,6 +1107,7 @@ whichKey.register({
 		c = { name = "LSP Opts" },
 		d = { name = "Database" },
 		f = { name = "Telescope" },
+		h = { name = "Highlighting Options" },
 		k = { name = "Wiki Opts" },
 		l = { name = "VimTex" },
 		m = { name = "Todos" },
@@ -1523,11 +1600,29 @@ keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = 
 
 -- Mappings
 ----------
-keymap.set("n", "<leader>xx", "<cmd>CompilerOpen<cr>", keyopts({ desc = "Run Code" }))
-keymap.set("n", "<leader>xq", "<cmd>CompilerStop<cr>", keyopts({ desc = "Stop Code Runner" }))
-keymap.set("n", "<leader>xi", "<cmd>CompilerToggleResults<cr>", keyopts({ desc = "Show Code Run" }))
+-- WhichKey -- Includes for testing and http calls too
+whichKey.register({
+	["<leader>x"] = {
+		["t"] = { name = "Testing" },
+		["h"] = { name = "Http Calls" },
+		["c"] = { name = "Coverage" },
+	},
+})
+-- Mappings
+norm_keyset("<leader>xx", "CompilerOpen", "Run Code")
+norm_keyset("<leader>xq", "CompilerStop", "Stop Code Runner")
+norm_keyset("<leader>xi", "CompilerToggleResults", "Show Code Run")
 keymap.set("n", "<leader>xr", "<cmd>CompilerStop<cr>" .. "<cmd>CompilerRedo<cr>", keyopts({ desc = "Re-Run Code" }))
 ----------
+
+---------------------------------"
+-- Http Execution - rest.nvim
+---------------------------------"
+
+require("rest-nvim").setup({})
+norm_keyset("<leader>xhx", "RestNvim", "Run Http Under Cursor")
+norm_keyset("<leader>xhp", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
+norm_keyset("<leader>xhx", "RestNvim", "Re-Run Last Http Command")
 
 ---------------------------------"
 -- Code Testing - neotest
@@ -1558,61 +1653,18 @@ require("neotest").setup({
 
 -- Mappings
 ----------
--- WhichKey
-whichKey.register({
-	["<leader>x"] = {
-		["t"] = { name = "Testing" },
-		["c"] = { name = "Coverage" },
-	},
-})
 -- Mappings
-keymap.set(
-	"n",
-	"<leader>xtx",
-	"<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>",
-	{ noremap = true, silent = true, desc = "Test Current Buffer" }
-)
-keymap.set(
-	"n",
-	"<leader>xto",
-	"<cmd>lua require('neotest').output.open({ enter = true, auto_close = true })<CR>",
-	{ noremap = true, silent = true, desc = "Test Output" }
-)
-keymap.set(
-	"n",
-	"<leader>xts",
-	"<cmd>lua require('neotest').summary.toggle()<CR>",
-	{ noremap = true, silent = true, desc = "Test Output (All Tests)" }
-)
-keymap.set(
-	"n",
-	"<leader>xtq",
-	"<cmd>lua require('neotest').run.stop()<CR>",
-	{ noremap = true, silent = true, desc = "Quit Test Run" }
-)
-keymap.set(
-	"n",
-	"<leader>xtw",
-	"<cmd>lua require('neotest').watch.toggle(vim.fn.expand('%'))<CR>",
-	{ noremap = true, silent = true, desc = "Toggle Test Refreshing" }
-)
-keymap.set(
-	"n",
-	"<leader>xtc",
-	"<cmd>lua require('neotest').run.run()<CR>",
-	{ noremap = true, silent = true, desc = "Run Nearest Test" }
-)
-keymap.set(
-	"n",
-	"<leader>xtr",
-	"<cmd>lua require('neotest').run.run_last()<CR>",
-	{ noremap = true, silent = true, desc = "Repeat Last Test Run" }
-)
-keymap.set(
-	"n",
+norm_keyset("<leader>xtx", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
+norm_keyset("<leader>xto", "lua require('neotest').output.open({ enter = true, auto_close = true })", "Test Output")
+norm_keyset("<leader>xts", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
+norm_keyset("<leader>xtq", "lua require('neotest').run.stop()", "Quit Test Run")
+norm_keyset("<leader>xtw", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
+norm_keyset("<leader>xtc", "lua require('neotest').run.run()", "Run Nearest Test")
+norm_keyset("<leader>xtr", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
+norm_keyset(
 	"<leader>xtb",
-	"<cmd>lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})<CR>",
-	{ noremap = true, silent = true, desc = "Debug Closest Test" }
+	"lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
+	"Debug Closest Test"
 )
 ----------
 
