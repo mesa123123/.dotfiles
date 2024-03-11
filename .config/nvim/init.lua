@@ -574,8 +574,9 @@ require("colorizer").setup()
 -- Config
 ----------
 local alpha = require("alpha")
-local dashboard = require("alpha.themes.startify")
-dashboard.section.header.val = {
+local dashboard = require("alpha.themes.theta")
+local dashboard_opts = require("alpha.themes.dashboard")
+dashboard.header.val = {
 	"<-.(`-')    _       (`-')  _                    (`-')   (`-')  _          (`-')       (`-')  _      (`-')  _             ",
 	" __( OO)   (_)      (OO ).-/           .->   <-.(OO )   (OO ).-/          ( OO).->    ( OO).-/      (OO ).-/       .->   ",
 	"'-'. ,--.  ,-(`-')  / ,---.       (`-')----. ,------,)  / ,---.           /    '._   (,------.      / ,---.   (`-')----. ",
@@ -588,6 +589,43 @@ dashboard.section.header.val = {
 	"-------------------------------------------------------------------------------------------------------------------",
 	"                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                  ",
 }
+dashboard.buttons.val = {
+	{ type = "text", val = "Options", opts = { hl = "SpecialComment", position = "center" } },
+	dashboard_opts.button("e", "  New file", "<cmd>ene<CR>"),
+	dashboard_opts.button("n", "  Open File", ":Telescope file_browser theme=dropdown<CR>"),
+	dashboard_opts.button("v", "  EditVim", "<cmd>e ~/.config/nvim/init.lua<CR>"),
+	dashboard_opts.button("l", "  Editlsp", "<cmd>e ~/.config/nvim/lua/lsp.lua<CR>"),
+}
+local section_mru = {
+	type = "group",
+	val = {
+		{
+			type = "text",
+			val = "Recent files",
+			opts = {
+				hl = "SpecialComment",
+				shrink_margin = false,
+				position = "center",
+			},
+		},
+		{
+			type = "group",
+			val = function()
+				return { dashboard.mru(0, fn.getcwd(), 6) }
+			end,
+			opts = { shrink_margin = false },
+		},
+	},
+}
+dashboard.config.layout = {
+	{ type = "padding", val = 2 },
+	dashboard.header,
+	{ type = "padding", val = 2 },
+	dashboard.buttons,
+	{ type = "padding", val = 1 },
+	section_mru,
+}
+
 alpha.setup(dashboard.config)
 ----------
 
@@ -1040,12 +1078,12 @@ require("lualine").setup({
 		},
 		lualine_c = {
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" }, fmt = trunc(120, 4, 90, true) },
-			{ "filename",  },
+			{ "filename" },
 			debug_status,
 			{ "overseer", colored = true },
 		},
 		lualine_x = { active_lsp, active_lint, active_formatter },
-		lualine_y = { {"progress", fmt = trunc(120, 10000, 120, true)},{ "location" }},
+		lualine_y = { { "progress", fmt = trunc(120, 10000, 120, true) }, { "location" } },
 		lualine_z = { "Zonedtime(11)" },
 	},
 })
