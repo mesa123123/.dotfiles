@@ -470,6 +470,20 @@ api.nvim_create_user_command("DepInstall", function()
 end, { nargs = 0 })
 ----------
 
+-- AutoCmds
+----------
+-- Create Group
+api.nvim_create_augroup("onYank", { clear = true })
+-- Highlight on Yank
+api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking text",
+	group = "onYank",
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
+----------
+
 --------------------------------
 -- Register Settings (Copy, Paste)
 --------------------------------
