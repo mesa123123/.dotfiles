@@ -295,20 +295,19 @@ format.setup({
 	log_level = log.levels.TRACE,
 	-- Formatter Choice
 	formatters_by_ft = {
-		python = { "black", "isort" },
+		python = { "black", "isort", "injected" },
 		lua = { "stylua" },
 		javascript = { "prettier" },
 		typescript = { "prettier" },
-		html = { "prettier" },
+		html = { "prettier", "injected" },
 		sh = { "shellharden" },
-		json = { { "jq", "jsonls" } },
+		json = { "jq", "jsonls" },
 		markdown = { "markdownlint" },
 		yaml = { "yamlfmt" },
 		sql = { "sql_formatter" },
 		rust = { "rustfmt" },
 		jinja = { "djlint" },
 		tex = { "latex-indent" },
-		["*"] = { "injected" },
 	},
 })
 

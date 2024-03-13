@@ -605,8 +605,7 @@ dashboard.header.val = {
 }
 dashboard.buttons.val = {
 	{ type = "text", val = "Options", opts = { hl = "SpecialComment", position = "center" } },
-	dashboard_opts.button("e", "  New file", "<cmd>ene<CR>"),
-	dashboard_opts.button("n", "  Open File", ":Telescope file_browser theme=dropdown<CR>"),
+	dashboard_opts.button("n", "  Open File-system", ":Telescope file_browser theme=dropdown<CR>"),
 	dashboard_opts.button("v", "  EditVim", "<cmd>e ~/.config/nvim/init.lua<CR>"),
 	dashboard_opts.button("l", "  Editlsp", "<cmd>e ~/.config/nvim/lua/lsp.lua<CR>"),
 }
@@ -814,6 +813,9 @@ require("nvim-treesitter.configs").setup({
 		"toml",
 		"markdown",
 		"markdown_inline",
+        "html",
+        "css",
+        "htmldjango",
 		"rst",
 		"python",
 		"bash",

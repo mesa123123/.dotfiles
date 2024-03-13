@@ -10,6 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "pyright": "^1.1.353"
+    "pyright": "^1.1.354"
   }
 }
