@@ -190,9 +190,20 @@ local lsp_servers_ei = {
 	"htmx-lsp",
 	"tailwindcss-language-server",
 	"solidity",
+	"texlab",
 }
 -- Formatters
-local formatters_ei = { "prettier", "shellharden", "sql-formatter", "djlint", "black", "jq", "stylua", "yamlfmt" }
+local formatters_ei = {
+	"prettier",
+	"shellharden",
+	"sql-formatter",
+	"djlint",
+	"black",
+	"jq",
+	"stylua",
+	"yamlfmt",
+	"latexindent",
+}
 -- Linters
 local linters_ei = {
 	"pylint",
@@ -296,6 +307,7 @@ format.setup({
 		sql = { "sql_formatter" },
 		rust = { "rustfmt" },
 		jinja = { "djlint" },
+		tex = { "latex-indent" },
 		["*"] = { "injected" },
 	},
 })
@@ -845,6 +857,11 @@ config.rust_analyzer.setup(lsp_opts({
 config.solidity.setup(lsp_opts({ root_dir = config.util.root_pattern("brownie-config.yaml", ".git") }))
 ----------
 
+-- Latex
+----------
+config.texlab.setup(lsp_opts({}))
+----------
+
 -- Injected Languages (Otter)
 ----------
 api.nvim_create_user_command("OtterActivate", function()
@@ -875,6 +892,7 @@ api.nvim_create_user_command("OtterActivate", function()
 	vim.keymap.set("n", "<leader>clR", ':lua require"otter".ask_rename()<cr>', keyopts({ desc = "Rename" }))
 	vim.keymap.set("n", "<leader>clf", ':lua require"otter".ask_format()<cr>', keyopts({ desc = "Format" }))
 end, {})
+----------
 
 -- Null-ls : Third Party LSPs
 ----------

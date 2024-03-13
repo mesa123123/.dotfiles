@@ -818,6 +818,7 @@ require("nvim-treesitter.configs").setup({
 		"python",
 		"bash",
 		"vim",
+        "csv",
 		"regex",
 		"javascript",
 		"typescript",
