@@ -374,13 +374,6 @@ markdownlint.args = {
 	"MD041",
 }
 
--- Pylint
-local pylint = lint.linters.pylint
-pylint.cmd = get_venv_command("pylint")
--- find pylintrc if its there and add to args
-pylint.args = { "--rcfile", ".pylintrc.toml", "-f", "json" }
-----------
-
 --------------------------------
 -- Completion
 --------------------------------
@@ -423,7 +416,7 @@ local general_sources = {
 -- Cmp-Ui
 ----------
 local cmp_formatting = {
-	format = function(entry, vim_item)
+    format = function(entry, vim_item)
 		if vim.tbl_contains({ "path" }, entry.source.name) then
 			local icon, hl_group = require("nvim-web-devicons").get_icon(entry:get_completion_item().label)
 			if icon then
