@@ -439,7 +439,8 @@ opt.shiftwidth = 4
 opt.expandtab = true
 -- Folding Options
 opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldtext = "v:lua.vim.treesitter.foldtext()"
 opt.foldlevelstart = 99
 -- Conceal Level
 opt.conceallevel = 1
