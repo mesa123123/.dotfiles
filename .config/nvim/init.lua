@@ -813,14 +813,14 @@ require("nvim-treesitter.configs").setup({
 		"toml",
 		"markdown",
 		"markdown_inline",
-        "html",
-        "css",
-        "htmldjango",
+		"html",
+		"css",
+		"htmldjango",
 		"rst",
 		"python",
 		"bash",
 		"vim",
-        "csv",
+		"csv",
 		"regex",
 		"javascript",
 		"typescript",
@@ -1650,7 +1650,7 @@ keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = 
 ---------
 
 ---------------------------------"
--- Code Execution - compiler.nvim, overseer
+-- Code Execution - compiler.nvim, overseer, vimtext
 ---------------------------------"
 
 -- Mappings
@@ -1664,7 +1664,25 @@ whichKey.register({
 	},
 })
 -- Mappings
-norm_keyset("<leader>xx", "CompilerOpen", "Run Code")
+api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+	callback = function()
+		if vim.bo.filetype == "tex" then
+			vim.keymap.set(
+				"n",
+				"<leader>xx",
+				"<cmd>VimtexCompile<CR>",
+				{ silent = true, noremap = false, desc = "Compile Doc" }
+			)
+		else
+			vim.keymap.set(
+				"n",
+				"<leader>xx",
+				"<cmd>CompilerOpen<CR>",
+				{ silent = true, noremap = false, desc = "Run Code" }
+			)
+		end
+	end,
+})
 norm_keyset("<leader>xq", "CompilerStop", "Stop Code Runner")
 norm_keyset("<leader>xi", "CompilerToggleResults", "Show Code Run")
 keymap.set("n", "<leader>xr", "<cmd>CompilerStop<cr>" .. "<cmd>CompilerRedo<cr>", keyopts({ desc = "Re-Run Code" }))
