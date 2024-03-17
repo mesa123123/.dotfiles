@@ -524,8 +524,6 @@ cmd("colorscheme gruvbox")
 ----------
 gv["rainbow_active"] = 1
 ----------
-
--- Load Webdevicons
 ----------
 local devIcons = require("nvim-web-devicons")
 devIcons.setup({
@@ -559,6 +557,12 @@ devIcons.set_icon({
 		color = "#e44d26",
 		cterm_color = "196",
 		name = "Jinja",
+	},
+	rst = {
+		icon = "",
+		color = "#55cc55",
+		cterm_color = "lime green",
+		name = "rst",
 	},
 })
 devIcons.get_icons()
