@@ -307,6 +307,10 @@ local plugins = {
 		event = "VimEnter",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
+	-- Folding
+	----------
+	"anuvyklack/pretty-fold.nvim",
+	----------
 	-- CmdLine
 	----------
 	{
@@ -437,11 +441,6 @@ opt.signcolumn = "yes"
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
--- Folding Options
-opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-opt.foldtext = "v:lua.vim.treesitter.foldtext()"
-opt.foldlevelstart = 99
 -- Conceal Level
 opt.conceallevel = 1
 -- Mouse off
@@ -453,7 +452,7 @@ api.nvim_create_user_command("SpellCheckToggle", function()
 	vim.opt.spell = not (vim.opt.spell:get())
 end, { nargs = 0 })
 -- Settings
------------- 
+------------
 gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
 -- Virtual Text Enabled Globally
 diagnostics.config({ virtual_text = true })
@@ -484,6 +483,19 @@ api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 ----------
+
+--------------------------------
+-- Code Folding - pretty-fold.nvim
+--------------------------------
+
+-- Default Folding Options
+----------
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+opt.foldlevelstart = 99
+----------
+
 
 --------------------------------
 -- Register Settings (Copy, Paste)
