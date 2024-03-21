@@ -453,13 +453,13 @@ api.nvim_create_user_command("SpellCheckToggle", function()
 	vim.opt.spell = not (vim.opt.spell:get())
 end, { nargs = 0 })
 -- Settings
-----------
+------------ 
 gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
 -- Virtual Text Enabled Globally
 diagnostics.config({ virtual_text = true })
-----------
+------------
 
--- Commands
+-- Section: Commands
 ----------
 -- #FIX: This doesn't seem to do anything, or output to console
 api.nvim_create_user_command("DepInstall", function()

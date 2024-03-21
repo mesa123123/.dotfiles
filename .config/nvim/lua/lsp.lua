@@ -176,7 +176,6 @@ local lsp_servers_ei = {
 	"lua_ls",
 	"pyright",
 	"bashls",
-	"cucumber_language_server",
 	"tsserver",
 	"rust_analyzer",
 	"terraformls",

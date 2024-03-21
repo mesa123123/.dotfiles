@@ -1,1 +1,1 @@
-{"primary_source":{"type":"registry+v1","id":"pkg:cargo\/shellharden@4.3.0"},"schema_version":"1.1","name":"shellharden","secondary_sources":[],"links":{"bin":{"shellharden":"bin\/shellharden"},"opt":{},"share":{}},"metrics":{"start_time":1710106090673,"completion_time":1710106095476}}
+{"secondary_sources":[],"schema_version":"1.1","name":"shellharden","links":{"bin":{"shellharden":"bin\/shellharden"},"opt":{},"share":{}},"metrics":{"start_time":1711055350699,"completion_time":1711055353242},"primary_source":{"type":"registry+v1","id":"pkg:cargo\/shellharden@4.3.0"}}
