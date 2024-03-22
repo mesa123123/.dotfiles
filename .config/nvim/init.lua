@@ -488,6 +488,11 @@ api.nvim_create_autocmd("TextYankPost", {
 -- Code Folding - pretty-fold.nvim
 --------------------------------
 
+-- Theming Pretty Fold
+----------
+require("pretty-fold").setup()
+----------
+
 -- Default Folding Options
 ----------
 opt.foldmethod = "expr"
@@ -495,7 +500,6 @@ opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 opt.foldtext = "v:lua.vim.treesitter.foldtext()"
 opt.foldlevelstart = 99
 ----------
-
 
 --------------------------------
 -- Register Settings (Copy, Paste)
