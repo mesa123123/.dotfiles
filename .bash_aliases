@@ -99,8 +99,8 @@ alias media_last='spotify playback previous'
 [[ $(cargo install --list | grep -c "tidy-viewer") -ge 1 ]] && alias tv="tidy-viewer"
 # If ripgrep is available use that
 [[ "$(cargo install --list | grep -c "ripgrep")" -ge 1 ]] && alias grep='rg --no-ignore'
-# If rtx-cli is installed use that over asdf
-[[ "$(cargo install --list | grep -c "rtx-cli")" -ge 1 ]] && alias asdf='rtx'
+# If mise is installed use that over asdf
+[[ "$(cargo install --list | grep -c "mise")" -ge 1 ]] && alias asdf='mise'
 # If broot is installed use that over tree
 [[ "$(cargo install --list | grep -c "broot")" -ge 1 ]] && alias tree='broot'
 # If zoxide is installed use that over cd
