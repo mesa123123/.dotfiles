@@ -170,6 +170,10 @@ fi
 # ---- Start Of Environment Variables -----
 # ---------
 
+if [ -f "/home/$USER/.local/bin/mise" ]; then
+    eval "$(~/.local/bin/mise activate bash)"
+fi
+
 # Defining Variables
 # ----------
 # JAVA
@@ -185,8 +189,6 @@ export SBT_HOME="/usr/bin/sbt"
 # PYTHON
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
 export PIPENV_VENV_IN_PROJECT=1
-export PYSPARK_PYTHON="/home/$USER/.pyenv/shims/python"
-export PYENV_ROOT="$HOME/.pyenv"
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 # CURL
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
@@ -267,10 +269,6 @@ add_to_path "$EXERCISM_HOME/"
 # ---------
 # ---- Automated Shell Commands For Startup ----
 # ---------
-
-# Pyenv Setup
-eval "$(pyenv init -)"  
-eval "$(pyenv virtualenv-init -)"
 
 # Powerline Setup
 if [ -f "$(which powerline-daemon)" ]; then

@@ -84,13 +84,6 @@ if [ -d "$HOME/.cargo/bin" ] ; then
     add_to_path "$HOME/.cargo/bin"
 fi
 
-# Setup Pyenv to deal with multiple python versions
-if [ -d "$HOME/.pyenv" ] ; then
-    export PYENV_ROOT="$HOME/.pyenv"
-    command -v pyenv >/dev/null || add_to_path "$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-fi
 # Save the Profile Path Here
 export PROFILE_PATH=$PATH
 # ----------
