@@ -142,6 +142,8 @@ local plugins = {
 	-- Essentials
 	----------
 	{ "nvim-lua/plenary.nvim", event = "VeryLazy" },
+    -- Lua Rocks Dependency Management
+	{  "vhyrro/luarocks.nvim" },
 	{
 		"nvim-treesitter/nvim-treesitter",
 		dependencies = {
@@ -233,17 +235,18 @@ local plugins = {
 	{ "numToStr/Comment.nvim", lazy = false },
 	-- Testing Plugins
 	----------
-	{
-		"nvim-neotest/neotest",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"antoinemadec/FixCursorHold.nvim",
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-neotest/neotest-python",
-			"andythigpen/nvim-coverage",
-		},
-		event = "VeryLazy",
-	},
+	-- {
+	-- 	"nvim-neotest/neotest",
+	-- 	dependencies = {
+	-- 		-- "nvim-neotest/nvim-nio",	-- Currently broken on my config....
+	-- 		"nvim-lua/plenary.nvim",
+	-- 		"antoinemadec/FixCursorHold.nvim",
+	-- 		"nvim-treesitter/nvim-treesitter",
+	-- 		"nvim-neotest/neotest-python",
+	-- 		"andythigpen/nvim-coverage",
+	-- 	},
+	-- 	event = "VeryLazy",
+	-- },
 	{
 		"rest-nvim/rest.nvim",
 		dependencies = "nvim-lua/plenary.nvim",
@@ -669,9 +672,9 @@ alpha.setup(dashboard.config)
 
 --Neodev
 local neodev = require("neodev")
-neodev.setup({
-	library = { plugins = { "neotest" }, types = true },
-})
+-- neodev.setup({
+-- 	library = { plugins = { "neotest" }, types = true },
+-- })
 ----------
 
 ----------------------------------
@@ -1438,45 +1441,37 @@ keymap.set("n", "<leader>m", "<cmd>TodoTelescope<CR>", keyopts({ desc = "List To
 
 -- Mappings
 ----------
--- Buffers Mappings
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files theme=dropdown<cr>", { silent = true, desc = "Find Files" })
--- Vim Options
-keymap.set("n", "<leader>fo", "<cmd>Telescope vim_options theme=dropdown<CR>", { silent = true, desc = "Vim Options" })
--- Find File
-keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep theme=dropdown<cr>", { silent = true, desc = "Live Grep" })
 -- Find Buffer
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, desc = "Show Buffers" })
-keymap.set("n", "<C-b>s", "<cmd>Telescope buffers theme=dropdown<cr>", { silent = true, noremap = true })
--- Registers
-keymap.set("n", "<leader>fr", "<cmd>Telescope registers theme=dropdown<cr>", { silent = true, desc = "Registers" })
--- Help Mappings
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags theme=dropdown<cr>", { silent = true, desc = "Help Tags" })
--- Man Pages
-keymap.set("n", "<leader>fm", "<cmd>Telescope man_pages theme=dropdown<cr>", { silent = true, desc = "Man Pages" })
--- Keymaps
-keymap.set("n", "<leader>fk", "<cmd>Telescope keymaps theme=dropdown<cr>", { silent = true, desc = "Keymaps" })
+norm_keyset("<leader>fb", "Telescope buffers theme=dropdown", "Show Buffers")
+norm_keyset("<C-b>s", "Telescope buffers theme=dropdown", "Show Buffers")
 -- ColorScheme
-keymap.set("n", "<leader>fc", "<cmd>Telescope colorscheme theme=dropdown<cr>", { silent = true, desc = "Themes" })
+norm_keyset("<leader>fc", "Telescope colorscheme theme=dropdown", "Themes")
 -- Diagnostics (Also thorugh \cp
-keymap.set("n", "<leader>fd", "<cmd>Telescope diagnostics theme=dropdown<cr>", { silent = true, desc = "Diagnostics" })
--- Tree Sitter Mapping
-keymap.set(
-	"n",
-	"<leader>fs",
-	"<cmd>Telescope treesitter theme=dropdown<cr>",
-	{ silent = true, desc = "Treesitter Insights" }
-)
--- Telescope Telescopes
-keymap.set(
-	"n",
-	"<leader>ft",
-	"<cmd>Telescope builtin theme=dropdown<cr>",
-	{ silent = true, desc = "Telescope Commands" }
-)
+norm_keyset("<leader>fd", "Telescope diagnostics theme=dropdown", "Diagnostics")
+-- Buffers Mappings
+norm_keyset("<leader>ff", "Telescope find_files theme=dropdown", "Find Files")
+-- Find File
+norm_keyset("<leader>fg", "Telescope live_grep theme=dropdown", "Live Grep")
+-- Help Mappings
+norm_keyset("<leader>fh", "Telescope help_tags theme=dropdown", "Help Tags")
 -- Imports
-keymap.set("n", "<leader>fi", "<cmd>Telescope import theme=dropdown<cr>", { silent = true, desc = "Imports" })
+norm_keyset("<leader>fi", "Telescope import theme=dropdown", "Imports")
 -- Jumplist
-keymap.set("n", "<leader>fj", "<cmd>Telescope jumplist theme=dropdown<CR>", { silent = true, desc = "Jumplist" })
+norm_keyset("<leader>fj", "Telescope jumplist theme=dropdown<CR>", "Jumplist")
+-- Keymaps
+norm_keyset("<leader>fk", "Telescope keymaps theme=dropdown", "Keymaps")
+-- Man Pages
+norm_keyset("<leader>fm", "Telescope man_pages theme=dropdown", "Man Pages")
+-- Notifications
+norm_keyset("<leader>fn", "Telescope notify", "Notifications")
+-- Vim Options
+norm_keyset("<leader>fo", "Telescope vim_options theme=dropdown<CR>", "Vim Options")
+-- Registers
+norm_keyset("<leader>fr", "Telescope registers theme=dropdown", "Registers")
+-- Tree Sitter Mapping
+norm_keyset("<leader>fs", "Telescope treesitter theme=dropdown", "Treesitter Insights")
+-- Telescope Telescopes
+norm_keyset("<leader>ft", "Telescope builtin theme=dropdown", "Telescope Commands")
 
 ---------------------------------
 -- Telescope Setup
@@ -1710,100 +1705,6 @@ keymap.set("n", "<leader>xr", "<cmd>CompilerStop<cr>" .. "<cmd>CompilerRedo<cr>"
 ----------
 
 ---------------------------------"
--- Http Execution - rest.nvim
----------------------------------"
-
-require("rest-nvim").setup({})
-norm_keyset("<leader>xhx", "RestNvim", "Run Http Under Cursor")
-norm_keyset("<leader>xhp", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
-norm_keyset("<leader>xhx", "RestNvim", "Re-Run Last Http Command")
-
----------------------------------"
--- Code Testing - neotest
----------------------------------"
-
--- Setup Test Runners
-----------
-
--- Setup
-----------
--- Neotest
-require("neotest").setup({
-	adapters = {
-		require("neotest-python")({
-			dap = { justMyCode = false },
-			runner = "pytest",
-			python = get_python_path(),
-			pytest_discover_instances = true,
-		}),
-	},
-	status = {
-		enabled = true,
-		virtual_text = true,
-		signs = false,
-	},
-})
-----------
-
--- Mappings
-----------
--- Mappings
-norm_keyset("<leader>xtx", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
-norm_keyset("<leader>xto", "lua require('neotest').output.open({ enter = true, auto_close = true })", "Test Output")
-norm_keyset("<leader>xts", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
-norm_keyset("<leader>xtq", "lua require('neotest').run.stop()", "Quit Test Run")
-norm_keyset("<leader>xtw", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
-norm_keyset("<leader>xtc", "lua require('neotest').run.run()", "Run Nearest Test")
-norm_keyset("<leader>xtr", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
-norm_keyset(
-	"<leader>xtb",
-	"lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
-	"Debug Closest Test"
-)
-----------
-
----------------------------------"
--- Code Coverage
----------------------------------"
-require("coverage").setup({
-	commands = true, -- create commands
-	highlights = {
-		-- customize highlight groups created by the plugin
-		covered = { fg = "#c3e88d" }, -- supports style, fg, bg, sp (see :h highlight-gui)
-		uncovered = { fg = "#f07178" },
-	},
-	signs = {
-		-- use your own highlight groups or text markers
-		covered = { hl = "CoverageCovered", text = "▎" },
-		uncovered = { hl = "CoverageUncovered", text = "▎" },
-	},
-	summary = {
-		-- customize the summary pop-up
-		min_coverage = 80.0, -- minimum coverage threshold (used for highlighting)
-	},
-	lang = {
-		-- customize language specific settings
-	},
-})
-
--- Mappings
-----------
-keymap.set("n", "<leader>xcr", "<cmd>Coverage<CR>", { noremap = true, silent = true, desc = "Run Coverage Report" })
-keymap.set(
-	"n",
-	"<leader>xcs",
-	"<cmd>CoverageSummary<CR>",
-	{ noremap = true, silent = true, desc = "Show Coverage Report" }
-)
-keymap.set(
-	"n",
-	"<leader>xct",
-	"<cmd>CoverageToggle<CR>",
-	{ noremap = true, silent = true, desc = "Toggle Coverage Signs" }
-)
-----------
-
----------------------------------"
 -- LSP Config
 ---------------------------------"
 
@@ -1821,6 +1722,100 @@ api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
 ----------
 require("lsp")
 ----------
+---------------------------------"
+-- Http Execution - rest.nvim
+---------------------------------"
+
+require("rest-nvim").setup({})
+norm_keyset("<leader>xhx", "RestNvim", "Run Http Under Cursor")
+norm_keyset("<leader>xhp", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
+norm_keyset("<leader>xhx", "RestNvim", "Re-Run Last Http Command")
+
+-- ---------------------------------"
+-- -- Code Testing - neotest
+-- ---------------------------------"
+--
+-- -- Setup Test Runners
+-- ----------
+--
+-- -- Setup
+-- ----------
+-- -- Neotest
+-- require("neotest").setup({
+-- 	adapters = {
+-- 		require("neotest-python")({
+-- 			dap = { justMyCode = false },
+-- 			runner = "pytest",
+-- 			python = get_python_path(),
+-- 			pytest_discover_instances = true,
+-- 		}),
+-- 	},
+-- 	status = {
+-- 		enabled = true,
+-- 		virtual_text = true,
+-- 		signs = false,
+-- 	},
+-- })
+-- ----------
+--
+-- -- Mappings
+-- ----------
+-- -- Mappings
+-- norm_keyset("<leader>xtx", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
+-- norm_keyset("<leader>xto", "lua require('neotest').output.open({ enter = true, auto_close = true })", "Test Output")
+-- norm_keyset("<leader>xts", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
+-- norm_keyset("<leader>xtq", "lua require('neotest').run.stop()", "Quit Test Run")
+-- norm_keyset("<leader>xtw", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
+-- norm_keyset("<leader>xtc", "lua require('neotest').run.run()", "Run Nearest Test")
+-- norm_keyset("<leader>xtr", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
+-- norm_keyset(
+-- 	"<leader>xtb",
+-- 	"lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
+-- 	"Debug Closest Test"
+-- )
+-- ----------
+
+-- ---------------------------------"
+-- -- Code Coverage
+-- ---------------------------------"
+-- require("coverage").setup({
+-- 	commands = true, -- create commands
+-- 	highlights = {
+-- 		-- customize highlight groups created by the plugin
+-- 		covered = { fg = "#c3e88d" }, -- supports style, fg, bg, sp (see :h highlight-gui)
+-- 		uncovered = { fg = "#f07178" },
+-- 	},
+-- 	signs = {
+-- 		-- use your own highlight groups or text markers
+-- 		covered = { hl = "CoverageCovered", text = "▎" },
+-- 		uncovered = { hl = "CoverageUncovered", text = "▎" },
+-- 	},
+-- 	summary = {
+-- 		-- customize the summary pop-up
+-- 		min_coverage = 80.0, -- minimum coverage threshold (used for highlighting)
+-- 	},
+-- 	lang = {
+-- 		-- customize language specific settings
+-- 	},
+-- })
+--
+-- -- Mappings
+-- ----------
+-- keymap.set("n", "<leader>xcr", "<cmd>Coverage<CR>", { noremap = true, silent = true, desc = "Run Coverage Report" })
+-- keymap.set(
+-- 	"n",
+-- 	"<leader>xcs",
+-- 	"<cmd>CoverageSummary<CR>",
+-- 	{ noremap = true, silent = true, desc = "Show Coverage Report" }
+-- )
+-- keymap.set(
+-- 	"n",
+-- 	"<leader>xct",
+-- 	"<cmd>CoverageToggle<CR>",
+-- 	{ noremap = true, silent = true, desc = "Toggle Coverage Signs" }
+-- )
+-- ----------
+--
 
 --------------------------------
 -- Workspace Specific Configs
