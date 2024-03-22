@@ -170,8 +170,8 @@ fi
 # ---- Start Of Environment Variables -----
 # ---------
 
-if [ -f "/home/$USER/.local/bin/mise" ]; then
-    eval "$(~/.local/bin/mise activate bash)"
+if [ -f "/home/$USER/.cargo/bin/mise" ]; then
+    eval "$(~/.cargo/bin/mise activate bash)"
 fi
 
 # Defining Variables
