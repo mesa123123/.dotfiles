@@ -149,22 +149,23 @@ local plugins = {
 			"nvim-treesitter/nvim-treesitter-context",
 		},
 	},
-    {
-      "vhyrro/luarocks.nvim",
-      priority = 1000,
-      config = true,
-    },
-    {
-      "rest-nvim/rest.nvim",
-      ft = "http",
-      dependencies = { "luarocks.nvim" },
-      config = function()
-        require("rest-nvim").setup()
-      end,
-    },
-    {
-
-    },
+	{
+		"vhyrro/luarocks.nvim",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+		},
+		priority = 1000,
+		config = true,
+	},
+	{
+		"rest-nvim/rest.nvim",
+		ft = "http",
+		dependencies = { "luarocks.nvim" },
+		config = function()
+			require("rest-nvim").setup()
+		end,
+	},
+	{},
 	"folke/neodev.nvim",
 	-- Autocompletion & Snips
 	----------
@@ -257,6 +258,7 @@ local plugins = {
 			"antoinemadec/FixCursorHold.nvim",
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-neotest/neotest-python",
+			-- "rouge8/neotest-rust",
 			"andythigpen/nvim-coverage",
 		},
 		event = "VeryLazy",
@@ -1736,7 +1738,6 @@ require("lsp")
 -- Http Execution - rest.nvim
 ---------------------------------"
 
-require("rest-nvim").setup({})
 norm_keyset("<leader>xhx", "RestNvim", "Run Http Under Cursor")
 norm_keyset("<leader>xhp", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
 norm_keyset("<leader>xhx", "RestNvim", "Re-Run Last Http Command")
@@ -1759,6 +1760,13 @@ require("neotest").setup({
 			python = get_python_path(),
 			pytest_discover_instances = true,
 		}),
+		-- Currently broken
+		-- {
+		-- 	require("neotest-rust")({
+		-- 		args = { "--no-capture" },
+		-- 		dap_adapter = "lldb",
+		-- 	}),
+		-- },
 	},
 	status = {
 		enabled = true,
