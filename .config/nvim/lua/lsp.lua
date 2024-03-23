@@ -373,6 +373,10 @@ markdownlint.args = {
 	"MD041",
 }
 
+-- Pylint
+local pylint = lint.linters.pylint
+pylint.cmd = get_venv_command("pylint")
+
 --------------------------------
 -- Completion
 --------------------------------
@@ -415,7 +419,7 @@ local general_sources = {
 -- Cmp-Ui
 ----------
 local cmp_formatting = {
-    format = function(entry, vim_item)
+	format = function(entry, vim_item)
 		if vim.tbl_contains({ "path" }, entry.source.name) then
 			local icon, hl_group = require("nvim-web-devicons").get_icon(entry:get_completion_item().label)
 			if icon then
@@ -730,7 +734,7 @@ end
 -- Functions
 ----------
 -- Find Python Virutal_Env
-local function get_python_path()
+function get_python_path()
 	-- Use Activated Environment
 	if vim.env.VIRTUAL_ENV then
 		return path.join(vim.env.VIRTUAL_ENV, "bin", "python")
