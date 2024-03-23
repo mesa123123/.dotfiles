@@ -170,9 +170,16 @@ fi
 # ---- Start Of Environment Variables -----
 # ---------
 
+# Mise for version Management
 if [ -f "/home/$USER/.cargo/bin/mise" ]; then
     eval "$(~/.cargo/bin/mise activate bash)"
 fi
+
+# VirtualEnv Wrapper for Venvs
+if [ -f "/home/$USER/.local/bin/virtualenvwrapper.sh" ]; then
+    source /home/"$USER"/.local/bin/virtualenvwrapper.sh
+fi
+
 
 # Defining Variables
 # ----------
@@ -188,8 +195,7 @@ export PYSPARK_DRIVER_PYTHON_OPTS='--no-browser --port=8889 --NotebookApp.iopub_
 export SBT_HOME="/usr/bin/sbt"
 # PYTHON
 export PY3_REPO_ROOT="/usr/lib/python3/dist-packages"
-export PIPENV_VENV_IN_PROJECT=1
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+export VENV_HOME=/home/$USER/.virtualenvs
 # CURL
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export SSL_CERT_DIR=/usr/local/share/ca-certificates
