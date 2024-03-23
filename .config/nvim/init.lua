@@ -150,6 +150,19 @@ local plugins = {
 		},
 	},
     {
+      "vhyrro/luarocks.nvim",
+      priority = 1000,
+      config = true,
+    },
+    {
+      "rest-nvim/rest.nvim",
+      ft = "http",
+      dependencies = { "luarocks.nvim" },
+      config = function()
+        require("rest-nvim").setup()
+      end,
+    },
+    {
 
     },
 	"folke/neodev.nvim",
@@ -1719,14 +1732,14 @@ api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
 require("lsp")
 ----------
 
--- ---------------------------------"
--- -- Http Execution - rest.nvim
--- ---------------------------------"
---
--- require("rest-nvim").setup({})
--- norm_keyset("<leader>xhx", "RestNvim", "Run Http Under Cursor")
--- norm_keyset("<leader>xhp", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
--- norm_keyset("<leader>xhx", "RestNvim", "Re-Run Last Http Command")
+---------------------------------"
+-- Http Execution - rest.nvim
+---------------------------------"
+
+require("rest-nvim").setup({})
+norm_keyset("<leader>xhx", "RestNvim", "Run Http Under Cursor")
+norm_keyset("<leader>xhp", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
+norm_keyset("<leader>xhx", "RestNvim", "Re-Run Last Http Command")
 
 ---------------------------------"
 -- Code Testing - neotest
