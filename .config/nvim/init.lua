@@ -7,8 +7,8 @@
 --------------------------------
 -- TO DO
 --------------------------------
--- None
---
+-- TODO: Abstract away the <leader> functions into their own files
+-- TODO: Get the utility functions defined at the top of every module into their own module
 --------------------------------
 
 -------------------------------
@@ -165,7 +165,6 @@ local plugins = {
 			require("rest-nvim").setup()
 		end,
 	},
-	{},
 	"folke/neodev.nvim",
 	-- Autocompletion & Snips
 	----------
@@ -365,6 +364,34 @@ local plugins = {
 	{ "fladson/vim-kitty", branch = "main" },
 	-- Terminal Behaviour
 	{ "akinsho/toggleterm.nvim", version = "v2.*" },
+	-- Notebooks
+	----------
+	{
+		"benlubas/molten-nvim",
+		version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
+		dependencies = { "3rd/image.nvim" },
+		build = ":UpdateRemotePlugins",
+		init = function()
+			-- these are examples, not defaults. Please see the readme
+			vim.g.molten_image_provider = "image.nvim"
+			vim.g.molten_output_win_max_height = 20
+		end,
+	},
+	{
+		-- see the image.nvim readme for more information about configuring this plugin
+		"3rd/image.nvim",
+		opts = {
+			backend = "kitty", -- whatever backend you would like to use
+			max_width = 100,
+			max_height = 12,
+			window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
+			window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+		},
+	},
+	{
+		"quarto-dev/quarto-nvim",
+	},
+	----------
 }
 -- Plugin Options
 local pluginOpts = {}
@@ -648,6 +675,7 @@ dashboard.buttons.val = {
 	dashboard_opts.button("n", "  Open File-system", ":Telescope file_browser theme=dropdown<CR>"),
 	dashboard_opts.button("v", "  EditVim", "<cmd>e ~/.config/nvim/init.lua<CR>"),
 	dashboard_opts.button("l", "  Editlsp", "<cmd>e ~/.config/nvim/lua/lsp.lua<CR>"),
+	dashboard_opts.button("n", "  EditNotebooks", "<cmd> e ~/.config/nvim/lua/notebooks.lua<CR>"),
 }
 local section_mru = {
 	type = "group",
@@ -860,7 +888,7 @@ require("nvim-treesitter.configs").setup({
 		"python",
 		"bash",
 		"vim",
-        "go",
+		"go",
 		"csv",
 		"regex",
 		"javascript",
@@ -1170,9 +1198,12 @@ require("lualine").setup({
 -- Code Alignment - EasyAlign : <leader>e
 -- Wiki Commands - Obsidian.nvim: <leader>k,
 -- Code Execution & Http Calls & Testing - compiler, neotest: <leader>x (T is being used for the terminal)
+-- Notebook Functionality - quarto.nvim, molten-nvim: <leader>n
+-- ---------- --
 -- Via Telescope --
 --    Filetree - telescope-file-browser : <c-n>
 --    Buffer Management - Telescope Nvim: <leader>f
+-- ---------- --
 -- Previously Configured --
 --    Key Mapping Assist - whichkey: <leader>?
 --    Highlighting Options - Treesitter: <leader>h
@@ -1182,6 +1213,7 @@ require("lualine").setup({
 --    Version Control Commands -- fugitive: <leader>v
 --    Write Commands: <leader>w
 --    System Yank Commands: <leader>y
+-- ---------- --
 -- Configured in init.lsp --
 --    Debugging - NvimDAP: <leader>b
 --    Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c
@@ -1838,6 +1870,20 @@ keymap.set(
 	"<cmd>CoverageToggle<CR>",
 	{ noremap = true, silent = true, desc = "Toggle Coverage Signs" }
 )
+----------
+
+--------------------------------
+-- Notebooks - quarto.nvim, molten-nvim: <leader>n
+--------------------------------
+
+-- Commands
+----------
+api.nvim_create_user_command("Editnotebooks", "e ~/.config/nvim/lua/notebooks.lua", {})
+----------
+
+-- Load File
+----------
+require("notebooks")
 ----------
 
 --------------------------------
