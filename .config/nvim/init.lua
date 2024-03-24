@@ -431,6 +431,11 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 			vim.bo.spelllang = "en_gb"
 			vim.keymap.set("i", "<TAB>", "<C-t>", {})
 		end
+		if buftype == "yaml" then
+			vim.wo.spell = true
+			vim.bo.spelllang = "en_gb"
+			vim.keymap.set("i", "<TAB>", "<C-t>", {})
+		end
 	end,
 	group = "FileSpecs",
 })
@@ -788,8 +793,8 @@ keymap.set("", "<C-t><c-n>", ":tabnew<cr>", {})
 
 -- Buffer Control Mappings
 ----------
-keymap.set("n", "<c-b>l", "<cmd>bnext<CR>", { silent = true, desc = "Next Buff" })
-keymap.set("n", "<c-b>h", "<cmd>bprev<CR>", { silent = true, desc = "Prev Buff" })
+keymap.set("n", "<leader>fl", "<cmd>bnext<CR>", { silent = true, desc = "Next Buff" })
+keymap.set("n", "<leader>fh", "<cmd>bprev<CR>", { silent = true, desc = "Prev Buff" })
 ----------
 
 -- Scroll Control Mappings
@@ -855,6 +860,7 @@ require("nvim-treesitter.configs").setup({
 		"python",
 		"bash",
 		"vim",
+        "go",
 		"csv",
 		"regex",
 		"javascript",
@@ -1464,7 +1470,7 @@ norm_keyset("<leader>ff", "Telescope find_files theme=dropdown", "Find Files")
 -- Find File
 norm_keyset("<leader>fg", "Telescope live_grep theme=dropdown", "Live Grep")
 -- Help Mappings
-norm_keyset("<leader>fh", "Telescope help_tags theme=dropdown", "Help Tags")
+norm_keyset("<leader>fH", "Telescope help_tags theme=dropdown", "Help Tags")
 -- Imports
 norm_keyset("<leader>fi", "Telescope import theme=dropdown", "Imports")
 -- Jumplist

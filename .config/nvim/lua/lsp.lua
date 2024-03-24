@@ -190,6 +190,7 @@ local lsp_servers_ei = {
 	"tailwindcss-language-server",
 	"solidity",
 	"texlab",
+    "gopls",
 }
 -- Formatters
 local formatters_ei = {
@@ -202,6 +203,7 @@ local formatters_ei = {
 	"stylua",
 	"yamlfmt",
 	"latexindent",
+    "gofumpt",
 }
 -- Linters
 local linters_ei = {
@@ -216,9 +218,10 @@ local linters_ei = {
 	"proselint",
 	"write-good",
 	"solhint",
+    "golangci-lint",
 }
 -- Debuggers
-local debuggers_ei = { "debugpy", "bash-debug-adapter", "codelldb" }
+local debuggers_ei = { "debugpy", "bash-debug-adapter", "codelldb", "go-debug-adapter", }
 ----------
 
 -- Install Packages
@@ -307,6 +310,7 @@ format.setup({
 		rust = { "rustfmt" },
 		jinja = { "djlint" },
 		tex = { "latex-indent" },
+        go = { "gofumpt" }
 	},
 })
 
@@ -345,6 +349,7 @@ lint.linters_by_ft = {
 	sh = { "shellcheck" },
 	jinja = { "djlint" },
 	solidity = { "solhint" },
+    go = { "golangcilint" },
 }
 
 -- Auto-Lint on Save, Enter, and InsertLeave
@@ -406,12 +411,12 @@ local general_sources = {
 	{ name = "luasnip" },
 	{ name = "nvim_lsp" },
 	{ name = "nvim_lsp_document_symbol" },
+	{ name = "htmx" },
 	{ name = "otter" },
 	{ name = "path" },
 	{ name = "buffer" },
 	{ name = "nvim_lua" },
 	{ name = "spell" },
-	{ name = "htmx" },
 	{ name = "treesitter" },
 	{ name = "dotenv" },
 }
@@ -855,6 +860,11 @@ config.solidity.setup(lsp_opts({ root_dir = config.util.root_pattern("brownie-co
 -- Latex
 ----------
 config.texlab.setup(lsp_opts({}))
+----------
+
+-- Go
+----------
+config.gopls.setup(lsp_opts({}))
 ----------
 
 -- Injected Languages (Otter)

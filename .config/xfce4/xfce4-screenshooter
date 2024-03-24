@@ -4,6 +4,6 @@ last_user=
 last_extension=png
 enable_imgur_upload=true
 show_in_folder=true
-screenshot_dir=file:/home/bowmanpete/Pictures
-action=2
+screenshot_dir=file:/home/bowmanpete/dev/fmtah/posts/post3/static
+action=1
 
