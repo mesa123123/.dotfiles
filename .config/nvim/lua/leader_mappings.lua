@@ -54,8 +54,11 @@ end
 M.paste = l("p", "System Paste")
 -- Quit
 M.quit = l("q", "Close & Quit Commands")
+M.quit_all = l("qa", "Quit All Commands")
+M.quit_buffer = l("qb", "Quit Buffer Commands")
 -- Write
 M.write = l("w", "File Write Commands")
+M.write_quit = l("wq", "Write & Quit Commands")
 -- Yank
 M.yank = l("y", "System Copy")
 -- Run Command
@@ -130,7 +133,8 @@ M.wiki_linkOpts = l("kl", "Link Options")
 -- Database
 M.database = l("d", "Database")
 -- Notebook Functionality
-M.nb = l("n", "Notebooks")
+M.notebook = l("n", "Notebooks")
+M.notebook_kernel = l("nk", "Notebook Kernel Opts")
 -- Highlighting Options - Treesitter: <leader>h
 M.hl = l("h", "Highlighting")
 -- Version Control Commands -- fugitive: <leader>v
@@ -148,6 +152,8 @@ M.docCreation = l("l", "Document Formatting & Creation")
 -- Key Assistance Table
 --------------------------------
 M.assistDesc = {
+	["]"] = { name = "Go To Next" },
+	["["] = { name = "Go To Previous" },
 	["<leader>"] = {
 		a = { name = "Terminal Applications" },
 		b = {
@@ -168,7 +174,7 @@ M.assistDesc = {
 		},
 		l = { name = "VimTex" },
 		m = { name = "Todos" },
-		n = { name = "Notebooks" },
+		n = { name = "Notebooks", k = { name = "Notebook Kernel Opts" } },
 		p = { name = "System Paste" },
 		q = {
 			name = "Close and Quit",

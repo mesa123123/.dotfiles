@@ -57,6 +57,10 @@ end
 M.norm_keyset = function(key, command, wkdesc)
 	keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = true, desc = wkdesc })
 end
+-- Abstraction for the vast majority of my keymappings, loud version
+M.norm_loudkeyset = function(key, command, wkdesc)
+	keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = false, noremap = true, desc = wkdesc })
+end
 ----------
 
 -- Map(function, table)
@@ -183,7 +187,7 @@ end
 --  A Function for installing rocks
 ----------
 M.install_rock = function(rock)
-	local rock_count = vim.fn.system("luarocks list | grep -c \"" .. rock .. "\"")
+	local rock_count = vim.fn.system('luarocks list | grep -c "' .. rock .. '"')
 	if rock_count == 0 then
 		vim.fn.system("luarocks install " .. rock)
 	end

@@ -1,12 +1,4 @@
 --------------------------------
--- ###################  --
--- # Main Vim Config #  --
--- ###################  --
---------------------------------
-
---------------------------------
--- TO DO
---------------------------------
 -- NONE
 --------------------------------
 
@@ -62,22 +54,22 @@ local plugins = require("plugins")
 ----------
 local norm_keyset = ufuncs.norm_keyset
 local keyopts = ufuncs.keyopts
-local loudkeyopts = ufuncs.loudkeyopts
+local norm_loudkeyset = ufuncs.norm_loudkeyset
 local get_python_path = ufuncs.get_python_path
 ----------
 
 --------------------------------
--- Plugin, Package Installing Loading and Settings -- lazy.nvim
+-- Plugin & Package: Installing, Loading, and Settings -- lazy.nvim & luarocks.nvim
 --------------------------------
 
 -- Package Path Upgrade
 ----------
-package.path = package.path
-	.. ";"
-	.. plugin_path
-	.. "/luarocks.nvim/.rocks/share/lua/6.1/?.lua;"
-	.. plugin_path
-	.. "/luarocks.nvim/.rocks/share/lua/5.1/?/?.lua"
+-- Rocks installed through luarocks.nvim
+package.path = package.path .. ";" .. plugin_path .. "/luarocks.nvim/.rocks/share/lua/5.1/?.lua"
+package.path = package.path .. ";" .. plugin_path .. "/luarocks.nvim/.rocks/share/lua/5.1/?/init.lua"
+-- Rocks installed through local luarocks
+package.path = package.path .. ";" .. fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
+package.path = package.path .. ";" .. fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
 ----------
 
 -- Install Package Manager(s)
@@ -105,7 +97,7 @@ require("lazy").setup(plugins.list, plugins.opts)
 
 -- Install Rocks
 ----------
-require("luarocks-nvim").setup({ rocks = { "magick" } })
+require("luarocks-nvim").setup({ rocks = plugins.rocks })
 ----------
 
 -------------------------------
@@ -142,8 +134,9 @@ local function set_shift_and_tab(length, patterns)
 	})
 end
 -- Set them for various File extensions
-set_shift_and_tab(2, { "*.cpp", "*.ts", "*.md", ".draft" })
+set_shift_and_tab(2, { "*.md", "*.draft", "*.lua" })
 set_shift_and_tab(4, { "*.py" })
+
 -- Filetype specific autocommands
 api.nvim_create_augroup("FileSpecs", {})
 api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
@@ -202,18 +195,6 @@ gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
 -- Virtual Text Enabled Globally
 diagnostics.config({ virtual_text = true })
 ------------
-
--- Section: Commands
-----------
--- #FIX: This doesn't seem to do anything, or output to console
-api.nvim_create_user_command("DepInstall", function()
-	if vim.bo.filetype == "python" then
-		print("Installing via pip")
-		local output = vim.fn.system("pip install -r " .. vim.fn.getcwd() .. "/requirements.txt")
-		print(output)
-	end
-end, { nargs = 0 })
-----------
 
 -- AutoCmds
 ----------
@@ -418,9 +399,9 @@ alpha.setup(dashboard.config)
 
 --Neodev
 local neodev = require("neodev")
--- neodev.setup({
--- 	library = { plugins = { "neotest" }, types = true },
--- })
+neodev.setup({
+	library = { plugins = { "neotest" }, types = true },
+})
 ----------
 
 -----------------------------------------
@@ -432,16 +413,21 @@ local neodev = require("neodev")
 api.nvim_create_user_command("Editleaderkeys", "e ~/.config/nvim/lua/leader_mappings.lua", {})
 ----------
 
--- Load File
+-- Load Leader Keybinds
 ----------
 lm = require("leader_mappings")
 ----------
 
--- Register Custom Menus
+-- Register Assist Menus
 ----------
 local whichKey = require("which-key")
 whichKey.register(lm.assistDesc)
 ---------
+
+-- Mappings
+---------------
+norm_keyset(lm.assist, "WhichKey", "Editor Mapping Assistance")
+---------------
 
 ----------------------------------
 -- Editor Mappings
@@ -487,32 +473,32 @@ keymap.set("v", "<leader>/", '"fy/\\V<C-R>f<CR>', {})
 -- Paste, Yank, Quit, Save Mappings
 ----------
 -- Set Write/Quit to shortcuts
-keymap.set("n", "<leader>ww", ":w<CR>", loudkeyopts({ desc = "Write" }))
-keymap.set("n", "<leader>w!", ":w!<CR>", loudkeyopts({ desc = "Over-Write" }))
-keymap.set("n", "<leader>ws", ":so<CR>", loudkeyopts({ desc = "Write and Source to Nvim" }))
-keymap.set("n", "<leader>wqq", ":wq<CR>", loudkeyopts({ desc = "Close Buffer" }))
-keymap.set("n", "<leader>wqb", ":w<CR>:bd<CR>", loudkeyopts({ desc = "Write and Close Buffer w/o Pane" }))
-keymap.set("n", "<leader>wqa", ":wqa<CR>", loudkeyopts({ desc = "Write All & Quit Nvim" }))
-keymap.set("n", "<leader>wa", ":wa<CR>", loudkeyopts({ desc = "Write All" }))
-keymap.set("n", "<leader>qaa", ":qa<CR>", loudkeyopts({ desc = "Quit Nvim" }))
-keymap.set("n", "<leader>qa!", "<cmd>qa!<cr>", loudkeyopts({ desc = "Quit Nvim Without Writing" }))
-keymap.set("n", "<leader>qq", ":q<CR>", loudkeyopts({ desc = "Close Buffer and Pane" }))
-keymap.set("n", "<leader>qbb", ":bd<CR>", loudkeyopts({ desc = "Close Buffer w/o Pane" }))
-keymap.set("n", "<leader>qb!", ":bd<CR>", loudkeyopts({ desc = "Close Buffer w/o Pane" }))
-keymap.set("n", "<leader>q!", ":q!<CR>", loudkeyopts({ desc = "Close Buffer Without Writing" }))
+norm_loudkeyset(lm.write .. "w", "w", "Write")
+norm_loudkeyset(lm.write .. "!", "w!", "Over-Write")
+norm_loudkeyset(lm.write .. "s", "so", "Write and Source to Nvim")
+norm_loudkeyset(lm.write .. "a", "wa", "Write All")
+norm_loudkeyset(lm.write_quit .. "q", "wq", "Close Buffer")
+norm_loudkeyset(lm.write_quit .. "b", "w<CR>:bd", "Write and Close Buffer w/o Pane")
+norm_loudkeyset(lm.write_quit .. "a", "wqa", "Write All & Quit Nvim")
+norm_loudkeyset(lm.quit .. "q", "q", "Close Buffer and Pane")
+norm_loudkeyset(lm.quit .. "!", "q!", "Close Buffer Without Writing")
+norm_loudkeyset(lm.quit_all .. "a", "qa", "Quit Nvim")
+norm_loudkeyset(lm.quit_all .. "!", "<cmd>qa!<cr>", "Quit Nvim Without Writing")
+norm_loudkeyset(lm.quit_buffer .. "b", "bd", "Close Buffer w/o Pane")
+norm_loudkeyset(lm.quit_buffer .. "!", "bd", "Close Buffer w/o Pane")
 -- System Copy Set to Mappings
-keymap.set({ "n", "v" }, "<leader>y", '"+y', keyopts({ desc = "System Copy" }))
-keymap.set({ "n", "v" }, "<leader>yy", '"+yy', keyopts({ desc = "System Copy: Line" }))
-keymap.set("n", "<leader>yG", '"+yG', keyopts({ desc = "System Copy: Rest of File" }))
-keymap.set("n", "<leader>y%", '"+y%', keyopts({ desc = "System Copy: Whole of File" }))
+keymap.set({ "n", "v" }, lm.yank .. "v", '"+y', keyopts({ desc = "System Copy" }))
+keymap.set({ "n", "v" }, lm.yank .. "y", '"+yy', keyopts({ desc = "System Copy: Line" }))
+keymap.set("n", lm.yank .. "G", '"+yG', keyopts({ desc = "System Copy: Rest of File" }))
+keymap.set("n", lm.yank .. "%", '"+y%', keyopts({ desc = "System Copy: Whole of File" }))
 -- System Paste Set to Mappings
-keymap.set({ "n", "v" }, "<leader>p", '"+p', keyopts({ desc = "System Paste" }))
+keymap.set({ "n", "v" }, lm.paste .. "p", '"+p', keyopts({ desc = "System Paste" }))
 ---------
 
 -- Highlighting Search Mappings
 ---------
 -- Trigger Highlight Searching Automatically
-keymap.set("n", "<cr>", ":nohlsearch<CR>", keyopts({}))
+norm_keyset("<cr>", "nohlsearch", "")
 keymap.set("n", "n", ":set hlsearch<CR>n", keyopts({}))
 keymap.set("n", "N", ":set hlsearch<CR>N", keyopts({}))
 ---------
@@ -557,34 +543,6 @@ keymap.set({ "n", "v" }, "<C-y>", "5<c-y>", {})
 -- Auto-Comment Mappings
 ----------
 local auto_comment = require("Comment").setup()
-----------
-
-----------------------------------
--- Editor Mapping Assistance -- Which Key
-----------------------------------
-
--- Setup
----------------
-local whichKey = require("which-key")
-whichKey.setup()
----------------
-
--- Mappings
----------------
-keymap.set(
-	"n",
-	"<leader>?",
-	"<cmd>WhichKey<CR>",
-	{ silent = true, noremap = false, desc = "Editor Mapping Assistance" }
-)
----------------
-
--- General Menu Keys Register
----------------
-whichKey.register({
-	["]"] = { name = "Go To Next" },
-	["["] = { name = "Go To Previous" },
-})
 ----------
 
 -----------------------------------------
@@ -1294,6 +1252,7 @@ keymap.set("v", lm.wiki_linkOpts .. "a", "<cmd>ObsidianLink<cr>", { silent = tru
 ---------------------------------
 -- Latex Functionality: <leader>l - Vimtex
 ---------------------------------
+
 -- Setup (Currently not supported in Lua)
 
 api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
@@ -1302,6 +1261,25 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 		vim.g["vimtext_view_method"] = "zathura"
 	end,
 })
+
+---------------------------------"
+-- LSP Config
+---------------------------------"
+
+-- Notes
+----------
+-- All Lsp Settings are configured in nvim/lua/lsp.lua
+----------
+
+-- Commands
+----------
+api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
+----------
+
+-- Load File
+----------
+require("lsp")
+----------
 
 ---------------------------------
 -- Code Align
@@ -1361,25 +1339,6 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 norm_keyset(lm.exec .. "q", "CompilerStop", "Stop Code Runner")
 norm_keyset(lm.exec .. "i", "CompilerToggleResults", "Show Code Run")
 norm_keyset(lm.exec .. "r", "CompilerStop<cr>" .. "<cmd>CompilerRedo", "Re-Run Code")
-----------
-
----------------------------------"
--- LSP Config
----------------------------------"
-
--- Notes
-----------
--- All Lsp Settings are configured in nvim/lua/lsp.lua
-----------
-
--- Commands
-----------
-api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
-----------
-
--- Load File
-----------
-require("lsp")
 ----------
 
 ---------------------------------"
