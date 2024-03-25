@@ -618,7 +618,7 @@ dashboard.buttons.val = {
 	dashboard_opts.button("n", "  Open File-system", ":Telescope file_browser theme=dropdown<CR>"),
 	dashboard_opts.button("v", "  EditVim", "<cmd>e ~/.config/nvim/init.lua<CR>"),
 	dashboard_opts.button("l", "  Editlsp", "<cmd>e ~/.config/nvim/lua/lsp.lua<CR>"),
-	dashboard_opts.button("n", "  EditNotebooks", "<cmd> e ~/.config/nvim/lua/notebooks.lua<CR>"),
+	dashboard_opts.button("b", "  EditNotebooks", "<cmd> e ~/.config/nvim/lua/notebooks.lua<CR>"),
 	dashboard_opts.button("k", "󰌓  EditKeyLeaderKeyMappings", "<cmd>e ~/.config/nvim/lua/leader_mappings.lua<CR>"),
 }
 local section_mru = {
