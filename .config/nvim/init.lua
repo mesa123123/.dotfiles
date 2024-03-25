@@ -20,7 +20,7 @@ vim.g["config_path"] = "~/.config/nvim"
 vim.g["mapleader"] = "\\"
 
 --------------------------------
--- Luaisms for Vim Stuff
+-- Vim Sims and Requires
 --------------------------------
 
 -- Apis, Functions, Commands
@@ -40,79 +40,23 @@ local diagnostics = vim.diagnostic
 local opt = vim.opt -- vim options
 -- For Variables
 local gv = vim.g -- global variables
+local plugin_path = fn.stdpath("data") .. "/lazy"
+local lazypath = plugin_path .. "/lazy.nvim"
 ----------
 
--- Functions
+-- Requires
+----------
+-- Requires
+local ufuncs = require("personal_utils")
 ----------
 
--- Keyopts
-----------
-local function keyopts(opts)
-	local standardOpts = { silent = true, noremap = true }
-	for k, v in pairs(standardOpts) do
-		opts[k] = v
-	end
-	return opts
-end
+--------------------------------
+-- Utility Functions
+--------------------------------
 
-local function loudkeyopts(opts)
-	local standardOpts = { silent = false, noremap = true }
-	for k, v in pairs(standardOpts) do
-		opts[k] = v
-	end
-	return opts
-end
--- Abstraction for the vast majority of my keymappings
-local function norm_keyset(key, command, wkdesc)
-	keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = true, desc = wkdesc })
-end
-----------
-
--- Map(function, table)
-----------
-function Map(func, tbl)
-	local newtbl = {}
-	for i, v in pairs(tbl) do
-		newtbl[i] = func(v)
-	end
-	return newtbl
-end
-----------
-
--- Filter(function, table)
-----------
-function Filter(func, tbl)
-	local newtbl = {}
-	for i, v in pairs(tbl) do
-		if func(v) then
-			newtbl[i] = v
-		end
-	end
-	return newtbl
-end
-----------
-
--- Concat two Tables
-----------
-local function tableConcat(t1, t2)
-	for _, v in ipairs(t2) do
-		table.insert(t1, v)
-	end
-	return t1
-end
-----------
-
--- Python Path
-----------
-local function get_python_path()
-	-- Use Activated Environment
-	if vim.env.VIRTUAL_ENV then
-		return vim.env.VIRTUAL_ENV .. "/bin/" .. "python"
-	end
-	-- Fallback to System Python
-	return fn.exepath("python3") or fn.exepath("python") or "python"
-end
-----------
+local norm_keyset = ufuncs.norm_keyset
+local keyopts = ufuncs.keyopts
+local loudkeyopts = ufuncs.loudkeyopts
 
 --------------------------------
 -- Plugin Loading and Settings -- lazy.nvim
@@ -121,7 +65,6 @@ end
 -- Install
 ----------
 -- Download
-local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not loop.fs_stat(lazypath) then
 	fn.system({
 		"git",
@@ -1750,7 +1693,7 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 })
 norm_keyset("<leader>xq", "CompilerStop", "Stop Code Runner")
 norm_keyset("<leader>xi", "CompilerToggleResults", "Show Code Run")
-keymap.set("n", "<leader>xr", "<cmd>CompilerStop<cr>" .. "<cmd>CompilerRedo<cr>", keyopts({ desc = "Re-Run Code" }))
+norm_keyset("<leader>xr", "CompilerStop<cr>" .. "<cmd>CompilerRedo", "Re-Run Code")
 ----------
 
 ---------------------------------"
@@ -1818,7 +1761,11 @@ require("neotest").setup({
 ----------
 -- Mappings
 norm_keyset("<leader>xtx", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
-norm_keyset("<leader>xto", "lua require('neotest').output.open({ enter = true, auto_close = true })", "Test Output")
+norm_keyset(
+	"<leader>xto",
+	"lua require('neotest').output.open({ enter = true, auto_close = true })",
+	"Test Output"
+)
 norm_keyset("<leader>xts", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
 norm_keyset("<leader>xtq", "lua require('neotest').run.stop()", "Quit Test Run")
 norm_keyset("<leader>xtw", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
@@ -1857,19 +1804,9 @@ require("coverage").setup({
 
 -- Mappings
 ----------
-keymap.set("n", "<leader>xcr", "<cmd>Coverage<CR>", { noremap = true, silent = true, desc = "Run Coverage Report" })
-keymap.set(
-	"n",
-	"<leader>xcs",
-	"<cmd>CoverageSummary<CR>",
-	{ noremap = true, silent = true, desc = "Show Coverage Report" }
-)
-keymap.set(
-	"n",
-	"<leader>xct",
-	"<cmd>CoverageToggle<CR>",
-	{ noremap = true, silent = true, desc = "Toggle Coverage Signs" }
-)
+norm_keyset("<leader>xcr", "Coverage", "Run Coverage Report")
+norm_keyset("<leader>xcs", "CoverageSummary", "Show Coverage Report")
+norm_keyset("<leader>xct", "CoverageToggle", "Toggle Coverage Signs")
 ----------
 
 --------------------------------
