@@ -9,5 +9,6 @@ node_modules/
 !.config/xfce4/panel/*
 # Nvim Config
 !.config/nvim/
-!.config/nvim/lua/*
+!.config/nvim/lua/
 !.config/nvim/lua
+.config/nvim/lua/lsp_servers
