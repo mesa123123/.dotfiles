@@ -4,14 +4,27 @@
 -- ###################  --
 --------------------------
 
--- Set the table to return to other modules
+--------------------------------
+-- Configure Doc Commands
+--------------------------------
+
+-- Commands
+----------
+vim.api.nvim_create_user_command("Editutils", "e ~/.config/nvim/lua/personal_utils.lua", {}) -- Edit
+vim.api.nvim_create_user_command("Srcutils", "luafile ~/.config/nvim/lua/personal_utils.lua", {}) -- Source
+----------
+
+--------------------------------
+-- Module Table
+--------------------------------
+
 local M = {}
 
 --------------------------------
 -- Vim Sims and Requires
 --------------------------------
 
--- Apis, Functions, Commands
+-- Vim Vars
 ----------
 local fn = vim.fn -- vim functions
 local keymap = vim.keymap
@@ -25,7 +38,7 @@ local plugin_path = fn.stdpath("data") .. "/lazy"
 
 -- Keyopts
 ----------
-function M.keyopts(opts)
+M.keyopts = function(opts)
 	local standardOpts = { silent = true, noremap = true }
 	for k, v in pairs(standardOpts) do
 		opts[k] = v
@@ -33,7 +46,7 @@ function M.keyopts(opts)
 	return opts
 end
 
-function M.loudkeyopts(opts)
+M.loudkeyopts = function(opts)
 	local standardOpts = { silent = false, noremap = true }
 	for k, v in pairs(standardOpts) do
 		opts[k] = v
@@ -41,14 +54,14 @@ function M.loudkeyopts(opts)
 	return opts
 end
 -- Abstraction for the vast majority of my keymappings
-function M.norm_keyset(key, command, wkdesc)
+M.norm_keyset = function(key, command, wkdesc)
 	keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = true, desc = wkdesc })
 end
 ----------
 
 -- Map(function, table)
 ----------
-function M.map(func, tbl)
+M.map = function(func, tbl)
 	local newtbl = {}
 	for i, v in pairs(tbl) do
 		newtbl[i] = func(v)
@@ -59,7 +72,7 @@ end
 
 -- Filter(function, table)
 ----------
-function M.filter(func, tbl)
+M.filter = function(func, tbl)
 	local newtbl = {}
 	for i, v in pairs(tbl) do
 		if func(v) then
@@ -72,7 +85,7 @@ end
 
 -- Concat two Tables
 ----------
-function M.tableConcat(t1, t2)
+M.tableConcat = function(t1, t2)
 	for _, v in ipairs(t2) do
 		table.insert(t1, v)
 	end
@@ -82,7 +95,7 @@ end
 
 -- Python Path
 ----------
-function M.get_python_path()
+M.get_python_path = function()
 	-- Use Activated Environment
 	if vim.env.VIRTUAL_ENV then
 		return vim.env.VIRTUAL_ENV .. "/bin/" .. "python"
@@ -94,7 +107,7 @@ end
 
 -- Find if a file exists
 ----------
-function M.fileExists(name)
+M.fileExists = function(name)
 	local f = io.open(name, "r")
 	if f ~= nil then
 		io.close(f)
@@ -106,7 +119,7 @@ end
 
 -- Get Pyenv Packages if active
 ----------
-function M.get_venv_command(command)
+M.get_venv_command = function(command)
 	if vim.env.VIRTUAL_ENV then
 		return require("lspconfig").util.path.join(vim.env.VIRTUAL_ENV, "bin", command)
 	else
@@ -116,7 +129,7 @@ end
 
 -- Get a folders files as members of a table
 ----------
-function M.scandirMenu(title, dir, sub_func)
+M.scandirMenu = function(title, dir, sub_func)
 	local scan = require("plenary.scandir")
 	local Menu = require("nui.menu")
 	local scan_results = scan.scan_dir(dir, { hidden = false })
@@ -159,11 +172,22 @@ end
 
 -- On Exit for Sys Calls
 ----------
-function M.on_exit(obj)
+M.on_exit = function(obj)
 	print(obj.code)
 	print(obj.signal)
 	print(obj.stdout)
 	print(obj.stderr)
+end
+----------
+
+--  A Function for installing rocks
+----------
+M.install_rock = function(rock)
+	local rock_count = vim.fn.system("luarocks list | grep -c \"" .. rock .. "\"")
+	if rock_count == 0 then
+		vim.fn.system("luarocks install " .. rock)
+	end
+    print("installing" .. rock)
 end
 ----------
 

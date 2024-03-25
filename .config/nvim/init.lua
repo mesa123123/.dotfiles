@@ -1,36 +1,43 @@
--------------------------
+--------------------------------
 -- ###################  --
 -- # Main Vim Config #  --
 -- ###################  --
---------------------------
+--------------------------------
 
 --------------------------------
 -- TO DO
 --------------------------------
--- TODO: Abstract away the <leader> functions into their own files
--- TODO: Get the utility functions defined at the top of every module into their own module
+-- NONE
 --------------------------------
 
--------------------------------
+--------------------------------
 -- Priority Settings
--------------------------------
+--------------------------------
 -- Set the config path
 vim.g["config_path"] = "~/.config/nvim"
 -- Set the mapleader
 vim.g["mapleader"] = "\\"
 
 --------------------------------
+-- Configure Doc Commands
+--------------------------------
+
+-- Commands
+----------
+vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {}) -- Edit
+vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {}) -- Source
+----------
+
+--------------------------------
 -- Vim, Sims, and Requires
 --------------------------------
 
--- Apis, Functions, Commands
+-- Vim Vars
 ----------
 local cmd = vim.cmd -- vim commands
 local api = vim.api -- vim api (I'm not sure what this does)
 local fn = vim.fn -- vim functions
 local system = vim.fn.system
-local fs = vim.fs -- vim filesystem
-local ui = vim.ui -- vim ui options
 local keymap = vim.keymap
 local ft = vim.filetype
 local hl = vim.api.nvim_set_hl
@@ -48,6 +55,7 @@ local lazypath = plugin_path .. "/lazy.nvim"
 ----------
 -- Requires
 local ufuncs = require("personal_utils")
+local plugins = require("plugins")
 ----------
 
 -- Extra Vars
@@ -56,17 +64,18 @@ local norm_keyset = ufuncs.norm_keyset
 local keyopts = ufuncs.keyopts
 local loudkeyopts = ufuncs.loudkeyopts
 local get_python_path = ufuncs.get_python_path
+local install_rock = ufuncs.install_rock
 ----------
 
 --------------------------------
--- Plugin Loading and Settings -- lazy.nvim
+-- Plugin, Package Installing Loading and Settings -- lazy.nvim
 --------------------------------
 
--- Install
+-- Install Package Manager(s)
 ----------
 -- Download
 if not loop.fs_stat(lazypath) then
-	fn.system({
+	system({
 		"git",
 		"clone",
 		"--filter=blob:none",
@@ -76,280 +85,24 @@ if not loop.fs_stat(lazypath) then
 	})
 end
 -- Add to Runtime Path
+----------
 opt.rtp:prepend(lazypath)
 ----------
 
--- Setup
-----------------
-local plugins = {
-	-- Essentials
-	----------
-	{ "nvim-lua/plenary.nvim", event = "VeryLazy" },
-	{
-		"nvim-treesitter/nvim-treesitter",
-		dependencies = {
-			"nvim-treesitter/playground",
-			"nvim-treesitter/nvim-treesitter-context",
-		},
-	},
-	{
-		"vhyrro/luarocks.nvim",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-		},
-		priority = 1000,
-		config = true,
-	},
-	{
-		"rest-nvim/rest.nvim",
-		ft = "http",
-		dependencies = { "luarocks.nvim" },
-		config = function()
-			require("rest-nvim").setup()
-		end,
-	},
-	"folke/neodev.nvim",
-	-- Autocompletion & Snips
-	----------
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			-- Sources
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-nvim-lsp-document-symbol",
-			"hrsh7th/cmp-nvim-lua",
-			"hrsh7th/cmp-cmdline",
-			"ray-x/cmp-treesitter",
-			"SergioRibera/cmp-dotenv",
-			"dmitmel/cmp-cmdline-history",
-			"yochem/cmp-htmx",
-			"saadparwaiz1/cmp_luasnip",
-			"f3fora/cmp-spell",
-			"jmbuhr/otter.nvim",
-			-- Dependencies
-			"L3MON4D3/LuaSnip",
-			"rafamadriz/friendly-snippets",
-			"rcarriga/nvim-notify",
-		},
-	},
-	-- Language Server Protocol
-	----------
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			"williamboman/mason-lspconfig.nvim",
-			"williamboman/mason.nvim",
-			"ray-x/lsp_signature.nvim",
-			"hrsh7th/nvim-cmp",
-			"L3MON4D3/LuaSnip",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
-		},
-	},
-	{ "jose-elias-alvarez/null-ls.nvim", branch = "main" },
-	-- Linting Plugins
-	----------
-	{ "mfussenegger/nvim-lint", event = "VeryLazy" },
-	-- Formatting
-	----------
-	{ "stevearc/conform.nvim", event = "VeryLazy" },
-	-- Inejected Languages
-	----------
-	"jmbuhr/otter.nvim",
-	-- Debug Adapter Protocol
-	----------
-	{
-		"mfussenegger/nvim-dap",
-		dependencies = { "mfussenegger/nvim-dap-python", "theHamsta/nvim-dap-virtual-text" },
-	},
-	-- Code Running
-	----------
-	{
-		"mesa123123/compiler.nvim",
-		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
-		dependencies = { "stevearc/overseer.nvim" },
-		opts = {},
-	},
-	{
-		"stevearc/overseer.nvim",
-		commit = "68a2d344cea4a2e11acfb5690dc8ecd1a1ec0ce0",
-		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
-		opts = {
-			task_list = {
-				direction = "bottom",
-				min_height = 15,
-				max_height = 15,
-				default_detail = 1,
-			},
-		},
-	},
-	----------
-	-- Assistance Plugins
-	----------
-	"folke/which-key.nvim",
-	{ "folke/todo-comments.nvim", dependencies = { "nvim-lua/plenary.nvim" }, event = "VeryLazy" },
-	{ "numToStr/Comment.nvim", lazy = false },
-	-- Testing Plugins
-	--------
-	{
-		"nvim-neotest/neotest",
-		dependencies = {
-			"nvim-neotest/nvim-nio", -- Currently broken on my config....
-			"nvim-lua/plenary.nvim",
-			"antoinemadec/FixCursorHold.nvim",
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-neotest/neotest-python",
-			-- "rouge8/neotest-rust",
-			"andythigpen/nvim-coverage",
-		},
-		event = "VeryLazy",
-	},
-	-- Database Workbench,
-	-----------
-	{ "tpope/vim-dadbod", event = "VeryLazy", dependencies = "kristijanhusak/vim-dadbod-ui" },
-	-- Versions Control
-	----------
-	{ "tpope/vim-fugitive", event = "VeryLazy" },
-	-- Status/Window Lines
-	------------
-	{
-		"nvim-lualine/lualine.nvim",
-		event = "VeryLazy",
-	},
-	{
-		"utilyre/barbecue.nvim",
-		dependencies = {
-			"SmiteshP/nvim-navic",
-			"nvim-tree/nvim-web-devicons", -- optional dependency
-		},
-	},
-	------------
-	-- Colors and Themes
-	------------
-	-- DevIcons
-	"nvim-tree/nvim-web-devicons",
-	-- Theme
-	"ellisonleao/gruvbox.nvim",
-	-- Brackets Rainbowing
-	"luochen1990/rainbow",
-	-- Highlights Hex Colors as their color
-	"norcalli/nvim-colorizer.lua",
-	-- Rainbow csv hl
-	{
-		"cameron-wags/rainbow_csv.nvim",
-		config = true,
-		ft = {
-			"csv",
-			"tsv",
-			"csv_semicolon",
-			"csv_whitespace",
-			"csv_pipe",
-			"rfc_csv",
-			"rfc_semicolon",
-		},
-		cmd = {
-			"RainbowDelim",
-			"RainbowDelimSimple",
-			"RainbowDelimQuoted",
-			"RainbowMultiDelim",
-		},
-	},
-	-- LSP Icons
-	{ "onsails/lspkind.nvim", event = "VeryLazy" },
-	-- Dashboard
-	{
-		"goolord/alpha-nvim",
-		event = "VimEnter",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-	},
-	-- Folding
-	----------
-	"anuvyklack/pretty-fold.nvim",
-	----------
-	-- CmdLine
-	----------
-	{
-		"folke/noice.nvim",
-		event = "VeryLazy",
-		dependencies = {
-			"MunifTanjim/nui.nvim",
-			"rcarriga/nvim-notify",
-		},
-	},
-	{ "stevearc/dressing.nvim", event = "VeryLazy" },
-	----------
-	-- Nvim Telescope
-	---------
-	{
-		"nvim-telescope/telescope.nvim",
-		dependencies = {
-			"BurntSushi/ripgrep",
-			"sharkdp/fd",
-			"nvim-telescope/telescope-dap.nvim",
-			"nvim-telescope/telescope-file-browser.nvim",
-			"piersolenski/telescope-import.nvim",
-			"nvim-telescope/telescope-ui-select.nvim",
-		},
-		event = "VeryLazy",
-	},
-	----------
-	-- Writing Functionality
-	----------
-	-- Wiki - Obsidian nvim
-	{ "epwalsh/obsidian.nvim", event = "VeryLazy" },
-	-- Latex - VimTex
-	"lervag/vimtex",
-	----------
-	-- Alignment
-	{ "junegunn/vim-easy-align", event = "VeryLazy" },
-	-- Working with Kitty
-	{ "fladson/vim-kitty", branch = "main" },
-	-- Terminal Behaviour
-	{ "akinsho/toggleterm.nvim", version = "v2.*" },
-	-- Notebooks
-	----------
-	{
-		"benlubas/molten-nvim",
-		version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
-		dependencies = { "3rd/image.nvim" },
-		build = ":UpdateRemotePlugins",
-		init = function()
-			-- these are examples, not defaults. Please see the readme
-			vim.g.molten_image_provider = "image.nvim"
-			vim.g.molten_output_win_max_height = 20
-		end,
-	},
-	{
-		-- see the image.nvim readme for more information about configuring this plugin
-		"3rd/image.nvim",
-		opts = {
-			backend = "kitty", -- whatever backend you would like to use
-			max_width = 100,
-			max_height = 12,
-			window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
-			window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
-		},
-	},
-	{
-		"quarto-dev/quarto-nvim",
-	},
-	----------
-}
--- Plugin Options
-local pluginOpts = {}
--- Load
-require("lazy").setup(plugins, pluginOpts)
+-- Load Plugins
+----------
+require("lazy").setup(plugins.list, plugins.opts)
 ----------
 
---------------------------------
--- Configure Vimrc from Vim
---------------------------------
-
--- Commands
+-- Install Rocks
 ----------
-api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {}) -- Edit Config
-api.nvim_create_user_command("Srcv", "luafile ~/.config/nvim/init.lua", {}) -- Source Config
+-- Check luarocks is installed
+install_rock("luarocks")
+print(vim.fn.system("luarocks list"))
+-- Install
+for rock = 1, #plugins.rocks do
+	install_rock(plugins.rocks[rock])
+end
 ----------
 
 -------------------------------
@@ -479,7 +232,7 @@ api.nvim_create_autocmd("TextYankPost", {
 
 -- Theming Pretty Fold
 ----------
-require("pretty-fold").setup()
+require("pretty-fold").setup({})
 ----------
 
 -- Default Folding Options
@@ -617,9 +370,11 @@ dashboard.buttons.val = {
 	{ type = "text", val = "Options", opts = { hl = "SpecialComment", position = "center" } },
 	dashboard_opts.button("n", "  Open File-system", ":Telescope file_browser theme=dropdown<CR>"),
 	dashboard_opts.button("v", "  EditVim", "<cmd>e ~/.config/nvim/init.lua<CR>"),
+	dashboard_opts.button("p", "  Editplugins", "<cmd>e ~/.config/nvim/lua/plugins.lua<CR>"),
+	dashboard_opts.button("f", "󰘧  Editutil_funcs", "<cmd>e ~/.config/nvim/lua/personal_utils.lua<CR>"),
+	dashboard_opts.button("m", "󰌓  EditKeyMappings", "<cmd>e ~/.config/nvim/lua/leader_mappings.lua<CR>"),
 	dashboard_opts.button("l", "  Editlsp", "<cmd>e ~/.config/nvim/lua/lsp.lua<CR>"),
 	dashboard_opts.button("b", "  EditNotebooks", "<cmd> e ~/.config/nvim/lua/notebooks.lua<CR>"),
-	dashboard_opts.button("k", "󰌓  EditKeyLeaderKeyMappings", "<cmd>e ~/.config/nvim/lua/leader_mappings.lua<CR>"),
 }
 local section_mru = {
 	type = "group",
