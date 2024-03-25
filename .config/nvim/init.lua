@@ -64,12 +64,21 @@ local norm_keyset = ufuncs.norm_keyset
 local keyopts = ufuncs.keyopts
 local loudkeyopts = ufuncs.loudkeyopts
 local get_python_path = ufuncs.get_python_path
-local install_rock = ufuncs.install_rock
 ----------
 
 --------------------------------
 -- Plugin, Package Installing Loading and Settings -- lazy.nvim
 --------------------------------
+
+-- Package Path Upgrade
+----------
+package.path = package.path
+	.. ";"
+	.. plugin_path
+	.. "/luarocks.nvim/.rocks/share/lua/6.1/?.lua;"
+	.. plugin_path
+	.. "/luarocks.nvim/.rocks/share/lua/5.1/?/?.lua"
+----------
 
 -- Install Package Manager(s)
 ----------
@@ -96,13 +105,7 @@ require("lazy").setup(plugins.list, plugins.opts)
 
 -- Install Rocks
 ----------
--- Check luarocks is installed
-install_rock("luarocks")
-print(vim.fn.system("luarocks list"))
--- Install
-for rock = 1, #plugins.rocks do
-	install_rock(plugins.rocks[rock])
-end
+require("luarocks-nvim").setup({ rocks = { "magick" } })
 ----------
 
 -------------------------------

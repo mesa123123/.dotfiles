@@ -187,7 +187,6 @@ M.install_rock = function(rock)
 	if rock_count == 0 then
 		vim.fn.system("luarocks install " .. rock)
 	end
-    print("installing" .. rock)
 end
 ----------
 
