@@ -20,7 +20,7 @@ vim.g["config_path"] = "~/.config/nvim"
 vim.g["mapleader"] = "\\"
 
 --------------------------------
--- Vim Sims and Requires
+-- Vim, Sims, and Requires
 --------------------------------
 
 -- Apis, Functions, Commands
@@ -50,13 +50,13 @@ local lazypath = plugin_path .. "/lazy.nvim"
 local ufuncs = require("personal_utils")
 ----------
 
---------------------------------
--- Utility Functions
---------------------------------
-
+-- Extra Vars
+----------
 local norm_keyset = ufuncs.norm_keyset
 local keyopts = ufuncs.keyopts
 local loudkeyopts = ufuncs.loudkeyopts
+local get_python_path = ufuncs.get_python_path
+----------
 
 --------------------------------
 -- Plugin Loading and Settings -- lazy.nvim
@@ -619,6 +619,7 @@ dashboard.buttons.val = {
 	dashboard_opts.button("v", "  EditVim", "<cmd>e ~/.config/nvim/init.lua<CR>"),
 	dashboard_opts.button("l", "  Editlsp", "<cmd>e ~/.config/nvim/lua/lsp.lua<CR>"),
 	dashboard_opts.button("n", "  EditNotebooks", "<cmd> e ~/.config/nvim/lua/notebooks.lua<CR>"),
+	dashboard_opts.button("k", "󰌓  EditKeyLeaderKeyMappings", "<cmd>e ~/.config/nvim/lua/leader_mappings.lua<CR>"),
 }
 local section_mru = {
 	type = "group",
@@ -663,6 +664,26 @@ local neodev = require("neodev")
 -- 	library = { plugins = { "neotest" }, types = true },
 -- })
 ----------
+
+-----------------------------------------
+-- Leader Remappings, Plugin Commands
+-----------------------------------------
+
+-- Commands
+----------
+api.nvim_create_user_command("Editleaderkeys", "e ~/.config/nvim/lua/leader_mappings.lua", {})
+----------
+
+-- Load File
+----------
+lm = require("leader_mappings")
+----------
+
+-- Register Custom Menus
+----------
+local whichKey = require("which-key")
+whichKey.register(lm.assistDesc)
+---------
 
 ----------------------------------
 -- Editor Mappings
@@ -764,8 +785,8 @@ keymap.set("", "<C-t><c-n>", ":tabnew<cr>", {})
 
 -- Buffer Control Mappings
 ----------
-keymap.set("n", "<leader>fl", "<cmd>bnext<CR>", { silent = true, desc = "Next Buff" })
-keymap.set("n", "<leader>fh", "<cmd>bprev<CR>", { silent = true, desc = "Prev Buff" })
+keymap.set("n", lm.file .. "l", "<cmd>bnext<CR>", { silent = true, desc = "Next Buff" })
+keymap.set("n", lm.file .. "h", "<cmd>bprev<CR>", { silent = true, desc = "Prev Buff" })
 ----------
 
 -- Scroll Control Mappings
@@ -805,7 +826,6 @@ keymap.set(
 whichKey.register({
 	["]"] = { name = "Go To Next" },
 	["["] = { name = "Go To Previous" },
-	["<C-b>"] = { name = "Buffer Changes" },
 })
 ----------
 
@@ -1118,82 +1138,6 @@ require("lualine").setup({
 })
 ----------
 
------------------------------------------
--- Leader Remappings, Plugin Commands
------------------------------------------
-
--- Note
----------
--- I'll use leader mappings for plugins and super extra goodies
--- however ones I use all the time will be mapped to `<c-` or a specific key
--- This follows the conventions <leader>{plugin key}{command key}
--- I've listed already use leader commands here
-----------
-
--- Mappings
-----------
--- Configured Here --
--- Terminal - TerminalToggle : <leader>t & <leader> q (while in terminal mode)
--- Other Terminal Apps: <leader>a
---     Docker - lazydocker: <leader>ad
---     GitUi - Gitui: <leader>ag
--- Database - DadBod: : <leader>d
--- Code Alignment - EasyAlign : <leader>e
--- Wiki Commands - Obsidian.nvim: <leader>k,
--- Code Execution & Http Calls & Testing - compiler, neotest: <leader>x (T is being used for the terminal)
--- Notebook Functionality - quarto.nvim, molten-nvim: <leader>n
--- ---------- --
--- Via Telescope --
---    Filetree - telescope-file-browser : <c-n>
---    Buffer Management - Telescope Nvim: <leader>f
--- ---------- --
--- Previously Configured --
---    Key Mapping Assist - whichkey: <leader>?
---    Highlighting Options - Treesitter: <leader>h
---    Todo Highlights -- todocomments.nvim: <leader>m
---    System Paste Comnmands: <leader>p
---    Quit Commands: <leader>q
---    Version Control Commands -- fugitive: <leader>v
---    Write Commands: <leader>w
---    System Yank Commands: <leader>y
--- ---------- --
--- Configured in init.lsp --
---    Debugging - NvimDAP: <leader>b
---    Code Actions and Diagnostics - nvim-lsp, nvim-cmp (and dependents): <leader>c
---    Snippets - LuaSnip : <leader>s
--- ---------- --
-----------
-
--- Key Map Assistance
-----------
--- Disable some so I can recustomize them
-local presets = require("which-key.plugins.presets")
-presets.operators["<leader>c"] = nil
-
--- Register Custom Menus
-whichKey.register({
-	["<leader>"] = {
-		a = { name = "Terminal Applications" },
-		b = { name = "Debugging" },
-		c = { name = "LSP Opts" },
-		d = { name = "Database" },
-		f = { name = "Telescope" },
-		h = { name = "Highlighting Options" },
-		k = { name = "Wiki Opts" },
-		l = { name = "VimTex" },
-		m = { name = "Todos" },
-		p = { name = "System Paste" },
-		q = { name = "Close and Quit" },
-		r = { name = "Flashcards" },
-		s = { name = "Snippets" },
-		v = { name = "Version Control", f = { "Telescope Options" } },
-		w = { name = "File Write" },
-		x = { name = "Code Execute/Test" },
-		y = { name = "System Copy" },
-	},
-})
----------
-
 ----------------------------------
 -- Terminal Settings: <leader>t & <leader>a - toggleterm
 ----------------------------------
@@ -1298,26 +1242,11 @@ keymap.set(
 	{ noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
 )
 -- Standard Term Toggle
-keymap.set(
-	"n",
-	"<leader>t",
-	"<cmd>lua Standard_term_toggle()<CR>",
-	{ noremap = true, silent = true, desc = "Open Terminal" }
-)
+norm_keyset(lm.terminal, "lua Standard_term_toggle()", "Open Terminal")
 -- Docker Toggle
-keymap.set(
-	"n",
-	"<leader>ad",
-	"<cmd>lua Docker_term_toggle()<CR>",
-	{ noremap = true, silent = true, desc = "Open Docker Container Management" }
-)
+norm_keyset(lm.terminalApp .. "d", "lua Docker_term_toggle()", "Open Docker Container Management")
 -- Gitui Toggle
-keymap.set(
-	"n",
-	"<leader>ag",
-	"<cmd>lua Gitui_term_toggle()<CR>",
-	{ noremap = true, silent = true, desc = "Open Git Ui" }
-)
+norm_keyset("<leader>ag", "lua Gitui_term_toggle()", "Open Git Ui")
 ----------
 
 ---------------------------------
@@ -1380,7 +1309,7 @@ local file_browser_configs = {
 
 -- Mappings
 ----------
-keymap.set("n", "<C-n>", ":Telescope file_browser theme=dropdown<CR>", keyopts({ desc = "Toggle File Browser" })) -- Remap the open and close to C-n
+norm_keyset(lm.ftree, "Telescope file_browser theme=dropdown", "Toggle File Browser")
 ----------
 
 -----------------------------
@@ -1418,13 +1347,13 @@ require("todo-comments").setup({
 ----------
 keymap.set("n", "]t", function()
 	require("todo-comments").jump_next()
-end, { desc = "Next todo comment" })
+end, keyopts({ desc = "Next todo comment" }))
 
 keymap.set("n", "[t", function()
 	require("todo-comments").jump_prev()
-end, { desc = "Previous todo comment" })
+end, keyopts({ desc = "Previous todo comment" }))
 
-keymap.set("n", "<leader>m", "<cmd>TodoTelescope<CR>", keyopts({ desc = "List Todos" }))
+norm_keyset(lm.todo, "TodoTelescope", "List Todos")
 ----------
 
 ---------------------------------
@@ -1434,36 +1363,36 @@ keymap.set("n", "<leader>m", "<cmd>TodoTelescope<CR>", keyopts({ desc = "List To
 -- Mappings
 ----------
 -- Find Buffer
-norm_keyset("<leader>fb", "Telescope buffers theme=dropdown", "Show Buffers")
+norm_keyset(lm.file .. "b", "Telescope buffers theme=dropdown", "Show Buffers")
 norm_keyset("<C-b>s", "Telescope buffers theme=dropdown", "Show Buffers")
 -- ColorScheme
-norm_keyset("<leader>fc", "Telescope colorscheme theme=dropdown", "Themes")
+norm_keyset(lm.file .. "c", "Telescope colorscheme theme=dropdown", "Themes")
 -- Diagnostics (Also thorugh \cp
-norm_keyset("<leader>fd", "Telescope diagnostics theme=dropdown", "Diagnostics")
+norm_keyset(lm.file .. "d", "Telescope diagnostics theme=dropdown", "Diagnostics")
 -- Buffers Mappings
-norm_keyset("<leader>ff", "Telescope find_files theme=dropdown", "Find Files")
+norm_keyset(lm.file .. "f", "Telescope find_files theme=dropdown", "Find Files")
 -- Find File
-norm_keyset("<leader>fg", "Telescope live_grep theme=dropdown", "Live Grep")
+norm_keyset(lm.file .. "g", "Telescope live_grep theme=dropdown", "Live Grep")
 -- Help Mappings
-norm_keyset("<leader>fH", "Telescope help_tags theme=dropdown", "Help Tags")
+norm_keyset(lm.file .. "H", "Telescope help_tags theme=dropdown", "Help Tags")
 -- Imports
-norm_keyset("<leader>fi", "Telescope import theme=dropdown", "Imports")
+norm_keyset(lm.file .. "i", "Telescope import theme=dropdown", "Imports")
 -- Jumplist
-norm_keyset("<leader>fj", "Telescope jumplist theme=dropdown<CR>", "Jumplist")
+norm_keyset(lm.file .. "j", "Telescope jumplist theme=dropdown<CR>", "Jumplist")
 -- Keymaps
-norm_keyset("<leader>fk", "Telescope keymaps theme=dropdown", "Keymaps")
+norm_keyset(lm.file .. "k", "Telescope keymaps theme=dropdown", "Keymaps")
 -- Man Pages
-norm_keyset("<leader>fm", "Telescope man_pages theme=dropdown", "Man Pages")
+norm_keyset(lm.file .. "m", "Telescope man_pages theme=dropdown", "Man Pages")
 -- Notifications
-norm_keyset("<leader>fn", "Telescope notify", "Notifications")
+norm_keyset(lm.file .. "n", "Telescope notify", "Notifications")
 -- Vim Options
-norm_keyset("<leader>fo", "Telescope vim_options theme=dropdown<CR>", "Vim Options")
+norm_keyset(lm.file .. "o", "Telescope vim_options theme=dropdown<CR>", "Vim Options")
 -- Registers
-norm_keyset("<leader>fr", "Telescope registers theme=dropdown", "Registers")
+norm_keyset(lm.file .. "r", "Telescope registers theme=dropdown", "Registers")
 -- Tree Sitter Mapping
-norm_keyset("<leader>fs", "Telescope treesitter theme=dropdown", "Treesitter Insights")
+norm_keyset(lm.file .. "s", "Telescope treesitter theme=dropdown", "Treesitter Insights")
 -- Telescope Telescopes
-norm_keyset("<leader>ft", "Telescope builtin theme=dropdown", "Telescope Commands")
+norm_keyset(lm.file .. "t", "Telescope builtin theme=dropdown", "Telescope Commands")
 
 ---------------------------------
 -- Telescope Setup
@@ -1589,29 +1518,19 @@ obsidian.setup({
 
 -- Mappings
 ----------
-keymap.set("n", "<leader>kb", "<cmd>ObsidianBacklinks<cr>", { silent = true, desc = "Get References To Current" })
-keymap.set("n", "<leader>kt", "<cmd>ObsidianToday<cr>", { silent = true, desc = "Open (New) Daily Note" })
-keymap.set(
-	"n",
-	"<leader>ky",
-	"<cmd>ObsidianYesterday<cr>",
-	{ silent = true, desc = "Create New Daily Note For Yesterday" }
-)
-keymap.set("n", "<leader>ko", "<cmd>ObsidianOpen<cr>", { silent = true, desc = "Open in Obisidian App" })
-keymap.set("n", "<leader>kcn", ":ObsidianNew ", { silent = false, desc = "Create New Note" })
-keymap.set("v", "<leader>kcl", ":ObsidianLinkNew ", { silent = false, desc = "Created New Linked Note" })
-keymap.set("n", "<leader>ks", "<cmd>ObsidianSearch<cr>", { silent = true, desc = "Search Vault Notes" })
-keymap.set("n", "<leader>kq", "<cmd>ObsidianQuickSwitch<cr>", { silent = true, desc = "Note Quick Switch" })
-keymap.set("n", "<leader>kll", "<cmd>ObsidianFollowLink<cr>", { silent = true, desc = "Go To Link Under Cursor" })
-keymap.set("v", "<leader>kla", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Link Note To Selection" })
-keymap.set("n", "<leader>klt", "<cmd>ObsidianTemplate<cr>", { silent = true, desc = "Insert Template Into Link" })
--- Mapping Assist
-whichKey.register({
-	["<leader>k"] = {
-		c = { name = "Create New" },
-		l = { name = "Links Opts" },
-	},
-})
+-- Normal Mode
+norm_keyset(lm.wiki .. "b", "ObsidianBacklinks", "Get References To Current")
+norm_keyset(lm.wiki .. "t", "ObsidianToday", "Open (New) Daily Note")
+norm_keyset(lm.wiki .. "y", "ObsidianYesterday", "Create New Daily Note For Yesterday")
+norm_keyset(lm.wiki .. "o", "ObsidianOpen", "Open in Obisidian App")
+norm_keyset(lm.wiki .. "s", "ObsidianSearch", "Search Vault Notes")
+norm_keyset(lm.wiki .. "q", "ObsidianQuickSwitch", "Note Quick Switch")
+norm_keyset(lm.wiki_linkOpts .. "l", "ObsidianFollowLink", "Go To Link Under Cursor")
+norm_keyset(lm.wiki_linkOpts .. "t", "ObsidianTemplate", "Insert Template Into Link")
+keymap.set("n", lm.wiki_createPage .. "n", ":ObsidianNew ", { silent = false, desc = "Create New Note" })
+-- Visual Mode
+keymap.set("v", lm.wiki_createPage .. "l", ":ObsidianLinkNew ", { silent = false, desc = "Created New Linked Note" })
+keymap.set("v", lm.wiki_linkOpts .. "a", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Link Note To Selection" })
 -----------
 
 ---------------------------------
@@ -1627,16 +1546,15 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 })
 
 ---------------------------------
--- Easy Align
+-- Code Align
 ---------------------------------
 
 -- Mappings
 ----------
 -- Start interactive EasyAlign in visual mode (e.g. vipga)
-keymap.set("x", "<leader>e", "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
-
+keymap.set("x", lm.codeAction_alignment, "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 -- Start interactive EasyAlign for a motion/text object (e.g. gaip)
-keymap.set("n", "<leader>e", "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
+keymap.set("n", lm.codeAction_alignment, "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 ----------
 
 ---------------------------------"
@@ -1651,10 +1569,10 @@ gv["dd_ui_use_nerd_fonts"] = 1
 
 -- Mappings
 ---------
-keymap.set("n", "<leader>du", ":DBUIToggle<CR>", { silent = true, desc = "Toggle DB UI" })
-keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true, desc = "Find DB Buffer" })
-keymap.set("n", "<leader>dr", ":DBUIRenameBuffer<CR>", { silent = true, desc = "Rename DB Buffer" })
-keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = "Run Last Query" })
+norm_keyset(lm.database .. "u", "DBUIToggle<CR>", "Toggle DB UI")
+norm_keyset(lm.database .. "f", "DBUIFindBuffer<CR>", "Find DB Buffer")
+norm_keyset(lm.database .. "r", "DBUIRenameBuffer<CR>", "Rename DB Buffer")
+norm_keyset(lm.database .. "l", "DBUILastQueryInfo<CR>", "Run Last Query")
 ---------
 
 ---------------------------------"
@@ -1663,37 +1581,28 @@ keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true, desc = 
 
 -- Mappings
 ----------
--- WhichKey -- Includes for testing and http calls too
-whichKey.register({
-	["<leader>x"] = {
-		["t"] = { name = "Testing" },
-		["h"] = { name = "Http Calls" },
-		["c"] = { name = "Coverage" },
-	},
-})
--- Mappings
 api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 	callback = function()
 		if vim.bo.filetype == "tex" then
 			vim.keymap.set(
 				"n",
-				"<leader>xx",
+				require("leader_mappings").exec .. "x",
 				"<cmd>VimtexCompile<CR>",
 				{ silent = true, noremap = false, desc = "Compile Doc" }
 			)
 		else
 			vim.keymap.set(
 				"n",
-				"<leader>xx",
+				require("leader_mappings").exec .. "x",
 				"<cmd>CompilerOpen<CR>",
 				{ silent = true, noremap = false, desc = "Run Code" }
 			)
 		end
 	end,
 })
-norm_keyset("<leader>xq", "CompilerStop", "Stop Code Runner")
-norm_keyset("<leader>xi", "CompilerToggleResults", "Show Code Run")
-norm_keyset("<leader>xr", "CompilerStop<cr>" .. "<cmd>CompilerRedo", "Re-Run Code")
+norm_keyset(lm.exec .. "q", "CompilerStop", "Stop Code Runner")
+norm_keyset(lm.exec .. "i", "CompilerToggleResults", "Show Code Run")
+norm_keyset(lm.exec .. "r", "CompilerStop<cr>" .. "<cmd>CompilerRedo", "Re-Run Code")
 ----------
 
 ---------------------------------"
@@ -1719,9 +1628,9 @@ require("lsp")
 -- Http Execution - rest.nvim
 ---------------------------------"
 
-norm_keyset("<leader>xhx", "RestNvim", "Run Http Under Cursor")
-norm_keyset("<leader>xhp", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
-norm_keyset("<leader>xhx", "RestNvim", "Re-Run Last Http Command")
+norm_keyset(lm.exec_http .. "x", "RestNvim", "Run Http Under Cursor")
+norm_keyset(lm.exec_http .. "p", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
+norm_keyset(lm.exec_http .. "x", "RestNvim", "Re-Run Last Http Command")
 
 ---------------------------------"
 -- Code Testing - neotest
@@ -1760,19 +1669,19 @@ require("neotest").setup({
 -- Mappings
 ----------
 -- Mappings
-norm_keyset("<leader>xtx", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
+norm_keyset(lm.exec_test .. "x", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
 norm_keyset(
-	"<leader>xto",
+	lm.exec_test .. "o",
 	"lua require('neotest').output.open({ enter = true, auto_close = true })",
 	"Test Output"
 )
-norm_keyset("<leader>xts", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
-norm_keyset("<leader>xtq", "lua require('neotest').run.stop()", "Quit Test Run")
-norm_keyset("<leader>xtw", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
-norm_keyset("<leader>xtc", "lua require('neotest').run.run()", "Run Nearest Test")
-norm_keyset("<leader>xtr", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
+norm_keyset(lm.exec_test .. "s", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
+norm_keyset(lm.exec_test .. "q", "lua require('neotest').run.stop()", "Quit Test Run")
+norm_keyset(lm.exec_test .. "w", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
+norm_keyset(lm.exec_test .. "c", "lua require('neotest').run.run()", "Run Nearest Test")
+norm_keyset(lm.exec_test .. "r", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
 norm_keyset(
-	"<leader>xtb",
+	lm.exec_test .. "b",
 	"lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
 	"Debug Closest Test"
 )
@@ -1804,9 +1713,9 @@ require("coverage").setup({
 
 -- Mappings
 ----------
-norm_keyset("<leader>xcr", "Coverage", "Run Coverage Report")
-norm_keyset("<leader>xcs", "CoverageSummary", "Show Coverage Report")
-norm_keyset("<leader>xct", "CoverageToggle", "Toggle Coverage Signs")
+norm_keyset(lm.exec_test_coverage .. "r", "Coverage", "Run Coverage Report")
+norm_keyset(lm.exec_test_coverage .. "s", "CoverageSummary", "Show Coverage Report")
+norm_keyset(lm.exec_test_coverage .. "t", "CoverageToggle", "Toggle Coverage Signs")
 ----------
 
 --------------------------------
