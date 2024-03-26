@@ -36,6 +36,26 @@ local plugin_path = fn.stdpath("data") .. "/lazy"
 -- Function Definitions
 --------------------------------
 
+-- Mapping Opts
+----------
+-- Silent Mappings
+M.bufopts = function(opts)
+	local standardOpts = { noremap = true, silent = true, buffer = 0 }
+	for k, v in pairs(standardOpts) do
+		opts[k] = v
+	end
+	return opts
+end
+-- Non silent Mappings
+M.loudbufopts = function(opts)
+	local standardOpts = { noremap = true, silent = false, buffer = 0 }
+	for k, v in pairs(standardOpts) do
+		opts[k] = v
+	end
+	return opts
+end
+----------
+
 -- Keyopts
 ----------
 M.keyopts = function(opts)

@@ -23,21 +23,26 @@ local lm = require("leader_mappings")
 local norm_keyset = ufuncs.norm_keyset
 ----------
 
+-- Module Funcs
+----------
+function new_terminal(lang)
+	vim.cmd("belowright vsplit term://" .. lang)
+end
+
 --------------------------------
 -- Notebook Setup - quarto.nvim, molten-nvim: <leader>n
 --------------------------------
 
--- local quarto = require("quarto")
--- quarto.setup({
--- 	codeRunner = {
--- 		enables = true,
--- 		ft_runners = { python = "molten" },
--- 	},
--- })
---
--- norm_keyset(lm.notebook .. "p", "QuartoPreview", "Open Notebook Preview")
--- -- norm_keyset(lm.notebook .. "x", 'MoltenInit', "Initalize Notebook Kernel")
--- -- norm_keyset(lm.notebook_kernel .. "i", 'MoltenInfo', "Kernel Info")
--- -- norm_keyset(lm.notebook .. "q", 'MoltenDeinit', "Shutdown Kernel")
--- vim.keymap.set("n", "<localleader>ni", ":MoltenInit<CR>",
---     { silent = true, desc = "Initialize the plugin" })
+local quarto = require("quarto")
+quarto.setup({
+	ft = { "quarto" },
+	codeRunner = {
+		enabled = true,
+		default_method = "slime",
+	},
+	lspFeatures = {
+		languages = { "r", "python", "bash", "lua", "html" },
+	},
+})
+
+norm_keyset(lm.notebook .. "p", "QuartoPreview", "Open Notebook Preview")

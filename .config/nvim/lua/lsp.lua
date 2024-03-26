@@ -49,11 +49,17 @@ local lm = require("leader_mappings")
 -- Extra Vars
 ----------
 local keyopts = putils.keyopts
+local nmap = putils.norm_keyset
 local tableConcat = putils.tableConcat
 local scandir_menu = putils.scandirMenu
 local get_venv_command = putils.get_venv_command
 local file_exists = putils.fileExists
 local get_python_path = putils.get_python_path
+----------
+
+-- Compressing Text w/Vars
+----------
+local lreq = "lua require"
 ----------
 
 --------------------------------
@@ -212,6 +218,22 @@ format.setup({
 		go = { "gofumpt" },
 	},
 })
+-- Setup for injected languages
+format.formatters.injected = {
+	options = {
+		ignore_errors = false,
+		lang_to_ext = {
+			bash = "sh",
+			latex = "tex",
+			markdown = "md",
+			html = "html",
+			sql = "sql",
+			python = "py",
+			r = "r",
+			typescript = "ts",
+		},
+	},
+}
 
 -- General Format Function
 ----------
@@ -263,7 +285,7 @@ api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnte
 api.nvim_create_user_command("Relint", function()
 	require("lint").try_lint()
 end, {})
-keymap.set("n", "gl", ":Relint<CR>", keyopts({ desc = "Refresh Linter" }))
+nmap("gl", "Relint", "Refresh Linter")
 ----------
 
 -- Configure Linters
@@ -489,123 +511,36 @@ end
 -- Mappings
 ----------
 local function keymappings(client)
-	-- Mapping Opts
-	----------
-	-- Silent Mappings
-	local function bufopts(opts)
-		local standardOpts = { noremap = true, silent = true, buffer = 0 }
-		for k, v in pairs(standardOpts) do
-			opts[k] = v
-		end
-		return opts
-	end
-	-- Non silent Mappings
-	local function loudbufopts(opts)
-		local standardOpts = { noremap = true, silent = false, buffer = 0 }
-		for k, v in pairs(standardOpts) do
-			opts[k] = v
-		end
-		return opts
-	end
-
 	b["max_line_length"] = 0 -- This has to be attached to the buffer so I went for a bufferopt
 
 	-- Mappings
 	----------
 	-- Commands that keep you in this buffer `g`
-	keymap.set("n", "gw", ":lua vim.diagnostic.open_float()<CR>", bufopts({ desc = "LSP: Open Diagnostics Window" }))
-	keymap.set(
-		"n",
-		"gW",
-		":lua require('telescope.builtin').diagnostics()<CR>",
-		bufopts({ desc = "LSP: List All Diagnostics" })
-	)
-	keymap.set(
-		"n",
-		"gh",
-		"<cmd>lua vim.lsp.buf.signature_help()<CR>",
-		bufopts({ desc = "LSP: Bring Up LSP Explanation" })
-	)
-	keymap.set(
-		"n",
-		"gs",
-		":lua require('telescope.builtin').lsp_document_symbols()<CR>",
-		bufopts({ desc = "LSP: Get Current Buffer Symbols" })
-	)
-	keymap.set("n", "g=", ":lua vim.lsp.buf.code_action()<CR>", bufopts({ desc = "LSP: Take Code Action" }))
-	keymap.set("n", "gi", ":lua vim.lsp.buf.hover()<CR>", bufopts({ desc = "LSP: Function & Library Info" }))
-	keymap.set("n", "gL", ":lua ShortenLine()<CR>", bufopts({ desc = "LSP: Shorten Line" }))
-	keymap.set("n", "gf", ":lua FormatWithConfirm()<CR>", loudbufopts({ desc = "LSP: Format Code" }))
-	keymap.set("n", "[g", ":lua vim.diagnostic.goto_prev()<CR>", bufopts({ desc = "LSP: Previous Flag" }))
-	keymap.set("n", "]g", ":lua vim.diagnostic.goto_next()<CR>", bufopts({ desc = "LSP: Next Flag" }))
-	keymap.set(
-		"n",
-		"[G",
-		":lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})<CR>",
-		bufopts({ desc = "LSP: Next Error" })
-	)
-	keymap.set(
-		"n",
-		"]G",
-		":lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<CR>",
-		bufopts({ desc = "LSP: Previous Error" })
-	)
-	keymap.set("n", "gr", ":LSPRestart<CR>", bufopts({ desc = "LSP: Previous Error" }))
-	keymap.set(
-		"n",
-		lm.codeAction .. "R",
-		"<cmd>lua vim.lsp.buf.rename()<CR>",
-		bufopts({ desc = "LSP: Rename Item Under Cursor" })
-	)
-	keymap.set("n", lm.codeAction .. "I", "<cmd>LspInfo<CR>", bufopts({ desc = "LSP: Show Info" }))
-	keymap.set(
-		"n",
-		lm.codeAction .. "D",
-		"<Cmd>lua vim.lsp.buf.definition()<CR>",
-		bufopts({ desc = "LSP: Go To Definition" })
-	)
-	keymap.set(
-		"n",
-		lm.codeAction .. "d",
-		"<Cmd>lua vim.lsp.buf.declaration()<CR>",
-		bufopts({ desc = "LSP: Go To Declaration" })
-	)
-	keymap.set(
-		"n",
-		lm.codeAction .. "r",
-		"<cmd>lua require('telescope.builtin').lsp_references()<CR>",
-		bufopts({ desc = "LSP: Go to References" })
-	)
-	keymap.set(
-		"n",
-		lm.codeAction .. "i",
-		"<cmd>lua vim.lsp.buf.implementation()<CR>",
-		bufopts({ desc = "LSP: Go To Implementation" })
-	)
-	keymap.set(
-		"n",
-		lm.codeAction .. "t",
-		"<cmd>lua require('telescope.builtin').lsp_type_definitions()<CR>",
-		bufopts({ desc = "LSP: Go To Type Definition" })
-	)
-	keymap.set(
-		"n",
-		lm.codeAction .. "p",
-		"<cmd>lua require('telescope.builtin').diagnostics()<CR>",
-		bufopts({ desc = "Show all Diagnostics" })
-	)
-	keymap.set(
-		"n",
+	nmap("gw", "lua vim.diagnostic.open_float()", "LSP: Open Diagnostics Window")
+	nmap("g=", "lua vim.lsp.buf.code_action()", "LSP: Take Code Action")
+	nmap("gi", "lua vim.lsp.buf.hover()", "LSP: Function & Library Info")
+	nmap("gL", "lua ShortenLine()", "LSP: Shorten Line")
+	nmap("gf", "lua FormatWithConfirm()", "LSP: Format Code")
+	nmap("[g", "lua vim.diagnostic.goto_prev()", "LSP: Previous Flag")
+	nmap("]g", "lua vim.diagnostic.goto_next()", "LSP: Next Flag")
+	nmap("[G", "lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})", "LSP: Next Error")
+	nmap("]G", "lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})", "LSP: Previous Error")
+	nmap(lm.codeAction .. "q", "LSPRestart", "LSP: Previous Error")
+	nmap(lm.codeAction .. "R", "lua vim.lsp.buf.rename()", "LSP: Rename Item Under Cursor")
+	nmap(lm.codeAction .. "h", "lua vim.lsp.buf.signature_help()", "LSP: Bring Up LSP Explanation")
+	nmap(lm.codeAction .. "I", "LspInfo", "LSP: Show Info")
+	nmap(lm.codeAction .. "D", "lua vim.lsp.buf.definition()", "LSP: Go To Definition")
+	nmap(lm.codeAction .. "d", "lua vim.lsp.buf.declaration()", "LSP: Go To Declaration")
+	nmap(lm.codeAction .. "r", "lua require('telescope.builtin').lsp_references()", "LSP: Go to References")
+	nmap(lm.codeAction .. "i", "lua vim.lsp.buf.implementation()", "LSP: Go To Implementation")
+	nmap(lm.codeAction .. "t", "lua require('telescope.builtin').lsp_type_definitions()", "LSP: Go To Type Definition")
+	nmap(lm.codeAction .. "p", "lua require('telescope.builtin').diagnostics()", "Show all Diagnostics")
+	nmap(
 		lm.codeAction_symbols .. "w",
-		"<cmd>lua require('telescope.builtin').lsp_workspace_symbols()<CR>",
-		bufopts({ desc = "Show Workspace Symbols" })
+		lreq .. "('telescope.builtin').lsp_workspace_symbols()",
+		"Show Workspace Symbols"
 	)
-	keymap.set(
-		"n",
-		lm.codeAction_symbols .. "d",
-		"<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>",
-		bufopts({ desc = "Show Document Symbols" })
-	)
+	nmap(lm.codeAction_symbols .. "d", lreq .. "('telescope.builtin').lsp_document_symbols()", "Show Document Symbols")
 end
 
 --------------------------------
@@ -630,7 +565,14 @@ end
 ----------
 -- Standard Opts
 local function lsp_opts(opts)
-	local standardOpts = { on_attach = on_attach, capabilities = capabilities }
+	local standardOpts = {
+		on_attach = on_attach,
+		capabilities = capabilities,
+		flags = {
+			allow_incremental_sync = true,
+			debounce_text_changes = 150,
+		},
+	}
 	for k, v in pairs(standardOpts) do
 		opts[k] = v
 	end
@@ -661,13 +603,14 @@ config.lua_ls.setup(lsp_opts({
 	-- Config
 	settings = {
 		Lua = {
-			diagnostics = { globals = { "vim" } }, -- Makes sure that vim, packer global errors dont pop up
+			diagnostics = { globals = { "vim", "quarto", "require", "table", "string" } },
 			workspace = {
 				library = api.nvim_get_runtime_file("", true),
-				checkThirdParty = false, -- Stops annoying config prompts
+				checkThirdParty = false,
 			},
+			runtime = { verions = "LuaJIT" },
 			completion = { autoRequire = false },
-			telemetry = { enable = false }, -- Don't steal my data
+			telemetry = { enable = false },
 		},
 	},
 }))
@@ -750,49 +693,21 @@ config.gopls.setup(lsp_opts({}))
 
 -- Injected Languages (Otter)
 ----------
-api.nvim_create_user_command("OtterActivate", function()
+OtterStart = function()
 	local otter = require("otter")
-	local filetype = vim.bo.filetype
+	local filetype = bo.filetype
 	if filetype == "python" then
 		otter.activate({ "htmldjango", "html", "sql" })
 	end
-	vim.keymap.set(
-		"n",
-		lm.codeAction_injectedLanguage .. "d",
-		':lua require"otter".ask_definition()<cr>',
-		keyopts({ desc = "Show Definition" })
-	)
-	vim.keymap.set(
-		"n",
-		lm.codeAction_injectedLanguage .. "t",
-		':lua require"otter".ask_type_definition()<cr>',
-		keyopts({ desc = "Show Type Definition" })
-	)
-	vim.keymap.set(
-		"n",
-		lm.codeAction_injectedLanguage .. "I",
-		':lua require"otter".ask_hover()<cr>',
-		keyopts({ desc = "Show Info" })
-	)
-	vim.keymap.set(
-		"n",
-		lm.codeAction_injectedLanguage .. "s",
-		':lua require"otter".ask_document_symbols()<cr>',
-		keyopts({ desc = "Show Symbols" })
-	)
-	vim.keymap.set(
-		"n",
-		lm.codeAction_injectedLanguage .. "R",
-		':lua require"otter".ask_rename()<cr>',
-		keyopts({ desc = "Rename" })
-	)
-	vim.keymap.set(
-		"n",
-		lm.codeAction_injectedLanguage .. "f",
-		':lua require"otter".ask_format()<cr>',
-		keyopts({ desc = "Format" })
-	)
-end, {})
+	nmap(lm.codeAction_injectedLanguage .. "d", lreq .. '"otter".ask_definition()', "Show Definition")
+	nmap(lm.codeAction_injectedLanguage .. "t", lreq .. '"otter".ask_type_definition()', "Show Type Definition")
+	nmap(lm.codeAction_injectedLanguage .. "I", lreq .. '"otter".ask_hover()', "Show Info")
+	nmap(lm.codeAction_injectedLanguage .. "s", lreq .. '"otter".ask_document_symbols()', "Show Symbols")
+	nmap(lm.codeAction_injectedLanguage .. "R", lreq .. '"otter".ask_rename()', "Rename")
+	nmap(lm.codeAction_injectedLanguage .. "f", lreq .. '"otter".ask_format()', "Format")
+end
+
+api.nvim_create_user_command("OtterActivate", OtterStart, {})
 ----------
 
 -- Null-ls : Third Party LSPs
@@ -864,155 +779,61 @@ fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "Da
 
 -- Running Commands (and pauses)
 ----------
-keymap.set(
-	"n",
-	lm.debug .. "c",
-	"<cmd>lua require('dap').continue()<cr>",
-	keyopts({ desc = "Continue/Start Debug Run" })
-)
-keymap.set(
-	{ "n" },
-	lm.debug .. "b",
-	"<cmd>lua require('dap').toggle_breakpoint()<cr>",
-	keyopts({ desc = "Toggle Breakpoint" })
-)
-keymap.set(
-	"n",
-	lm.debug .. "B",
-	"<cmd>lua require('dap').set_breakpoint(vim.fn.input '[Condition] > ')<cr>",
-	keyopts({ desc = "Set Conditional BreakPoint" })
-)
-keymap.set("n", lm.debug .. "p", "<cmd>lua require('dap').pause.toggle()<cr>", keyopts({ desc = "Toggle Pause" }))
-keymap.set("n", lm.debug .. "r", "<cmd>lua require('dap').restart()<cr>", keyopts({ desc = "Restart Debugger" }))
-keymap.set(
-	"n",
-	lm.debug .. "C",
-	"<cmd>lua require('dap').run_to_cursor()<cr>",
-	keyopts({ desc = "Run Session To Cursor" })
-)
+nmap(lm.debug .. "c", lreq .. "('dap').continue()", "Continue/Start Debug Run")
+nmap(lm.debug .. "b", lreq .. "('dap').toggle_breakpoint()", "Toggle Breakpoint")
+nmap(lm.debug .. "B", lreq .. "('dap').set_breakpoint(vim.fn.input '[Condition] > ')", "Set Conditional BreakPoint")
+nmap(lm.debug .. "p", lreq .. "('dap').pause.toggle()", "Toggle Pause")
+nmap(lm.debug .. "r", lreq .. "('dap').restart()", "Restart Debugger")
+nmap(lm.debug .. "C", lreq .. "('dap').run_to_cursor()", "Run Session To Cursor")
 ----------
 
 -- Stepping Commands
 ------------
-keymap.set("n", lm.debug .. "h", "<cmd>lua require('dap').step_back()<cr>", keyopts({ desc = "Step Back" }))
-keymap.set("n", lm.debug .. "k", "<cmd>lua require('dap').step_into()<cr>", keyopts({ desc = "Step Into" }))
-keymap.set("n", lm.debug .. "l", "<cmd>lua require('dap').step_over()<cr>", keyopts({ desc = "Step Over" }))
-keymap.set("n", lm.debug .. "j", "<cmd>lua require('dap').step_out()<cr>", keyopts({ desc = "Step Out" }))
-keymap.set("n", lm.debug .. "K", "<cmd>lua require('dap').up()<cr>", keyopts({ desc = "Step Up Call Stack" }))
-keymap.set("n", lm.debug .. "J", "<cmd>lua require('dap').down()<cr>", keyopts({ desc = "Step Down Call Stack" }))
+nmap(lm.debug .. "h", lreq .. "('dap').step_back()", "Step Back")
+nmap(lm.debug .. "k", lreq .. "('dap').step_into()", "Step Into")
+nmap(lm.debug .. "l", lreq .. "('dap').step_over()", "Step Over")
+nmap(lm.debug .. "j", lreq .. "('dap').step_out()", "Step Out")
+nmap(lm.debug .. "K", lreq .. "('dap').up()", "Step Up Call Stack")
+nmap(lm.debug .. "J", lreq .. "('dap').down()", "Step Down Call Stack")
 ------------
 
 -- Dap REPL
 ------------
-keymap.set("n", lm.debug .. "x", "<cmd>lua require('dap').repl.toggle()<cr>", keyopts({ desc = "Debug REPL Toggle" }))
+nmap(lm.debug .. "x", lreq .. "('dap').repl.toggle()", "Debug REPL Toggle")
 ------------
 
 -- Session Commands
 ------------
-keymap.set(
-	"n",
-	lm.debug_session .. "s",
-	"<cmd>lua require('dap').session()<cr>",
-	keyopts({ desc = "Start Debug Session" })
-)
-keymap.set(
-	"n",
-	lm.debug_session .. "c",
-	"<cmd>lua require('dap').close()<cr>",
-	keyopts({ desc = "Close Debug Session" })
-)
-keymap.set(
-	"n",
-	lm.debug_session .. "a",
-	"<cmd>lua require('dap').attach()<cr>",
-	keyopts({ desc = "Attach Debug Session" })
-)
-keymap.set(
-	"n",
-	lm.debug_session .. "d",
-	"<cmd>lua require('dap').disconnect()<cr>",
-	keyopts({ desc = "Detach Debug Session" })
-)
-keymap.set("n", lm.debug .. "q", "<cmd>lua require('dap').terminate()<cr>", keyopts({ desc = "Quit Debug Session" }))
+nmap(lm.debug_session .. "s", lreq .. "('dap').session()", "Start Debug Session")
+nmap(lm.debug_session .. "c", lreq .. "('dap').close()", "Close Debug Session")
+nmap(lm.debug_session .. "a", lreq .. "('dap').attach()", "Attach Debug Session")
+nmap(lm.debug_session .. "d", lreq .. "('dap').disconnect()", "Detach Debug Session")
+nmap(lm.debug .. "q", lreq .. "('dap').terminate()", "Quit Debug Session")
 ----------
 
 -- UI Commands
 ----------
-keymap.set("n", lm.debug .. "v", "<cmd>lua require('dap.ui.widgets').hover()<CR>", keyopts({ desc = "Variable Info" }))
-keymap.set(
-	"n",
-	lm.debug .. "S",
-	"<cmd> lua require ('dap.ui.widgets').cursor_float(require('dap.ui.widgets').scopes)<CR>",
-	keyopts({ desc = "Scope Info" })
-)
-keymap.set(
-	"n",
-	lm.debug .. "F",
-	"<cmd> lua require ('dap.ui.widgets').cursor_float(require('dap.ui.widgets').frames)<CR>",
-	keyopts({ desc = "Stack Frame Info" })
-)
-keymap.set(
-	"n",
-	lm.debug .. "e",
-	"<cmd> lua require ('dap.ui.widgets').cursor_float(require('dap.ui.widgets').expressions)<CR>",
-	keyopts({ desc = "Expression Info" })
-)
+local duw = 'require("dap.ui.widgets")'
+nmap(lm.debug .. "v", "lua " .. duw .. ".hover()", "Variable Info")
+nmap(lm.debug .. "S", "lua " .. duw .. ".cursor_float(" .. duw .. ".scopes)", "Scope Info")
+nmap(lm.debug .. "F", "lua " .. duw .. ".cursor_float(" .. duw .. ".frames)", "Stack Frame Info")
+nmap(lm.debug .. "e", "lua " .. duw .. ".cursor_float(" .. duw .. ".expressions)", "Expression Info")
 ----------
 
 -- Telescope Commands
 ----------
-keymap.set(
-	"n",
-	lm.debug_fileView .. "c",
-	'<cmd>lua require"telescope".extensions.dap.commands{}<CR>',
-	keyopts({ desc = "Show Debug Command Palette" })
-)
-keymap.set(
-	"n",
-	lm.debug_fileView .. "o",
-	'<cmd>lua require"telescope".extensions.dap.configurations{}<CR>',
-	keyopts({ desc = "Show Debug Options" })
-)
-keymap.set(
-	"n",
-	lm.debug_fileView .. "b",
-	'<cmd>lua require"telescope".extensions.dap.list_breakpoints{}<CR>',
-	keyopts({ desc = "Show All BreakPoints" })
-)
-keymap.set(
-	"n",
-	lm.debug_fileView .. "v",
-	'<cmd>lua require"telescope".extensions.dap.variables{}<CR>',
-	keyopts({ desc = "Show All Variables" })
-)
-keymap.set(
-	"n",
-	lm.debug_fileView .. "f",
-	'<cmd>lua require"telescope".extensions.dap.frames{}<CR>',
-	keyopts({ desc = "Show All Frames" })
-)
+nmap(lm.debug_fileView .. "c", lreq .. '"telescope".extensions.dap.commands{}', "Show Debug Command Palette")
+nmap(lm.debug_fileView .. "o", lreq .. '"telescope".extensions.dap.configurations{}', "Show Debug Options")
+nmap(lm.debug_fileView .. "b", lreq .. '"telescope".extensions.dap.list_breakpoints{}', "Show All BreakPoints")
+nmap(lm.debug_fileView .. "v", lreq .. '"telescope".extensions.dap.variables{}', "Show All Variables")
+nmap(lm.debug_fileView .. "f", lreq .. '"telescope".extensions.dap.frames{}', "Show All Frames")
 ----------
 
 -- Language Specific Commands
 ----------
-keymap.set(
-	"n",
-	lm.debug_python .. "m",
-	"<cmd>lua require('dap-python').test_method()<CR>",
-	keyopts({ desc = "Test Method" })
-)
-keymap.set(
-	"n",
-	lm.debug_python .. "c",
-	"<cmd>lua require('dap-python').test_class()<CR>",
-	keyopts({ desc = "Test Class" })
-)
-keymap.set(
-	"n",
-	lm.debug_python .. "s",
-	"<cmd>lua require('dap-python').debug_selection()<CR>",
-	keyopts({ desc = "Debug Selected" })
-)
+nmap(lm.debug_python .. "m", lreq .. "('dap-python').test_method()", "Test Method")
+nmap(lm.debug_python .. "c", lreq .. "('dap-python').test_class()", "Test Class")
+nmap(lm.debug_python .. "s", lreq .. "('dap-python').debug_selection()", "Debug Selected")
 ----------
 
 ----------

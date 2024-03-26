@@ -79,16 +79,18 @@ M.vimHelp = l(";", "Vim Help")
 ----------
 -- Files
 M.file = l("f", "File & Buffer Options")
+-- Tab Management
+M.tab = l("t", "Tab Options")
+-- Pane Resizing
+M.resize = l("r", "Pane Resize")
 -- Filetree
 M.ftree = "<c-n>"
 ----------
 
 -- Terminal
 ----------
--- Toggle
-M.terminal = l("t", "Terminal Toggle")
--- Apps
-M.terminalApp = l("a", "Terminal Applications")
+-- Terminal
+M.terminal = l("a", "Terminal Applications")
 ----------
 
 -- Code Execution
@@ -143,7 +145,7 @@ M.vcs_file = l("vf", "VCS: File Options")
 -- Todo Highlights -- todocomments.nvim: <leader>m
 M.todo = l("m", "Todos")
 -- Self Testing
-M.selfTest = l("r", "Self-Testing (Flashcards)")
+M.selfTest = l("e", "Self-Testing ([E]xaminations)")
 -- Document Creation And Templating
 M.docCreation = l("l", "Document Formatting & Creation")
 ----------
@@ -155,42 +157,44 @@ M.assistDesc = {
 	["]"] = { name = "Go To Next" },
 	["["] = { name = "Go To Previous" },
 	["<leader>"] = {
-		a = { name = "Terminal Applications" },
+		a = { name = "Terminal [A]pplications" },
 		b = {
-			name = "Debugging",
-			f = { name = "Debug Views" },
-			s = { name = "Sessions" },
-			w = { name = "Language Options" },
-			P = { name = "Python" },
+			name = "De[b]ugging",
+			f = { name = "Debug Views ([f]iles)" },
+			s = { name = "[S]essions" },
+			w = { name = "Language Options ([w]idgets)" },
+			P = { name = "[P]ython" },
 		},
-		c = { name = "LSP Opts" },
-		d = { name = "Database" },
-		f = { name = "Telescope" },
-		h = { name = "Highlighting Options" },
+		c = { name = "[C]ode Actions & Opts" },
+		d = { name = "[D]atabase" },
+    e = { name = "[E]xaminations" },
+		f = { name = "Telescope & [F]ile Opts" },
+		h = { name = "[H]ighlighting Options" },
 		k = {
-			name = "Wiki Opts",
-			c = { name = "Creation Opts" },
-			l = { name = "Link Opts" },
+			name = "Wiki Opts ([k]nowledge)",
+			c = { name = "[C]reation Opts" },
+			l = { name = "[L]ink Opts" },
 		},
 		l = { name = "VimTex" },
-		m = { name = "Todos" },
-		n = { name = "Notebooks", k = { name = "Notebook Kernel Opts" } },
-		p = { name = "System Paste" },
+		m = { name = "Todos ([m]essages)" },
+		n = { name = "[N]otebooks", k = { name = "Notebook [K]ernel Opts" } },
+		p = { name = "System [P]aste" },
 		q = {
-			name = "Close and Quit",
-			b = { name = "Quit Buffer Options" },
-			a = { name = "Quit All Options" },
+			name = "Close and [Q]uit",
+			b = { name = "Quit [B]uffer Options" },
+			a = { name = "Quit [A]ll Options" },
 		},
-		r = { name = "Flashcards" },
-		s = { name = "Snippets" },
-		v = { name = "Version Control", f = { "Telescope Options" } },
-		w = { name = "File Write", q = { name = "Write & Quit Opts" } },
+		r = { name = "Pane [R]esizing" },
+		s = { name = "[S]nippets" },
+    t = { name = "[T]abs Opts" },
+		v = { name = "[V]ersion Control", f = { "Telescope Opts ([f]iles)" } },
+		w = { name = "File Write", q = { name = "Write & [Q]uit Opts" } },
 		x = {
-			name = "Code Execute",
-			h = { name = "Http" },
-			t = { name = "Testing", c = { name = "Coverage" } },
+			name = "Code E[x]ecute",
+			h = { name = "[H]ttp" },
+			t = { name = "[T]esting", c = { name = "[C]overage" } },
 		},
-		y = { name = "System Copy" },
+		y = { name = "System Copy ([y]ank)" },
 	},
 }
 --------------------------------

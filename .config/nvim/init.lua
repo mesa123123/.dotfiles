@@ -21,10 +21,15 @@ vim.g["mapleader"] = "\\"
 -- Configure Doc Commands
 --------------------------------
 
--- Commands
+-- Commands for Editing Docs
 ----------
-vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {}) -- Edit
-vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {}) -- Source
+vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {})
+vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/package_setup.lua", {})
+vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins.lua", {})
+vim.api.nvim_create_user_command("Editleadermaps", "e ~/.config/nvim/lua/leader_mappings.lua", {})
+vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
+vim.api.nvim_create_user_command("Editnotebooks", "e ~/.config/nvim/lua/notebooks.lua", {})
+vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {})
 ----------
 
 --------------------------------
@@ -33,78 +38,33 @@ vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {}
 
 -- Vim Vars
 ----------
-local cmd = vim.cmd -- vim commands
-local api = vim.api -- vim api (I'm not sure what this does)
-local fn = vim.fn -- vim functions
-local system = vim.fn.system
+local cmd = vim.cmd
+local api = vim.api
+local fn = vim.fn
 local keymap = vim.keymap
 local ft = vim.filetype
 local hl = vim.api.nvim_set_hl
-local loop = vim.loop
-local diagnostics = vim.diagnostic
--- For Options
-local opt = vim.opt -- vim options
--- For Variables
-local gv = vim.g -- global variables
-local plugin_path = fn.stdpath("data") .. "/lazy"
-local lazypath = plugin_path .. "/lazy.nvim"
+local diagnostic = vim.diagnostic
+local opt = vim.opt
+local gv = vim.g
 ----------
 
 -- Requires
 ----------
--- Requires
+-- Modules
 local ufuncs = require("personal_utils")
-local plugins = require("plugins")
+-- Scripts
+require("package_setup")
+require("notebooks")
+require("lsp")
 ----------
 
 -- Extra Vars
 ----------
-local norm_keyset = ufuncs.norm_keyset
+local nmap = ufuncs.norm_keyset
 local keyopts = ufuncs.keyopts
-local norm_loudkeyset = ufuncs.norm_loudkeyset
+local nlmap = ufuncs.norm_loudkeyset
 local get_python_path = ufuncs.get_python_path
-----------
-
---------------------------------
--- Plugin & Package: Installing, Loading, and Settings -- lazy.nvim & luarocks.nvim
---------------------------------
-
--- Package Path Upgrade
-----------
--- Rocks installed through luarocks.nvim
-package.path = package.path .. ";" .. plugin_path .. "/luarocks.nvim/.rocks/share/lua/5.1/?.lua"
-package.path = package.path .. ";" .. plugin_path .. "/luarocks.nvim/.rocks/share/lua/5.1/?/init.lua"
--- Rocks installed through local luarocks
-package.path = package.path .. ";" .. fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
-package.path = package.path .. ";" .. fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
-----------
-
--- Install Package Manager(s)
-----------
--- Download
-if not loop.fs_stat(lazypath) then
-	system({
-		"git",
-		"clone",
-		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
-		lazypath,
-	})
-end
--- Add to Runtime Path
-----------
-opt.rtp:prepend(lazypath)
-----------
-
--- Load Plugins
-----------
-require("lazy").setup(plugins.list, plugins.opts)
-----------
-
--- Install Rocks
-----------
-require("luarocks-nvim").setup({ rocks = plugins.rocks })
 ----------
 
 -------------------------------
@@ -200,7 +160,11 @@ end, { nargs = 0 })
 ------------
 gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
 -- Virtual Text Enabled Globally
-diagnostics.config({ virtual_text = true })
+diagnostic.config({
+	virtual_text = true,
+	underline = true,
+	signs = true,
+})
 ------------
 
 -- AutoCmds
@@ -360,12 +324,13 @@ dashboard.header.val = {
 dashboard.buttons.val = {
 	{ type = "text", val = "Options", opts = { hl = "SpecialComment", position = "center" } },
 	dashboard_opts.button("n", "  Open File-system", ":Telescope file_browser theme=dropdown<CR>"),
-	dashboard_opts.button("v", "  EditVim", "<cmd>e ~/.config/nvim/init.lua<CR>"),
-	dashboard_opts.button("p", "  Editplugins", "<cmd>e ~/.config/nvim/lua/plugins.lua<CR>"),
-	dashboard_opts.button("f", "󰘧  Editutil_funcs", "<cmd>e ~/.config/nvim/lua/personal_utils.lua<CR>"),
-	dashboard_opts.button("m", "󰌓  EditKeyMappings", "<cmd>e ~/.config/nvim/lua/leader_mappings.lua<CR>"),
-	dashboard_opts.button("l", "  Editlsp", "<cmd>e ~/.config/nvim/lua/lsp.lua<CR>"),
-	dashboard_opts.button("b", "  EditNotebooks", "<cmd> e ~/.config/nvim/lua/notebooks.lua<CR>"),
+	dashboard_opts.button("v", "  EditVim", ":EditVim<cr>"),
+	dashboard_opts.button("p", "  Editplugins", ":Editplugins<cr>"),
+	dashboard_opts.button("p", "  Editpackagesetup", ":Editpackagesetup<cr>"),
+	dashboard_opts.button("f", "󰘧  Editutil_funcs", ":Editutil_funcs<cr>"),
+	dashboard_opts.button("m", "󰌓  EditKeyMappings", ":EditKeyMappings<cr>"),
+	dashboard_opts.button("l", "  Editlsp", ":Editlsp<cr>"),
+	dashboard_opts.button("b", "  EditNotebooks", ":EditNotebooks<cr>"),
 }
 local section_mru = {
 	type = "group",
@@ -433,7 +398,7 @@ whichKey.register(lm.assistDesc)
 
 -- Mappings
 ---------------
-norm_keyset(lm.assist, "WhichKey", "Editor Mapping Assistance")
+nmap(lm.assist, "WhichKey", "Editor Mapping Assistance")
 ---------------
 
 ----------------------------------
@@ -480,32 +445,32 @@ keymap.set("v", "<leader>/", '"fy/\\V<C-R>f<CR>', {})
 -- Paste, Yank, Quit, Save Mappings
 ----------
 -- Set Write/Quit to shortcuts
-norm_loudkeyset(lm.write .. "w", "w", "Write")
-norm_loudkeyset(lm.write .. "!", "w!", "Over-Write")
-norm_loudkeyset(lm.write .. "s", "so", "Write and Source to Nvim")
-norm_loudkeyset(lm.write .. "a", "wa", "Write All")
-norm_loudkeyset(lm.write_quit .. "q", "wq", "Close Buffer")
-norm_loudkeyset(lm.write_quit .. "b", "w<CR>:bd", "Write and Close Buffer w/o Pane")
-norm_loudkeyset(lm.write_quit .. "a", "wqa", "Write All & Quit Nvim")
-norm_loudkeyset(lm.quit .. "q", "q", "Close Buffer and Pane")
-norm_loudkeyset(lm.quit .. "!", "q!", "Close Buffer Without Writing")
-norm_loudkeyset(lm.quit_all .. "a", "qa", "Quit Nvim")
-norm_loudkeyset(lm.quit_all .. "!", "<cmd>qa!<cr>", "Quit Nvim Without Writing")
-norm_loudkeyset(lm.quit_buffer .. "b", "bd", "Close Buffer w/o Pane")
-norm_loudkeyset(lm.quit_buffer .. "!", "bd", "Close Buffer w/o Pane")
+nlmap(lm.write .. "w", "w", "Write")
+nlmap(lm.write .. "!", "w!", "Over-Write")
+nlmap(lm.write .. "s", "so", "Write and Source to Nvim")
+nlmap(lm.write .. "a", "wa", "Write All")
+nlmap(lm.write_quit .. "q", "wq", "Close Buffer")
+nlmap(lm.write_quit .. "b", "w<CR>:bd", "Write and Close Buffer w/o Pane")
+nlmap(lm.write_quit .. "a", "wqa", "Write All & Quit Nvim")
+nlmap(lm.quit .. "q", "q", "Close Buffer and Pane")
+nlmap(lm.quit .. "!", "q!", "Close Buffer Without Writing")
+nlmap(lm.quit_all .. "a", "qa", "Quit Nvim")
+nlmap(lm.quit_all .. "!", "<cmd>qa!<cr>", "Quit Nvim Without Writing")
+nlmap(lm.quit_buffer .. "b", "bd", "Close Buffer w/o Pane")
+nlmap(lm.quit_buffer .. "!", "bd", "Close Buffer w/o Pane")
 -- System Copy Set to Mappings
 keymap.set({ "n", "v" }, lm.yank .. "v", '"+y', keyopts({ desc = "System Copy" }))
 keymap.set({ "n", "v" }, lm.yank .. "y", '"+yy', keyopts({ desc = "System Copy: Line" }))
 keymap.set("n", lm.yank .. "G", '"+yG', keyopts({ desc = "System Copy: Rest of File" }))
 keymap.set("n", lm.yank .. "%", '"+y%', keyopts({ desc = "System Copy: Whole of File" }))
 -- System Paste Set to Mappings
-keymap.set({ "n", "v" }, lm.paste .. "p", '"+p', keyopts({ desc = "System Paste" }))
+keymap.set({ "n", "v" }, lm.paste, '"+p', keyopts({ desc = "System Paste" }))
 ---------
 
 -- Highlighting Search Mappings
 ---------
 -- Trigger Highlight Searching Automatically
-norm_keyset("<cr>", "nohlsearch", "")
+nmap("<cr>", "nohlsearch", "")
 keymap.set("n", "n", ":set hlsearch<CR>n", keyopts({}))
 keymap.set("n", "N", ":set hlsearch<CR>N", keyopts({}))
 ---------
@@ -513,25 +478,35 @@ keymap.set("n", "N", ":set hlsearch<CR>N", keyopts({}))
 -- Pane Control Mappings
 ----------
 -- Tmux Pane Resizing Terminal Mode
-keymap.set({ "t", "i", "c", "n" }, "<c-a><c-j>", "<c-\\><c-n>:res-5<CR>i", {})
-keymap.set({ "t", "i", "c", "n" }, "<c-a><c-k>", "<c-\\><c-n>:res+5<CR>i", {})
-keymap.set({ "t", "i", "c", "n" }, "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set({ "t", "i", "c", "n" }, "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
+keymap.set({ "t", "i", "c", "n" }, lm.resize .. "j", "<c-\\><c-n>:res-5<CR>i", { desc = "Move Partition Down" })
+keymap.set({ "t", "i", "c", "n" }, lm.resize .. "k", "<c-\\><c-n>:res+5<CR>i", { desc = "Move Partition Up" })
+keymap.set(
+	{ "t", "i", "c", "n" },
+	lm.resize .. "h",
+	"<c-\\><c-n>:vertical resize -5<CR>i",
+	{ desc = "Move Partition Left" }
+)
+keymap.set(
+	{ "t", "i", "c", "n" },
+	lm.resize .. "l",
+	"<c-\\><c-n>:vertical resize +5<CR>i",
+	{ desc = "Move Partition Right" }
+)
 ----------
 
 -- Tab Control mappings
 ----------
 -- Navigation
-keymap.set("", "<C-t>k", ":tabr<cr>", {})
-keymap.set("", "<C-t>j", ":table<cr>", {})
-keymap.set("", "<C-t>l", ":tabn<cr>", {})
-keymap.set("", "<C-t>h", ":tabp<cr>", {})
+keymap.set({ "t", "i", "c", "n" }, lm.tab .. "H", ":tabfirst<cr>", { desc = "Tab First" })
+keymap.set({ "t", "i", "c", "n" }, lm.tab .. "L", ":tablast<cr>", { desc = "Tab Last" })
+keymap.set({ "t", "i", "c", "n" }, lm.tab .. "l", ":tabn<cr>", { desc = "Tab Next" })
+keymap.set({ "t", "i", "c", "n" }, lm.tab .. "h", ":tabp<cr>", { desc = "Tab Previous" })
 -- Close Current Tab
-keymap.set("", "<C-t>c", ":tabc<cr>", {})
--- Close all other Tabs
-keymap.set("", "<C-t>o", ":tabo<cr>", {})
--- New Tab - note n is already used as a search text tool and cannot be mapped
-keymap.set("", "<C-t><c-n>", ":tabnew<cr>", {})
+keymap.set({ "t", "i", "c", "n" }, lm.tab .. "q", ":tabc<cr>", { desc = "[Q]uit tab" })
+-- Close alther Tabs
+keymap.set({ "t", "i", "c", "n" }, lm.tab .. "o", ":tabo<cr>", { desc = "Tab Open" })
+-- New Tab ote n is already used as a search text tool and cannot be mapped
+keymap.set({ "t", "i", "c", "n" }, lm.tab .. "n", ":tabnew<cr>", { desc = "[N]ew Tab" })
 ----------
 
 -- Buffer Control Mappings
@@ -618,10 +593,10 @@ treesitter.language.register("htmldjango", "jinja")
 -- Mappings
 ----------
 -- Context Bar - W/TS Context
-norm_keyset("<leader>hc", "TSContextEnable", "Context Highlight On")
-norm_keyset("<leader>hs", "TSContextDisable", "Context Highlight Off")
-norm_keyset("<leader>ht", "TSContextToggle", "Context Highlight Toggle")
-norm_keyset("[c", 'lua require(treesitter-context").go_to_context(vim.v.count1)', "Context Highlight Toggle")
+nmap("<leader>hc", "TSContextEnable", "Context Highlight On")
+nmap("<leader>hs", "TSContextDisable", "Context Highlight Off")
+nmap("<leader>ht", "TSContextToggle", "Context Highlight Toggle")
+nmap("[c", 'lua require(treesitter-context").go_to_context(vim.v.count1)', "Context Highlight Toggle")
 ----------
 
 -----------------------------------------
@@ -808,15 +783,15 @@ local debug_status = {
 ------------------
 local noice_recording = {
 	function()
-		local noice_stats = require("noice").api.statusline.mode.get()
-		if string.find(noice_stats, "recording") ~= nil then
-			return string.format("󰑋 %s", string.sub(noice_stats, string.len(noice_stats)))
+		local rec_status = vim.fn.reg_recording()
+		if rec_status ~= "" then
+			return string.format("󰑋 %s", string.sub(rec_status, string.len(rec_status)))
 		else
 			return ""
 		end
 	end,
-	cond = require("noice").api.statusline.mode.has,
-	color = { fg = "#282828" },
+	-- cond = require("noice").api.statusline.mode.has,
+	color = { fg = "#333333" },
 }
 ------------------
 
@@ -844,13 +819,12 @@ require("lualine").setup({
 			},
 			{
 				"diagnostics",
-				symbols = { error = "E-", warn = "W-", info = "I-", hint = "H-" },
+				symbols = { error = "", warn = "", info = "", hint = "" },
 				fmt = trunc(120, 10000, 120, true),
 			},
 		},
 		lualine_c = {
 			{ "filetype", colored = true, icon_only = true, icon = { align = "right" }, fmt = trunc(120, 4, 90, true) },
-			{ "filename" },
 			debug_status,
 			{ "overseer", colored = true },
 		},
@@ -965,11 +939,11 @@ keymap.set(
 	{ noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
 )
 -- Standard Term Toggle
-norm_keyset(lm.terminal, "lua Standard_term_toggle()", "Open Terminal")
+nmap(lm.terminal .. "t", "lua Standard_term_toggle()", "Toggle Terminal")
 -- Docker Toggle
-norm_keyset(lm.terminalApp .. "d", "lua Docker_term_toggle()", "Open Docker Container Management")
+nmap(lm.terminal .. "d", "lua Docker_term_toggle()", "Open Docker Container Management")
 -- Gitui Toggle
-norm_keyset("<leader>ag", "lua Gitui_term_toggle()", "Open Git Ui")
+nmap(lm.terminal .. "g", "lua Gitui_term_toggle()", "Open Git Ui")
 ----------
 
 ---------------------------------
@@ -1032,7 +1006,7 @@ local file_browser_configs = {
 
 -- Mappings
 ----------
-norm_keyset(lm.ftree, "Telescope file_browser theme=dropdown", "Toggle File Browser")
+nmap(lm.ftree, "Telescope file_browser theme=dropdown", "Toggle File Browser")
 ----------
 
 -----------------------------
@@ -1076,7 +1050,7 @@ keymap.set("n", "[t", function()
 	require("todo-comments").jump_prev()
 end, keyopts({ desc = "Previous todo comment" }))
 
-norm_keyset(lm.todo, "TodoTelescope", "List Todos")
+nmap(lm.todo, "TodoTelescope", "List Todos")
 ----------
 
 ---------------------------------
@@ -1085,45 +1059,35 @@ norm_keyset(lm.todo, "TodoTelescope", "List Todos")
 
 -- Mappings
 ----------
--- Find Buffer
-norm_keyset(lm.file .. "b", "Telescope buffers theme=dropdown", "Show Buffers")
-norm_keyset("<C-b>s", "Telescope buffers theme=dropdown", "Show Buffers")
--- ColorScheme
-norm_keyset(lm.file .. "c", "Telescope colorscheme theme=dropdown", "Themes")
--- Diagnostics (Also thorugh \cp
-norm_keyset(lm.file .. "d", "Telescope diagnostics theme=dropdown", "Diagnostics")
--- Buffers Mappings
-norm_keyset(lm.file .. "f", "Telescope find_files theme=dropdown", "Find Files")
--- Find File
-norm_keyset(lm.file .. "g", "Telescope live_grep theme=dropdown", "Live Grep")
--- Help Mappings
-norm_keyset(lm.file .. "H", "Telescope help_tags theme=dropdown", "Help Tags")
--- Imports
-norm_keyset(lm.file .. "i", "Telescope import theme=dropdown", "Imports")
--- Jumplist
-norm_keyset(lm.file .. "j", "Telescope jumplist theme=dropdown<CR>", "Jumplist")
--- Keymaps
-norm_keyset(lm.file .. "k", "Telescope keymaps theme=dropdown", "Keymaps")
--- Man Pages
-norm_keyset(lm.file .. "m", "Telescope man_pages theme=dropdown", "Man Pages")
--- Notifications
-norm_keyset(lm.file .. "n", "Telescope notify", "Notifications")
--- Vim Options
-norm_keyset(lm.file .. "o", "Telescope vim_options theme=dropdown<CR>", "Vim Options")
--- Registers
-norm_keyset(lm.file .. "r", "Telescope registers theme=dropdown", "Registers")
--- Tree Sitter Mapping
-norm_keyset(lm.file .. "s", "Telescope treesitter theme=dropdown", "Treesitter Insights")
--- Telescope Telescopes
-norm_keyset(lm.file .. "t", "Telescope builtin theme=dropdown", "Telescope Commands")
+nmap(lm.file .. "b", "Telescope buffers theme=dropdown", "Show Buffers")
+nmap("<C-b>s", "Telescope buffers theme=dropdown", "Show Buffers")
+nmap(lm.file .. "c", "Telescope colorscheme theme=dropdown", "Themes")
+nmap(lm.file .. "d", "Telescope diagnostics", "Diagnostics")
+nmap(lm.file .. "f", "Telescope find_files theme=dropdown", "Find Files")
+nmap(lm.file .. "g", "Telescope live_grep theme=dropdown", "Live Grep")
+nmap(lm.file .. "H", "Telescope help_tags theme=dropdown", "Help Tags")
+nmap(lm.file .. "i", "Telescope import theme=dropdown", "Imports")
+nmap(lm.file .. "j", "Telescope jumplist theme=dropdown<CR>", "Jumplist")
+nmap(lm.file .. "k", "Telescope keymaps theme=dropdown", "Keymaps")
+nmap(lm.file .. "m", "Telescope man_pages theme=dropdown", "Man Pages")
+nmap(lm.file .. "n", "Telescope notify", "Notifications")
+nmap(lm.file .. "o", "Telescope vim_options theme=dropdown<CR>", "Vim Options")
+nmap(lm.file .. "r", "Telescope registers theme=dropdown", "Registers")
+nmap(lm.file .. "s", "Telescope treesitter theme=dropdown", "Treesitter Insights")
+nmap(lm.file .. "t", "Telescope builtin theme=dropdown", "Telescope Commands")
+----------
 
 ---------------------------------
 -- Telescope Setup
 ---------------------------------
 
+-- Local var
+----------
+local telescope = require("telescope")
+
 -- Setup
 ----------
-require("telescope").setup({
+telescope.setup({
 	pickers = {
 		buffers = {
 			mappings = {
@@ -1147,9 +1111,9 @@ require("telescope").setup({
 })
 
 -- Extension setup (must Go last)
-require("telescope").load_extension("file_browser")
-require("telescope").load_extension("import")
-require("telescope").load_extension("ui-select")
+telescope.load_extension("file_browser")
+telescope.load_extension("import")
+telescope.load_extension("ui-select")
 ----------
 
 ---------
@@ -1242,14 +1206,14 @@ obsidian.setup({
 -- Mappings
 ----------
 -- Normal Mode
-norm_keyset(lm.wiki .. "b", "ObsidianBacklinks", "Get References To Current")
-norm_keyset(lm.wiki .. "t", "ObsidianToday", "Open (New) Daily Note")
-norm_keyset(lm.wiki .. "y", "ObsidianYesterday", "Create New Daily Note For Yesterday")
-norm_keyset(lm.wiki .. "o", "ObsidianOpen", "Open in Obisidian App")
-norm_keyset(lm.wiki .. "s", "ObsidianSearch", "Search Vault Notes")
-norm_keyset(lm.wiki .. "q", "ObsidianQuickSwitch", "Note Quick Switch")
-norm_keyset(lm.wiki_linkOpts .. "l", "ObsidianFollowLink", "Go To Link Under Cursor")
-norm_keyset(lm.wiki_linkOpts .. "t", "ObsidianTemplate", "Insert Template Into Link")
+nmap(lm.wiki .. "b", "ObsidianBacklinks", "Get References To Current")
+nmap(lm.wiki .. "t", "ObsidianToday", "Open (New) Daily Note")
+nmap(lm.wiki .. "y", "ObsidianYesterday", "Create New Daily Note For Yesterday")
+nmap(lm.wiki .. "o", "ObsidianOpen", "Open in Obisidian App")
+nmap(lm.wiki .. "s", "ObsidianSearch", "Search Vault Notes")
+nmap(lm.wiki .. "q", "ObsidianQuickSwitch", "Note Quick Switch")
+nmap(lm.wiki_linkOpts .. "l", "ObsidianFollowLink", "Go To Link Under Cursor")
+nmap(lm.wiki_linkOpts .. "t", "ObsidianTemplate", "Insert Template Into Link")
 keymap.set("n", lm.wiki_createPage .. "n", ":ObsidianNew ", { silent = false, desc = "Create New Note" })
 -- Visual Mode
 keymap.set("v", lm.wiki_createPage .. "l", ":ObsidianLinkNew ", { silent = false, desc = "Created New Linked Note" })
@@ -1268,26 +1232,6 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 		vim.g["vimtext_view_method"] = "zathura"
 	end,
 })
-
----------------------------------"
--- LSP Config
----------------------------------"
-
--- Notes
-----------
--- All Lsp Settings are configured in nvim/lua/lsp.lua
-----------
-
--- Commands
-----------
-api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
-----------
-
--- Load File
-----------
-require("lsp")
-----------
-
 ---------------------------------
 -- Code Align
 ---------------------------------
@@ -1312,10 +1256,10 @@ gv["dd_ui_use_nerd_fonts"] = 1
 
 -- Mappings
 ---------
-norm_keyset(lm.database .. "u", "DBUIToggle<CR>", "Toggle DB UI")
-norm_keyset(lm.database .. "f", "DBUIFindBuffer<CR>", "Find DB Buffer")
-norm_keyset(lm.database .. "r", "DBUIRenameBuffer<CR>", "Rename DB Buffer")
-norm_keyset(lm.database .. "l", "DBUILastQueryInfo<CR>", "Run Last Query")
+nmap(lm.database .. "u", "DBUIToggle<CR>", "Toggle DB UI")
+nmap(lm.database .. "f", "DBUIFindBuffer<CR>", "Find DB Buffer")
+nmap(lm.database .. "r", "DBUIRenameBuffer<CR>", "Rename DB Buffer")
+nmap(lm.database .. "l", "DBUILastQueryInfo<CR>", "Run Last Query")
 ---------
 
 ---------------------------------"
@@ -1343,18 +1287,18 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 		end
 	end,
 })
-norm_keyset(lm.exec .. "q", "CompilerStop", "Stop Code Runner")
-norm_keyset(lm.exec .. "i", "CompilerToggleResults", "Show Code Run")
-norm_keyset(lm.exec .. "r", "CompilerStop<cr>" .. "<cmd>CompilerRedo", "Re-Run Code")
+nmap(lm.exec .. "q", "CompilerStop", "Stop Code Runner")
+nmap(lm.exec .. "i", "CompilerToggleResults", "Show Code Run")
+nmap(lm.exec .. "r", "CompilerStop<cr>" .. "<cmd>CompilerRedo", "Re-Run Code")
 ----------
 
 ---------------------------------"
 -- Http Execution - rest.nvim
 ---------------------------------"
 
-norm_keyset(lm.exec_http .. "x", "RestNvim", "Run Http Under Cursor")
-norm_keyset(lm.exec_http .. "p", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
-norm_keyset(lm.exec_http .. "x", "RestNvim", "Re-Run Last Http Command")
+nmap(lm.exec_http .. "x", "RestNvim", "Run Http Under Cursor")
+nmap(lm.exec_http .. "p", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
+nmap(lm.exec_http .. "x", "RestNvim", "Re-Run Last Http Command")
 
 ---------------------------------"
 -- Code Testing - neotest
@@ -1393,18 +1337,14 @@ require("neotest").setup({
 -- Mappings
 ----------
 -- Mappings
-norm_keyset(lm.exec_test .. "x", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
-norm_keyset(
-	lm.exec_test .. "o",
-	"lua require('neotest').output.open({ enter = true, auto_close = true })",
-	"Test Output"
-)
-norm_keyset(lm.exec_test .. "s", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
-norm_keyset(lm.exec_test .. "q", "lua require('neotest').run.stop()", "Quit Test Run")
-norm_keyset(lm.exec_test .. "w", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
-norm_keyset(lm.exec_test .. "c", "lua require('neotest').run.run()", "Run Nearest Test")
-norm_keyset(lm.exec_test .. "r", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
-norm_keyset(
+nmap(lm.exec_test .. "x", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
+nmap(lm.exec_test .. "o", "lua require('neotest').output.open({ enter = true, auto_close = true })", "Test Output")
+nmap(lm.exec_test .. "s", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
+nmap(lm.exec_test .. "q", "lua require('neotest').run.stop()", "Quit Test Run")
+nmap(lm.exec_test .. "w", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
+nmap(lm.exec_test .. "c", "lua require('neotest').run.run()", "Run Nearest Test")
+nmap(lm.exec_test .. "r", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
+nmap(
 	lm.exec_test .. "b",
 	"lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
 	"Debug Closest Test"
@@ -1437,23 +1377,9 @@ require("coverage").setup({
 
 -- Mappings
 ----------
-norm_keyset(lm.exec_test_coverage .. "r", "Coverage", "Run Coverage Report")
-norm_keyset(lm.exec_test_coverage .. "s", "CoverageSummary", "Show Coverage Report")
-norm_keyset(lm.exec_test_coverage .. "t", "CoverageToggle", "Toggle Coverage Signs")
-----------
-
---------------------------------
--- Notebooks - quarto.nvim, molten-nvim: <leader>n
---------------------------------
-
--- Commands
-----------
-api.nvim_create_user_command("Editnotebooks", "e ~/.config/nvim/lua/notebooks.lua", {})
-----------
-
--- Load File
-----------
-require("notebooks")
+nmap(lm.exec_test_coverage .. "r", "Coverage", "Run Coverage Report")
+nmap(lm.exec_test_coverage .. "s", "CoverageSummary", "Show Coverage Report")
+nmap(lm.exec_test_coverage .. "t", "CoverageToggle", "Toggle Coverage Signs")
 ----------
 
 --------------------------------
