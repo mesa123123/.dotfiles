@@ -222,14 +222,24 @@ gv["clipboard"] = {
 -- Color Schemes and Themes
 --------------------------------
 
--- Set TermGuiColors true
+-- Set & Customize Colour Scheme
 ----------
-opt.termguicolors = true
-----------
-
--- Load Color Scheme
-----------
-require("gruvbox").setup({ contrast = "hard", transparent_mode = true })
+local gruvbox = require("gruvbox")
+local palette = require("gruvbox").palette
+gruvbox.setup({
+	contrast = "hard",
+	transparent_mode = false,
+	italic = {
+		strings = true,
+		emphasis = true,
+		comments = true,
+		operators = false,
+		folds = true,
+	},
+	overrides = {
+		SignColumn = { bg = palette.dark0_hard },
+	},
+})
 cmd("colorscheme gruvbox")
 ----------
 
@@ -245,13 +255,13 @@ devIcons.setup({
 	override_by_filename = {
 		["requirements.txt"] = {
 			icon = "",
-			color = "#51a0cf",
+			color = palette.bright_blue,
 			cterm_color = "196",
 			name = "requirements",
 		},
 		["dev-requirements.txt"] = {
 			icon = "",
-			color = "#51a0cf",
+			color = palette.bright_blue,
 			cterm_color = "196",
 			name = "requirements",
 		},
@@ -261,19 +271,19 @@ devIcons.setup({
 devIcons.set_icon({
 	htmldjango = {
 		icon = "",
-		color = "#e44d26",
+		color = palette.bright_red,
 		cterm_color = "196",
 		name = "Htmldjango",
 	},
 	jinja = {
 		icon = "",
-		color = "#e44d26",
+		color = palette.bright_red,
 		cterm_color = "196",
 		name = "Jinja",
 	},
 	rst = {
 		icon = "",
-		color = "#55cc55",
+		color = palette.bright_green,
 		cterm_color = "lime green",
 		name = "rst",
 	},
@@ -288,11 +298,32 @@ opt.laststatus = 2
 
 -- Highlighting
 ---------
-hl(0, "LspDiagnosticsUnderlineError", { bg = "#EB4917", underline = true, blend = 50 })
-hl(0, "LspDiagnosticsUnderlineWarning", { bg = "#EBA217", underline = true, blend = 50 })
-hl(0, "LspDiagnosticsUnderlineInformation", { bg = "#17D6EB", underline = true, blend = 50 })
-hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend = 50 })
+hl(
+	0,
+	"LspDiagnosticsUnderlineError",
+	{ fg = palette.dark0_hard, bg = palette.bright_red, underline = true, blend = 50 }
+)
+hl(
+	0,
+	"LspDiagnosticsUnderlineWarning",
+	{ fg = palette.dark0_hard, bg = palette.bright_yelllow, underline = true, blend = 50 }
+)
+hl(
+	0,
+	"LspDiagnosticsUnderlineInformation",
+	{ fg = palette.dark0_hard, bg = palette.bright_blue, underline = true, blend = 50 }
+)
+hl(
+	0,
+	"LspDiagnosticsUnderlineHint",
+	{ fg = palette.dark0_hard, bg = palette.bright_green, underline = true, blend = 50 }
+)
 ----------
+-- Gitsigns
+hl(0, "GitGutterAdd", { bg = palette.dark0_hard })
+hl(0, "GitGutterChange", { bg = palette.dark0_hard })
+hl(0, "GitGutterDelete", { bg = palette.dark0_hard })
+hl(0, "GitGutterChangeDelete", { bg = palette.dark0_hard })
 
 -- Highlight Colors as their Color
 ----------
@@ -324,7 +355,7 @@ dashboard.header.val = {
 dashboard.buttons.val = {
 	{ type = "text", val = "Options", opts = { hl = "SpecialComment", position = "center" } },
 	dashboard_opts.button("n", "  Open File-system", ":Telescope file_browser theme=dropdown<CR>"),
-	dashboard_opts.button("v", "  EditVim", ":EditVim<cr>"),
+	dashboard_opts.button("v", "  Editvim", ":Editvim<cr>"),
 	dashboard_opts.button("p", "  Editplugins", ":Editplugins<cr>"),
 	dashboard_opts.button("p", "  Editpackagesetup", ":Editpackagesetup<cr>"),
 	dashboard_opts.button("f", "󰘧  Editutil_funcs", ":Editutil_funcs<cr>"),
@@ -615,7 +646,7 @@ notify.setup({
 	top_down = true,
 })
 -- Highlighting
-hl(0, "NotifyBackground", { bg = "#414141" })
+hl(0, "NotifyBackground", { bg = palette.dark0_hard })
 ----------
 
 --------------------------------
@@ -735,7 +766,7 @@ local active_lsp = {
 			return ""
 		end
 	end,
-	color = { fg = "f84935" },
+	color = { fg = palette.bright_red },
 	fmt = trunc(120, 3, 90, true),
 }
 -- Formatter
@@ -748,7 +779,7 @@ local active_formatter = {
 			return ""
 		end
 	end,
-	color = { fg = "#8ec07c" },
+	color = { fg = palette.bright_green },
 	fmt = trunc(120, 3, 90, true),
 }
 -- Linter
@@ -761,7 +792,7 @@ local active_lint = {
 			return ""
 		end
 	end,
-	color = { fg = "#eab133" },
+	color = { fg = palette.bright_yellow },
 	fmt = trunc(120, 4, 90, true),
 }
 -- Debugger
@@ -774,7 +805,7 @@ local debug_status = {
 			return ""
 		end
 	end,
-	color = { fg = "#f84935" },
+	color = { fg = palette.dark_red },
 	fmt = trunc(120, 4, 90, true),
 }
 ------------------
@@ -791,7 +822,7 @@ local noice_recording = {
 		end
 	end,
 	-- cond = require("noice").api.statusline.mode.has,
-	color = { fg = "#333333" },
+	color = { fg = palette.dark0_hard },
 }
 ------------------
 
@@ -1358,8 +1389,8 @@ require("coverage").setup({
 	commands = true, -- create commands
 	highlights = {
 		-- customize highlight groups created by the plugin
-		covered = { fg = "#c3e88d" }, -- supports style, fg, bg, sp (see :h highlight-gui)
-		uncovered = { fg = "#f07178" },
+		covered = { fg = palette.bright_green }, -- supports style, fg, bg, sp (see :h highlight-gui)
+		uncovered = { fg = palette.bright_red },
 	},
 	signs = {
 		-- use your own highlight groups or text markers

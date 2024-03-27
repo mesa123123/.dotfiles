@@ -736,14 +736,6 @@ nullSources[#nullSources + 1] = hover.dictionary.with({
 nullls.setup(lsp_opts({ debug = true, sources = { sources = nullSources } }))
 ----------
 
--- Colors and Themes
-----------
-hl(0, "LspDiagnosticsUnderlineError", { bg = "#EB4917", underline = true, blend = 50 })
-hl(0, "LspDiagnosticsUnderlineWarning", { bg = "#EBA217", underline = true, blend = 50 })
-hl(0, "LspDiagnosticsUnderlineInformation", { bg = "#17D6EB", underline = true, blend = 50 })
-hl(0, "LspDiagnosticsUnderlineHint", { bg = "#17EB7A", underline = true, blend = 50 })
-----------
-
 --------------------------------
 -- Debug Adapter Protocol
 --------------------------------
