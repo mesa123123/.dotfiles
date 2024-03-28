@@ -329,10 +329,10 @@ require("colorizer").setup()
 -- Start Page - alpha.nvim
 -----------------------------
 
--- local dashboard = require("dashboard")
--- -- Load Config
--- ----------
--- require("alpha").setup(dashboard.config)
+local dashboard = require("dashboard")
+-- Load Config
+----------
+require("alpha").setup(dashboard.config)
 
 ----------
 
