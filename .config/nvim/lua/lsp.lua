@@ -743,14 +743,15 @@ nullls.setup(lsp_opts({ debug = true, sources = { sources = nullSources } }))
 -- Helper Funcs
 ----------
 local python_path = get_python_path()
+local palette = require("gruvbox").palette
 
 -- Colors and Themes
 ----------
 -- Colors
-hl(0, "DapBreakpoint", { ctermbg = 0, fg = "#cc3939", bg = "#31353f" })
-hl(0, "DapBreakpointCondition", { ctermbg = 0, fg = "#993939", bg = "#31353f" })
-hl(0, "DapLogPoint", { ctermbg = 0, fg = "#61afef", bg = "#31353f" })
-hl(0, "DapStopped", { ctermbg = 0, fg = "#98c379", bg = "#31353f" })
+hl(0, "DapBreakpoint", { ctermbg = 0, fg = palette.bright_red, bg = palette.dark0_soft })
+hl(0, "DapBreakpointCondition", { ctermbg = 0, fg = palette.bright_red, bg = palette.dark0_soft })
+hl(0, "DapLogPoint", { ctermbg = 0, fg = palette.neutral_blue, bg = palette.dark0_soft })
+hl(0, "DapStopped", { ctermbg = 0, fg = palette.netural_red, bg = palette.dark0_soft })
 -- Symbols
 fn.sign_define(
 	"DapBreakpoint",
@@ -801,6 +802,7 @@ nmap(lm.debug_session .. "c", lreq .. "('dap').close()", "Close Debug Session")
 nmap(lm.debug_session .. "a", lreq .. "('dap').attach()", "Attach Debug Session")
 nmap(lm.debug_session .. "d", lreq .. "('dap').disconnect()", "Detach Debug Session")
 nmap(lm.debug .. "q", lreq .. "('dap').terminate()", "Quit Debug Session")
+nmap(lm.debug_session .. "l", lreq .. "('osv').launch({port=8086})", "Launch Debug Server")
 ----------
 
 -- UI Commands
@@ -855,6 +857,14 @@ dap.adapters.lldb = {
 	},
 	name = "lldb",
 }
+-- Lua
+dap.adapters.nlua = function(callback, opts)
+	callback({
+		type = "server",
+		host = opts.host or "127.0.0.1",
+		port = opts.port or 8086,
+	})
+end
 ----------
 
 -- Configuration
@@ -889,6 +899,16 @@ dap.configurations.sh = {
 		args = {},
 	},
 }
+
+-- Lua
+dap.configurations.lua = {
+	{
+		type = "nlua",
+		request = "attach",
+		name = "Attach to running Neovim Instance",
+	},
+}
+
 -- Rust
 dap.configurations.rust = {
 	{

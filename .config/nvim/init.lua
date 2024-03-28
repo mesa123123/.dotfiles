@@ -29,6 +29,7 @@ vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins.lu
 vim.api.nvim_create_user_command("Editleadermaps", "e ~/.config/nvim/lua/leader_mappings.lua", {})
 vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
 vim.api.nvim_create_user_command("Editnotebooks", "e ~/.config/nvim/lua/notebooks.lua", {})
+vim.api.nvim_create_user_command("Editdashboard", "e ~/.config/nvim/lua/dashboard.lua", {})
 vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {})
 ----------
 
@@ -298,32 +299,26 @@ opt.laststatus = 2
 
 -- Highlighting
 ---------
+-- SignColumn Transparency
+hl(0, "SignColumn", { bg = palette.dark0_hard })
+-- Lsp Underline
+hl(0, "LspticsUnderlineError", { bg = palette.dark0_hard, fg = palette.bright_red, underline = true, blend = 50 })
+hl(0, "LspticsUnderlineWarning", { bg = palette.dark0_hard, fg = palette.bright_yellow, underline = true, blend = 50 })
 hl(
 	0,
-	"LspDiagnosticsUnderlineError",
-	{ fg = palette.dark0_hard, bg = palette.bright_red, underline = true, blend = 50 }
+	"LspticsUnderlineInformation",
+	{ bg = palette.dark0_hard, fg = palette.bright_blue, underline = true, blend = 50 }
 )
-hl(
-	0,
-	"LspDiagnosticsUnderlineWarning",
-	{ fg = palette.dark0_hard, bg = palette.bright_yelllow, underline = true, blend = 50 }
-)
-hl(
-	0,
-	"LspDiagnosticsUnderlineInformation",
-	{ fg = palette.dark0_hard, bg = palette.bright_blue, underline = true, blend = 50 }
-)
-hl(
-	0,
-	"LspDiagnosticsUnderlineHint",
-	{ fg = palette.dark0_hard, bg = palette.bright_green, underline = true, blend = 50 }
-)
+hl(0, "LspticsUnderlineHint", { bg = palette.dark0_hard, fg = palette.bright_green, underline = true, blend = 50 })
+-- Transparent Sign Column
+hl(0, "DiagnosticSignOk", { fg = palette.bright_green, bg = palette.dark0_hard })
+hl(0, "DiagnosticSignInfo", { fg = palette.bright_blue, bg = palette.dark0_hard })
+hl(0, "DiagnosticSignWarn", { fg = palette.bright_yellow, bg = palette.dark0_hard })
+hl(0, "DiagnosticSignError", { fg = palette.bright_blue, bg = palette.dark0_hard })
+-- CmdLine Borders Etc.
+hl(0, "NoiceCmdlinePopup", { fg = palette.neutral_blue, bg = palette.dark0_hard })
+hl(0, "NoiceCmdlinePopupBorder", { bg = palette.dark0_hard })
 ----------
--- Gitsigns
-hl(0, "GitGutterAdd", { bg = palette.dark0_hard })
-hl(0, "GitGutterChange", { bg = palette.dark0_hard })
-hl(0, "GitGutterDelete", { bg = palette.dark0_hard })
-hl(0, "GitGutterChangeDelete", { bg = palette.dark0_hard })
 
 -- Highlight Colors as their Color
 ----------
@@ -334,66 +329,11 @@ require("colorizer").setup()
 -- Start Page - alpha.nvim
 -----------------------------
 
--- Config
-----------
-local alpha = require("alpha")
-local dashboard = require("alpha.themes.theta")
-local dashboard_opts = require("alpha.themes.dashboard")
-dashboard.header.val = {
-	"<-.(`-')    _       (`-')  _                    (`-')   (`-')  _          (`-')       (`-')  _      (`-')  _             ",
-	" __( OO)   (_)      (OO ).-/           .->   <-.(OO )   (OO ).-/          ( OO).->    ( OO).-/      (OO ).-/       .->   ",
-	"'-'. ,--.  ,-(`-')  / ,---.       (`-')----. ,------,)  / ,---.           /    '._   (,------.      / ,---.   (`-')----. ",
-	"|  .'   /  | ( OO)  | \\ /`.\\      ( OO).-.  '|   /`. '  | \\ /`.\\          |'--...__)  |  .---'      | \\ /`.\\  ( OO).-.  '",
-	"|      /)  |  |  )  '-'|_.' |     ( _) | |  ||  |_.' |  '-'|_.' |         `--.  .--' (|  '--.       '-'|_.' | ( _) | |  |",
-	"|  .   '  (|  |_/  (|  .-.  |      \\|  |)|  ||  .   .' (|  .-.  |            |  |     |  .--'      (|  .-.  |  \\|  |)|  |",
-	"|  |\\   \\  |  |'->  |  | |  |       '  '-'  '|  |\\  \\   |  | |  | ,-.        |  |     |  `---.      |  | |  |   '  '-'  '",
-	"`--' '--'  `--'     `--' `--'        `-----' `--' '--'  `--' `--' './        `--'     `------'      `--' `--'    `-----' ",
-	"                                                                                                ",
-	"-------------------------------------------------------------------------------------------------------------------",
-	"                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                                  ",
-}
-dashboard.buttons.val = {
-	{ type = "text", val = "Options", opts = { hl = "SpecialComment", position = "center" } },
-	dashboard_opts.button("n", "  Open File-system", ":Telescope file_browser theme=dropdown<CR>"),
-	dashboard_opts.button("v", "  Editvim", ":Editvim<cr>"),
-	dashboard_opts.button("p", "  Editplugins", ":Editplugins<cr>"),
-	dashboard_opts.button("p", "  Editpackagesetup", ":Editpackagesetup<cr>"),
-	dashboard_opts.button("f", "󰘧  Editutil_funcs", ":Editutil_funcs<cr>"),
-	dashboard_opts.button("m", "󰌓  EditKeyMappings", ":EditKeyMappings<cr>"),
-	dashboard_opts.button("l", "  Editlsp", ":Editlsp<cr>"),
-	dashboard_opts.button("b", "  EditNotebooks", ":EditNotebooks<cr>"),
-}
-local section_mru = {
-	type = "group",
-	val = {
-		{
-			type = "text",
-			val = "Recent files",
-			opts = {
-				hl = "SpecialComment",
-				shrink_margin = false,
-				position = "center",
-			},
-		},
-		{
-			type = "group",
-			val = function()
-				return { dashboard.mru(0, fn.getcwd(), 6) }
-			end,
-			opts = { shrink_margin = false },
-		},
-	},
-}
-dashboard.config.layout = {
-	{ type = "padding", val = 2 },
-	dashboard.header,
-	{ type = "padding", val = 2 },
-	dashboard.buttons,
-	{ type = "padding", val = 1 },
-	section_mru,
-}
+-- local dashboard = require("dashboard")
+-- -- Load Config
+-- ----------
+-- require("alpha").setup(dashboard.config)
 
-alpha.setup(dashboard.config)
 ----------
 
 -------------------------------
@@ -821,7 +761,6 @@ local noice_recording = {
 			return ""
 		end
 	end,
-	-- cond = require("noice").api.statusline.mode.has,
 	color = { fg = palette.dark0_hard },
 }
 ------------------
