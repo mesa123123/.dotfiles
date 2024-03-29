@@ -82,7 +82,7 @@ ft.add({
 		["Jenkinsfile"] = "groovy",
 	},
 	pattern = { [".*req.*.txt"] = "requirements" },
-	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja", vy = "python", qmd = "markdown" },
+	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja", vy = "python", qmd = "quarto" },
 })
 ----------
 
@@ -288,6 +288,12 @@ devIcons.set_icon({
 		cterm_color = "lime green",
 		name = "rst",
 	},
+  quarto = {
+    icon = "",
+    color = palette.neutral_blue,
+    cterm_color = "blue",
+    name = "quarto"
+  }
 })
 devIcons.get_icons()
 ----------
@@ -559,6 +565,7 @@ require("nvim-treesitter.configs").setup({
 
 -- Custom Filetypes
 treesitter.language.register("htmldjango", "jinja")
+treesitter.language.register("markdown", "quarto")
 ----------
 
 -- Mappings
