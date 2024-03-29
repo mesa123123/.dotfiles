@@ -51,6 +51,7 @@ api.nvim_create_autocmd({ "BufWinEnter" }, {
       "nbformat",
       "pillow",
     })
+    cmd("QuartoActivate")
   end,
 })
 ----------
@@ -123,7 +124,7 @@ gv["python3_host_prog"] = python_path
 -- Mappings
 ----------
 norm_keyset(lm.notebook .. "p", "QuartoPreview", "Open Notebook Preview")
-keymap.set("n", lm.notebook .. "w", export_notebook, keyopts({ desc = "Open Notebook Preview" }))
+keymap.set("n", lm.notebook .. "w", export_notebook, keyopts({ desc = "Export Notebook to Code" }))
 keymap.set("n", lm.notebook_kernel .. "k", molten_launch, keyopts({ desc = "Start Kernel" }))
 norm_keyset(lm.notebook_run .. "a", "QuartoSendAbove", "Run Cell [A]bove")
 norm_keyset(lm.notebook_run .. "r", "QuartoSendAll", "[R]un All")

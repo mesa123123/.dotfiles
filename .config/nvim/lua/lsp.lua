@@ -96,6 +96,7 @@ local lsp_servers_ei = {
   "solidity",
   "texlab",
   "gopls",
+  "marksman",
 }
 -- Formatters
 local formatters_ei = {
@@ -210,6 +211,7 @@ format.setup({
     sh = { "shellharden" },
     json = { "jq", "jsonls" },
     markdown = { "markdownlint", "injected" },
+    quarto = { "markdownlint", "injected" },
     yaml = { "yamlfmt" },
     sql = { "sql_formatter" },
     rust = { "rustfmt" },
@@ -253,6 +255,7 @@ lint.linters_by_ft = {
   lua = { "luacheck" },
   -- Markdown
   markdown = { "markdownlint", "proselint", "write_good" },
+  quarto = { "markdownlint", "proselint", "write_good" },
   yaml = { "yamllint" },
   html = { "htmlhint" },
   css = { "stylelint" },
@@ -616,6 +619,16 @@ config.pyright.setup(lsp_opts({
   on_init = function(client)
     client.config.settings.python.pythonPath = get_python_path()
   end,
+}))
+----------
+
+-- Markdown
+----------
+config.marksman.setup(lsp_opts({
+  filetypes = {
+    "markdown",
+    "quarto",
+  },
 }))
 ----------
 
