@@ -1,6 +1,7 @@
 node_modules/	
 *.log
 .config/
+.config/nvim/lua/lsp_servers
 !.config/coc/extensions/package.json
 !.config/powerline/
 !.config/inkscape/
