@@ -11,18 +11,18 @@
 -- Vim Vars
 ----------
 -- Api Exposures
-local cmd = vim.cmd       -- vim commands
-local api = vim.api       -- vim api (I'm not sure what this does)
-local fn = vim.fn         -- vim functions
-local fs = vim.fs         -- vim filesystem
+local cmd = vim.cmd -- vim commands
+local api = vim.api -- vim api (I'm not sure what this does)
+local fn = vim.fn -- vim functions
+local fs = vim.fs -- vim filesystem
 local keymap = vim.keymap -- keymaps
-local lsp = vim.lsp       -- Lsp inbuilt
+local lsp = vim.lsp -- Lsp inbuilt
 local log = vim.log
 -- Options
-local bo = vim.bo          -- bufferopts
+local bo = vim.bo -- bufferopts
 -- For Variables
-local b = vim.b            -- buffer variables
-G = vim.g                  -- global variables
+local b = vim.b -- buffer variables
+G = vim.g -- global variables
 local hl = api.nvim_set_hl -- highlighting
 --------
 
@@ -209,7 +209,7 @@ format.setup({
     html = { "prettier", "injected" },
     sh = { "shellharden" },
     json = { "jq", "jsonls" },
-    markdown = { "markdownlint" },
+    markdown = { "markdownlint", "injected" },
     yaml = { "yamlfmt" },
     sql = { "sql_formatter" },
     rust = { "rustfmt" },
@@ -217,23 +217,12 @@ format.setup({
     tex = { "latex-indent" },
     go = { "gofumpt" },
   },
-})
--- Setup for injected languages
-format.formatters.injected = {
-  options = {
-    ignore_errors = false,
-    lang_to_ext = {
-      bash = "sh",
-      latex = "tex",
-      markdown = "md",
-      html = "html",
-      sql = "sql",
-      python = "py",
-      r = "r",
-      typescript = "ts",
+  formatters = {
+    stylua = {
+      args = { "--indent-type", "Spaces", "--indent-width", "2", "-" },
     },
   },
-}
+})
 
 -- General Format Function
 ----------
@@ -312,7 +301,7 @@ pylint.cmd = get_venv_command("pylint")
 -- Enablement for General Setup
 local general_enabled = function()
   local context = require("cmp.config.context") -- disable completion in comments
-  if vim.api.nvim_get_mode().mode == "c" then  -- keep command mode completion enabled when cursor is in a comment
+  if vim.api.nvim_get_mode().mode == "c" then -- keep command mode completion enabled when cursor is in a comment
     return true
   else
     return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
@@ -489,6 +478,7 @@ cmp.setup.filetype("gitcommit", {
 -- Add Cmp Capabilities
 ----------
 local capabilities = cmp_lsp.default_capabilities(lsp.protocol.make_client_capabilities())
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 ----------
 
 --------------------------------
@@ -535,13 +525,16 @@ local function keymappings(client)
   nmap(lm.codeAction .. "r", lreq .. "('telescope.builtin').lsp_references()", "LSP: Go to References")
   nmap(lm.codeAction .. "t", lreq .. "('telescope.builtin').lsp_type_definitions()", "LSP: Go To Type Definition")
   nmap(lm.codeAction .. "p", lreq .. "('telescope.builtin').diagnostics()", "Show all Diagnostics")
-  nmap(lm.codeAction .. "=", lreq .. "vim.diagnostic.setqflist", "Quick Fix List")
-  nmap(
-    lm.codeAction_symbols .. "w",
-    lreq .. "('telescope.builtin').lsp_workspace_symbols()",
-    "Show Workspace Symbols"
-  )
+  nmap(lm.codeAction .. "=", "lua vim.diagnostic.setqflist", "Quick Fix List")
+  nmap(lm.codeAction_symbols .. "w", lreq .. "('telescope.builtin').lsp_workspace_symbols()", "Show Workspace Symbols")
   nmap(lm.codeAction_symbols .. "d", lreq .. "('telescope.builtin').lsp_document_symbols()", "Show Document Symbols")
+
+  lsp.handlers["textDocument/hover"] =
+    vim.lsp.with(vim.lsp.handlers.hover, { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } })
+  lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+    vim.lsp.handlers.signature_help,
+    { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } }
+  )
 end
 
 --------------------------------
@@ -700,6 +693,9 @@ OtterStart = function()
   if filetype == "python" then
     otter.activate({ "htmldjango", "html", "sql" })
   end
+  if filetype == "qmd" then
+    otter.activate({ "python" })
+  end
   nmap(lm.codeAction_injectedLanguage .. "d", lreq .. '"otter".ask_definition()', "Show Definition")
   nmap(lm.codeAction_injectedLanguage .. "t", lreq .. '"otter".ask_type_definition()', "Show Type Definition")
   nmap(lm.codeAction_injectedLanguage .. "I", lreq .. '"otter".ask_hover()', "Show Info")
@@ -709,6 +705,14 @@ OtterStart = function()
 end
 
 api.nvim_create_user_command("OtterActivate", OtterStart, {})
+
+-- AutoLaunch on Quarto Notebook
+api.nvim_create_autocmd({ "BufWinEnter", "BufEnter" }, {
+  pattern = { "*.qmd" },
+  callback = function()
+    OtterStart()
+  end,
+})
 ----------
 
 -- Null-ls : Third Party LSPs

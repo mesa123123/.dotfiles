@@ -82,7 +82,7 @@ ft.add({
 		["Jenkinsfile"] = "groovy",
 	},
 	pattern = { [".*req.*.txt"] = "requirements" },
-	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja", vy = "python" },
+	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja", vy = "python", qmd = "markdown" },
 })
 ----------
 
@@ -627,6 +627,12 @@ require("noice").setup({
 			throttle = 1000,
 		},
 		"requirements",
+      signature = {
+        enabled = false,
+      },
+      hover = {
+        enabled = false,
+      }
 	},
 	presets = {
 		bottom_search = true, -- use a classic bottom cmdline for search

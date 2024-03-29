@@ -137,6 +137,8 @@ M.database = l("d", "Database")
 -- Notebook Functionality
 M.notebook = l("n", "Notebooks")
 M.notebook_kernel = l("nk", "Notebook Kernel Opts")
+M.notebook_insert = l("ni", "Notebook Insert Opts")
+M.notebook_run = l("nx", "Notebook Insert Opts")
 -- Highlighting Options - Treesitter: <leader>h
 M.hl = l("h", "Highlighting")
 -- Version Control Commands -- fugitive: <leader>v
@@ -167,7 +169,7 @@ M.assistDesc = {
 		},
 		c = { name = "[C]ode Actions & Opts" },
 		d = { name = "[D]atabase" },
-    e = { name = "[E]xaminations" },
+		e = { name = "[E]xaminations" },
 		f = { name = "Telescope & [F]ile Opts" },
 		h = { name = "[H]ighlighting Options" },
 		k = {
@@ -177,7 +179,12 @@ M.assistDesc = {
 		},
 		l = { name = "VimTex" },
 		m = { name = "Todos ([m]essages)" },
-		n = { name = "[N]otebooks", k = { name = "Notebook [K]ernel Opts" } },
+		n = {
+			name = "[N]otebooks",
+			k = { name = "Notebook [K]ernel Opts" },
+			i = { name = "[I]nsert Cells Opts" },
+			x = { name = "[R]un Cells Opts" },
+		},
 		p = { name = "System [P]aste" },
 		q = {
 			name = "Close and [Q]uit",
@@ -186,7 +193,7 @@ M.assistDesc = {
 		},
 		r = { name = "Pane [R]esizing" },
 		s = { name = "[S]nippets" },
-    t = { name = "[T]abs Opts" },
+		t = { name = "[T]abs Opts" },
 		v = { name = "[V]ersion Control", f = { "Telescope Opts ([f]iles)" } },
 		w = { name = "File Write", q = { name = "Write & [Q]uit Opts" } },
 		x = {
