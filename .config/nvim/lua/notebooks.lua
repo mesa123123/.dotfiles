@@ -50,7 +50,7 @@ quarto.setup({
   ft = { "quarto" },
   codeRunner = {
     enabled = true,
-    default_method = "slime",
+    default_method = "molten",
   },
   lspFeatures = {
     languages = { "r", "python", "bash", "lua", "html" },
