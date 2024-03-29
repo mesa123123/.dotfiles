@@ -82,7 +82,7 @@ ft.add({
 		["Jenkinsfile"] = "groovy",
 	},
 	pattern = { [".*req.*.txt"] = "requirements" },
-	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja", vy = "python", qmd = "quarto" },
+	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja", vy = "python", quarto = "quarto", qmd = "quarto" },
 })
 ----------
 
@@ -289,7 +289,7 @@ devIcons.set_icon({
 		name = "rst",
 	},
   quarto = {
-    icon = "",
+    icon = "󰄫",
     color = palette.neutral_blue,
     cterm_color = "blue",
     name = "quarto"
