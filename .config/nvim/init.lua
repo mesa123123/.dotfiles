@@ -293,6 +293,12 @@ devIcons.set_icon({
     color = palette.neutral_blue,
     cterm_color = "blue",
     name = "quarto"
+  },
+  qmd = {
+    icon = "󰄫",
+    color = palette.neutral_blue,
+    cterm_color = "blue",
+    name = "qmd"
   }
 })
 devIcons.get_icons()
