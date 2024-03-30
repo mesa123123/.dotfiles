@@ -24,7 +24,7 @@ vim.g["mapleader"] = "\\"
 -- Commands for Editing Docs
 ----------
 vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {})
-vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/package_setup.lua", {})
+vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/lua/package_setup.lua", {})
 vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins.lua", {})
 vim.api.nvim_create_user_command("Editleadermaps", "e ~/.config/nvim/lua/leader_mappings.lua", {})
 vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
