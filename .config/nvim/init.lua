@@ -77,12 +77,20 @@ local get_python_path = ufuncs.get_python_path
 gv["do_filetype_lua"] = 1
 gv["did_load_filetypes"] = 0
 ft.add({
-	filename = {
-		["Vagrantfile"] = "ruby",
-		["Jenkinsfile"] = "groovy",
-	},
-	pattern = { [".*req.*.txt"] = "requirements" },
-	extension = { hcl = "ini", draft = "markdown", env = "config", jinja = "jinja", vy = "python", quarto = "quarto", qmd = "quarto" },
+  filename = {
+    ["Vagrantfile"] = "ruby",
+    ["Jenkinsfile"] = "groovy",
+  },
+  pattern = { [".*req.*.txt"] = "requirements" },
+  extension = {
+    hcl = "ini",
+    draft = "markdown",
+    env = "config",
+    jinja = "jinja",
+    vy = "python",
+    quarto = "quarto",
+    qmd = "quarto",
+  },
 })
 ----------
 
@@ -91,15 +99,15 @@ ft.add({
 api.nvim_create_augroup("ShiftAndTabWidth", {})
 -- Autocommand for shifts and tabs
 local function set_shift_and_tab(length, patterns)
-	api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-		pattern = patterns,
-		callback = function()
-			vim.bo.tabstop = length
-			vim.bo.shiftwidth = length
-			vim.bo.expandtab = true
-		end,
-		group = "ShiftAndTabWidth",
-	})
+  api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+    pattern = patterns,
+    callback = function()
+      vim.bo.tabstop = length
+      vim.bo.shiftwidth = length
+      vim.bo.expandtab = true
+    end,
+    group = "ShiftAndTabWidth",
+  })
 end
 -- Set them for various File extensions
 set_shift_and_tab(2, { "*.md", "*.draft", "*.lua" })
@@ -108,23 +116,23 @@ set_shift_and_tab(4, { "*.py" })
 -- Filetype specific autocommands
 api.nvim_create_augroup("FileSpecs", {})
 api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-	callback = function()
-		local buftype = ft.match({ buf = 0 })
-		if buftype == "gitcommit" then
-			vim.bo.EditorConfig_disable = 1
-		end
-		if buftype == "markdown" then
-			vim.wo.spell = true
-			vim.bo.spelllang = "en_gb"
-			vim.keymap.set("i", "<TAB>", "<C-t>", {})
-		end
-		if buftype == "yaml" then
-			vim.wo.spell = true
-			vim.bo.spelllang = "en_gb"
-			vim.keymap.set("i", "<TAB>", "<C-t>", {})
-		end
-	end,
-	group = "FileSpecs",
+  callback = function()
+    local buftype = ft.match({ buf = 0 })
+    if buftype == "gitcommit" then
+      vim.bo.EditorConfig_disable = 1
+    end
+    if buftype == "markdown" then
+      vim.wo.spell = true
+      vim.bo.spelllang = "en_gb"
+      vim.keymap.set("i", "<TAB>", "<C-t>", {})
+    end
+    if buftype == "yaml" then
+      vim.wo.spell = true
+      vim.bo.spelllang = "en_gb"
+      vim.keymap.set("i", "<TAB>", "<C-t>", {})
+    end
+  end,
+  group = "FileSpecs",
 })
 ----------
 
@@ -155,16 +163,16 @@ opt.mouse = ""
 opt.spell = true
 -- toggle spellcheck
 api.nvim_create_user_command("SpellCheckToggle", function()
-	vim.opt.spell = not (vim.opt.spell:get())
+  vim.opt.spell = not (vim.opt.spell:get())
 end, { nargs = 0 })
 -- Settings
 ------------
 gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
 -- Virtual Text Enabled Globally
 diagnostic.config({
-	virtual_text = true,
-	underline = true,
-	signs = true,
+  virtual_text = true,
+  underline = true,
+  signs = true,
 })
 ------------
 
@@ -174,11 +182,11 @@ diagnostic.config({
 api.nvim_create_augroup("onYank", { clear = true })
 -- Highlight on Yank
 api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking text",
-	group = "onYank",
-	callback = function()
-		vim.highlight.on_yank()
-	end,
+  desc = "Highlight when yanking text",
+  group = "onYank",
+  callback = function()
+    vim.highlight.on_yank()
+  end,
 })
 ----------
 
@@ -206,17 +214,31 @@ opt.foldlevelstart = 99
 -- Setup Config for xfce4 desktops to use system keyboard
 ----------
 gv["clipboard"] = {
-	name = "xclip-xfce4-clipman",
-	copy = {
-		["+"] = "xclip -selection clipboard",
-		["*"] = "xclip -selection clipboard",
-	},
-	paste = {
-		["+"] = "xclip -selection clipboard -o",
-		["*"] = "xclip -selection clipboard -o",
-	},
-	cache_enabled = true,
+  name = "xclip-xfce4-clipman",
+  copy = {
+    ["+"] = "xclip -selection clipboard",
+    ["*"] = "xclip -selection clipboard",
+  },
+  paste = {
+    ["+"] = "xclip -selection clipboard -o",
+    ["*"] = "xclip -selection clipboard -o",
+  },
+  cache_enabled = true,
 }
+----------
+
+-----------------------------------------
+-- Leader Remappings, Plugin Commands
+-----------------------------------------
+
+-- Commands
+----------
+api.nvim_create_user_command("Editleaderkeys", "e ~/.config/nvim/lua/leader_mappings.lua", {})
+----------
+
+-- Load Leader Keybinds
+----------
+lm = require("leader_mappings")
 ----------
 
 --------------------------------
@@ -228,18 +250,18 @@ gv["clipboard"] = {
 local gruvbox = require("gruvbox")
 local palette = require("gruvbox").palette
 gruvbox.setup({
-	contrast = "hard",
-	transparent_mode = false,
-	italic = {
-		strings = true,
-		emphasis = true,
-		comments = true,
-		operators = false,
-		folds = true,
-	},
-	overrides = {
-		SignColumn = { bg = palette.dark0_hard },
-	},
+  contrast = "hard",
+  transparent_mode = false,
+  italic = {
+    strings = true,
+    emphasis = true,
+    comments = true,
+    operators = false,
+    folds = true,
+  },
+  overrides = {
+    SignColumn = { bg = palette.dark0_hard },
+  },
 })
 cmd("colorscheme gruvbox")
 ----------
@@ -251,55 +273,55 @@ gv["rainbow_active"] = 1
 ----------
 local devIcons = require("nvim-web-devicons")
 devIcons.setup({
-	default = true,
-	-- CustomFileTypes
-	override_by_filename = {
-		["requirements.txt"] = {
-			icon = "",
-			color = palette.bright_blue,
-			cterm_color = "196",
-			name = "requirements",
-		},
-		["dev-requirements.txt"] = {
-			icon = "",
-			color = palette.bright_blue,
-			cterm_color = "196",
-			name = "requirements",
-		},
-	},
+  default = true,
+  -- CustomFileTypes
+  override_by_filename = {
+    ["requirements.txt"] = {
+      icon = "",
+      color = palette.bright_blue,
+      cterm_color = "196",
+      name = "requirements",
+    },
+    ["dev-requirements.txt"] = {
+      icon = "",
+      color = palette.bright_blue,
+      cterm_color = "196",
+      name = "requirements",
+    },
+  },
 })
 -- Setup Custom Icons
 devIcons.set_icon({
-	htmldjango = {
-		icon = "",
-		color = palette.bright_red,
-		cterm_color = "196",
-		name = "Htmldjango",
-	},
-	jinja = {
-		icon = "",
-		color = palette.bright_red,
-		cterm_color = "196",
-		name = "Jinja",
-	},
-	rst = {
-		icon = "",
-		color = palette.bright_green,
-		cterm_color = "lime green",
-		name = "rst",
-	},
+  htmldjango = {
+    icon = "",
+    color = palette.bright_red,
+    cterm_color = "196",
+    name = "Htmldjango",
+  },
+  jinja = {
+    icon = "",
+    color = palette.bright_red,
+    cterm_color = "196",
+    name = "Jinja",
+  },
+  rst = {
+    icon = "",
+    color = palette.bright_green,
+    cterm_color = "lime green",
+    name = "rst",
+  },
   quarto = {
     icon = "󰄫",
     color = palette.neutral_blue,
     cterm_color = "blue",
-    name = "quarto"
+    name = "quarto",
   },
   qmd = {
     icon = "󰄫",
     color = palette.neutral_blue,
     cterm_color = "blue",
-    name = "qmd"
-  }
+    name = "qmd",
+  },
 })
 devIcons.get_icons()
 ----------
@@ -317,9 +339,9 @@ hl(0, "SignColumn", { bg = palette.dark0_hard })
 hl(0, "LspticsUnderlineError", { bg = palette.dark0_hard, fg = palette.bright_red, underline = true, blend = 50 })
 hl(0, "LspticsUnderlineWarning", { bg = palette.dark0_hard, fg = palette.bright_yellow, underline = true, blend = 50 })
 hl(
-	0,
-	"LspticsUnderlineInformation",
-	{ bg = palette.dark0_hard, fg = palette.bright_blue, underline = true, blend = 50 }
+  0,
+  "LspticsUnderlineInformation",
+  { bg = palette.dark0_hard, fg = palette.bright_blue, underline = true, blend = 50 }
 )
 hl(0, "LspticsUnderlineHint", { bg = palette.dark0_hard, fg = palette.bright_green, underline = true, blend = 50 })
 -- Transparent Sign Column
@@ -335,6 +357,11 @@ hl(0, "NoiceCmdlinePopupBorder", { bg = palette.dark0_hard })
 -- Highlight Colors as their Color
 ----------
 require("colorizer").setup()
+----------
+
+-- Zen Mode
+----------
+nmap(lm.zen, 'lua require("zen-mode").toggle({ window = { width = .85 }})', "Zen Mode Toggle")
 ----------
 
 -----------------------------
@@ -355,23 +382,10 @@ require("startup").setup(dashboard_config)
 --Neodev
 local neodev = require("neodev")
 neodev.setup({
-	library = { plugins = { "neotest" }, types = true },
+  library = { plugins = { "neotest" }, types = true },
 })
 ----------
 
------------------------------------------
--- Leader Remappings, Plugin Commands
------------------------------------------
-
--- Commands
-----------
-api.nvim_create_user_command("Editleaderkeys", "e ~/.config/nvim/lua/leader_mappings.lua", {})
-----------
-
--- Load Leader Keybinds
-----------
-lm = require("leader_mappings")
-----------
 
 -- Register Assist Menus
 ----------
@@ -464,16 +478,16 @@ keymap.set("n", "N", ":set hlsearch<CR>N", keyopts({}))
 keymap.set({ "t", "i", "c", "n" }, lm.resize .. "j", "<c-\\><c-n>:res-5<CR>i", { desc = "Move Partition Down" })
 keymap.set({ "t", "i", "c", "n" }, lm.resize .. "k", "<c-\\><c-n>:res+5<CR>i", { desc = "Move Partition Up" })
 keymap.set(
-	{ "t", "i", "c", "n" },
-	lm.resize .. "h",
-	"<c-\\><c-n>:vertical resize -5<CR>i",
-	{ desc = "Move Partition Left" }
+  { "t", "i", "c", "n" },
+  lm.resize .. "h",
+  "<c-\\><c-n>:vertical resize -5<CR>i",
+  { desc = "Move Partition Left" }
 )
 keymap.set(
-	{ "t", "i", "c", "n" },
-	lm.resize .. "l",
-	"<c-\\><c-n>:vertical resize +5<CR>i",
-	{ desc = "Move Partition Right" }
+  { "t", "i", "c", "n" },
+  lm.resize .. "l",
+  "<c-\\><c-n>:vertical resize +5<CR>i",
+  { desc = "Move Partition Right" }
 )
 ----------
 
@@ -519,54 +533,54 @@ local treesitter = vim.treesitter
 -- Plugin Setup
 ----------
 require("nvim-treesitter.configs").setup({
-	ensure_installed = {
-		"lua",
-		"rust",
-		"toml",
-		"markdown",
-		"markdown_inline",
-		"html",
-		"css",
-		"htmldjango",
-		"rst",
-		"python",
-		"bash",
-		"vim",
-		"go",
-		"csv",
-		"regex",
-		"javascript",
-		"typescript",
-		"requirements",
-		"jsonc",
-		"latex",
-		"http",
-		"git_config",
-		"git_rebase",
-		"gitattributes",
-		"gitcommit",
-		"gitignore",
-	},
-	auto_install = true,
-	highlight = {
-		enable = true,
-		additional_vim_regex_highlighting = { "markdown", "rst" },
-	},
-	ident = { enable = true },
-	rainbow = {
-		enable = true,
-		extended_mode = true,
-		max_file_lines = nil,
-		colors = {},
-	},
-	modules = {},
-	sync_install = true,
-	ignore_install = {},
-	query_linter = {
-		enable = true,
-		use_virtual_text = true,
-		lint_events = { "BufWrite", "CursorHold" },
-	},
+  ensure_installed = {
+    "lua",
+    "rust",
+    "toml",
+    "markdown",
+    "markdown_inline",
+    "html",
+    "css",
+    "htmldjango",
+    "rst",
+    "python",
+    "bash",
+    "vim",
+    "go",
+    "csv",
+    "regex",
+    "javascript",
+    "typescript",
+    "requirements",
+    "jsonc",
+    "latex",
+    "http",
+    "git_config",
+    "git_rebase",
+    "gitattributes",
+    "gitcommit",
+    "gitignore",
+  },
+  auto_install = true,
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = { "markdown", "rst" },
+  },
+  ident = { enable = true },
+  rainbow = {
+    enable = true,
+    extended_mode = true,
+    max_file_lines = nil,
+    colors = {},
+  },
+  modules = {},
+  sync_install = true,
+  ignore_install = {},
+  query_linter = {
+    enable = true,
+    use_virtual_text = true,
+    lint_events = { "BufWrite", "CursorHold" },
+  },
 })
 
 -- Custom Filetypes
@@ -592,11 +606,11 @@ local notify = require("notify")
 -- Configuration
 ----------
 notify.setup({
-	render = "simple",
-	timeout = 200,
-	stages = "fade",
-	minimum_width = 25,
-	top_down = true,
+  render = "simple",
+  timeout = 200,
+  stages = "fade",
+  minimum_width = 25,
+  top_down = true,
 })
 -- Highlighting
 hl(0, "NotifyBackground", { bg = palette.dark0_hard })
@@ -609,51 +623,51 @@ hl(0, "NotifyBackground", { bg = palette.dark0_hard })
 -- Config
 ----------
 require("noice").setup({
-	views = {
-		cmdline_popup = {
-			border = {
-				style = "rounded",
-			},
-			position = {
-				row = 5,
-				col = "50%",
-			},
-			size = {
-				width = 60,
-				height = "auto",
-			},
-		},
-		win_options = {
-			winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
-		},
-	},
-	lsp = {
-		-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-		override = {
-			["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-			["vim.lsp.util.stylize_markdown"] = true,
-			["cmp.entry.get_documentation"] = true,
-		},
-		progress = {
-			enabled = true,
-			view = "mini",
-			throttle = 1000,
-		},
-		"requirements",
-      signature = {
-        enabled = false,
+  views = {
+    cmdline_popup = {
+      border = {
+        style = "rounded",
       },
-      hover = {
-        enabled = false,
-      }
-	},
-	presets = {
-		bottom_search = true, -- use a classic bottom cmdline for search
-		command_palette = true, -- position the cmdline and popupmenu together
-		long_message_to_split = true, -- long messages will be sent to a split
-		inc_rename = false, -- enables an input dialog for inc-rename.nvim
-		lsp_doc_border = false, -- add a border to hover docs and signature help
-	},
+      position = {
+        row = 5,
+        col = "50%",
+      },
+      size = {
+        width = 60,
+        height = "auto",
+      },
+    },
+    win_options = {
+      winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+    },
+  },
+  lsp = {
+    -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+    override = {
+      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+      ["vim.lsp.util.stylize_markdown"] = true,
+      ["cmp.entry.get_documentation"] = true,
+    },
+    progress = {
+      enabled = true,
+      view = "mini",
+      throttle = 1000,
+    },
+    "requirements",
+    signature = {
+      enabled = false,
+    },
+    hover = {
+      enabled = false,
+    },
+  },
+  presets = {
+    bottom_search = true, -- use a classic bottom cmdline for search
+    command_palette = true, -- position the cmdline and popupmenu together
+    long_message_to_split = true, -- long messages will be sent to a split
+    inc_rename = false, -- enables an input dialog for inc-rename.nvim
+    lsp_doc_border = false, -- add a border to hover docs and signature help
+  },
 })
 ----------
 
@@ -685,26 +699,26 @@ require("barbecue").setup()
 -- Get accurate time on panel
 ----------
 function Zonedtime(hours)
-	-- Change time zone here (default seems to be +12 on home workstation)
-	local zone_difference = 11
-	local t = os.time() - (zone_difference * 3600)
-	local d = t + hours * 3600
-	return os.date("%H:%M %Y-%m-%d", d)
+  -- Change time zone here (default seems to be +12 on home workstation)
+  local zone_difference = 11
+  local t = os.time() - (zone_difference * 3600)
+  local d = t + hours * 3600
+  return os.date("%H:%M %Y-%m-%d", d)
 end
 ----------
 
 -- Truncate components on smaller windows
 ------------------
 local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
-	return function(str)
-		local win_width = vim.fn.winwidth(0)
-		if hide_width and win_width < hide_width then
-			return ""
-		elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
-			return str:sub(1, trunc_len) .. (no_ellipsis and "" or "...")
-		end
-		return str
-	end
+  return function(str)
+    local win_width = vim.fn.winwidth(0)
+    if hide_width and win_width < hide_width then
+      return ""
+    elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
+      return str:sub(1, trunc_len) .. (no_ellipsis and "" or "...")
+    end
+    return str
+  end
 end
 ------------------
 
@@ -712,115 +726,115 @@ end
 ------------------
 -- LSP
 local active_lsp = {
-	function()
-		local bufnr = vim.api.nvim_get_current_buf()
-		local lsps = vim.lsp.get_active_clients({ bufnr })
-		if lsps and #lsps > 0 then
-			local names = {}
-			for _, lsp in ipairs(lsps) do
-				table.insert(names, lsp.name)
-			end
-			return string.format(" %s", table.concat(names, ", "))
-		else
-			return ""
-		end
-	end,
-	color = { fg = palette.bright_red },
-	fmt = trunc(120, 3, 90, true),
+  function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local lsps = vim.lsp.get_active_clients({ bufnr })
+    if lsps and #lsps > 0 then
+      local names = {}
+      for _, lsp in ipairs(lsps) do
+        table.insert(names, lsp.name)
+      end
+      return string.format(" %s", table.concat(names, ", "))
+    else
+      return ""
+    end
+  end,
+  color = { fg = palette.bright_red },
+  fmt = trunc(120, 3, 90, true),
 }
 -- Formatter
 local active_formatter = {
-	function()
-		local formatters = require("conform").list_formatters_for_buffer(0)
-		if formatters ~= nil then
-			return string.format(" %s", table.concat(formatters, ", "))
-		else
-			return ""
-		end
-	end,
-	color = { fg = palette.bright_green },
-	fmt = trunc(120, 3, 90, true),
+  function()
+    local formatters = require("conform").list_formatters_for_buffer(0)
+    if formatters ~= nil then
+      return string.format(" %s", table.concat(formatters, ", "))
+    else
+      return ""
+    end
+  end,
+  color = { fg = palette.bright_green },
+  fmt = trunc(120, 3, 90, true),
 }
 -- Linter
 local active_lint = {
-	function()
-		local linters = require("lint").linters_by_ft[vim.bo.filetype][1]
-		if linters ~= nil then
-			return string.format("󰯠 %s", linters)
-		else
-			return ""
-		end
-	end,
-	color = { fg = palette.bright_yellow },
-	fmt = trunc(120, 4, 90, true),
+  function()
+    local linters = require("lint").linters_by_ft[vim.bo.filetype][1]
+    if linters ~= nil then
+      return string.format("󰯠 %s", linters)
+    else
+      return ""
+    end
+  end,
+  color = { fg = palette.bright_yellow },
+  fmt = trunc(120, 4, 90, true),
 }
 -- Debugger
 local debug_status = {
-	function()
-		local status = require("dap").status()
-		if status ~= "" then
-			return string.format("󰃤 %s", status)
-		else
-			return ""
-		end
-	end,
-	color = { fg = palette.dark_red },
-	fmt = trunc(120, 4, 90, true),
+  function()
+    local status = require("dap").status()
+    if status ~= "" then
+      return string.format("󰃤 %s", status)
+    else
+      return ""
+    end
+  end,
+  color = { fg = palette.dark_red },
+  fmt = trunc(120, 4, 90, true),
 }
 ------------------
 
 -- Show if a macro is recording
 ------------------
 local noice_recording = {
-	function()
-		local rec_status = vim.fn.reg_recording()
-		if rec_status ~= "" then
-			return string.format("󰑋 %s", string.sub(rec_status, string.len(rec_status)))
-		else
-			return ""
-		end
-	end,
-	color = { fg = palette.dark0_hard },
+  function()
+    local rec_status = vim.fn.reg_recording()
+    if rec_status ~= "" then
+      return string.format("󰑋 %s", string.sub(rec_status, string.len(rec_status)))
+    else
+      return ""
+    end
+  end,
+  color = { fg = palette.dark0_hard },
 }
 ------------------
 
 -- Config
 ----------
 require("lualine").setup({
-	options = {
-		section_separators = { left = " ", right = " " },
-		component_separators = { left = "", right = "" },
-		theme = "gruvbox-material",
-	},
-	sections = {
-		lualine_a = { {
-			"mode",
-			fmt = function(res)
-				return res:sub(1, 1)
-			end,
-		}, noice_recording },
-		lualine_b = {
-			"branch",
-			{
-				"diff",
-				symbols = { added = "+", modified = "~", removed = "-" },
-				fmt = trunc(120, 10000, 120, true),
-			},
-			{
-				"diagnostics",
-				symbols = { error = "", warn = "", info = "", hint = "" },
-				fmt = trunc(120, 10000, 120, true),
-			},
-		},
-		lualine_c = {
-			{ "filetype", colored = true, icon_only = true, icon = { align = "right" }, fmt = trunc(120, 4, 90, true) },
-			debug_status,
-			{ "overseer", colored = true },
-		},
-		lualine_x = { active_lsp, active_lint, active_formatter },
-		lualine_y = { { "progress", fmt = trunc(120, 10000, 120, true) }, { "location" } },
-		lualine_z = { "Zonedtime(11)" },
-	},
+  options = {
+    section_separators = { left = " ", right = " " },
+    component_separators = { left = "", right = "" },
+    theme = "gruvbox-material",
+  },
+  sections = {
+    lualine_a = { {
+      "mode",
+      fmt = function(res)
+        return res:sub(1, 1)
+      end,
+    }, noice_recording },
+    lualine_b = {
+      "branch",
+      {
+        "diff",
+        symbols = { added = "+", modified = "~", removed = "-" },
+        fmt = trunc(120, 10000, 120, true),
+      },
+      {
+        "diagnostics",
+        symbols = { error = "", warn = "", info = "", hint = "" },
+        fmt = trunc(120, 10000, 120, true),
+      },
+    },
+    lualine_c = {
+      { "filetype", colored = true, icon_only = true, icon = { align = "right" }, fmt = trunc(120, 4, 90, true) },
+      debug_status,
+      { "overseer", colored = true },
+    },
+    lualine_x = { active_lsp, active_lint, active_formatter },
+    lualine_y = { { "progress", fmt = trunc(120, 10000, 120, true) }, { "location" } },
+    lualine_z = { "Zonedtime(11)" },
+  },
 })
 ----------
 
@@ -831,10 +845,10 @@ require("lualine").setup({
 -- Setup
 ----------
 local default_terminal_opts = {
-	persist_mode = true,
-	close_on_exit = true,
-	terminal_mappings = true,
-	hide_numbers = true,
+  persist_mode = true,
+  close_on_exit = true,
+  terminal_mappings = true,
+  hide_numbers = true,
 }
 
 require("toggleterm").setup(default_terminal_opts)
@@ -851,18 +865,18 @@ local Terminal = require("toggleterm.terminal").Terminal
 -- Basic Terminal
 ----------
 local standard_term = Terminal:new({
-	cmd = "/bin/bash",
-	dir = fn.getcwd(),
-	direction = "float",
-	on_open = function()
-		cmd([[ TermExec cmd="source ~/.bashrc &&  clear" ]])
-	end,
-	on_exit = function()
-		cmd([[silent! ! unset HIGHER_TERM_CALLED ]])
-	end,
+  cmd = "/bin/bash",
+  dir = fn.getcwd(),
+  direction = "float",
+  on_open = function()
+    cmd([[ TermExec cmd="source ~/.bashrc &&  clear" ]])
+  end,
+  on_exit = function()
+    cmd([[silent! ! unset HIGHER_TERM_CALLED ]])
+  end,
 })
 function Standard_term_toggle()
-	standard_term:toggle()
+  standard_term:toggle()
 end
 
 ----------
@@ -873,17 +887,17 @@ end
 local docker_tui = "lazydocker"
 -- Setup
 local docker_client = Terminal:new({
-	cmd = docker_tui,
-	dir = fn.getcwd(),
-	hidden = true,
-	direction = "float",
-	float_opts = {
-		border = "double",
-	},
+  cmd = docker_tui,
+  dir = fn.getcwd(),
+  hidden = true,
+  direction = "float",
+  float_opts = {
+    border = "double",
+  },
 })
 -- toggle function
 function Docker_term_toggle()
-	docker_client:toggle()
+  docker_client:toggle()
 end
 
 ----------
@@ -894,18 +908,18 @@ end
 local gitui = "gitui"
 -- Setup
 local gitui_client = Terminal:new({
-	cmd = gitui,
-	dir = fn.getcwd(),
-	hidden = true,
-	direction = "float",
-	float_opts = {
-		border = "double",
-	},
+  cmd = gitui,
+  dir = fn.getcwd(),
+  hidden = true,
+  direction = "float",
+  float_opts = {
+    border = "double",
+  },
 })
 
 -- toggle function
 function Gitui_term_toggle()
-	gitui_client:toggle()
+  gitui_client:toggle()
 end
 
 ----------
@@ -916,16 +930,16 @@ end
 keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true, desc = "Quit Terminal Instance" })
 keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true, desc = "Change to N mode" })
 keymap.set(
-	"t",
-	"vim",
-	"say \"You're already in vim! You're a dumb ass!\"",
-	{ noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
+  "t",
+  "vim",
+  "say \"You're already in vim! You're a dumb ass!\"",
+  { noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
 )
 keymap.set(
-	"t",
-	"editvim",
-	'say "You\'re already in vim! This is why no one loves you!"',
-	{ noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
+  "t",
+  "editvim",
+  'say "You\'re already in vim! This is why no one loves you!"',
+  { noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
 )
 -- Standard Term Toggle
 nmap(lm.terminal .. "t", "lua Standard_term_toggle()", "Toggle Terminal")
@@ -960,36 +974,36 @@ local fb_actions = require("telescope._extensions.file_browser.actions")
 -- Config
 ----------
 local file_browser_configs = {
-	hijack_netrw = true,
-	initial_mode = "insert",
-	git_status = true,
-	respect_gitignore = false,
-	-- Internal Mappings
-	----------
-	mappings = {
-		-- Normal Mode
-		["n"] = {
-			["<C-n>"] = tele_actions.close,
-			["<A-c>"] = fb_actions.change_cwd,
-			["h"] = fb_actions.goto_parent_dir,
-			["l"] = require("telescope.actions.set").select,
-			["c"] = fb_actions.goto_cwd,
-			["<C-a>"] = fb_actions.create,
-			["<A-h>"] = fb_actions.toggle_hidden,
-		},
-		-- Insert Mode
-		["i"] = {
-			["<C-n>"] = tele_actions.close,
-			["<A-c>"] = fb_actions.change_cwd,
-			["<C-h>"] = fb_actions.goto_parent_dir,
-			["<C-l>"] = require("telescope.actions.set").select,
-			["<C-j>"] = tele_actions.move_selection_next,
-			["<C-k>"] = tele_actions.move_selection_previous,
-			["<C-c>"] = fb_actions.goto_cwd,
-			["<A-h>"] = fb_actions.toggle_hidden,
-			["<C-a>"] = fb_actions.create,
-		},
-	},
+  hijack_netrw = true,
+  initial_mode = "insert",
+  git_status = true,
+  respect_gitignore = false,
+  -- Internal Mappings
+  ----------
+  mappings = {
+    -- Normal Mode
+    ["n"] = {
+      ["<C-n>"] = tele_actions.close,
+      ["<A-c>"] = fb_actions.change_cwd,
+      ["h"] = fb_actions.goto_parent_dir,
+      ["l"] = require("telescope.actions.set").select,
+      ["c"] = fb_actions.goto_cwd,
+      ["<C-a>"] = fb_actions.create,
+      ["<A-h>"] = fb_actions.toggle_hidden,
+    },
+    -- Insert Mode
+    ["i"] = {
+      ["<C-n>"] = tele_actions.close,
+      ["<A-c>"] = fb_actions.change_cwd,
+      ["<C-h>"] = fb_actions.goto_parent_dir,
+      ["<C-l>"] = require("telescope.actions.set").select,
+      ["<C-j>"] = tele_actions.move_selection_next,
+      ["<C-k>"] = tele_actions.move_selection_previous,
+      ["<C-c>"] = fb_actions.goto_cwd,
+      ["<A-h>"] = fb_actions.toggle_hidden,
+      ["<C-a>"] = fb_actions.create,
+    },
+  },
 }
 ----------
 
@@ -1014,29 +1028,29 @@ local ui_select_configs = {}
 -- Config
 ----------
 require("todo-comments").setup({
-	keywords = {
-		LOOKUP = { icon = "󱛉", color = "lookup" },
-		TODO = { icon = "󰟃", color = "todo" },
-		BUG = { icon = "󱗜", color = "JiraBug" },
-		TASK = { icon = "", color = "JiraTask" },
-	},
-	colors = {
-		lookup = { "#8800bb" },
-		todo = { "#3080b0" },
-		JiraBug = { "#e5493a" },
-		JiraTask = { "#4bade8" },
-	},
+  keywords = {
+    LOOKUP = { icon = "󱛉", color = "lookup" },
+    TODO = { icon = "󰟃", color = "todo" },
+    BUG = { icon = "󱗜", color = "JiraBug" },
+    TASK = { icon = "", color = "JiraTask" },
+  },
+  colors = {
+    lookup = { "#8800bb" },
+    todo = { "#3080b0" },
+    JiraBug = { "#e5493a" },
+    JiraTask = { "#4bade8" },
+  },
 })
 ----------
 
 -- Mappings
 ----------
 keymap.set("n", "]t", function()
-	require("todo-comments").jump_next()
+  require("todo-comments").jump_next()
 end, keyopts({ desc = "Next todo comment" }))
 
 keymap.set("n", "[t", function()
-	require("todo-comments").jump_prev()
+  require("todo-comments").jump_prev()
 end, keyopts({ desc = "Previous todo comment" }))
 
 nmap(lm.todo, "TodoTelescope", "List Todos")
@@ -1077,26 +1091,26 @@ local telescope = require("telescope")
 -- Setup
 ----------
 telescope.setup({
-	pickers = {
-		buffers = {
-			mappings = {
-				-- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
-				i = {
-					["<a-d>"] = tele_actions.delete_buffer,
-					["<c-k>"] = tele_actions.move_selection_previous,
-					["<c-j>"] = tele_actions.move_selection_next,
-					["<C-J>"] = tele_actions.preview_scrolling_down,
-					["<C-K>"] = tele_actions.preview_scrolling_up,
-					["<C-L>"] = tele_actions.preview_scrolling_right,
-					["<C-H>"] = tele_actions.preview_scrolling_left,
-				},
-			},
-		},
-	},
-	extensions = {
-		file_browser = file_browser_configs,
-		ui_select = ui_select_configs,
-	},
+  pickers = {
+    buffers = {
+      mappings = {
+        -- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
+        i = {
+          ["<a-d>"] = tele_actions.delete_buffer,
+          ["<c-k>"] = tele_actions.move_selection_previous,
+          ["<c-j>"] = tele_actions.move_selection_next,
+          ["<C-J>"] = tele_actions.preview_scrolling_down,
+          ["<C-K>"] = tele_actions.preview_scrolling_up,
+          ["<C-L>"] = tele_actions.preview_scrolling_right,
+          ["<C-H>"] = tele_actions.preview_scrolling_left,
+        },
+      },
+    },
+  },
+  extensions = {
+    file_browser = file_browser_configs,
+    ui_select = ui_select_configs,
+  },
 })
 
 -- Extension setup (must Go last)
@@ -1123,19 +1137,19 @@ keymap.set("n", "<leader>vc", ":Git commit -m ", { silent = true, desc = "Make a
 ----------
 -- Commits
 keymap.set(
-	"n",
-	"<leader>vfc",
-	"<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
-	{ silent = true, desc = "Git Commits" }
+  "n",
+  "<leader>vfc",
+  "<cmd>Telescope git_commits theme=dropdown theme=dropdown<cr>",
+  { silent = true, desc = "Git Commits" }
 )
 -- Status
 keymap.set("n", "<leader>vfs", "<cmd>Telescope git_status theme=dropdown<cr>", { silent = true, desc = "Git Status" })
 -- Branches
 keymap.set(
-	"n",
-	"<leader>vfb",
-	"<cmd>Telescope git_branches theme=dropdown<cr>",
-	{ silent = true, desc = "Git Branches" }
+  "n",
+  "<leader>vfb",
+  "<cmd>Telescope git_branches theme=dropdown<cr>",
+  { silent = true, desc = "Git Branches" }
 )
 -- Git Files
 keymap.set("n", "<leader>vff", "<cmd>Telescope git_files theme=dropdown<cr>", { silent = true, desc = "Git Files" })
@@ -1157,38 +1171,38 @@ local obsidian = require("obsidian")
 -- Functions
 ----------
 local make_note_id = function(title)
-	local suffix = ""
-	if title ~= nil then
-		suffix = title:gsub(" ", "-")
-	else
-		suffix = tostring(os.time())
-	end
-	return suffix
+  local suffix = ""
+  if title ~= nil then
+    suffix = title:gsub(" ", "-")
+  else
+    suffix = tostring(os.time())
+  end
+  return suffix
 end
 
 local make_note_frontmatter = function(note)
-	note:add_tag("TODO")
-	local out = { id = note.id, aliases = note.aliases, tags = note.tags }
-	if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
-		for k, v in pairs(note.metadata) do
-			out[k] = v
-		end
-	end
-	return out
+  note:add_tag("TODO")
+  local out = { id = note.id, aliases = note.aliases, tags = note.tags }
+  if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
+    for k, v in pairs(note.metadata) do
+      out[k] = v
+    end
+  end
+  return out
 end
 
 -- Setup
 ----------
 obsidian.setup({
-	dir = "~/Learning",
-	templates = {
-		subdir = "templates",
-		date_format = "%Y-%m-%d-%a",
-		time_format = "%H:%M",
-	},
-	mappings = {},
-	note_id_func = make_note_id,
-	note_frontmatter_func = make_note_frontmatter,
+  dir = "~/Learning",
+  templates = {
+    subdir = "templates",
+    date_format = "%Y-%m-%d-%a",
+    time_format = "%H:%M",
+  },
+  mappings = {},
+  note_id_func = make_note_id,
+  note_frontmatter_func = make_note_frontmatter,
 })
 ----------
 
@@ -1216,10 +1230,10 @@ keymap.set("v", lm.wiki_linkOpts .. "a", "<cmd>ObsidianLink<cr>", { silent = tru
 -- Setup (Currently not supported in Lua)
 
 api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-	pattern = { "*.tex" },
-	callback = function()
-		vim.g["vimtext_view_method"] = "zathura"
-	end,
+  pattern = { "*.tex" },
+  callback = function()
+    vim.g["vimtext_view_method"] = "zathura"
+  end,
 })
 ---------------------------------
 -- Code Align
@@ -1258,23 +1272,23 @@ nmap(lm.database .. "l", "DBUILastQueryInfo<CR>", "Run Last Query")
 -- Mappings
 ----------
 api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-	callback = function()
-		if vim.bo.filetype == "tex" then
-			vim.keymap.set(
-				"n",
-				require("leader_mappings").exec .. "x",
-				"<cmd>VimtexCompile<CR>",
-				{ silent = true, noremap = false, desc = "Compile Doc" }
-			)
-		else
-			vim.keymap.set(
-				"n",
-				require("leader_mappings").exec .. "x",
-				"<cmd>CompilerOpen<CR>",
-				{ silent = true, noremap = false, desc = "Run Code" }
-			)
-		end
-	end,
+  callback = function()
+    if vim.bo.filetype == "tex" then
+      vim.keymap.set(
+        "n",
+        require("leader_mappings").exec .. "x",
+        "<cmd>VimtexCompile<CR>",
+        { silent = true, noremap = false, desc = "Compile Doc" }
+      )
+    else
+      vim.keymap.set(
+        "n",
+        require("leader_mappings").exec .. "x",
+        "<cmd>CompilerOpen<CR>",
+        { silent = true, noremap = false, desc = "Run Code" }
+      )
+    end
+  end,
 })
 nmap(lm.exec .. "q", "CompilerStop", "Stop Code Runner")
 nmap(lm.exec .. "i", "CompilerToggleResults", "Show Code Run")
@@ -1300,26 +1314,26 @@ nmap(lm.exec_http .. "x", "RestNvim", "Re-Run Last Http Command")
 ----------
 -- Neotest
 require("neotest").setup({
-	adapters = {
-		require("neotest-python")({
-			dap = { justMyCode = false },
-			runner = "pytest",
-			python = get_python_path(),
-			pytest_discover_instances = true,
-		}),
-		-- Currently broken
-		-- {
-		-- 	require("neotest-rust")({
-		-- 		args = { "--no-capture" },
-		-- 		dap_adapter = "lldb",
-		-- 	}),
-		-- },
-	},
-	status = {
-		enabled = true,
-		virtual_text = true,
-		signs = false,
-	},
+  adapters = {
+    require("neotest-python")({
+      dap = { justMyCode = false },
+      runner = "pytest",
+      python = get_python_path(),
+      pytest_discover_instances = true,
+    }),
+    -- Currently broken
+    -- {
+    -- 	require("neotest-rust")({
+    -- 		args = { "--no-capture" },
+    -- 		dap_adapter = "lldb",
+    -- 	}),
+    -- },
+  },
+  status = {
+    enabled = true,
+    virtual_text = true,
+    signs = false,
+  },
 })
 ----------
 
@@ -1334,9 +1348,9 @@ nmap(lm.exec_test .. "w", "lua require('neotest').watch.toggle(vim.fn.expand('%'
 nmap(lm.exec_test .. "c", "lua require('neotest').run.run()", "Run Nearest Test")
 nmap(lm.exec_test .. "r", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
 nmap(
-	lm.exec_test .. "b",
-	"lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
-	"Debug Closest Test"
+  lm.exec_test .. "b",
+  "lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
+  "Debug Closest Test"
 )
 ----------
 
@@ -1344,24 +1358,24 @@ nmap(
 -- Code Coverage
 ---------------------------------"
 require("coverage").setup({
-	commands = true, -- create commands
-	highlights = {
-		-- customize highlight groups created by the plugin
-		covered = { fg = palette.bright_green }, -- supports style, fg, bg, sp (see :h highlight-gui)
-		uncovered = { fg = palette.bright_red },
-	},
-	signs = {
-		-- use your own highlight groups or text markers
-		covered = { hl = "CoverageCovered", text = "▎" },
-		uncovered = { hl = "CoverageUncovered", text = "▎" },
-	},
-	summary = {
-		-- customize the summary pop-up
-		min_coverage = 80.0, -- minimum coverage threshold (used for highlighting)
-	},
-	lang = {
-		-- customize language specific settings
-	},
+  commands = true, -- create commands
+  highlights = {
+    -- customize highlight groups created by the plugin
+    covered = { fg = palette.bright_green }, -- supports style, fg, bg, sp (see :h highlight-gui)
+    uncovered = { fg = palette.bright_red },
+  },
+  signs = {
+    -- use your own highlight groups or text markers
+    covered = { hl = "CoverageCovered", text = "▎" },
+    uncovered = { hl = "CoverageUncovered", text = "▎" },
+  },
+  summary = {
+    -- customize the summary pop-up
+    min_coverage = 80.0, -- minimum coverage threshold (used for highlighting)
+  },
+  lang = {
+    -- customize language specific settings
+  },
 })
 
 -- Mappings

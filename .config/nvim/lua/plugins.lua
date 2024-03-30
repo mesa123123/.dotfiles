@@ -182,6 +182,8 @@ M.list = {
   "luochen1990/rainbow",
   -- Highlights Hex Colors as their color
   "norcalli/nvim-colorizer.lua",
+  -- Zen Mode
+  "folke/zen-mode.nvim",
   -- Rainbow csv hl
   {
     "cameron-wags/rainbow_csv.nvim",

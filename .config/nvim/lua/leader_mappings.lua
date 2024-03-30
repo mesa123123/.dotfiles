@@ -150,6 +150,8 @@ M.todo = l("m", "Todos")
 M.selfTest = l("e", "Self-Testing ([E]xaminations)")
 -- Document Creation And Templating
 M.docCreation = l("l", "Document Formatting & Creation")
+-- Zen Mode
+M.zen = l("z", "Zen Mode Toggle")
 ----------
 
 --------------------------------
@@ -202,6 +204,7 @@ M.assistDesc = {
 			t = { name = "[T]esting", c = { name = "[C]overage" } },
 		},
 		y = { name = "System Copy ([y]ank)" },
+    z = { name = "[z]en mode" }
 	},
 }
 --------------------------------
