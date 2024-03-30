@@ -386,7 +386,6 @@ neodev.setup({
 })
 ----------
 
-
 -- Register Assist Menus
 ----------
 local whichKey = require("which-key")
@@ -455,6 +454,7 @@ nlmap(lm.quit_all .. "a", "qa", "Quit Nvim")
 nlmap(lm.quit_all .. "!", "<cmd>qa!<cr>", "Quit Nvim Without Writing")
 nlmap(lm.quit_buffer .. "b", "bd", "Close Buffer w/o Pane")
 nlmap(lm.quit_buffer .. "!", "bd", "Close Buffer w/o Pane")
+-- TODO: Get a close buffer w/o pane/tab function
 -- System Copy Set to Mappings
 keymap.set({ "n", "v" }, lm.yank .. "v", '"+y', keyopts({ desc = "System Copy" }))
 keymap.set({ "n", "v" }, lm.yank .. "y", '"+yy', keyopts({ desc = "System Copy: Line" }))
@@ -807,12 +807,15 @@ require("lualine").setup({
     theme = "gruvbox-material",
   },
   sections = {
-    lualine_a = { {
-      "mode",
-      fmt = function(res)
-        return res:sub(1, 1)
-      end,
-    }, noice_recording },
+    lualine_a = {
+      {
+        "mode",
+        fmt = function(res)
+          return res:sub(1, 1)
+        end,
+      },
+      noice_recording,
+    },
     lualine_b = {
       "branch",
       {
@@ -1009,7 +1012,7 @@ local file_browser_configs = {
 
 -- Mappings
 ----------
-nmap(lm.ftree, "Telescope file_browser theme=dropdown", "Toggle File Browser")
+nmap(lm.file .. "e", "Telescope file_browser theme=dropdown", "Toggle [F]ile [E]xplorer")
 ----------
 
 -----------------------------
@@ -1320,8 +1323,9 @@ require("neotest").setup({
       runner = "pytest",
       python = get_python_path(),
       pytest_discover_instances = true,
+      args = {"-vv"}
     }),
-    -- Currently broken
+    -- TODO: Currently broken unbreak
     -- {
     -- 	require("neotest-rust")({
     -- 		args = { "--no-capture" },
