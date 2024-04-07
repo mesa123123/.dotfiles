@@ -113,7 +113,7 @@ alias media_last='spotify playback previous'
 
 # NordVpn Commands
 # --------
-alias norduk="nordvpn connect United_Kingdom London"
+alias norduk="nordvpn connect United_Kingdom Glasgow"
 # --------
 
 # Terminal Flavours
