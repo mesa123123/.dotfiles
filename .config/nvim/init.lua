@@ -32,6 +32,7 @@ vim.api.nvim_create_user_command("Editcolors", "e ~/.config/nvim/lua/colors.lua"
 vim.api.nvim_create_user_command("Edittheme", "e ~/.config/nvim/lua/theme.lua", {})
 vim.api.nvim_create_user_command("Editnotebooks", "e ~/.config/nvim/lua/notebooks.lua", {})
 vim.api.nvim_create_user_command("Editoptions", "e ~/.config/nvim/lua/options.lua", {})
+vim.api.nvim_create_user_command("Editcmp", "e ~/.config/nvim/lua/lsp/cmp_setup.lua", {})
 vim.api.nvim_create_user_command("Editdashboard", "e ~/.config/nvim/lua/dashboard.lua", {})
 vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {})
 ----------
@@ -57,7 +58,7 @@ local gv = vim.g
 ----------
 -- Modules
 local ufuncs = require("personal_utils")
-palette = require("colors").palette
+local palette = require("colors").palette
 local theme = require("theme")
 lm = require("leader_mappings")
 -- Scripts
