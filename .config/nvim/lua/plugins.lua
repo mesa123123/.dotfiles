@@ -176,8 +176,6 @@ M.list = {
   ------------
   -- DevIcons
   "nvim-tree/nvim-web-devicons",
-  -- Theme
-  "ellisonleao/gruvbox.nvim",
   -- Brackets Rainbowing
   "luochen1990/rainbow",
   -- Highlights Hex Colors as their color

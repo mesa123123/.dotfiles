@@ -761,7 +761,7 @@ nullls.setup(lsp_opts({ debug = true, sources = { sources = nullSources } }))
 -- Helper Funcs
 ----------
 local python_path = get_python_path()
-local palette = require("gruvbox").palette
+local palette = require("colors")
 
 -- Colors and Themes
 ----------

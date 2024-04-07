@@ -13,7 +13,7 @@ local hl = vim.api.nvim_set_hl
 
 -- Requires
 ----------
-local palette = require("gruvbox").palette
+local palette = require("colors")
 ----------
 
 -- Define Highlight

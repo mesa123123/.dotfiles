@@ -28,7 +28,10 @@ vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/lua/packa
 vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins.lua", {})
 vim.api.nvim_create_user_command("Editleadermaps", "e ~/.config/nvim/lua/leader_mappings.lua", {})
 vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
+vim.api.nvim_create_user_command("Editcolors", "e ~/.config/nvim/lua/colors.lua", {})
+vim.api.nvim_create_user_command("Edittheme", "e ~/.config/nvim/lua/theme.lua", {})
 vim.api.nvim_create_user_command("Editnotebooks", "e ~/.config/nvim/lua/notebooks.lua", {})
+vim.api.nvim_create_user_command("Editoptions", "e ~/.config/nvim/lua/options.lua", {})
 vim.api.nvim_create_user_command("Editdashboard", "e ~/.config/nvim/lua/dashboard.lua", {})
 vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {})
 ----------
@@ -54,10 +57,15 @@ local gv = vim.g
 ----------
 -- Modules
 local ufuncs = require("personal_utils")
+palette = require("colors").palette
+local theme = require("theme")
+lm = require("leader_mappings")
 -- Scripts
 require("package_setup")
 require("notebooks")
 require("lsp")
+require("options")
+
 ----------
 
 -- Extra Vars
@@ -137,60 +145,6 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 ----------
 
 --------------------------------
--- Editor Options, Settings, Commands
---------------------------------
-
--- Options
-----------
--- Line Numbers On
-opt.number = true
--- Other Encoding and Formatting settings
-opt.linebreak = true
-opt.autoindent = true
-opt.encoding = "UTF-8"
-opt.showmode = false
-opt.splitbelow = true
-opt.signcolumn = "yes"
--- Default Tabstop & Shiftwidth
-opt.tabstop = 4
-opt.shiftwidth = 4
-opt.expandtab = true
--- Conceal Level
-opt.conceallevel = 1
--- Mouse off
-opt.mouse = ""
--- Spell Check On
-opt.spell = true
--- toggle spellcheck
-api.nvim_create_user_command("SpellCheckToggle", function()
-  vim.opt.spell = not (vim.opt.spell:get())
-end, { nargs = 0 })
--- Settings
-------------
-gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
--- Virtual Text Enabled Globally
-diagnostic.config({
-  virtual_text = true,
-  underline = true,
-  signs = true,
-})
-------------
-
--- AutoCmds
-----------
--- Create Group
-api.nvim_create_augroup("onYank", { clear = true })
--- Highlight on Yank
-api.nvim_create_autocmd("TextYankPost", {
-  desc = "Highlight when yanking text",
-  group = "onYank",
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-})
-----------
-
---------------------------------
 -- Code Folding - pretty-fold.nvim
 --------------------------------
 
@@ -227,43 +181,13 @@ gv["clipboard"] = {
 }
 ----------
 
------------------------------------------
--- Leader Remappings, Plugin Commands
------------------------------------------
-
--- Commands
-----------
-api.nvim_create_user_command("Editleaderkeys", "e ~/.config/nvim/lua/leader_mappings.lua", {})
-----------
-
--- Load Leader Keybinds
-----------
-lm = require("leader_mappings")
-----------
-
 --------------------------------
 -- Color Schemes and Themes
 --------------------------------
 
 -- Set & Customize Colour Scheme
 ----------
-local gruvbox = require("gruvbox")
-local palette = require("gruvbox").palette
-gruvbox.setup({
-  contrast = "hard",
-  transparent_mode = false,
-  italic = {
-    strings = true,
-    emphasis = true,
-    comments = true,
-    operators = false,
-    folds = true,
-  },
-  overrides = {
-    SignColumn = { bg = palette.dark0_hard },
-  },
-})
-cmd("colorscheme gruvbox")
+cmd("colorscheme theme")
 ----------
 
 -- Rainbow Brackets Options
@@ -611,6 +535,7 @@ notify.setup({
   stages = "fade",
   minimum_width = 25,
   top_down = true,
+  background_color = palette.dark0_hard
 })
 -- Highlighting
 hl(0, "NotifyBackground", { bg = palette.dark0_hard })
@@ -804,7 +729,7 @@ require("lualine").setup({
   options = {
     section_separators = { left = " ", right = " " },
     component_separators = { left = "", right = "" },
-    theme = "gruvbox-material",
+    theme = "theme",
   },
   sections = {
     lualine_a = {
@@ -1323,7 +1248,7 @@ require("neotest").setup({
       runner = "pytest",
       python = get_python_path(),
       pytest_discover_instances = true,
-      args = {"-vv"}
+      args = { "-vv" },
     }),
     -- TODO: Currently broken unbreak
     -- {
