@@ -66,7 +66,7 @@ M.keyopts = function(opts)
   end
   return opts
 end
-
+-- Loud
 M.loudkeyopts = function(opts)
   local standardOpts = { silent = false, noremap = true }
   for k, v in pairs(standardOpts) do
@@ -74,11 +74,30 @@ M.loudkeyopts = function(opts)
   end
   return opts
 end
+----------
+
+-- LSP Opts
+----------
+M.lsp_opts = function(opts)
+  local standardOpts = {
+    flags = {
+      allow_incremental_sync = true,
+      debounce_text_changes = 150,
+    },
+  }
+  for k, v in pairs(standardOpts) do
+    opts[k] = v
+  end
+  return opts
+end
+----------
+
 -- Abstraction for the vast majority of my keymappings
+----------
 M.norm_keyset = function(key, command, wkdesc)
   keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = true, desc = wkdesc })
 end
--- Abstraction for the vast majority of my keymappings, loud version
+-- Loud Version
 M.norm_loudkeyset = function(key, command, wkdesc)
   keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = false, noremap = true, desc = wkdesc })
 end
@@ -228,6 +247,21 @@ M.ensure_install = function(type, packages)
   else
     print("Type of package not specified, doing nothing")
   end
+end
+----------
+
+-- Set Shift and Tab Width
+----------
+local function set_shift_and_tab(length, patterns)
+  api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+    pattern = patterns,
+    callback = function()
+      vim.bo.tabstop = length
+      vim.bo.shiftwidth = length
+      vim.bo.expandtab = true
+    end,
+    group = "ShiftAndTabWidth",
+  })
 end
 ----------
 

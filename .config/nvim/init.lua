@@ -27,7 +27,7 @@ vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {})
 vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/lua/package_setup.lua", {})
 vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins.lua", {})
 vim.api.nvim_create_user_command("Editleadermaps", "e ~/.config/nvim/lua/leader_mappings.lua", {})
-vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp.lua", {})
+vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp/init.lua", {})
 vim.api.nvim_create_user_command("Editcolors", "e ~/.config/nvim/lua/colors.lua", {})
 vim.api.nvim_create_user_command("Edittheme", "e ~/.config/nvim/lua/theme.lua", {})
 vim.api.nvim_create_user_command("Editnotebooks", "e ~/.config/nvim/lua/notebooks.lua", {})
@@ -255,29 +255,6 @@ devIcons.get_icons()
 opt.laststatus = 2
 ----------
 
--- Highlighting
----------
--- SignColumn Transparency
-hl(0, "SignColumn", { bg = palette.dark0_hard })
--- Lsp Underline
-hl(0, "LspticsUnderlineError", { bg = palette.dark0_hard, fg = palette.bright_red, underline = true, blend = 50 })
-hl(0, "LspticsUnderlineWarning", { bg = palette.dark0_hard, fg = palette.bright_yellow, underline = true, blend = 50 })
-hl(
-  0,
-  "LspticsUnderlineInformation",
-  { bg = palette.dark0_hard, fg = palette.bright_blue, underline = true, blend = 50 }
-)
-hl(0, "LspticsUnderlineHint", { bg = palette.dark0_hard, fg = palette.bright_green, underline = true, blend = 50 })
--- Transparent Sign Column
-hl(0, "DiagnosticSignOk", { fg = palette.bright_green, bg = palette.dark0_hard })
-hl(0, "DiagnosticSignInfo", { fg = palette.bright_blue, bg = palette.dark0_hard })
-hl(0, "DiagnosticSignWarn", { fg = palette.bright_yellow, bg = palette.dark0_hard })
-hl(0, "DiagnosticSignError", { fg = palette.bright_blue, bg = palette.dark0_hard })
--- CmdLine Borders Etc.
-hl(0, "NoiceCmdlinePopup", { fg = palette.neutral_blue, bg = palette.dark0_hard })
-hl(0, "NoiceCmdlinePopupBorder", { bg = palette.dark0_hard })
-----------
-
 -- Highlight Colors as their Color
 ----------
 require("colorizer").setup()
@@ -324,14 +301,6 @@ nmap(lm.assist, "WhichKey", "Editor Mapping Assistance")
 ----------------------------------
 -- Editor Mappings
 ----------------------------------
-
--- Autocorrect Mappings
-----------
--- Create Edit Command
-api.nvim_create_user_command("Editautocorrect", "e ~/.config/nvim/lua/autocorrect.lua", {})
--- Load File
-require("autocorrect")
-----------
 
 -- Writing Mappings
 ----------
@@ -729,7 +698,7 @@ require("lualine").setup({
   options = {
     section_separators = { left = " ", right = " " },
     component_separators = { left = "", right = "" },
-    theme = "theme",
+    theme = theme.line_theme
   },
   sections = {
     lualine_a = {
@@ -1178,6 +1147,8 @@ keymap.set("n", lm.codeAction_alignment, "<Plug>(EasyAlign)<CR>", { desc = "Easy
 ---------------------------------"
 -- Database Commands - DadBod
 ---------------------------------"
+-- TODO: Put this config into the sql settings file
+
 
 -- Options
 ---------
