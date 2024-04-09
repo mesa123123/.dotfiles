@@ -2,14 +2,19 @@ node_modules/
 *.log
 .config/
 .config/nvim/lua/lsp_servers
-!.config/coc/extensions/package.json
 !.config/powerline/
 !.config/inkscape/
 !.config/kitty/
 !.config/xfce4/xfconf/*
 !.config/xfce4/panel/*
 # Nvim Config
-!.config/nvim/
-!.config/nvim/lua/
-!.config/nvim/lua
+!.config/nvim/*
+!.config/nvim/colors/*
+!.config/nvim/after/*
+!.config/nvim/queries/*
+!.config/nvim/spell/*
+!.config/nvim/lua/lsp/*
+!.config/nvim/lua/ft/*
+!.conig/nvim/lua/core/*
+!.config/nvim/lua/plugins/*
 .config/nvim/lua/lsp_servers
