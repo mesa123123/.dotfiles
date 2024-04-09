@@ -17,6 +17,32 @@ vim.g["config_path"] = "~/.config/nvim"
 -- Set the mapleader
 vim.g["mapleader"] = "\\"
 
+
+--------------------------------
+-- Add Config Modules to RTPath
+--------------------------------
+
+-- Core Settings
+----------
+local corepath = vim.fn.stdpath("config") .. "/lua/core"
+package.path = package.path .. ';' .. corepath .. '/init.lua'
+package.path = package.path .. ';' .. corepath .. '/?.lua'
+----------
+
+-- FT Settings
+----------
+local ftpath = vim.fn.stdpath("config") .. "/lua/ft"
+package.path = package.path .. ';' .. ftpath .. '/init.lua'
+package.path = package.path .. ';' .. ftpath .. '/?.lua'
+----------
+
+-- Plugins Path
+----------
+local plugin_path = vim.fn.stdpath("data") .. "/lazy"
+local lazypath = plugin_path .. "/lazy.nvim"
+vim.opt.rtp:prepend(lazypath)
+----------
+
 --------------------------------
 -- Configure Doc Commands
 --------------------------------
@@ -57,16 +83,15 @@ local gv = vim.g
 -- Requires
 ----------
 -- Modules
-local ufuncs = require("personal_utils")
-local palette = require("colors").palette
-local theme = require("theme")
-lm = require("leader_mappings")
+local core = require("core")
+local ufuncs = core.utils
+local palette = core.colors.palette
+local theme = core.theme
+local options = core.options
+lm = core.leadermaps
 -- Scripts
-require("package_setup")
-require("notebooks")
-require("lsp")
-require("options")
-require("line")
+require("lazy")
+-- require("lsp")
 ----------
 
 -- Extra Vars
@@ -78,72 +103,23 @@ local get_python_path = ufuncs.get_python_path
 ----------
 
 -------------------------------
--- Filetype Settings
+-- General Settings
 -------------------------------
 
--- Custom Filetypes
+-- Set Core Options
 ----------
-gv["do_filetype_lua"] = 1
-gv["did_load_filetypes"] = 0
-ft.add({
-  filename = {
-    ["Vagrantfile"] = "ruby",
-    ["Jenkinsfile"] = "groovy",
-  },
-  pattern = { [".*req.*.txt"] = "requirements" },
-  extension = {
-    hcl = "ini",
-    draft = "markdown",
-    env = "config",
-    jinja = "jinja",
-    vy = "python",
-    quarto = "quarto",
-    qmd = "quarto",
-  },
-})
+options.setup()
 ----------
 
--- Tabs and Shiftwidth
-----------
-api.nvim_create_augroup("ShiftAndTabWidth", {})
--- Autocommand for shifts and tabs
-local function set_shift_and_tab(length, patterns)
-  api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-    pattern = patterns,
-    callback = function()
-      vim.bo.tabstop = length
-      vim.bo.shiftwidth = length
-      vim.bo.expandtab = true
-    end,
-    group = "ShiftAndTabWidth",
-  })
-end
--- Set them for various File extensions
-set_shift_and_tab(2, { "*.md", "*.draft", "*.lua" })
-set_shift_and_tab(4, { "*.py" })
+--------------------------------
+-- Color Schemes and Themes
+--------------------------------
 
--- Filetype specific autocommands
-api.nvim_create_augroup("FileSpecs", {})
-api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-  callback = function()
-    local buftype = ft.match({ buf = 0 })
-    if buftype == "gitcommit" then
-      vim.bo.EditorConfig_disable = 1
-    end
-    if buftype == "markdown" then
-      vim.wo.spell = true
-      vim.bo.spelllang = "en_gb"
-      vim.keymap.set("i", "<TAB>", "<C-t>", {})
-    end
-    if buftype == "yaml" then
-      vim.wo.spell = true
-      vim.bo.spelllang = "en_gb"
-      vim.keymap.set("i", "<TAB>", "<C-t>", {})
-    end
-  end,
-  group = "FileSpecs",
-})
+-- Set & Customize Colour Scheme
 ----------
+cmd("colorscheme theme")
+----------
+
 
 --------------------------------
 -- Code Folding - pretty-fold.nvim
@@ -152,14 +128,6 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 -- Theming Pretty Fold
 ----------
 require("pretty-fold").setup({})
-----------
-
--- Default Folding Options
-----------
-opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-opt.foldtext = "v:lua.vim.treesitter.foldtext()"
-opt.foldlevelstart = 99
 ----------
 
 --------------------------------
@@ -185,11 +153,6 @@ gv["clipboard"] = {
 --------------------------------
 -- Color Schemes and Themes
 --------------------------------
-
--- Set & Customize Colour Scheme
-----------
-cmd("colorscheme theme")
-----------
 
 -- Rainbow Brackets Options
 ----------
