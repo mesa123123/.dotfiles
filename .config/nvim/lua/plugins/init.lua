@@ -102,21 +102,6 @@ return {
 --  ----------
   { "folke/todo-comments.nvim", dependencies = { "nvim-lua/plenary.nvim" }, event = "VeryLazy" },
   { "numToStr/Comment.nvim", lazy = false },
---  -- Testing Plugins
---  --------
---  {
---    "nvim-neotest/neotest",
---    dependencies = {
---      "nvim-neotest/nvim-nio", -- Currently broken on my config....
---      "nvim-lua/plenary.nvim",
---      "antoinemadec/FixCursorHold.nvim",
---      "nvim-treesitter/nvim-treesitter",
---      "nvim-neotest/neotest-python",
---      -- "rouge8/neotest-rust",
---      "andythigpen/nvim-coverage",
---    },
---    event = "VeryLazy",
---  },
 --  -- Database Workbench,
 --  -----------
 --  { "tpope/vim-dadbod", event = "VeryLazy", dependencies = "kristijanhusak/vim-dadbod-ui" },

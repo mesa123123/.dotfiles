@@ -88,7 +88,7 @@ local theme = core.theme
 local palette = theme.palette
 local options = core.options
 km = core.keymaps
-lk = km.leaderkeys
+lk = km.lk
 -- Scripts
 require("package_setup")
 -- require("lsp")
@@ -116,21 +116,16 @@ options.setup()
 cmd("colorscheme theme")
 ----------
 
+-- Setup Keymaps
+----------
+km.setup()
+----------
+
 -- Zen Mode
 ----------
 nmap(lk.zen.key, 'lua require("zen-mode").toggle({ window = { width = .85 }})', "Zen Mode Toggle")
 ----------
 
--- Register Keymaps
-----------
-local whichKey = require("which-key")
-whichKey.register(lk.assistDesc.key)
----------
-
--- Mappings
----------------
-nmap(lk.assist.key, "WhichKey", "Editor Mapping Assistance")
----------------
 
 ----------------------------------
 -- Editor Mappings
@@ -346,70 +341,6 @@ keymap.set("n", "<leader>vff", "<cmd>Telescope git_files theme=dropdown<cr>", { 
 ---------
 
 ---------------------------------
--- Wiki Functionality: <leader>k - Obsidian.nvim
----------------------------------
-
--- Variables
-----------
-local obsidian = require("obsidian")
-----------
-
--- Functions
-----------
-local make_note_id = function(title)
-  local suffix = ""
-  if title ~= nil then
-    suffix = title:gsub(" ", "-")
-  else
-    suffix = tostring(os.time())
-  end
-  return suffix
-end
-
-local make_note_frontmatter = function(note)
-  note:add_tag("TODO")
-  local out = { id = note.id, aliases = note.aliases, tags = note.tags }
-  if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
-    for k, v in pairs(note.metadata) do
-      out[k] = v
-    end
-  end
-  return out
-end
-
--- Setup
-----------
-obsidian.setup({
-  dir = "~/Learning",
-  templates = {
-    subdir = "templates",
-    date_format = "%Y-%m-%d-%a",
-    time_format = "%H:%M",
-  },
-  mappings = {},
-  note_id_func = make_note_id,
-  note_frontmatter_func = make_note_frontmatter,
-})
-----------
-
--- Mappings
-----------
--- Normal Mode
-nmap(lk.wiki .. "b", "ObsidianBacklinks", "Get References To Current")
-nmap(lk.wiki .. "t", "ObsidianToday", "Open (New) Daily Note")
-nmap(lk.wiki .. "y", "ObsidianYesterday", "Create New Daily Note For Yesterday")
-nmap(lk.wiki .. "o", "ObsidianOpen", "Open in Obisidian App")
-nmap(lk.wiki .. "s", "ObsidianSearch", "Search Vault Notes")
-nmap(lk.wiki .. "q", "ObsidianQuickSwitch", "Note Quick Switch")
-nmap(lk.wiki_linkOpts .. "l", "ObsidianFollowLink", "Go To Link Under Cursor")
-nmap(lk.wiki_linkOpts .. "t", "ObsidianTemplate", "Insert Template Into Link")
-keymap.set("n", lk.wiki_createPage .. "n", ":ObsidianNew ", { silent = false, desc = "Create New Note" })
--- Visual Mode
-keymap.set("v", lk.wiki_createPage .. "l", ":ObsidianLinkNew ", { silent = false, desc = "Created New Linked Note" })
-keymap.set("v", lk.wiki_linkOpts .. "a", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Link Note To Selection" })
------------
-
----------------------------------
 -- Latex Functionality: <leader>l - Vimtex
 ---------------------------------
 -- TODO: Put into latex settings file
@@ -431,9 +362,9 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 -- Mappings
 ----------
 -- Start interactive EasyAlign in visual mode (e.g. vipga)
-keymap.set("x", lk.codeAction_alignment, "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
+keymap.set("x", lk.codeAction_alignment.key, "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 -- Start interactive EasyAlign for a motion/text object (e.g. gaip)
-keymap.set("n", lk.codeAction_alignment, "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
+keymap.set("n", lk.codeAction_alignment.key, "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
 ----------
 
 ---------------------------------"
@@ -450,10 +381,10 @@ gv["dd_ui_use_nerd_fonts"] = 1
 
 -- Mappings
 ---------
-nmap(lk.database .. "u", "DBUIToggle<CR>", "Toggle DB UI")
-nmap(lk.database .. "f", "DBUIFindBuffer<CR>", "Find DB Buffer")
-nmap(lk.database .. "r", "DBUIRenameBuffer<CR>", "Rename DB Buffer")
-nmap(lk.database .. "l", "DBUILastQueryInfo<CR>", "Run Last Query")
+nmap(lk.database.key .. "u", "DBUIToggle<CR>", "Toggle DB UI")
+nmap(lk.database.key .. "f", "DBUIFindBuffer<CR>", "Find DB Buffer")
+nmap(lk.database.key .. "r", "DBUIRenameBuffer<CR>", "Rename DB Buffer")
+nmap(lk.database.key .. "l", "DBUILastQueryInfo<CR>", "Run Last Query")
 ---------
 
 ---------------------------------"
@@ -464,87 +395,37 @@ nmap(lk.database .. "l", "DBUILastQueryInfo<CR>", "Run Last Query")
 ----------
 api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   callback = function()
+    leader_key = require('core.keymaps').lk.exec.key
     if vim.bo.filetype == "tex" then
       vim.keymap.set(
         "n",
-        require("core.leadermaps").exec .. "x",
+        leader_key .. "x",
         "<cmd>VimtexCompile<CR>",
         { silent = true, noremap = false, desc = "Compile Doc" }
       )
     else
       vim.keymap.set(
         "n",
-        require("core.leadermaps").exec .. "x",
+        leader_key .. "x",
         "<cmd>CompilerOpen<CR>",
         { silent = true, noremap = false, desc = "Run Code" }
       )
     end
   end,
 })
-nmap(lk.exec .. "q", "CompilerStop", "Stop Code Runner")
-nmap(lk.exec .. "i", "CompilerToggleResults", "Show Code Run")
-nmap(lk.exec .. "r", "CompilerStop<cr>" .. "<cmd>CompilerRedo", "Re-Run Code")
+nmap(lk.exec.key .. "q", "CompilerStop", "Stop Code Runner")
+nmap(lk.exec.key .. "i", "CompilerToggleResults", "Show Code Run")
+nmap(lk.exec.key .. "r", "CompilerStop<cr>" .. "<cmd>CompilerRedo", "Re-Run Code")
 ----------
 
 ---------------------------------"
 -- Http Execution - rest.nvim
 ---------------------------------"
 
-nmap(lk.exec_http .. "x", "RestNvim", "Run Http Under Cursor")
-nmap(lk.exec_http .. "p", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
-nmap(lk.exec_http .. "x", "RestNvim", "Re-Run Last Http Command")
+nmap(lk.exec_http.key .. "x", "RestNvim", "Run Http Under Cursor")
+nmap(lk.exec_http.key .. "p", "RestNvimPreview", "Preview Curl Command From Http Under Cursor")
+nmap(lk.exec_http.key .. "x", "RestNvim", "Re-Run Last Http Command")
 
----------------------------------"
--- Code Testing - neotest
----------------------------------"
-
--- Setup Test Runners
-----------
-
--- Setup
-----------
--- Neotest
-require("neotest").setup({
-  adapters = {
-    require("neotest-python")({
-      dap = { justMyCode = false },
-      runner = "pytest",
-      python = get_python_path(),
-      pytest_discover_instances = true,
-      args = { "-vv" },
-    }),
-    -- TODO: Currently broken unbreak
-    -- {
-    -- 	require("neotest-rust")({
-    -- 		args = { "--no-capture" },
-    -- 		dap_adapter = "lldb",
-    -- 	}),
-    -- },
-  },
-  status = {
-    enabled = true,
-    virtual_text = true,
-    signs = false,
-  },
-})
-----------
-
--- Mappings
-----------
--- Mappings
-nmap(lk.exec_test .. "x", "lua require('neotest').run.run(vim.fn.expand('%'))", "Test Current Buffer")
-nmap(lk.exec_test .. "o", "lua require('neotest').output.open({ enter = true, auto_close = true })", "Test Output")
-nmap(lk.exec_test .. "s", "lua require('neotest').summary.toggle()", "Test Output (All Tests)")
-nmap(lk.exec_test .. "q", "lua require('neotest').run.stop()", "Quit Test Run")
-nmap(lk.exec_test .. "w", "lua require('neotest').watch.toggle(vim.fn.expand('%'))", "Toggle Test Refreshing")
-nmap(lk.exec_test .. "c", "lua require('neotest').run.run()", "Run Nearest Test")
-nmap(lk.exec_test .. "r", "lua require('neotest').run.run_last()", "Repeat Last Test Run")
-nmap(
-  lk.exec_test .. "b",
-  "lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
-  "Debug Closest Test"
-)
-----------
 
 ---------------------------------"
 -- Code Coverage
@@ -572,20 +453,20 @@ require("coverage").setup({
 
 -- Mappings
 ----------
-nmap(lk.exec_test_coverage .. "r", "Coverage", "Run Coverage Report")
-nmap(lk.exec_test_coverage .. "s", "CoverageSummary", "Show Coverage Report")
-nmap(lk.exec_test_coverage .. "t", "CoverageToggle", "Toggle Coverage Signs")
+nmap(lk.exec_test_coverage.key .. "r", "Coverage", "Run Coverage Report")
+nmap(lk.exec_test_coverage.key .. "s", "CoverageSummary", "Show Coverage Report")
+nmap(lk.exec_test_coverage.key .. "t", "CoverageToggle", "Toggle Coverage Signs")
 ----------
 
---------------------------------
--- Workspace Specific Configs
---------------------------------
-
--- Allow WorkSpace Specific Init
--- if filereadable("./ws_init.lua")
---     luafile ./ws_init.lua
--- endif
-
---------------------------------
--- EOF
--------------------------------
+----------------------------------
+---- Workspace Specific Configs
+----------------------------------
+--
+---- Allow WorkSpace Specific Init
+---- if filereadable("./ws_init.lua")
+----     luafile ./ws_init.lua
+---- endif
+--
+----------------------------------
+---- EOF
+---------------------------------

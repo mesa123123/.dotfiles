@@ -36,6 +36,7 @@ local system = vim.fn.system
 -- Silent Mappings
 M.bufopts = function(opts)
   local standardOpts = { noremap = true, silent = true, buffer = 0 }
+  local opts = opts or {}
   for k, v in pairs(standardOpts) do
     opts[k] = v
   end
@@ -44,6 +45,7 @@ end
 -- Non silent Mappings
 M.loudbufopts = function(opts)
   local standardOpts = { noremap = true, silent = false, buffer = 0 }
+  local opts = opts or {}
   for k, v in pairs(standardOpts) do
     opts[k] = v
   end
@@ -55,6 +57,7 @@ end
 ----------
 M.keyopts = function(opts)
   local standardOpts = { silent = true, noremap = true }
+  local opts = opts or {}
   for k, v in pairs(standardOpts) do
     opts[k] = v
   end
@@ -63,6 +66,7 @@ end
 -- Loud
 M.loudkeyopts = function(opts)
   local standardOpts = { silent = false, noremap = true }
+  local opts = opts or {}
   for k, v in pairs(standardOpts) do
     opts[k] = v
   end
