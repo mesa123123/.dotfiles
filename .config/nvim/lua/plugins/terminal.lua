@@ -7,6 +7,7 @@ return  { "akinsho/toggleterm.nvim", version = "*", config = function()
         local lk = require('core.keymaps').lk
         local nmap = require('core.utils').norm_keyset
         local fn = vim.fn
+        local cmd = vim.cmd
         local keymap = vim.keymap
         -- Setup
         ----------

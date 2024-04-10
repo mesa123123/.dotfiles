@@ -165,12 +165,12 @@ local cmp_formatting = {
 -- Setups
 --------------------------------
 
--- General
+-- Pick your sources
 ----------
-local general = function()
+local load = function(sources)
   return cmp.setup({
     enabled = { general_enabled },
-    sources = general_sources,
+    sources = sources,
     completion = { completeopt = "menu,menuone,noinsert,noselect", keyword_length = 1 },
     snippet = {
       expand = function(args)
@@ -198,6 +198,12 @@ local general = function()
     },
   })
 end
+----------
+
+-- A General Cmp Source
+----------
+local general = load(general_sources)
+----------
 
 -- Setup - Text Search '/'
 ----------
@@ -251,6 +257,7 @@ end
 -- Table
 local M = {
   general = general,
+  load = load,
   ft = {
     gitcommit = git_commit,
     cmdline = cmdline,

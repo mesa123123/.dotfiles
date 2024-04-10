@@ -124,14 +124,15 @@ end
 
 -- Get keys from a table
 ----------
-local get_table_keys = function(t1)
-    if t1 == nil
+M.get_table_keys = function(t1)
+    if t1 == nil then
         return {}
+    end
     keyarr = {}
     local n = 0
     for k, v in pairs(t1) do
      n = n+1
-     keyarrr[n] = k
+     keyarr[n] = k
     end 
     return keyarr
 end
@@ -139,14 +140,15 @@ end
 
 -- Get values from a table
 ----------
-local get_table_values = function(t1)
-    if t1 == nil
+M.get_table_values = function(t1)
+    if t1 == nil then
         return {}
+    end
     keyarr = {}
     local n = 0
     for k, v in pairs(t1) do
      n = n+1
-     keyarrr[n] = v
+     keyarr[n] = v
     end 
     return keyarr
 end
@@ -225,7 +227,7 @@ end
 
 -- Set Shift and Tab Width
 ----------
-local function set_shift_and_tab(length, patterns)
+M.set_shift_and_tab = function(length, patterns)
   api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     pattern = patterns,
     callback = function()
@@ -235,6 +237,23 @@ local function set_shift_and_tab(length, patterns)
     end,
     group = "ShiftAndTabWidth",
   })
+end
+----------
+
+-- Register Meta Function
+----------
+M.meta_load = function(func_content)
+    local func, err = load("return " .. func_content)
+    if func then
+        local ok, out_func = pcall(func)
+        if ok then
+            return out_func
+        else
+            print("Execution Error:", out_func)
+        end
+    else
+        print("Compilation Error:", err)
+    end
 end
 ----------
 

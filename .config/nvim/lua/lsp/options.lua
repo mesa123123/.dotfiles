@@ -63,7 +63,6 @@ local keymaps = function(client)
   nmap("g=", "lua vim.lsp.buf.code_action()", "LSP: Take Code Action")
   nmap("gi", "lua vim.lsp.buf.hover()", "LSP: Function & Library Info")
   nmap("gL", "lua ShortenLine()", "LSP: Shorten Line")
-  nmap("gf", "lua require("conform").format({ async = true, lsp_fallback = true }); vim.print(\"Formatted\")", "LSP: Format Code")
   nmap("[g", "lua vim.diagnostic.goto_prev()", "LSP: Previous Flag")
   nmap("]g", "lua vim.diagnostic.goto_next()", "LSP: Next Flag")
   nmap("[G", "lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})", "LSP: Next Error")
@@ -79,6 +78,7 @@ local keymaps = function(client)
   nmap(lm.codeAction .. "t", lreq .. "('telescope.builtin').lsp_type_definitions()", "LSP: Go To Type Definition")
   nmap(lm.codeAction .. "p", lreq .. "('telescope.builtin').diagnostics()", "Show all Diagnostics")
   nmap(lm.codeAction .. "=", "lua vim.diagnostic.setqflist", "Quick Fix List")
+  nmap(lm.codeAction .. "f", "lua require('conform').format({ async = true, lsp_fallback = true }); vim.print(\"Formatted\")", "LSP: Format Code")
   nmap(lm.codeAction_symbols .. "w", lreq .. "('telescope.builtin').lsp_workspace_symbols()", "Show Workspace Symbols")
   nmap(lm.codeAction_symbols .. "d", lreq .. "('telescope.builtin').lsp_document_symbols()", "Show Document Symbols")
 
@@ -105,6 +105,7 @@ local on_attach = function(client, bufnr)
   -- Format Timeout
   lsp.buf.format({ timeout = 10000 }) -- Format Timeout
 end
+----------
 
 --------------------------------
 -- Lsp Std Opts

@@ -73,7 +73,9 @@ M.lk = {
   debug_python = M.l("bP", "Python Options"),
   codeAction = M.l("c", "Code & Diagnostic Actions"),
   codeAction_symbols = M.l("cs", "Language Server Symbol Options"),
-  codeAction_injectedLanguage = M.l("cl", "Injected Language Options"),
+  codeAction_injectedLanguage = M.l("cL", "Injected Language Options"),
+  codeAction_format = M.l("cf", "LSP: Format Code"),
+  codeAction_lint = M.l("cl", "LSP: Lint Code"),
   codeAction_alignment = M.l("ce", "Code Alignment"),
   snippet = M.l("s", "Snippets"),
   ------------
@@ -142,6 +144,11 @@ M.setup = function()
  	keymap.set("n", lk.resize.key  .. "k" , ":res+5<CR>", keyopts({ desc =  "Move Partition Up"}))
  	keymap.set("n", lk.resize.key  .. "h" , ":vertical resize -5<CR>", keyopts({ desc = "Move Partition Left"}))
  	keymap.set("n", lk.resize.key  .. "l" , ":vertical resize +5<CR>", keyopts({ desc = "Move Partition Right"}))
+ 	keymap.set("n", lk.paste.key, '"+p', keyopts({ desc =  "System Paste" }))
+ 	keymap.set("n", lk.yank.key .. "v",  '"+y', keyopts({ desc = "System Copy" }))
+ 	keymap.set("n", lk.yank.key .. "y", '"+yy', keyopts({ desc = "System Copy: Line" }))
+    keymap.set("n", lk.yank.key .. "G",  '"+yG', keyopts({ desc = "System Copy: Rest of File" }))
+    keymap.set("n", lk.yank.key .. "%",  '"+y%', keyopts({ desc = "System Copy: Whole of File" }))
     nmap(lk.file.key .. "l", "bnext", "NextBuff")
     nmap(lk.file.key .. "h", "bprev", "PrevBuff")
     nmap(lk.write.key ..  "w", "w", "Write")
@@ -157,11 +164,6 @@ M.setup = function()
  	nmap(lk.quit_buffer.key .. "!","bd", "Close Buffer w/o Pane")
     nmap(lk.quit_all.key .. "a", "qa", "Quit Nvim")
     nmap(lk.quit_all.key .. "!", "qa!", "Quit Nvim Without Writing")
- 	nmap(lk.yank.key .. "v",  '"+y', "System Copy" )
- 	nmap(lk.yank.key .. "y", '"+yy', "System Copy: Line" )
-    nmap(lk.yank.key .. "G",  '"+yG', "System Copy: Rest of File" )
-    nmap(lk.yank.key .. "%",  '"+y%', "System Copy: Whole of File" )
- 	nmap(lk.paste.key, '"+p',  "System Paste" )
   	nmap(lk.tab.key  .. "H" , ":tabfirst", "Tab First" )
   	nmap(lk.tab.key  .. "L" , ":tablast", "Tab Last" )
   	nmap(lk.tab.key  .. "l" , ":tabn", "Tab Next" )

@@ -9,49 +9,49 @@ return {
 --  },
 --  -- Autocompletion & Snips
 --  ----------
---  {
---    "hrsh7th/nvim-cmp",
---    dependencies = {
---      -- Sources
---      "hrsh7th/cmp-nvim-lsp",
---      "hrsh7th/cmp-path",
---      "hrsh7th/cmp-buffer",
---      "hrsh7th/cmp-nvim-lsp-document-symbol",
---      "hrsh7th/cmp-nvim-lua",
---      "hrsh7th/cmp-cmdline",
---      "ray-x/cmp-treesitter",
---      "SergioRibera/cmp-dotenv",
---      "dmitmel/cmp-cmdline-history",
---      "yochem/cmp-htmx",
---      "saadparwaiz1/cmp_luasnip",
---      "f3fora/cmp-spell",
---      "jmbuhr/otter.nvim",
---      -- Dependencies
---      "L3MON4D3/LuaSnip",
---      "rafamadriz/friendly-snippets",
---      "rcarriga/nvim-notify",
---    },
---  },
+    {
+      "hrsh7th/nvim-cmp",
+      dependencies = {
+        -- Sources
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-nvim-lsp-document-symbol",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-cmdline",
+        "ray-x/cmp-treesitter",
+        "SergioRibera/cmp-dotenv",
+        "dmitmel/cmp-cmdline-history",
+        "yochem/cmp-htmx",
+        "saadparwaiz1/cmp_luasnip",
+        "f3fora/cmp-spell",
+        "jmbuhr/otter.nvim",
+        -- Dependencies
+        "L3MON4D3/LuaSnip",
+        "rafamadriz/friendly-snippets",
+        "rcarriga/nvim-notify",
+      },
+    },
 --  -- Language Server Protocol
 --  ----------
---  {
---    "neovim/nvim-lspconfig",
---    dependencies = {
---      "williamboman/mason-lspconfig.nvim",
---      "williamboman/mason.nvim",
---      "ray-x/lsp_signature.nvim",
---      "hrsh7th/nvim-cmp",
---      "L3MON4D3/LuaSnip",
---      "WhoIsSethDaniel/mason-tool-installer.nvim",
---    },
---  },
+   {
+     "neovim/nvim-lspconfig",
+     dependencies = {
+       "williamboman/mason-lspconfig.nvim",
+       "williamboman/mason.nvim",
+       "ray-x/lsp_signature.nvim",
+       "hrsh7th/nvim-cmp",
+       "L3MON4D3/LuaSnip",
+       "WhoIsSethDaniel/mason-tool-installer.nvim",
+     },
+   },
 --  { "jose-elias-alvarez/null-ls.nvim", branch = "main" },
 --  -- Linting Plugins
 --  ----------
---  { "mfussenegger/nvim-lint", event = "VeryLazy" },
+   { "mfussenegger/nvim-lint", event = "VeryLazy" },
 --  -- Formatting
 --  ----------
---  { "stevearc/conform.nvim", event = "VeryLazy" },
+   { "stevearc/conform.nvim", event = "VeryLazy" },
 --  -- Inejected Languages
 --  ----------
 --  "jmbuhr/otter.nvim",
