@@ -56,7 +56,7 @@ end
 -- Keyopts
 ----------
 M.keyopts = function(opts)
-  local standardOpts = { silent = true, noremap = true }
+  local standardOpts = { silent = true, noremap = false }
   local opts = opts or {}
   for k, v in pairs(standardOpts) do
     opts[k] = v
@@ -65,7 +65,7 @@ M.keyopts = function(opts)
 end
 -- Loud
 M.loudkeyopts = function(opts)
-  local standardOpts = { silent = false, noremap = true }
+  local standardOpts = { silent = false, noremap = false }
   local opts = opts or {}
   for k, v in pairs(standardOpts) do
     opts[k] = v
@@ -77,13 +77,14 @@ end
 -- Abstraction for the vast majority of my keymappings
 ----------
 M.norm_keyset = function(key, command, wkdesc)
-  keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = true, desc = wkdesc })
+  keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = false, desc = wkdesc })
 end
 -- Loud Version
 M.norm_loudkeyset = function(key, command, wkdesc)
-  keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = false, noremap = true, desc = wkdesc })
+  keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = false, noremap = false, desc = wkdesc })
 end
 ----------
+
 
 -- Map(function, table)
 ----------
