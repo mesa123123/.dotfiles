@@ -31,8 +31,6 @@ local M = {}
 --------------------------------
 
 M.setup = function()
-    -- Term Gui Col True
-    opt.termguicolors = true
     -- Line Numbers On
     opt.relativenumber = true
     opt.number = true

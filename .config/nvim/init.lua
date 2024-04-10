@@ -16,7 +16,8 @@
 vim.g["config_path"] = "~/.config/nvim"
 -- Set the mapleader
 vim.g["mapleader"] = "\\"
-
+-- TermGuiColors
+vim.opt.termguicolors = true
 
 --------------------------------
 -- Add Config Modules to RTPath
@@ -49,16 +50,10 @@ vim.opt.rtp:prepend(lazypath)
 ----------
 vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {})
 vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/lua/package_setup.lua", {})
-vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins.lua", {})
-vim.api.nvim_create_user_command("Editutils", "e ~/.config/nvim/lua/core/utils.lua", {})
-vim.api.nvim_create_user_command("Editleadermaps", "e ~/.config/nvim/lua/leader_mappings.lua", {})
-vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp/init.lua", {})
-vim.api.nvim_create_user_command("Editcolors", "e ~/.config/nvim/lua/colors.lua", {})
-vim.api.nvim_create_user_command("Edittheme", "e ~/.config/nvim/lua/theme.lua", {})
-vim.api.nvim_create_user_command("Editnotebooks", "e ~/.config/nvim/lua/notebooks.lua", {})
-vim.api.nvim_create_user_command("Editoptions", "e ~/.config/nvim/lua/core/options/lua", {})
-vim.api.nvim_create_user_command("Editcmp", "e ~/.config/nvim/lua/lsp/cmp_setup.lua", {})
-vim.api.nvim_create_user_command("Editdashboard", "e ~/.config/nvim/lua/dashboard.lua", {})
+vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins/", {})
+vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp/", {})
+vim.api.nvim_create_user_command("Editcore", "e ~/.config/nvim/lua/core/", {})
+vim.api.nvim_create_user_command("Editft", "e ~/.config/nvim/lua/ft/", {})
 vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {})
 ----------
 
@@ -83,12 +78,13 @@ local gv = vim.g
 ----------
 -- Modules
 local core = require("core")
+local options = core.options
 local ufuncs = core.utils
 local theme = core.theme
 local palette = theme.palette
-local options = core.options
-km = core.keymaps
-lk = km.lk
+local dashboard_config = core.dashboard_config
+local km = core.keymaps
+local lk = km.lk
 -- Scripts
 require("package_setup")
 -- require("lsp")
@@ -111,14 +107,19 @@ local get_python_path = ufuncs.get_python_path
 options.setup()
 ----------
 
--- Set & Customize Colour Scheme
-----------
-cmd("colorscheme theme")
-----------
-
 -- Setup Keymaps
 ----------
 km.setup()
+----------
+
+-- Greeting Screen
+----------
+require("startup").setup(dashboard_config)
+----------
+
+-- Set & Customize Colour Scheme
+----------
+cmd("colorscheme theme")
 ----------
 
 -- Zen Mode
@@ -126,81 +127,6 @@ km.setup()
 nmap(lk.zen.key, 'lua require("zen-mode").toggle({ window = { width = .85 }})', "Zen Mode Toggle")
 ----------
 
-
-----------------------------------
--- Editor Mappings
-----------------------------------
----------------------------------
--- Functions Handled by Telescope
----------------------------------
--- Projects
--- File Tree
--- Buffer Management
--- Buffer Diff
-
--- Telescope Variables
-----------
-local tele_actions = require("telescope.actions")
-----------
-
------------------------------
--- Filetree: <c-n> - telescope-file-browser
------------------------------
-
--- Functions
-----------
-local fb_actions = require("telescope._extensions.file_browser.actions")
-----------
-
--- Config
-----------
-local file_browser_configs = {
-  hijack_netrw = true,
-  initial_mode = "insert",
-  git_status = true,
-  respect_gitignore = false,
-  -- Internal Mappings
-  ----------
-  mappings = {
-    -- Normal Mode
-    ["n"] = {
-      ["<C-n>"] = tele_actions.close,
-      ["<A-c>"] = fb_actions.change_cwd,
-      ["h"] = fb_actions.goto_parent_dir,
-      ["l"] = require("telescope.actions.set").select,
-      ["c"] = fb_actions.goto_cwd,
-      ["<C-a>"] = fb_actions.create,
-      ["<A-h>"] = fb_actions.toggle_hidden,
-    },
-    -- Insert Mode
-    ["i"] = {
-      ["<C-n>"] = tele_actions.close,
-      ["<A-c>"] = fb_actions.change_cwd,
-      ["<C-h>"] = fb_actions.goto_parent_dir,
-      ["<C-l>"] = require("telescope.actions.set").select,
-      ["<C-j>"] = tele_actions.move_selection_next,
-      ["<C-k>"] = tele_actions.move_selection_previous,
-      ["<C-c>"] = fb_actions.goto_cwd,
-      ["<A-h>"] = fb_actions.toggle_hidden,
-      ["<C-a>"] = fb_actions.create,
-    },
-  },
-}
-----------
-
--- Mappings
-----------
-nmap(lk.file.key .. "e", "Telescope file_browser theme=dropdown", "Toggle [F]ile [E]xplorer")
-----------
-
------------------------------
--- Ui-Select Management: - Ui Improvements, not mapped to a keybinding
------------------------------
-
--- Config
-----------
-local ui_select_configs = {}
-----------
 
 -----------------------------
 -- Todo Highlighting: - <leader>m - TodoComments
@@ -236,73 +162,6 @@ end, keyopts({ desc = "Previous todo comment" }))
 
 nmap(lk.todo.key, "TodoTelescope", "List Todos")
 ----------
-
----------------------------------
--- Buffer Management: <leader>f  - Telescope Core
----------------------------------
-
--- Mappings
-----------
-nmap(lk.file.key .. "b", "Telescope buffers theme=dropdown", "Show Buffers")
-nmap("<C-b>s", "Telescope buffers theme=dropdown", "Show Buffers")
-nmap(lk.file.key .. "c", "Telescope colorscheme theme=dropdown", "Themes")
-nmap(lk.file.key  .. "d", "Telescope diagnostics", "Diagnostics")
-nmap(lk.file.key .. "f", "Telescope find_files theme=dropdown", "Find Files")
-nmap(lk.file.key .. "g", "Telescope live_grep theme=dropdown", "Live Grep")
-nmap(lk.file.key .. "H", "Telescope help_tags theme=dropdown", "Help Tags")
-nmap(lk.file.key .. "i", "Telescope import theme=dropdown", "Imports")
-nmap(lk.file.key .. "j", "Telescope jumplist theme=dropdown<CR>", "Jumplist")
-nmap(lk.file.key .. "k", "Telescope keymaps theme=dropdown", "Keymaps")
-nmap(lk.file.key .. "m", "Telescope man_pages theme=dropdown", "Man Pages")
-nmap(lk.file.key .. "n", "Telescope notify", "Notifications")
-nmap(lk.file.key .. "o", "Telescope vim_options theme=dropdown<CR>", "Vim Options")
-nmap(lk.file.key .. "r", "Telescope registers theme=dropdown", "Registers")
-nmap(lk.file.key .. "s", "Telescope treesitter theme=dropdown", "Treesitter Insights")
-nmap(lk.file.key .. "t", "Telescope builtin theme=dropdown", "Telescope Commands")
-----------
-
----------------------------------
--- Telescope Setup
----------------------------------
-
--- Local var
-----------
-local telescope = require("telescope")
-
--- Setup
-----------
-telescope.setup({
-  pickers = {
-    buffers = {
-      mappings = {
-        -- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
-        i = {
-          ["<a-d>"] = tele_actions.delete_buffer,
-          ["<c-k>"] = tele_actions.move_selection_previous,
-          ["<c-j>"] = tele_actions.move_selection_next,
-          ["<C-J>"] = tele_actions.preview_scrolling_down,
-          ["<C-K>"] = tele_actions.preview_scrolling_up,
-          ["<C-L>"] = tele_actions.preview_scrolling_right,
-          ["<C-H>"] = tele_actions.preview_scrolling_left,
-        },
-      },
-    },
-  },
-  extensions = {
-    file_browser = file_browser_configs,
-    ui_select = ui_select_configs,
-  },
-})
-
--- Extension setup (must Go last)
-telescope.load_extension("file_browser")
-telescope.load_extension("import")
-telescope.load_extension("ui-select")
-----------
-
----------
--- End of Telescope Setup
----------
 
 ---------------------------------
 -- Version Control Functionality: <leader>v - fugitive & Telescope
@@ -355,23 +214,9 @@ api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 })
 ----------
 
----------------------------------
--- Code Align
----------------------------------
-
--- Mappings
-----------
--- Start interactive EasyAlign in visual mode (e.g. vipga)
-keymap.set("x", lk.codeAction_alignment.key, "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
--- Start interactive EasyAlign for a motion/text object (e.g. gaip)
-keymap.set("n", lk.codeAction_alignment.key, "<Plug>(EasyAlign)<CR>", { desc = "Easy Align" })
-----------
-
 ---------------------------------"
 -- Database Commands - DadBod
 ---------------------------------"
--- TODO: Put this config into the sql settings file
-
 
 -- Options
 ---------

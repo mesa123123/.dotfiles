@@ -143,7 +143,7 @@ return {
          config = function()
             require('colorizer').setup()
          end
-    }
+    },
 --  -- Zen Mode
 --  "folke/zen-mode.nvim",
 --  -- Rainbow csv hl
@@ -168,12 +168,12 @@ return {
 --  },
 --  -- LSP Icons
 --  { "onsails/lspkind.nvim", event = "VeryLazy" },
---  -- Dashboard
---  {
---    "startup-nvim/startup.nvim",
---    event = "VimEnter",
---    dependencies = { "nvim-tree/nvim-web-devicons", "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
---  },
+    -- Dashboard
+    {
+      "startup-nvim/startup.nvim",
+      event = "VimEnter",
+      dependencies = { "nvim-tree/nvim-web-devicons", "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+    },
 --  -- Folding
 --  ----------
 --   { 
@@ -187,31 +187,14 @@ return {
 --  ----------
 --  { "stevearc/dressing.nvim", event = "VeryLazy" },
 --  ----------
---  -- Nvim Telescope
---  ---------
---  {
---    "nvim-telescope/telescope.nvim",
---    dependencies = {
---      "BurntSushi/ripgrep",
---      "sharkdp/fd",
---      "nvim-telescope/telescope-dap.nvim",
---      "nvim-telescope/telescope-file-browser.nvim",
---      "piersolenski/telescope-import.nvim",
---      "nvim-telescope/telescope-ui-select.nvim",
---    },
---    event = "VeryLazy",
---  },
---  ----------
---  -- Writing Functionality
+-- Writing Functionality
 --  ----------
 --  -- Wiki - Obsidian nvim
 --  { "epwalsh/obsidian.nvim", event = "VeryLazy" },
 --  -- Latex - VimTex
 --  "lervag/vimtex",
 --  ----------
---  -- Alignment
---  { "junegunn/vim-easy-align", event = "VeryLazy" },
---  -- Working with Kitty
+-- Working with Kitty
 --  { "fladson/vim-kitty", branch = "main" },
 --  -- Terminal Behaviour
 --  { "akinsho/toggleterm.nvim", version = "v2.*" },

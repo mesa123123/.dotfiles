@@ -32,18 +32,13 @@ local hl = api.nvim_set_hl -- highlighting
 local config = require("lspconfig") -- Overall configuration for lsp
 local tool_manager = require("mason")
 local tool_installer = require("mason-tool-installer")
-local cmp_setup = require("lsp.cmp_setup") -- Autocompletion for the language servers
-local lsp_opts = require("lsp.options").options
-local dap = require("dap")
-local daptext = require("nvim-dap-virtual-text")
 local lint = require("lint")
 local format = require("conform")
 local snip = require("luasnip")
 local snipload_lua = require("luasnip.loaders.from_lua")
 local snipload_vscode = require("luasnip.loaders.from_vscode")
-local dappy = require("dap-python")
 local putils = require("core").utils
-local lm = require("leader_mappings")
+local lk = require("leader_mappings")
 ----------
 
 -- Extra Vars
@@ -142,6 +137,21 @@ tool_installer.setup({
 }) -- This is running through Mason_Tools_Installer
 ----------
 
+local install_tools = function(lang_tooling)
+    require("mason-tool-installer").setup({ tableConcat(lang_tooling.lsp, tableConcat(lang_tooling.lint, tableConcat(lang_tooling.format, tableConcat(encure_installed.dap)))),
+        ensure_installed = 
+        auto_update = true
+    })
+end
+
+local set_shift_and_tab = function(length)
+	      vim.bo.tabstop = length
+	      vim.bo.shiftwidth = length
+	      vim.bo.expandtab = true
+end
+
+
+
 --------------------------------
 -- Snippets
 --------------------------------
@@ -229,19 +239,6 @@ format.setup({
     },
   },
 })
-
--- General Format Function
-----------
-function FormatWithConfirm()
-  format.format({ async = true, lsp_fallback = true })
-  print("Formatted")
-end
-
-----------
-
---Format Settings
-----------
-lsp.buf.format({ timeout = 10000 }) -- Format Timeout
 ----------
 
 --------------------------------
@@ -278,10 +275,10 @@ api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnte
 
 -- Mappings
 ----------
-api.nvim_create_user_command("Relint", function()
+api.nvim_create_user_command("relint", function()
   require("lint").try_lint()
 end, {})
-nmap("gl", "Relint", "Refresh Linter")
+nmap("gl", "relint", "refresh linter")
 ----------
 
 -- Configure Linters
@@ -305,10 +302,16 @@ pylint.cmd = get_venv_command("pylint")
 
 -- Setup
 ----------
+local cmp_setup = require("lsp.cmp_setup")
 cmp_setup.general()
 cmp_setup.ft.gitcommit()
 cmp_setup.ft.cmdline()
 cmp_setup.ft.text_search()
+----------
+
+-- Lsp Opts
+----------
+local lsp_opts = require("lsp.options").options
 ----------
 
 --------------------------------
@@ -443,12 +446,12 @@ OtterStart = function()
   if filetype == "qmd" then
     otter.activate({ "python" })
   end
-  nmap(lm.codeAction_injectedLanguage .. "d", lreq .. '"otter".ask_definition()', "Show Definition")
-  nmap(lm.codeAction_injectedLanguage .. "t", lreq .. '"otter".ask_type_definition()', "Show Type Definition")
-  nmap(lm.codeAction_injectedLanguage .. "I", lreq .. '"otter".ask_hover()', "Show Info")
-  nmap(lm.codeAction_injectedLanguage .. "s", lreq .. '"otter".ask_document_symbols()', "Show Symbols")
-  nmap(lm.codeAction_injectedLanguage .. "R", lreq .. '"otter".ask_rename()', "Rename")
-  nmap(lm.codeAction_injectedLanguage .. "f", lreq .. '"otter".ask_format()', "Format")
+  nmap(lk.codeAction_injectedLanguage .. "d", lreq .. '"otter".ask_definition()', "Show Definition")
+  nmap(lk.codeAction_injectedLanguage .. "t", lreq .. '"otter".ask_type_definition()', "Show Type Definition")
+  nmap(lk.codeAction_injectedLanguage .. "I", lreq .. '"otter".ask_hover()', "Show Info")
+  nmap(lk.codeAction_injectedLanguage .. "s", lreq .. '"otter".ask_document_symbols()', "Show Symbols")
+  nmap(lk.codeAction_injectedLanguage .. "R", lreq .. '"otter".ask_rename()', "Rename")
+  nmap(lk.codeAction_injectedLanguage .. "f", lreq .. '"otter".ask_format()', "Format")
 end
 
 api.nvim_create_user_command("OtterActivate", OtterStart, {})
@@ -488,103 +491,15 @@ nullSources[#nullSources + 1] = hover.dictionary.with({
 nullls.setup(lsp_opts({ debug = true, sources = { sources = nullSources } }))
 ----------
 
---------------------------------
--- Debug Adapter Protocol
---------------------------------
-
--- Helper Funcs
-----------
-local python_path = get_python_path()
-local palette = require("colors")
-
--- Colors and Themes
-----------
--- Colors
-hl(0, "DapBreakpoint", { ctermbg = 0, fg = palette.bright_red, bg = palette.dark0_soft })
-hl(0, "DapBreakpointCondition", { ctermbg = 0, fg = palette.bright_red, bg = palette.dark0_soft })
-hl(0, "DapLogPoint", { ctermbg = 0, fg = palette.neutral_blue, bg = palette.dark0_soft })
-hl(0, "DapStopped", { ctermbg = 0, fg = palette.netural_red, bg = palette.dark0_soft })
--- Symbols
-fn.sign_define(
-  "DapBreakpoint",
-  { text = "󰃤", texthl = "DapBreakpoint", linehl = "DapBreakpoint", numhl = "DapBreakpoint" }
-)
-fn.sign_define("DapBreakpointCondition", {
-  text = "󱏛",
-  texthl = "DapBreakpointCondition",
-  linehl = "DapBreakpointCondition",
-  numhl = "DapBreakpointCondition",
-})
-fn.sign_define("DapStopped", { text = "", texthl = "DapStopped", linehl = "DapStopped", numhl = "DapStopped" })
-----------
-
-----------
--- Mappings
-----------
-
--- Running Commands (and pauses)
-----------
-nmap(lm.debug .. "c", lreq .. "('dap').continue()", "Continue/Start Debug Run")
-nmap(lm.debug .. "b", lreq .. "('dap').toggle_breakpoint()", "Toggle Breakpoint")
-nmap(lm.debug .. "B", lreq .. "('dap').set_breakpoint(vim.fn.input '[Condition] > ')", "Set Conditional BreakPoint")
-nmap(lm.debug .. "p", lreq .. "('dap').pause.toggle()", "Toggle Pause")
-nmap(lm.debug .. "r", lreq .. "('dap').restart()", "Restart Debugger")
-nmap(lm.debug .. "C", lreq .. "('dap').run_to_cursor()", "Run Session To Cursor")
-----------
-
--- Stepping Commands
-------------
-nmap(lm.debug .. "h", lreq .. "('dap').step_back()", "Step Back")
-nmap(lm.debug .. "k", lreq .. "('dap').step_into()", "Step Into")
-nmap(lm.debug .. "l", lreq .. "('dap').step_over()", "Step Over")
-nmap(lm.debug .. "j", lreq .. "('dap').step_out()", "Step Out")
-nmap(lm.debug .. "K", lreq .. "('dap').up()", "Step Up Call Stack")
-nmap(lm.debug .. "J", lreq .. "('dap').down()", "Step Down Call Stack")
-------------
-
--- Dap REPL
-------------
-nmap(lm.debug .. "x", lreq .. "('dap').repl.toggle()", "Debug REPL Toggle")
-------------
-
--- Session Commands
-------------
-nmap(lm.debug_session .. "s", lreq .. "('dap').session()", "Start Debug Session")
-nmap(lm.debug_session .. "c", lreq .. "('dap').close()", "Close Debug Session")
-nmap(lm.debug_session .. "a", lreq .. "('dap').attach()", "Attach Debug Session")
-nmap(lm.debug_session .. "d", lreq .. "('dap').disconnect()", "Detach Debug Session")
-nmap(lm.debug .. "q", lreq .. "('dap').terminate()", "Quit Debug Session")
-nmap(lm.debug_session .. "l", lreq .. "('osv').launch({port=8086})", "Launch Debug Server")
-----------
-
--- UI Commands
-----------
-local duw = 'require("dap.ui.widgets")'
-nmap(lm.debug .. "v", "lua " .. duw .. ".hover()", "Variable Info")
-nmap(lm.debug .. "S", "lua " .. duw .. ".cursor_float(" .. duw .. ".scopes)", "Scope Info")
-nmap(lm.debug .. "F", "lua " .. duw .. ".cursor_float(" .. duw .. ".frames)", "Stack Frame Info")
-nmap(lm.debug .. "e", "lua " .. duw .. ".cursor_float(" .. duw .. ".expressions)", "Expression Info")
-----------
-
--- Telescope Commands
-----------
-nmap(lm.debug_fileView .. "c", lreq .. '"telescope".extensions.dap.commands{}', "Show Debug Command Palette")
-nmap(lm.debug_fileView .. "o", lreq .. '"telescope".extensions.dap.configurations{}', "Show Debug Options")
-nmap(lm.debug_fileView .. "b", lreq .. '"telescope".extensions.dap.list_breakpoints{}', "Show All BreakPoints")
-nmap(lm.debug_fileView .. "v", lreq .. '"telescope".extensions.dap.variables{}', "Show All Variables")
-nmap(lm.debug_fileView .. "f", lreq .. '"telescope".extensions.dap.frames{}', "Show All Frames")
-----------
-
--- Language Specific Commands
-----------
-nmap(lm.debug_python .. "m", lreq .. "('dap-python').test_method()", "Test Method")
-nmap(lm.debug_python .. "c", lreq .. "('dap-python').test_class()", "Test Class")
-nmap(lm.debug_python .. "s", lreq .. "('dap-python').debug_selection()", "Debug Selected")
-----------
 
 ----------
 -- DAP Setup
 ----------
+
+require("dap")
+require("lsp.dap_setup")
+local dappy = require("dap-python")
+
 
 -- Selection
 ----------
@@ -698,14 +613,6 @@ dap.configurations.rust = {
     },
   },
 }
-----------
-
---------------------------------
--- Virtual Text DAP
---------------------------------
-
-daptext.setup({})
-
 ----------
 
 -------------------------------

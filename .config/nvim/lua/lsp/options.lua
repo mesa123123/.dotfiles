@@ -63,7 +63,7 @@ local keymaps = function(client)
   nmap("g=", "lua vim.lsp.buf.code_action()", "LSP: Take Code Action")
   nmap("gi", "lua vim.lsp.buf.hover()", "LSP: Function & Library Info")
   nmap("gL", "lua ShortenLine()", "LSP: Shorten Line")
-  nmap("gf", "lua FormatWithConfirm()", "LSP: Format Code")
+  nmap("gf", "lua require("conform").format({ async = true, lsp_fallback = true }); vim.print(\"Formatted\")", "LSP: Format Code")
   nmap("[g", "lua vim.diagnostic.goto_prev()", "LSP: Previous Flag")
   nmap("]g", "lua vim.diagnostic.goto_next()", "LSP: Next Flag")
   nmap("[G", "lua vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR})", "LSP: Next Error")
@@ -102,6 +102,8 @@ local on_attach = function(client, bufnr)
   api.nvim_buf_set_option(0, "formatexpr", "v:lua.require'conform'.formatexpr()")
   -- Attach Keymappings
   keymaps(client)
+  -- Format Timeout
+  lsp.buf.format({ timeout = 10000 }) -- Format Timeout
 end
 
 --------------------------------

@@ -112,8 +112,10 @@ end
 -- Concat two Tables
 ----------
 M.tableConcat = function(t1, t2)
-  for _, v in ipairs(t2) do
-    table.insert(t1, v)
+  if t2 ~= nil then
+    for _, v in ipairs(t2) do
+      table.insert(t1, v)
+    end
   end
   return t1
 end

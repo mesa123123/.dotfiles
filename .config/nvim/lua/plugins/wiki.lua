@@ -60,18 +60,18 @@ return {
         -- Mappings
         ----------
         -- Normal Mode
-        nmap(lk.wiki .. "b", "ObsidianBacklinks", "Get References To Current")
-        nmap(lk.wiki .. "t", "ObsidianToday", "Open (New) Daily Note")
-        nmap(lk.wiki .. "y", "ObsidianYesterday", "Create New Daily Note For Yesterday")
-        nmap(lk.wiki .. "o", "ObsidianOpen", "Open in Obisidian App")
-        nmap(lk.wiki .. "s", "ObsidianSearch", "Search Vault Notes")
-        nmap(lk.wiki .. "q", "ObsidianQuickSwitch", "Note Quick Switch")
-        nmap(lk.wiki_linkOpts .. "l", "ObsidianFollowLink", "Go To Link Under Cursor")
-        nmap(lk.wiki_linkOpts .. "t", "ObsidianTemplate", "Insert Template Into Link")
-        keymap.set("n", lk.wiki_createPage .. "n", ":ObsidianNew ", { silent = false, desc = "Create New Note" })
+        nmap(lk.wiki.key .. "b", "ObsidianBacklinks", "Get References To Current")
+        nmap(lk.wiki.key .. "t", "ObsidianToday", "Open (New) Daily Note")
+        nmap(lk.wiki.key .. "y", "ObsidianYesterday", "Create New Daily Note For Yesterday")
+        nmap(lk.wiki.key .. "o", "ObsidianOpen", "Open in Obisidian App")
+        nmap(lk.wiki.key .. "s", "ObsidianSearch", "Search Vault Notes")
+        nmap(lk.wiki.key .. "q", "ObsidianQuickSwitch", "Note Quick Switch")
+        nmap(lk.wiki_linkOpts.key .. "l", "ObsidianFollowLink", "Go To Link Under Cursor")
+        nmap(lk.wiki_linkOpts.key .. "t", "ObsidianTemplate", "Insert Template Into Link")
+        keymap.set("n", lk.wiki_createPage.key .. "n", ":ObsidianNew ", { silent = false, desc = "Create New Note" })
         -- Visual Mode
-        keymap.set("v", lk.wiki_createPage .. "l", ":ObsidianLinkNew ", { silent = false, desc = "Created New Linked Note" })
-        keymap.set("v", lk.wiki_linkOpts .. "a", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Link Note To Selection" })
+        keymap.set("v", lk.wiki_createPage.key .. "l", ":ObsidianLinkNew ", { silent = false, desc = "Created New Linked Note" })
+        keymap.set("v", lk.wiki_linkOpts.key .. "a", "<cmd>ObsidianLink<cr>", { silent = true, desc = "Link Note To Selection" })
         -----------
 end,
 }

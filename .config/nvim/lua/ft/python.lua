@@ -69,10 +69,13 @@ local lang_tooling = {
     dap = { "debugpy" }
 }
 
-tool_installer.setup({
-    ensure_installed = tableConcat(lang_tooling.lsp, tableConcat(lang_tooling.lint, tableConcat(lang_tooling.format, tableConcat(encure_installed.dap)))),
-    auto_update = true
-})
+install_tools = function(lang_tooling)
+    local tool_installer = require("mason-tool-installer")
+    tool_installer.setup({ tableConcat(lang_tooling.lsp, tableConcat(lang_tooling.lint, tableConcat(lang_tooling.format, tableConcat(encure_installed.dap)))),
+        ensure_installed = 
+        auto_update = true
+    })
+end
 
 lint
 

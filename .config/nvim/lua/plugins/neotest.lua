@@ -10,10 +10,10 @@ return {
     },
     event = "VeryLazy",
     config = function()
-        
-        local nmap = require("core.utils").norm_keyset
+        local utils = require("core.utils") 
+        local nmap = utils.norm_keyset
         local lk = require("core.keymaps").lk
-
+        local get_python_path = utils.get_python_path
         require("neotest").setup({
           adapters = {
             require("neotest-python")({
@@ -48,5 +48,5 @@ return {
         )
         ----------
     end
-  },
+  }
 

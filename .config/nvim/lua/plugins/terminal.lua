@@ -4,7 +4,7 @@
 ----------------------------------
 
 return  { "akinsho/toggleterm.nvim", version = "*", config = function()
-        local lm = require('core.keymaps').leaderkeys
+        local lk = require('core.keymaps').lk
         local nmap = require('core.utils').norm_keyset
         local fn = vim.fn
         local keymap = vim.keymap
@@ -108,11 +108,11 @@ return  { "akinsho/toggleterm.nvim", version = "*", config = function()
           { noremap = true, silent = true, desc = "Stop you from inceptioning vim" }
         )
         -- Standard Term Toggle
-        nmap(lm.terminal.key .. "t", "lua Standard_term_toggle()", "Toggle Terminal")
+        nmap(lk.terminal.key .. "t", "lua Standard_term_toggle()", "Toggle Terminal")
         -- Docker Toggle
-        nmap(lm.terminal.key .. "d", "lua Docker_term_toggle()", "Open Docker Container Management")
+        nmap(lk.terminal.key .. "d", "lua Docker_term_toggle()", "Open Docker Container Management")
         -- Gitui Toggle
-        nmap(lm.terminal.key .. "g", "lua Gitui_term_toggle()", "Open Git Ui")
+        nmap(lk.terminal.key .. "g", "lua Gitui_term_toggle()", "Open Git Ui")
         ----------
     end
 }
