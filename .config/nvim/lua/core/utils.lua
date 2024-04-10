@@ -122,6 +122,36 @@ M.tableConcat = function(t1, t2)
 end
 ----------
 
+-- Get keys from a table
+----------
+local get_table_keys = function(t1)
+    if t1 == nil
+        return {}
+    keyarr = {}
+    local n = 0
+    for k, v in pairs(t1) do
+     n = n+1
+     keyarrr[n] = k
+    end 
+    return keyarr
+end
+----------
+
+-- Get values from a table
+----------
+local get_table_values = function(t1)
+    if t1 == nil
+        return {}
+    keyarr = {}
+    local n = 0
+    for k, v in pairs(t1) do
+     n = n+1
+     keyarrr[n] = v
+    end 
+    return keyarr
+end
+----------
+
 -- Python Path
 ----------
 M.get_python_path = function()
