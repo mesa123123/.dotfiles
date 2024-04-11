@@ -100,11 +100,10 @@ require("startup").setup(dashboard_config)
 ----------
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     callback = function()
-        local cmp_setup = require('lsp.cmp')
-        local lsp_setup = 
-        cmp_setup.ft.gitcommit()
-        cmp_setup.ft.cmdline()
-        cmp_setup.ft.text_search()
+        local cmp_setup = require('lsp').cmp
+        for k, v in pairs(cmp_setup.source_ft) do
+            cmp_setup.source_ft[k]()
+        end
         nullSources = {}
         nullSources[#nullSources + 1] = require('null-ls').builtins.completion.spell.with({
           on_attach = on_attach,
@@ -125,14 +124,14 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 
 -- Load Ft Settings
 ----------
--- for k, v in pairs(require('ft')) do
---     vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter" }, {
---         pattern = {"*." .. k}, 
---         callback = function()
---             require('lsp.core').setup(v)
---         end,
---     })
--- end
+ for k, v in pairs(require('ft')) do
+     vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter" }, {
+         pattern = {"*." .. k}, 
+         callback = function()
+             require('lsp').core.setup(v)
+         end,
+     })
+ end
 ----------
 
 ----------------------------------

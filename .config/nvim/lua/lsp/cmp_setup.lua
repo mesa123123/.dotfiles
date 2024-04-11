@@ -258,7 +258,7 @@ end
 local M = {
   general = general,
   load = load,
-  ft = {
+  source_ft = {
     gitcommit = git_commit,
     cmdline = cmdline,
     text_search = text_search,
