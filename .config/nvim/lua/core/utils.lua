@@ -257,4 +257,24 @@ M.meta_load = function(func_content)
 end
 ----------
 
+-- Get a packages name - Mason
+----------
+local get_package_name = function(t1)
+    if t1 == nil then
+        return {}
+    end
+    local package_names = {}
+    local n = 0
+    for k, v in pairs(t1) do
+        n = n + 1
+        if v.package_name == nil then
+            package_names[n] = k
+        else
+            package_names[n] = v.package_name
+        end
+        return package_names
+    end
+end
+----------
+
 return M

@@ -10,6 +10,9 @@ return {
     },
     event = "VeryLazy",
     config = function()
+        ---------------------------------"
+        -- Test Runners
+        ---------------------------------"
         local utils = require("core.utils") 
         local nmap = utils.norm_keyset
         local lk = require("core.keymaps").lk
@@ -30,7 +33,6 @@ return {
             signs = false,
           },
         })
-
         -- Mappings
         ----------
         -- Mappings
@@ -46,6 +48,36 @@ return {
           "lua require('neotest').run.run({vim.fn.expand('%'), strategy = 'dap'})",
           "Debug Closest Test"
         )
+        ----------
+        ---------------------------------"
+        -- Code Coverage
+        ---------------------------------"
+        require("coverage").setup({
+          commands = true, -- create commands
+          highlights = {
+            -- customize highlight groups created by the plugin
+            covered = { fg = palette.bright_green }, -- supports style, fg, bg, sp (see :h highlight-gui)
+            uncovered = { fg = palette.bright_red },
+          },
+          signs = {
+            -- use your own highlight groups or text markers
+            covered = { hl = "CoverageCovered", text = "▎" },
+            uncovered = { hl = "CoverageUncovered", text = "▎" },
+          },
+          summary = {
+            -- customize the summary pop-up
+            min_coverage = 80.0, -- minimum coverage threshold (used for highlighting)
+          },
+          lang = {
+            -- customize language specific settings
+          },
+        })
+        
+        -- Mappings
+        ----------
+        nmap(lk.exec_test_coverage.key .. "r", "Coverage", "Run Coverage Report")
+        nmap(lk.exec_test_coverage.key .. "s", "CoverageSummary", "Show Coverage Report")
+        nmap(lk.exec_test_coverage.key .. "t", "CoverageToggle", "Toggle Coverage Signs")
         ----------
     end
   }
