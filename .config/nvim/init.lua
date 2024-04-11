@@ -128,7 +128,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
      vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter" }, {
          pattern = {"*." .. k}, 
          callback = function()
-             require('lsp').core.setup(v)
+--             require('lsp').core.setup(v)
          end,
      })
  end
