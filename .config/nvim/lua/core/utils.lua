@@ -83,6 +83,14 @@ end
 M.norm_loudkeyset = function(key, command, wkdesc)
   keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = false, noremap = false, desc = wkdesc })
 end
+-- Creates a Key With Its Super Menu Description
+M.desc_keymap = function(modes, leader_key, key, action, map_desc)
+    keymap.set(modes, leader_key.key .. key, action, { silent = false, noremap = false, desc = leader_key.desc .. ": " .. map_desc })
+end
+-- Creates one similar to norm_keyset
+M.desc_keymap_cmd = function(modes, leader_key, key, action, map_desc)
+    keymap.set(modes, leader_key.key .. key, "<cmd>" .. action .. "<CR>", { silent = false, noremap = false, desc = leader_key.desc .. ": " .. map_desc })
+end
 ----------
 
 

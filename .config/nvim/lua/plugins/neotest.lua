@@ -16,6 +16,7 @@ return {
         local utils = require("core.utils") 
         local nmap = utils.norm_keyset
         local lk = require("core.keymaps").lk
+        palette = require("core.theme").palette
         local get_python_path = utils.get_python_path
         require("neotest").setup({
           adapters = {

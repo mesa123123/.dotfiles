@@ -15,13 +15,8 @@ local keymap = vim.keymap
 -- Require
 ----------
 local utils = require('core.utils')
-----------
-
--- Extra Vars
-----------
-local nmap = utils.norm_keyset
 local keyopts = utils.keyopts
-local nlmap = utils.norm_loudkeyset
+local makeDescMap = utils.desc_keymap
 ----------
 
 -- Functions
@@ -33,9 +28,13 @@ M.l = function(key, desc)
 end
 -- Creates a description for menu keys (keys that have sub keys)
 M.makeDesc = function(km)
-    keymap.set("n", "" .. km.key .. "", "<CMD>" .. km.key .. "<CR>", { desc = km.desc })
+    keymap.set("n", "" .. km.key .. "", "<CMD>" .. km.key .. "<CR>", { desc = "Opts: " .. km.desc })
 end
-----------
+
+
+--------------------------------
+-- Leader Key Vars
+--------------------------------
 
 M.lk = {
   -- System
@@ -54,7 +53,9 @@ M.lk = {
   vimHelp = M.l(";", "Vim Help"),
   -- File Mgmt
   file = M.l("f", "File & Buffer Options"),
-  tab = M.l("t", "Tab Options"),
+  window = M.l("t", "Window Options"),
+  window_move = M.l("tr", "Window Options"),
+  window_tab = M.l("tt", "Tab Options"),
   resize = M.l("r", "Pane Resize"),
   -- Terminal
   terminal = M.l("a", "Terminal Applications"),
@@ -140,37 +141,47 @@ M.setup = function()
     keymap.set("n", "<cr>", ":nohlsearch<CR>", keyopts())
     keymap.set("n", "n", ":set hlsearch<CR>n", keyopts())
     keymap.set("n", "N" , ":set hlsearch<CR>N", keyopts())
- 	keymap.set("n", lk.resize.key  .. "j" , ":res-5<CR>", keyopts({ desc =  "Move Partition Down"}))
- 	keymap.set("n", lk.resize.key  .. "k" , ":res+5<CR>", keyopts({ desc =  "Move Partition Up"}))
- 	keymap.set("n", lk.resize.key  .. "h" , ":vertical resize -5<CR>", keyopts({ desc = "Move Partition Left"}))
- 	keymap.set("n", lk.resize.key  .. "l" , ":vertical resize +5<CR>", keyopts({ desc = "Move Partition Right"}))
- 	keymap.set("n", lk.paste.key, '"+p', keyopts({ desc =  "System Paste" }))
- 	keymap.set("n", lk.yank.key .. "v",  '"+y', keyopts({ desc = "System Copy" }))
- 	keymap.set("n", lk.yank.key .. "y", '"+yy', keyopts({ desc = "System Copy: Line" }))
-    keymap.set("n", lk.yank.key .. "G",  '"+yG', keyopts({ desc = "System Copy: Rest of File" }))
-    keymap.set("n", lk.yank.key .. "%",  '"+y%', keyopts({ desc = "System Copy: Whole of File" }))
-    nmap(lk.file.key .. "l", "bnext", "NextBuff")
-    nmap(lk.file.key .. "h", "bprev", "PrevBuff")
-    nmap(lk.write.key ..  "w", "w", "Write")
-    nmap(lk.write.key .. "!", "w!", "Over-write")
-    nmap(lk.write.key .. "s", "so", "Write and Source to Nvim")
-    nmap(lk.write.key .. "a", "wa", "Write All")
-    nmap(lk.write_quit.key .. "q", "wq", "Close Buffer")
-    nmap(lk.write_quit.key ..  "b","w<CR>:bd", "Write and Close Buffer w/o Pane")
-    nmap(lk.write_quit.key .. "a", "wqa", "Write All & Quit Nvim")
-    nmap(lk.quit.key .."q", "q", "Close Buffer and Pane")
-    nmap(lk.quit.key .."!", "q!", "Close Buffer Without Writing")
-    nmap(lk.quit_buffer.key .. "b", "bd", "Close Buffer w/o Pane")
- 	nmap(lk.quit_buffer.key .. "!","bd", "Close Buffer w/o Pane")
-    nmap(lk.quit_all.key .. "a", "qa", "Quit Nvim")
-    nmap(lk.quit_all.key .. "!", "qa!", "Quit Nvim Without Writing")
-  	nmap(lk.tab.key  .. "H" , ":tabfirst", "Tab First" )
-  	nmap(lk.tab.key  .. "L" , ":tablast", "Tab Last" )
-  	nmap(lk.tab.key  .. "l" , ":tabn", "Tab Next" )
-  	nmap(lk.tab.key  .. "h" , ":tabp", "Tab Previous" )
- 	nmap(lk.tab.key  .. "q" , ":tabc", "[Q]uit tab" )
- 	nmap(lk.tab.key  .. "o" , ":tabo", "Tab Open" )
- 	nmap(lk.tab.key  .. "n" , ":tabnew", "[N]ew Tab" )
+ 	keymap.set("n", lk.paste.key, '"+p',  keyopts({ desc = lk.paste.desc }))
+ 	makeDescMap("n", lk.resize, "j" , ":res-5<CR>", "Move Partition Down")
+ 	makeDescMap("n", lk.resize, "k", ":res+5<CR>",  "Move Partition Up")
+ 	makeDescMap("n", lk.resize, "h", ":vertical resize -5<CR>", "Move Partition Left")
+ 	makeDescMap("n", lk.resize, "l", ":vertical resize +5<CR>", "Move Partition Right")
+ 	makeDescMap("n", lk.yank, "v",  '"+y', "System Copy" )
+ 	makeDescMap("n", lk.yank, "y", '"+yy', "System Copy: Line" )
+    makeDescMap("n", lk.yank, "G",  '"+yG', "System Copy: Rest of File" )
+    makeDescMap("n", lk.yank, "%",  '"+y%', "System Copy: Whole of File" )
+    makeDescMap("n", lk.file, "l", ":bnext<CR>", "NextBuff")
+    makeDescMap("n", lk.file, "h", ":bprev<CR>", "PrevBuff")
+    makeDescMap("n", lk.write,  "w", ":w<CR>", "Write")
+    makeDescMap("n", lk.write, "!", ":w!<CR>", "Over-write")
+    makeDescMap("n", lk.write, "s", ":so<CR>", "Write and Source to Nvim")
+    makeDescMap("n", lk.write, "a", ":wa<CR>", "Write All")
+    makeDescMap("n", lk.write_quit, ":q<CR>", "wq", "Close Buffer")
+    makeDescMap("n", lk.write_quit,  "b",":w<CR>:bd<CR>", "Write and Close Buffer w/o Pane")
+    makeDescMap("n", lk.write_quit, "a", ":wqa<CR>", "Write All & Quit Nvim")
+    makeDescMap("n", lk.quit, "q", ":q<CR>", "Close Buffer and Pane")
+    makeDescMap("n", lk.quit, "!", ":q!<CR>", "Close Buffer Without Writing")
+    makeDescMap("n", lk.quit_buffer, "b", ":bd<CR>", "Close Buffer w/o Pane")
+ 	makeDescMap("n", lk.quit_buffer, "!",":bd<CR>", "Close Buffer w/o Pane")
+    makeDescMap("n", lk.quit_all, "a", ":qa<CR>", "Quit Nvim")
+    makeDescMap("n", lk.quit_all, "!", ":qa!<CR>", "Quit Nvim Without Writing")
+  	makeDescMap("n", lk.window , "v" , ":vsplit<CR>", "Split Vertical" )
+  	makeDescMap("n", lk.window , "n" , ":sp<CR>", "Split Horizontal" )
+    makeDescMap("n", lk.window, "l",  '<C-w>l', "Change Window: Left" )
+    makeDescMap("n", lk.window, "j",  '<C-w>j', "Change Window: Down" )
+    makeDescMap("n", lk.window, "k",  '<C-w>k', "Change Window: Up" )
+    makeDescMap("n", lk.window, "h",  '<C-w>h', "Change Window: Right" )
+    makeDescMap("n", lk.window_move, "l",  '<C-w>L', "Move Window: Left" )
+    makeDescMap("n", lk.window_move, "j",  '<C-w>J', "Move Window: Down" )
+    makeDescMap("n", lk.window_move, "k",  '<C-w>K', "Move Window: Up" )
+    makeDescMap("n", lk.window_move, "h",  '<C-w>H', "Move Window: Right" )
+  	makeDescMap("n", lk.window_tab , "H" , ":tabfirst<CR>", "Tab First" )
+  	makeDescMap("n", lk.window_tab , "L" , ":tablast<CR>", "Tab Last" )
+  	makeDescMap("n", lk.window_tab , "l" , ":tabn<CR>", "Tab Next" )
+  	makeDescMap("n", lk.window_tab , "h" , ":tabp<CR>", "Tab Previous" )
+ 	makeDescMap("n", lk.window_tab , "q" , ":tabc<CR>", "[Q]uit tab" )
+ 	makeDescMap("n", lk.window_tab , "o" , ":tabo<CR>", "Tab Open" )
+ 	makeDescMap("n", lk.window_tab , "n" , ":tabnew<CR>", "[N]ew Tab" )
 end
 --------------------------------
 

@@ -100,7 +100,7 @@ require("startup").setup(dashboard_config)
 ----------
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     callback = function()
-        local cmp_setup = require('lsp.cmp_setup')
+        local cmp_setup = require('lsp.cmp')
         local lsp_setup = 
         cmp_setup.ft.gitcommit()
         cmp_setup.ft.cmdline()
@@ -117,7 +117,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
           filetypes = { "txt", "markdown", "md", "mdx" },
         })
         -- Package Load
-        require("null-ls").setup(lsp_opts({ debug = true, sources = { sources = nullSources } }))
+        require("null-ls").setup({capabilities = cmp_setup.capabilities(), debug = true, sources = { sources = nullSources }})
     end
 })
 ----------
@@ -125,14 +125,14 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 
 -- Load Ft Settings
 ----------
-for k, v in pairs(require('ft')) do
-    vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter" }, {
-        pattern = {"*." .. k}, 
-        callback = function()
-            v.load()
-        end,
-    })
-end
+-- for k, v in pairs(require('ft')) do
+--     vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter" }, {
+--         pattern = {"*." .. k}, 
+--         callback = function()
+--             require('lsp.core').setup(v)
+--         end,
+--     })
+-- end
 ----------
 
 ----------------------------------
