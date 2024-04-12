@@ -1,7 +1,5 @@
 node_modules/	
 *.log
-.config/
-.config/nvim/lua/lsp_servers
 !.config/powerline/
 !.config/inkscape/
 !.config/kitty/
@@ -18,3 +16,4 @@ node_modules/
 !.conig/nvim/lua/core/*
 !.config/nvim/lua/plugins/*
 .config/nvim/lua/lsp_servers
+.config/

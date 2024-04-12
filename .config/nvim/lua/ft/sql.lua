@@ -1,0 +1,131 @@
+-------------------------
+---- ############### --
+---- # SQL Config  # --
+---- ############### --
+-----------------------
+--
+--
+---- USE load() to try and get this working
+--
+--
+-----------------------------------"
+---- Draft Functions
+-----------------------------------"
+--local utils = require("core.utils")
+--local meta_func = utils.meta_func
+--local SCRIPT_NAME = string.gsub(string.match(vim.api.nvim_buf_get_name(0), "[^/]+$"), '.lua', '')
+--
+--local langConf = {
+--    lsp = { sqlls = {
+--          root_dir = "Root"
+--    } },
+--    cmp_sources = {},
+--    lint = { sqlfluff = {} },
+--    format = { sqlfmt = {} },
+--    dap = {},
+--    snips = snips,
+--    shift_length = 4,
+--    extra_opts = extra_opts
+--}
+--
+--local tool_manager = require("mason")
+--tool_manager.setup({
+--  install_root_dir = tool_dir,
+--})
+--
+--local install_tools = function(lang_tooling)
+--     local get_table_keys = require('core.utils').get_table_keys
+--     local tableConcat = require('core.utils').tableConcat
+--     local install_list = tableConcat(get_table_keys(lang_tooling.lsp), tableConcat(get_table_keys(lang_tooling.lint), tableConcat(get_table_keys(lang_tooling.format), tableConcat(get_table_keys(lang_tooling.dap)))))
+--     for k,v in pairs(install_list) do
+--         install_list[k] = string.gsub(v, "_", "-")
+--     end
+--     vim.print(install_list)
+--     require("mason-tool-installer").check_install(install_list)
+-- end
+--
+--
+--
+--local formatter_setup = meta_func("function(format_conf) require('conform').setup({ log_level = vim.log.levels.TRACE, formatters_by_ft = { " .. SCRIPT_NAME .. " = { table.concat(require('core.utils').get_table_keys(format_conf)) } }, formatters =  format_conf }) end ")
+--
+--install_tools(langConf)
+--formatter_setup(langConf.format)
+--
+---- local lint_setup = function(lint_conf)
+----     local lint = require("lint")
+----     local nmap = require("core.utils").norm_keyset
+----     lint.linters_by_format = { filetypeastext = lint_conf.firstkeyasstring }
+----     -- local markdownlint = lint.linters.markdownlint
+----     -- markdownlint.args = {
+----     --   "--disable",
+----     --   "MD013",
+----     --   "MD012",
+----     --   "MD041",
+----     -- }
+----     api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
+----       callback = function()
+----         require("lint").try_lint()
+----       end,
+----     })
+----     api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "BufWinEnter", "BufEnter" }, {
+----       callback = function()
+----         require("lint").try_lint()
+----       end,
+----     })
+----     nmap("gl", "relint", "refresh linter")
+---- end
+---- 
+---- local dap_setup = function(dap_conf)
+---- end
+---- 
+---- local snip_setup = function(snip_conf)
+---- end
+---- 
+---- ---------------------------------"
+---- -- Language Tools
+---- ---------------------------------"
+---- 
+---- local snips = {}
+---- local extra_opts = function()
+---- end
+---- 
+---- local langConf = {
+----     lsp = { sqlls = {
+----           root_dir = config.util.root_pattern("*.sql"),
+----     } },
+----     cmp_sources = {}
+----     lint = { sqlfluff = {} },
+----     format = { sql_formatter = {} },
+----     dap = {},
+----     snips = snips
+----     shift_length = 4,
+----     extra_opts = extra_opts
+---- }
+---- 
+---- install_tools(langConf)
+---- lsp_setup(langConf.lsp, langConf.cmp_sources)
+---- lint_setup(langConf.lint)
+---- format_setup(langConf.format)
+---- dap_setup(langConf.dap)
+---- snip_setup(langConf.snips)
+---- set_shift_and_tab(langConf.shift_length)
+----
+---- local install_tools = function(lang_tooling)
+----     local install_list = tableConcat(get_table_keys(lang_tooling.lsp), tableConcat(get_table_keys(lang_tooling.lint), tableConcat(get_key(lang_tooling.format), tableConcat(get_table_keys(encure_installed.dap)))))
+----     require("mason-tool-installer").setup({ install_list,
+----         ensure_installed = 
+----         auto_update = true
+----     })
+---- end
+---- 
+---- local lsp_setup = function(lsp_conf, cmp_sources)
+----     local cmp_setup = require("lsp.cmp_setup")
+----     local lsp_opts = require("lsp.options").options
+----     local config = require("lspconfig")
+----     cmp_setup.general(cmp_sources)
+----     cmp_setup.ft.cmdline()
+----     cmp_setup.ft.text_search()
+----     for k, v in pairs(lsp_conf) do
+----         config.k.setup(lsp_opts({lsp_conf.k}))
+----     end
+---- end
