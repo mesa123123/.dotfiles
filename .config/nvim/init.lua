@@ -125,6 +125,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 
 -- Load Ft Settings
 ----------
+
 for k, v in pairs(require("ft")) do
     local ext = v.ext or k
 	vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {

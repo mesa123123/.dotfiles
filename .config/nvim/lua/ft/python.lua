@@ -28,7 +28,7 @@ M.lint = {
 		parser = lint.linters.pylint.parser,
 	},
 }
-M.format = { black = {}, isort = {}, injected = {} }
+M.format = { black = { }, isort = {}, injected = {} }
 M.injected = true
 M.extraOpts = function()
 	local dappy = require("dap-python")
@@ -43,7 +43,9 @@ M.extraOpts = function()
 	nmap(lk.debug_python.key .. "c", lreq .. "('dap-python').test_class()", "Test Class")
 	nmap(lk.debug_python.key .. "s", lreq .. "('dap-python').debug_selection()", "Debug Selected")
 end
-M.dap = { debugpy = {} }
+M.dap = { debugpy = {
+    
+} }
 M.shift = 4
 
 return M

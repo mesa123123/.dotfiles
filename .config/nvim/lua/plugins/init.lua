@@ -31,20 +31,6 @@ return {
 			"jmbuhr/otter.nvim",
 		},
 	},
-	----------
-	-- Language Server Protocol
-	----------
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			"williamboman/mason-lspconfig.nvim",
-			"WhoIsSethDaniel/mason-tool-installer.nvim",
-			"williamboman/mason.nvim",
-			"ray-x/lsp_signature.nvim",
-			"hrsh7th/nvim-cmp",
-			"L3MON4D3/LuaSnip",
-		},
-	},
 	{ "jose-elias-alvarez/null-ls.nvim", branch = "main" },
 	-- Linting Plugins
 	----------
