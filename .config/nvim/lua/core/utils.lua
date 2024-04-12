@@ -236,14 +236,14 @@ end
 -- Set Shift and Tab Width
 ----------
 M.set_shift_and_tab = function(length, patterns)
-  api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     pattern = patterns,
     callback = function()
       vim.bo.tabstop = length
       vim.bo.shiftwidth = length
       vim.bo.expandtab = true
     end,
-    group = "ShiftAndTabWidth",
+    group = vim.api.nvim_create_augroup("ShiftAndTabWidth", {})
   })
 end
 ----------
@@ -267,7 +267,7 @@ end
 
 -- Get a packages name - Mason
 ----------
-local get_package_name = function(t1)
+M.get_package_names = function(t1)
     if t1 == nil then
         return {}
     end
@@ -280,8 +280,8 @@ local get_package_name = function(t1)
         else
             package_names[n] = v.package_name
         end
-        return package_names
     end
+    return package_names
 end
 ----------
 
