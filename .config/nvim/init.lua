@@ -82,6 +82,7 @@ core.options.setup()
 core.keymaps.setup()
 ----------
 
+----------
 -- Load Plugins
 ----------
 require("package_setup")
@@ -127,13 +128,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 ----------
 
 for k, v in pairs(require("ft")) do
-    local ext = v.ext or k
-	vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-		pattern = { "*." .. ext },
-		callback = function()
-			require("lsp.lsp_core").setup(v, k)
-		end,
-	})
+  require("lsp.lsp_core").setup(v, k)
 end
 
 ----------

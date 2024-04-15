@@ -121,8 +121,21 @@ local package_setup = function(lang_tooling)
 	local tC = require("core.utils").tableConcat
 	----------
 	-- Create Install List
-	local install_list =
-		tC(lang_tooling.lsp, tC(lang_tooling.lint, tC(lang_tooling.format, tC(lang_tooling.dap.packages))))
+	local install_list = {}
+	if lang_tooling.lsp ~= nil then
+		tC(install_list, lang_tooling.lsp)
+	end
+	if lang_tooling.lint ~= nil then
+		tC(install_list, lang_tooling.lint)
+	end
+	if lang_tooling.format ~= nil then
+		tC(install_list, lang_tooling.format)
+	end
+	if lang_tooling.dap ~= nil then
+        if lang_tooling.dap.packages ~= nil then
+		    tC(install_list, lang_tooling.dap.packages)
+        end
+	end
 	-- Setup and Install
 	----------
 	require("mason").setup({
@@ -135,7 +148,11 @@ local package_setup = function(lang_tooling)
 end
 ----------
 
+--------------------------------
 -- Formatter
+--------------------------------
+
+-- Setup
 ----------
 local formatter_setup = function(langConf, script_name)
 	-- Setup Function
@@ -143,7 +160,7 @@ local formatter_setup = function(langConf, script_name)
 	require("conform").setup({
 		log_level = vim.log.levels.TRACE,
 		formatters_by_ft = {
-			[script_name] = require("core.utils").get_table_keys(langConf)
+			[script_name] = require("core.utils").get_table_keys(langConf),
 		},
 		formatters = langConf,
 	})
@@ -170,16 +187,15 @@ local linter_setup = function(langConf, script_name)
 	----------
 	-- Setup Function
 	----------
-	vim.print("langConf")
 	local lint = require("lint")
 	lint.linters_by_ft[script_name] = { table.concat(require("core.utils").get_table_keys(langConf)) }
-    for k, v in pairs(langConf) do
-        if v ~= nil then
-            for l, m in v do
-                lint.linters[k][l] = m
-            end
-        end
-    end
+	for k, v in pairs(langConf) do
+		if v ~= nil then
+			for l, m in pairs(v) do
+				lint.linters[k][l] = m
+			end
+		end
+	end
 	----------
 	-- Options
 	----------
@@ -280,15 +296,16 @@ end
 --------------------------------
 -- Attach Dap
 --------------------------------
-local dap_setup = function(langConf, script_name)
+local dap_setup = function(langConf)
 	require("dap")
 	require("lsp.dap_core")
-    if langConf.configurations ~= nil then
-	require("dap").configurations[script_name] = { langConf.configurations }
-    end
-    if langConf.adapters ~= nil then
-	    require("dap").adapters = langConf.adapters
-    end
+	local tC = require("core.utils").tableConcat
+	if langConf.configurations ~= nil then
+		tC(require("dap").configurations,langConf.configurations)
+	end
+	if langConf.adapters ~= nil then
+		require("dap").adapters = langConf.adapters
+	end
 end
 ----------
 
@@ -355,21 +372,24 @@ end
 --------------------------------
 local lang_tool_setup = function(langConf, script_name)
 	local capabilities = require("lsp.cmp_setup").capabilities()
+  if langConf.priOpts ~= nil then
+    langConf.priOpts()
+  end
+	require("core.utils").set_shift_and_tab(langConf.shift)
 	package_setup(langConf)
 	lsp_setup(langConf.lsp, capabilities)
 	cmp_setup(langConf.cmp_sources)
 	formatter_setup(langConf.format, script_name)
 	linter_setup(langConf.lint, script_name)
-	dap_setup(langConf.dap, script_name)
+  dap_setup(langConf.dap)
 	cmp_setup(langConf.cmp_sources)
 	snip_setup()
-	require("core.utils").set_shift_and_tab(langConf.shift)
 	if langConf.injected then
 		injected_setup()
 	end
-	if langConf.extraOpts ~= nil then
-		langConf.extraOpts()
-	end
+  if langConf.afterOpts ~= nil then
+    langConf.afterOpts()
+  end
 	set_signs()
 	require("which-key").register()
 end

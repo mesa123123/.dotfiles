@@ -20,25 +20,36 @@ M.lsp = {
 	},
 }
 -- cmp sources
-M.cmp_sources = {}
+M.cmp_sources = {
+	"luasnip",
+	"nvim_lsp",
+	"nvim_lsp_document_symbol",
+	"nvim_lua",
+	"path",
+	"buffer",
+	"treesitter",
+}
 -- linter
 M.lint = {
 	luacheck = {
 		cmd = "luacheck",
-		args = { "--globals", "vim", },
+		args = { "--globals", "vim" },
 		ignore_exitcode = true,
 		parser = require("lint").linters.luacheck.parser,
 	},
 }
 -- formatter
 M.format = { stylua = {
-    indent_type = "Spaces",
-    indent_width = 2
+	indent_type = "Spaces",
+	indent_width = 2,
 } }
 -- debugger
 M.dap = {
 	packages = {},
-	configurations = { type = "nlua", request = "attach", name = "Attach to running Neovim Instance" },
+	configurations = {
+        lua = {
+        type = "nlua", request = "attach", name = "Attach to running Neovim Instance" },
+    },
 	adapters = {
 		nlua = function(callback, opts)
 			callback({

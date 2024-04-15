@@ -20,16 +20,41 @@ M.lsp = {
 		end,
 	},
 }
+
 M.lint = {
 	pylint = {
 		cmd = require("core.utils").get_venv_command("pylint"),
 		ignore_exit_code = true,
-		parser = lint.linters.pylint.parser
+		parser = lint.linters.pylint.parser,
 	},
 }
-M.format = { black = { }, isort = {}, injected = {} }
+
+M.format = { black = {}, isort = {}, injected = {} }
+
 M.injected = true
-M.extraOpts = function()
+
+M.pythonPath = require('core.utils').get_python_path()
+
+M.dap = {
+	configurations = {
+			type = "python",
+			request = "launch",
+			name = "Launch file",
+			program = "${file}",
+			cwd = vim.fn.getcwd(),
+			pythonPath = M.pythonPath,
+			env = { PYTHONPATH = vim.fn.getcwd() },
+		},
+  adapters = {
+    python = {
+      type = "executable",
+      command = M.pythonPath,
+      args = { "-m",  "debugpy.adapter" }
+    },
+  }
+}
+
+M.priOpts = function()
 	local dappy = require("dap-python")
 	dappy.setup(require("core.utils").python_path)
 	dappy.test_runner = "pytest"
@@ -42,9 +67,19 @@ M.extraOpts = function()
 	nmap(lk.debug_python.key .. "c", lreq .. "('dap-python').test_class()", "Test Class")
 	nmap(lk.debug_python.key .. "s", lreq .. "('dap-python').debug_selection()", "Debug Selected")
 end
-M.dap = { debugpy = {
-    
-} }
+
+M.cmp_sources = {
+	"luasnip",
+	"nvim_lsp",
+	"nvim_lsp_document_symbol",
+	"otter",
+	"path",
+	"buffer",
+	"spell",
+	"treesitter",
+	"dotenv",
+}
+
 M.shift = 4
 
 return M
