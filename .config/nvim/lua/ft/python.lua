@@ -24,7 +24,7 @@ M.lint = {
 	pylint = {
 		cmd = require("core.utils").get_venv_command("pylint"),
 		ignore_exit_code = true,
-		parser = lint.linters.pylint.parser()
+		parser = lint.linters.pylint.parser
 	},
 }
 M.format = { black = { }, isort = {}, injected = {} }
