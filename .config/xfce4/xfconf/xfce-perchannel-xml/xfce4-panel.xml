@@ -156,6 +156,7 @@
         <value type="string" value="pamac-tray"/>
       </property>
       <property name="known-items" type="array">
+        <value type="string" value="NordVPN"/>
         <value type="string" value="zoom"/>
         <value type="string" value="dnfdragora-updater"/>
         <value type="string" value="spotify-client"/>
