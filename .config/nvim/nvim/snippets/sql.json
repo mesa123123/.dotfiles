@@ -1,0 +1,30 @@
+{
+  "col_null": {
+    "prefix": "col_null",
+    "body": "NULL as ${1:column_name}"
+  },
+  "dbt_set_ref__diff_model": {
+    "prefix": "dbt_set_ref__diff_model",
+    "body": "{% set ${1:model_set}_${3:model_name} = ref('${1:model_set}_${2:layer}__${3:model_name}') %}"
+  },
+  "query_column_names": {
+    "prefix": "query_column_names",
+    "body": "select table_schema, table_name, column_name from information_schema.columns where table_schema like '%${1:schema}%' and table_name like '%${2:table}%'"
+  },
+  "dbt_set_ref__seed": {
+    "prefix": "dbt_set_ref__seed",
+    "body": "{% set ${1:model_set}_${3:model_name} = ref('${1:model_set}_${2:layer}__${3:model_name}') %}"
+  },
+  "dbt_set_ref__source": {
+    "prefix": "dbt_set_ref__source",
+    "body": "{% set ${1:schema}_${2:table} = source('${1:schema}', '${2:table}') %}"
+  },
+  "dbt_config_alias": {
+    "prefix": "dbt_config_alias",
+    "body": "{{ config(alias='${1:table_name}') }}"
+  },
+  "config_table_name": {
+    "prefix": "config_table_name",
+    "body": "{{ config(alias='${1:table_name}') }}"
+  }
+}

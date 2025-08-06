@@ -1,0 +1,225 @@
+---------------------------------
+-- ########################### --
+-- # Code Completion Config  # --
+-- ########################### --
+---------------------------------
+
+-------------------------------
+-- Module Table
+-------------------------------
+local M = {}
+-------------------------------
+
+--------------------------------
+-- Imports
+--------------------------------
+
+-- Vim Vars
+----------
+-- Api Exposures
+local api = vim.api -- vim api (I'm not sure what this does)
+local lsp = vim.lsp -- Lsp inbuilt
+G = vim.g -- global variables
+--------
+
+-------------------------------
+-- Sources
+-------------------------------
+-- Source Tables
+----------
+M.sources = {}
+
+-- General Sources
+----------
+M.sources.general_sources = {
+  { name = "core_snips" },
+  { name = "nvim_lsp" },
+  { name = "nvim_lsp_signature_help" },
+  { name = "nvim_lsp_document_symbol" },
+  { name = "buffer" },
+  { name = "path" },
+  { name = "vim-dadbod-completion" },
+  { name = "cmdline" },
+  { name = "treesitter" },
+  { name = "spell" },
+  { name = "nvim_lua" },
+  { name = "dotenv" },
+  { name = "cmdline_history" },
+}
+----------
+
+-- Text Search Sources
+----------
+M.sources.text_search_sources = {
+  { name = "buffer" },
+}
+----------
+
+-- Cmdline Sources
+----------
+M.sources.cmdline_sources = {
+  { name = "cmdline" },
+  { name = "cmdline_history" },
+  { name = "path" },
+}
+----------
+
+-- Gitignore Sources
+----------
+M.sources.gitignore_sources = function(cmp)
+  return cmp.config.sources({
+    { name = "cmp_git" },
+  })
+end
+----------
+
+--------------------------------
+-- Functions
+--------------------------------
+-- Source Tables
+----------
+M.functions = {}
+
+-- Next Selection
+----------
+M.functions.cmp_next = function(cmp)
+  return cmp.mapping(function(fallback)
+    if cmp.visible() then
+      cmp.select_next_item()
+    else
+      fallback()
+    end
+  end, { "i", "s", "c" })
+end
+----------
+
+-- Previous Selection
+----------
+M.functions.cmp_previous = function(cmp)
+  return cmp.mapping(function(fallback)
+    if cmp.visible() then
+      cmp.select_prev_item()
+    else
+      fallback()
+    end
+  end, { "i", "s", "c" })
+end
+----------
+
+-- Abort Selection
+----------
+M.functions.cmp_abort = function(cmp)
+  return cmp.mapping(function(fallback)
+    if cmp.visible() then
+      cmp.abort()
+    else
+      fallback()
+    end
+  end, { "i", "s", "c" })
+end
+----------
+
+-- Confirm Selection
+----------
+M.functions.cmp_select = function(cmp)
+  return cmp.mapping(function(fallback)
+    if cmp.visible() and cmp.get_active_entry() then
+      cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+    else
+      fallback()
+    end
+  end, { "i" })
+end
+----------
+
+-- Toggle Cmp window on and off
+----------
+M.functions.cmp_toggle = function(cmp)
+  return cmp.mapping(function()
+    if cmp.visible() then
+      cmp.close()
+    else
+      cmp.complete()
+    end
+  end, { "i", "s" })
+end
+----------
+
+--------------------------------
+-- Setups
+--------------------------------
+M.loaders = {}
+-- General Setups
+----------
+M.loaders.general = function(cmp, lspkind)
+  require("core").snips.register_snip_cmp_source(cmp)
+  return {
+    sources = M.sources.general_sources,
+    completion = {
+      completeopt = "menu,menuone,preview,noselect",
+    },
+    snippet = {
+      expand = function(args)
+        vim.snippet.expand(args.body)
+      end,
+    },
+    -- Making autocomplete menu look nice
+    formatting = {
+      format = lspkind.cmp_format({
+        mode = "symbol",
+        maxwidth = {
+          menu = 50,
+          abbr = 50,
+        },
+        ellipsis_char = "...",
+        show_labelDetails = true,
+      }),
+    },
+    mapping = {
+      ["<C-l>"] = M.functions.cmp_next(cmp),
+      ["<C-h>"] = M.functions.cmp_previous(cmp),
+      ["<C-k>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-j>"] = cmp.mapping.scroll_docs(4),
+      ["<Esc>"] = M.functions.cmp_abort(cmp),
+      ["<CR>"] = M.functions.cmp_select(cmp),
+      ["<c-space>"] = M.functions.cmp_toggle(cmp), -- toggle completion suggestions
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+  }
+end
+----------
+
+-- Text Search '/'
+----------
+M.loaders.text_search = function(cmp)
+  return {
+    sources = M.sources.text_search_sources,
+    mapping = {
+      ["<TAB>"] = M.functions.cmp_select(cmp),
+    },
+  }
+end
+----------
+
+-- Setup - Commandline ':'
+----------
+M.loaders.cmdline = function(cmp)
+  return {
+    sources = M.sources.cmdline_sources,
+    mapping = {
+      ["<TAB>"] = M.functions.cmp_select(cmp),
+    },
+  }
+end
+----------
+
+--------------------------------
+-- Module Table
+--------------------------------
+
+return M
+
+----------
