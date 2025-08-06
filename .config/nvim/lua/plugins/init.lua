@@ -1,193 +1,203 @@
 return {
-	{
-		"vhyrro/luarocks.nvim",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-		},
-		priority = 1000,
-		config = true,
-	},
-	----------
-	-- Autocompletion & Snips
-	----------
-	{ "L3MON4D3/LuaSnip", dependencies = {
-		"rafamadriz/friendly-snippets",
-	} },
-	{
-		"hrsh7th/nvim-cmp",
-		dependencies = {
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-nvim-lsp-document-symbol",
-			"hrsh7th/cmp-nvim-lua",
-			"hrsh7th/cmp-cmdline",
-			"ray-x/cmp-treesitter",
-			"SergioRibera/cmp-dotenv",
-			"dmitmel/cmp-cmdline-history",
-			"yochem/cmp-htmx",
-			"saadparwaiz1/cmp_luasnip",
-			"f3fora/cmp-spell",
-			"jmbuhr/otter.nvim",
-		},
-	},
-	{ "jose-elias-alvarez/null-ls.nvim", branch = "main" },
-	-- Linting Plugins
-	----------
-	{ "mfussenegger/nvim-lint", event = "VeryLazy" },
-	-- Formatting
-	----------
-	{ "stevearc/conform.nvim", event = "VeryLazy" },
-	-- Inejected Languages
-	----------
-	"jmbuhr/otter.nvim",
-	-- Debug Adapter Protocol
-	----------
-	{
-		"mfussenegger/nvim-dap",
-		dependencies = {
-			-- Python Funcs
-			"mfussenegger/nvim-dap-python",
-			-- NvimConfig Funcs
-			"jbyuki/one-small-step-for-vimkind",
-			-- Cool Ui Elements
-			"theHamsta/nvim-dap-virtual-text",
-		},
-	},
-	----------
-	-- Versions Control
-	----------
-	-- nicer-looking tabs with close icons
-	{
-		"nanozuki/tabby.nvim",
-		enabled = true,
-		config = function()
-			require("tabby.tabline").use_preset("tab_only")
-		end,
-	},
-	{
-		"dstein64/nvim-scrollview",
-		enabled = true,
-		opts = {
-			current_only = true,
-			signs_on_startup = {},
-		},
-	},
-	{
-		"utilyre/barbecue.nvim",
-		dependencies = {
-			"SmiteshP/nvim-navic",
-			"nvim-tree/nvim-web-devicons", -- optional dependency
-		},
-		config = function()
-			require("barbecue").setup()
-		end,
-	},
-	{
-		"norcalli/nvim-colorizer.lua",
-		config = function()
-			require("colorizer").setup()
-		end,
-	},
-	{
-		"folke/zen-mode.nvim",
-		config = function()
-			require("core.utils").norm_keyset(
-				require("core.keymaps").lk.zen.key,
-				'lua require("zen-mode").toggle({ window = { width = .85 }})',
-				"Zen Mode Toggle"
-			)
-		end,
-	},
-	{
-		"cameron-wags/rainbow_csv.nvim",
-		config = true,
-		ft = {
-			"csv",
-			"tsv",
-			"csv_semicolon",
-			"csv_whitespace",
-			"csv_pipe",
-			"rfc_csv",
-			"rfc_semicolon",
-		},
-		cmd = {
-			"RainbowDelim",
-			"RainbowDelimSimple",
-			"RainbowDelimQuoted",
-			"RainbowMultiDelim",
-		},
-	},
-	{ "onsails/lspkind.nvim", event = "VeryLazy" },
-	-- Dashboard
-	{
-		"startup-nvim/startup.nvim",
-		event = "VimEnter",
-		dependencies = { "nvim-tree/nvim-web-devicons", "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-	},
-	-- Folding
-	----------
-	{
-		"anuvyklack/pretty-fold.nvim",
-		config = function()
-			require("pretty-fold").setup({})
-		end,
-	},
-	----------
-	-- CmdLine
-	----------
-	"rcarriga/nvim-notify",
-	{ "stevearc/dressing.nvim", event = "VeryLazy" },
-	{
-		"stevearc/overseer.nvim",
-		commit = "68a2d344cea4a2e11acfb5690dc8ecd1a1ec0ce0",
-		cmd = { "CompilerOpen", "CompilerToggleResults", "CompilerRedo" },
-		opts = {
-			task_list = {
-				direction = "bottom",
-				min_height = 15,
-				max_height = 15,
-				default_detail = 1,
-			},
-		},
-	},
-	----------
-	-- Writing Functionality
-	----------
-	-- Wiki - Obsidian nvim
-	{ "epwalsh/obsidian.nvim", event = "VeryLazy" },
-	-- Latex - VimTex
-	{
-		"lervag/vimtex",
-		config = function()
-			vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-				pattern = { "*.tex" },
-				callback = function()
-					vim.g["vimtext_view_method"] = "zathura"
-				end,
-			})
-		end,
-	},
-	----------
-	-- Working with Kitty
-	----------
-	{ "fladson/vim-kitty", branch = "main" },
-	----------
-	-- Notebooks
-	----------
-	--  {
-	--    "quarto-dev/quarto-nvim",
-	--  },
-	--  {
-	--    "benlubas/molten-nvim",
-	--    version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
-	--    build = ":UpdateRemotePlugins",
-	--    init = function()
-	--      -- this is an example, not a default. Please see the readme for more configuration options
-	--      vim.g.molten_output_win_max_height = 12
-	--    end,
-	--  },
-	--  ----------
-	-- Vim tutor Ext
-	"ThePrimeagen/vim-be-good",
+  {
+    "vhyrro/luarocks.nvim",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
+    priority = 1000,
+    config = true,
+  },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      icons = { mappings = false },
+    },
+  },
+  -- Linting Plugins
+  ----------
+  { "mfussenegger/nvim-lint", event = "VeryLazy" },
+  -- Formatting
+  ----------
+  { "stevearc/conform.nvim", event = "VeryLazy" },
+  ----------
+  -- Tools Manager
+  ----------
+  {
+    "williamboman/mason.nvim",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "jay-babu/mason-nvim-dap.nvim",
+      "jay-babu/mason-null-ls.nvim",
+      -- neodev
+      "folke/neodev.nvim",
+      -- Nice popup windows
+      "ray-x/lsp_signature.nvim",
+    },
+  },
+  { "neovim/nvim-lsp-config", url = "git@github.com:neovim/nvim-lspconfig.git", lazy = false },
+  ----------
+  -- Debug Adapter Protocol
+  ----------
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      -- Python Funcs
+      "mfussenegger/nvim-dap-python",
+      -- NvimConfig Funcs - This is the debugger for your config
+      "jbyuki/one-small-step-for-vimkind",
+      -- Cool Ui Elements
+      "theHamsta/nvim-dap-virtual-text",
+    },
+    config = function()
+      require("lsp_config.dap_config")
+    end,
+  },
+  ----------
+  -- Version Control
+  ----------
+  {
+    "tpope/vim-fugitive",
+    event = "VeryLazy",
+    config = function()
+      local vcs_config = require("config.vcs")
+      vcs_config.mappings()
+      vcs_config.tele_mappings()
+    end,
+  },
+  ----------
+  -- UI Stuff
+  ----------
+  -- Icons
+  {
+    "echasnovski/mini.icons",
+    config = function()
+      require("mini.icons").setup({
+        lsp = {
+          snippet = {
+            glyph = "",
+            hl = "miniiconsgreen",
+          },
+        },
+      })
+    end,
+  },
+  -- Notifications
+  {
+    "echasnovski/mini.notify",
+    version = "*",
+    config = function()
+      require("mini.notify").setup()
+    end,
+  },
+  {
+    "dstein64/nvim-scrollview",
+    enabled = true,
+    opts = {
+      current_only = true,
+      signs_on_startup = {},
+    },
+  },
+  {
+    "norcalli/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup()
+    end,
+  },
+  {
+    "tris203/precognition.nvim",
+    opts = {
+      startVisible = true,
+      hints = {
+        Caret = { text = "^", prio = 4 },
+        Dollar = { text = "L", prio = 5 },
+        MatchingPair = { text = "%", prio = 4 },
+        Zero = { text = "H", prio = 5 },
+        w = { text = "w", prio = 1 },
+        b = { text = "b", prio = 1 },
+        e = { text = "e", prio = 1 },
+        W = { text = "W", prio = 2 },
+        B = { text = "B", prio = 2 },
+        E = { text = "E", prio = 2 },
+      },
+    },
+  },
+  { "ellisonleao/gruvbox.nvim", priority = 1000 },
+  {
+    "cameron-wags/rainbow_csv.nvim",
+    config = true,
+    ft = {
+      "csv",
+      "tsv",
+      "csv_semicolon",
+      "csv_whitespace",
+      "csv_pipe",
+      "rfc_csv",
+      "rfc_semicolon",
+    },
+    cmd = {
+      "RainbowDelim",
+      "RainbowDelimSimple",
+      "RainbowDelimQuoted",
+      "RainbowMultiDelim",
+    },
+  },
+  { "onsails/lspkind.nvim", event = "VeryLazy" },
+  -- Dashboard
+  {
+    "startup-nvim/startup.nvim",
+    event = "VimEnter",
+    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+  },
+  -- Syntax Stuff
+  {
+    "fei6409/log-highlight.nvim",
+    config = function()
+      require("log-highlight").setup({
+        extensions = { "log", "output" },
+      })
+    end,
+  },
+  ----------
+  -- CmdLine
+  ----------
+  { "stevearc/dressing.nvim", event = "VeryLazy" },
+  ----------
+  -- Writing Functionality
+  ----------
+  -- Wiki - Obsidian nvim
+  { "epwalsh/obsidian.nvim", event = "VeryLazy" },
+  -- Latex - VimTex
+  {
+    "lervag/vimtex",
+    ft = "tex",
+    config = function()
+      vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+        pattern = { "*.tex" },
+        callback = function()
+          vim.g["vimtext_view_method"] = "zathura"
+        end,
+      })
+    end,
+  },
+  {
+    "tadmccorkle/markdown.nvim",
+    ft = "markdown",
+  },
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      -- Setup render-markdown
+      require("render-markdown").setup({
+        completions = { blink = { enabled = true } },
+      })
+    end,
+    opts = {
+      file_types = { "markdown", "codecompanion" },
+      render_modes = { "n", "c", "t" },
+    },
+    ft = { "markdown", "codecompanion" },
+  },
+  ----------
 }

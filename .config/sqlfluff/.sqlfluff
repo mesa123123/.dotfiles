@@ -1,0 +1,12 @@
+[sqlfluff]
+dialect = bigquery
+templater = jinja
+max_line_length = 120
+exclude_rules = L003,L016 # Example: Exclude specific rules globally
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper

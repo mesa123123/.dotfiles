@@ -1,1 +1,1 @@
-require("core.theme").load()
+require("base.theme").load()
