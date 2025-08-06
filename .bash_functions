@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# --------------------------------
+# Environment Functions
+# --------------------------------
+
 function wsldevcheck() {
 	if [ "${WSLON}" == "true" ]; then
         [[ ! -d ~/dev  ]] && ln -s "$WINHOME"/dev ~/dev
@@ -7,7 +11,7 @@ function wsldevcheck() {
 }
 
 # A function to make a directory for a new project if it isn't already made, only used by other functions
-function makeDevDir() {
+function makedevDir() {
    # Prompt User on Non-existent Directory and ask if they want to create it
    echo "Project "${1}" doesn't currently exist, create project?"
    echo "(y/n)"
@@ -15,12 +19,12 @@ function makeDevDir() {
    read -r ANSWER
    # If yes, create folder and git repo
    if [ "${ANSWER}" == "y" ]; then 
-        mkdir ~/Dev/"${1}"
+        mkdir ~/dev/"${1}"
         echo "Project Folder Created, Iniatlize Git Repo?"
         read -r REPOFY
         echo "(y/n)"
-        [ "${REPOFY}" == "y" ] && git init ~/Dev/"${1}"
-        cd ~/Dev/"${1}"
+        [ "${REPOFY}" == "y" ] && git init ~/dev/"${1}"
+        cd ~/dev/"${1}"
    else
        echo "Project not created"
        return 1;
@@ -35,27 +39,27 @@ function devhome()
     # If no arguement is given simply go to the dev/projects home folder
 	if [[ -z "$1" ]]; then
 		echo "No project named, please enter one of the following:"	
-		ls ~/Dev/
+		ls ~/dev/
         echo "or use -m to create new name of new project"
 	#  if i use the cmd switch -m then i can create a new project
     elif [[ "$1" == "-m" ]]; then 
         if [[ -z "$2" ]]; then
             echo "no new project named, please enter name of new project"
             read -r PROJECT_NAME
-            makeDevDir "${PROJECT_NAME}"    
+            makedevDir "${PROJECT_NAME}"    
         else
-            makeDevDir "$2" 
+            makedevDir "$2" 
         fi
 	# If I enter the word go, it just goes to the folder	
     elif [[ "$1" == "go" ]]; then
-            cd ~/Dev/;
+            cd ~/dev/;
 	else
 		# If the arguement given is show, print out the list of project folders
 		if [[ "$1" == "show" || "$1" == "list" ]]; then	
-			ls ~/Dev/
+			ls ~/dev/
 		# if the arguement given is the name of a project go to that project folder	
 		else
-            if [ -d ~/Dev/"${1}" ]; then cd ~/Dev/"${1}" || exit; else echo "No project named ${1} please enter the name of a valid project or use command line switch -m to create one"; fi
+            if [ -d ~/dev/"${1}" ]; then cd ~/dev/"${1}" || exit; else echo "No project named ${1} please enter the name of a valid project or use command line switch -m to create one"; fi
             if [[ $? == 1 ]]; then 
                 return 1;
             fi
@@ -67,7 +71,7 @@ function devhome()
 # Probably should be able to sort this out for more environments other than those named "env"
 function DvxSendKeys()
 {
-    ENVPRESENT=~/Dev/"${1}"/.venv
+    ENVPRESENT=~/dev/"${1}"/.venv
     devhome "${1}"
     if [[ -d $ENVPRESENT ]]; then
        source "$ENVPRESENT"/bin/activate
@@ -80,25 +84,25 @@ function dvx()
     wsldevcheck
     if [[ $# -eq 0 ]]; then
         echo "Please enter one of the following:"
-        ls ~/Dev/
+        ls ~/dev/
         return 1;
     fi
     if [[ ! -d ~/dev/Projects/"${1}" ]]; then
-        makeDevDir "${1}"
+        makedevDir "${1}"
         if [[ $? == 1 ]]; then
             echo "Project not created, exiting"
             return 1;
         fi
     fi
-    tmux new-session -d -s Development
-    tmux rename-window -t 0 Development
+    tmux new-session -d -s development
+    tmux rename-window -t 0 development
     tmux split-window -v 
     tmux select-pane -t 1
     tmux send-keys -t1 DvxSendKeys Space "${1}" Enter
     tmux send-keys -t0 DvxSendKeys Space "${1}" Enter
     tmux send-keys -t0 'vim' Enter 
     tmux send-keys -t1 'clear' Enter
-    tmux attach-session -t Development:0 -c ~/dev/Projects/"${1}"
+    tmux attach-session -t development:0 -c ~/dev/Projects/"${1}"
 
 }
 
@@ -152,11 +156,30 @@ function stenv() {
         echo "Can't find an unamed or env-named virtualenvironment"
     fi
 }
+ # Adds text to a file if its not there
+configadd() {
+    grep -qxF "${2}" "$1" || echo "${2}" >> "$1"
+}
+
+# Helpful for settingn up certain things that may or may not be installed
+check_command() {
+    command
+    if [ $? -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 # export the functions to the shell session
+export -f check_command
+export -f configadd
 export -f devhome
 export -f dvx
 export -f newscreen
 export -f stenv
 export -f cocfinstall
 export -f standardterm
+
+# --------
+# EndofAliases

@@ -4,47 +4,151 @@
   <property name="panels" type="array">
     <value type="int" value="0"/>
     <property name="panel-0" type="empty">
-      <property name="position" type="string" value="p=6;x=2880;y=19"/>
+      <property name="position" type="string" value="p=6;x=2880;y=18"/>
       <property name="length" type="uint" value="100"/>
       <property name="position-locked" type="bool" value="true"/>
       <property name="plugin-ids" type="array">
-        <value type="int" value="1"/>
-        <value type="int" value="5"/>
-        <value type="int" value="2"/>
         <value type="int" value="6"/>
-        <value type="int" value="9"/>
-        <value type="int" value="3"/>
         <value type="int" value="16"/>
+        <value type="int" value="3"/>
+        <value type="int" value="9"/>
+        <value type="int" value="1"/>
+        <value type="int" value="8"/>
+        <value type="int" value="5"/>
+        <value type="int" value="10"/>
+        <value type="int" value="7"/>
+        <value type="int" value="12"/>
+        <value type="int" value="14"/>
+        <value type="int" value="4"/>
+        <value type="int" value="2"/>
       </property>
       <property name="role" type="string" value="xfce4-panel-12965750720"/>
       <property name="length-adjust" type="bool" value="true"/>
-      <property name="background-style" type="uint" value="0"/>
+      <property name="background-style" type="uint" value="1"/>
       <property name="size" type="uint" value="36"/>
       <property name="mode" type="uint" value="0"/>
       <property name="autohide-behavior" type="uint" value="0"/>
-      <property name="disable-struts" type="bool" value="false"/>
       <property name="icon-size" type="uint" value="16"/>
       <property name="leave-opacity" type="uint" value="100"/>
+      <property name="enable-struts" type="bool" value="true"/>
+      <property name="background-rgba" type="array">
+        <value type="double" value="0.20784313725490197"/>
+        <value type="double" value="0.20784313725490197"/>
+        <value type="double" value="0.20784313725490197"/>
+        <value type="double" value="1"/>
+      </property>
+      <property name="enter-opacity" type="uint" value="100"/>
     </property>
     <property name="dark-mode" type="bool" value="true"/>
   </property>
   <property name="plugins" type="empty">
     <property name="plugin-9" type="string" value="pulseaudio">
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
-      <property name="mpris-players" type="string" value="chromium.instance1576;chromium.instance18174;chromium.instance37636"/>
+      <property name="mpris-players" type="string" value="chromium.instance10091;chromium.instance10422;chromium.instance11726;chromium.instance13262;chromium.instance14476;chromium.instance1468;chromium.instance1486;chromium.instance1543;chromium.instance1550;chromium.instance1576;chromium.instance1580;chromium.instance1654;chromium.instance1679;chromium.instance1692;chromium.instance1780;chromium.instance18174;chromium.instance1864;chromium.instance20738;chromium.instance2134;chromium.instance25153;chromium.instance26829;chromium.instance3183;chromium.instance37497;chromium.instance37576;chromium.instance37636;chromium.instance48295;chromium.instance5713;chromium.instance6204;chromium.instance64648;chromium.instance74820;chromium.instance75541;chromium.instance9293"/>
+      <property name="known-players" type="string" value="Chrome;ncspot;spotify;Spotify;Spotify Player"/>
+      <property name="persistent-players" type="string" value=""/>
+      <property name="ignored-players" type="string" value=""/>
     </property>
     <property name="plugin-5" type="string" value="clock">
       <property name="mode" type="uint" value="2"/>
       <property name="digital-format" type="string" value="%a %_d %b, %R"/>
-      <property name="timezone" type="string" value="GMT"/>
+      <property name="timezone" type="string" value="UTC"/>
       <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
-    </property>
-    <property name="plugin-2" type="string" value="separator">
-      <property name="expand" type="bool" value="true"/>
-      <property name="style" type="uint" value="0"/>
+      <property name="digital-time-format" type="string" value="UK - %T"/>
+      <property name="digital-layout" type="uint" value="3"/>
+      <property name="digital-time-font" type="string" value="FiraCode Nerd Font Propo Bold Italic 8"/>
     </property>
     <property name="plugin-3" type="string" value="systray">
       <property name="known-legacy-items" type="array">
+        <value type="string" value="wi-fi network connection “gabi01” active: gabi01 (77%)"/>
+        <value type="string" value="wi-fi network connection “gabi01” active: gabi01 (73%) vpn connection active"/>
+        <value type="string" value="wi-fi network connection “spark-b9gzfv” active: spark-b9gzfv (69%)"/>
+        <value type="string" value="wi-fi network connection “spark-b9gzfv” active: spark-b9gzfv (69%) vpn connection active"/>
+        <value type="string" value="selinux troubleshooter"/>
+        <value type="string" value="wi-fi network connection “spark-b9gzfv-ext” active: spark-b9gzfv-ext (66%)"/>
+        <value type="string" value="gpick"/>
+        <value type="string" value="notes"/>
+        <value type="string" value="seapplet"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (59%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (61%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (48%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (47%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (50%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (60%)"/>
+        <value type="string" value="wi-fi network connection “luton airport wifi” active: luton airport wifi (82%)"/>
+        <value type="string" value="wi-fi network connection “bob w guest ” active: bob w guest  (65%)"/>
+        <value type="string" value="wi-fi network connection “bob w guest ” active: bob w guest  (56%)"/>
+        <value type="string" value="wi-fi network connection “bob w guest ” active: bob w guest  (59%)"/>
+        <value type="string" value="wi-fi network connection “bob w guest ” active: bob w guest  (60%)"/>
+        <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (53%)"/>
+        <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (71%)"/>
+        <value type="string" value="wi-fi network connection “bob w guest ” active: bob w guest  (58%)"/>
+        <value type="string" value="wi-fi network connection “coffeecompany vismarkt” active: coffeecompany vismarkt (62%)"/>
+        <value type="string" value="wi-fi network connection “luton airport wifi” active: luton airport wifi (57%)"/>
+        <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (72%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (58%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (60%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (66%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (65%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (68%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (39%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (46%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (43%)"/>
+        <value type="string" value="wi-fi network connection “freshapartments11” active: freshapartments11 (78%)"/>
+        <value type="string" value="wi-fi network connection “freshapartments11” active: freshapartments11 (74%)"/>
+        <value type="string" value="wi-fi network connection “freshapartments11” active: freshapartments11 (79%)"/>
+        <value type="string" value="wi-fi network connection “meininger free wifi” active: meininger free wifi (75%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (63%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (69%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (61%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (62%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (72%)"/>
+        <value type="string" value="wi-fi network connection “guests-projectsthelanes” active: guests-projectsthelanes (70%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (59%)"/>
+        <value type="string" value="wi-fi network connection “now3d2dh” active: now3d2dh (57%)"/>
+        <value type="string" value="wi-fi network connection “asteroid” active: asteroid (77%)"/>
+        <value type="string" value="wi-fi network connection “asteroid” active: asteroid (81%)"/>
+        <value type="string" value="wi-fi network connection “asteroid” active: asteroid (70%)"/>
+        <value type="string" value="wi-fi network connection “asteroid” active: asteroid (73%)"/>
+        <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (68%)"/>
+        <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (82%)"/>
+        <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (80%)"/>
+        <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (81%)"/>
+        <value type="string" value="wi-fi network connection “colony guest” active: colony guest (71%)"/>
+        <value type="string" value="wi-fi network connection “colony guest” active: colony guest (72%)"/>
+        <value type="string" value="wi-fi network connection “colony guest” active: colony guest (49%)"/>
+        <value type="string" value="wi-fi network connection “black sheep coffee free wifi” active: black sheep coffee free wifi (56%)"/>
+        <value type="string" value="wi-fi network connection “black sheep coffee free wifi” active: black sheep coffee free wifi (59%)"/>
+        <value type="string" value="requesting a wi-fi network address for “_the cloud”…"/>
+        <value type="string" value="wi-fi network connection “#starbuckswifi” active: #starbuckswifi (54%)"/>
+        <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (79%)"/>
+        <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (68%)"/>
+        <value type="string" value="requesting a wi-fi network address for “kings hotel guest”…"/>
+        <value type="string" value="wi-fi network connection “bbe_guest” active: bbe_guest (47%)"/>
+        <value type="string" value="requesting a wi-fi network address for “bbe_guest”…"/>
+        <value type="string" value="wi-fi network connection “avanti_free_wifi” active: avanti_free_wifi (74%)"/>
+        <value type="string" value="wi-fi network connection “lg69-mesh-a_5g-1” active: lg69-mesh-a_5g-1 (62%)"/>
+        <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (73%)"/>
+        <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (81%)"/>
+        <value type="string" value="wi-fi network connection “10emachina” active: 10emachina (80%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (59%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (46%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (55%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (63%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (67%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (69%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (54%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (70%)"/>
+        <value type="string" value="wi-fi network connection “ask4 wireless” active: ask4 wireless (62%)"/>
+        <value type="string" value="requesting a wi-fi network address for “all season_rep”…"/>
+        <value type="string" value="requesting a wi-fi network address for “boingo hotspot”…"/>
+        <value type="string" value="wi-fi network connection “boingo hotspot” active: boingo hotspot (61%)"/>
+        <value type="string" value="wi-fi network connection “spark-b9gzfv” active: spark-b9gzfv (63%)"/>
+        <value type="string" value="wi-fi network connection “vodafoneefa47c-ext” active: vodafoneefa47c-ext (73%)"/>
+        <value type="string" value="wi-fi network connection “spark-vv7fa8-5g” active: spark-vv7fa8-5g (67%)"/>
+        <value type="string" value="wi-fi network connection “spark-vv7fa8-5g” active: spark-vv7fa8-5g (72%)"/>
+        <value type="string" value="msm notifier"/>
+        <value type="string" value="no network connection"/>
         <value type="string" value="networkmanager applet"/>
         <value type="string" value="xfce terminal"/>
         <value type="string" value="clipman"/>
@@ -52,15 +156,111 @@
         <value type="string" value="pamac-tray"/>
       </property>
       <property name="known-items" type="array">
+        <value type="string" value="NordVPN"/>
+        <value type="string" value="zoom"/>
+        <value type="string" value="dnfdragora-updater"/>
+        <value type="string" value="spotify-client"/>
+        <value type="string" value="chrome_status_icon_1"/>
+        <value type="string" value="remmina-icon"/>
+        <value type="string" value="steam"/>
+        <value type="string" value="discord1"/>
         <value type="string" value="blueman"/>
+        <value type="string" value="indicator-solaar"/>
+        <value type="string" value="MSM Notifier"/>
       </property>
+      <property name="icon-size" type="int" value="22"/>
+      <property name="single-row" type="bool" value="true"/>
+      <property name="square-icons" type="bool" value="true"/>
+      <property name="hidden-legacy-items" type="array">
+        <value type="string" value="pamac-tray"/>
+      </property>
+      <property name="hidden-items" type="array">
+        <value type="string" value="indicator-solaar"/>
+        <value type="string" value="MSM Notifier"/>
+      </property>
+      <property name="menu-is-primary" type="bool" value="true"/>
+      <property name="symbolic-icons" type="bool" value="true"/>
+      <property name="hide-new-items" type="bool" value="false"/>
     </property>
     <property name="plugin-6" type="string" value="battery"/>
     <property name="plugin-1" type="string" value="separator">
       <property name="expand" type="bool" value="true"/>
       <property name="style" type="uint" value="0"/>
     </property>
-    <property name="plugin-16" type="string" value="whiskermenu"/>
+    <property name="plugin-16" type="string" value="whiskermenu">
+      <property name="button-icon" type="string" value="fedora-logo-sprite"/>
+      <property name="favorites-in-recent" type="bool" value="true"/>
+      <property name="command-switchuser" type="string" value="dm-tool switch-to-greeter"/>
+      <property name="favorites" type="array">
+        <value type="string" value="xfce4-web-browser.desktop"/>
+        <value type="string" value="xfce4-mail-reader.desktop"/>
+        <value type="string" value="xfce4-file-manager.desktop"/>
+        <value type="string" value="xfce4-terminal-emulator.desktop"/>
+      </property>
+      <property name="recent" type="array">
+        <value type="string" value="org.pwmt.zathura.desktop"/>
+        <value type="string" value="com.bitwig.BitwigStudio.desktop"/>
+        <value type="string" value="xfce-backdrop-settings.desktop"/>
+        <value type="string" value="xfce4-about.desktop"/>
+        <value type="string" value="setroubleshoot.desktop"/>
+        <value type="string" value="pavucontrol.desktop"/>
+        <value type="string" value="xfce4-notes.desktop"/>
+        <value type="string" value="xfce-ui-settings.desktop"/>
+        <value type="string" value="nordvpn.desktop"/>
+        <value type="string" value="steam.desktop"/>
+      </property>
+      <property name="show-button-icon" type="bool" value="true"/>
+      <property name="show-button-title" type="bool" value="false"/>
+    </property>
+    <property name="plugin-12" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-14" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="clipman" type="empty">
+      <property name="tweaks" type="empty">
+        <property name="never-confirm-history-clear" type="bool" value="true"/>
+      </property>
+    </property>
+    <property name="plugin-2" type="string" value="pager">
+      <property name="rows" type="uint" value="1"/>
+      <property name="miniature-view" type="bool" value="false"/>
+      <property name="workspace-scrolling" type="bool" value="true"/>
+      <property name="numbering" type="bool" value="false"/>
+      <property name="wrap-workspaces" type="bool" value="false"/>
+    </property>
+    <property name="plugin-4" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="notes" type="empty">
+      <property name="global" type="empty">
+        <property name="font-description" type="string" value="FiraCode Nerd Font Light 14"/>
+        <property name="tabs-position" type="int" value="1"/>
+        <property name="version" type="string" value="1.11.0"/>
+      </property>
+      <property name="new-window" type="empty">
+        <property name="width" type="int" value="270"/>
+        <property name="height" type="int" value="337"/>
+      </property>
+    </property>
+    <property name="plugin-7" type="string" value="clock">
+      <property name="timezone" type="string" value="Pacific/Auckland"/>
+      <property name="tooltip-format" type="string" value="%A %d %B %Y"/>
+      <property name="digital-layout" type="uint" value="3"/>
+      <property name="digital-time-font" type="string" value="FiraCode Nerd Font Propo Bold Italic 8"/>
+      <property name="digital-time-format" type="string" value="NZ - %T"/>
+    </property>
+    <property name="plugin-8" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-10" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
   </property>
   <property name="configver" type="int" value="2"/>
 </channel>

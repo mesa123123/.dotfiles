@@ -1,0 +1,8 @@
+[tools]
+node = '24.0'
+lua = '5.1'
+python = '3.13.0'
+
+[settings]
+experimental = true
+idiomatic_version_file_enable_tools = ["python"]

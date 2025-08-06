@@ -1,685 +1,732 @@
---------------------------
--- ###################  --
--- # Main Vim Config #  --
--- ###################  --
---------------------------
+------------------------------
+---#####################
+-- #  Main Nvim Config  #  --
+-- ######################  --
+--------------------------------
 
 --------------------------------
--- TO DO
+-- TODOS
 --------------------------------
--- 1. Learn LuaSnip
---      a. Rewrite Snippets for Lua
---      b. Restructure Snippets so only that format of Snippets loads
--- 2. Figure out how to run telescope
-----------------------------------
+-- TODO: config.utils table_concat, update it so it works with any number of tables
+-- TODO: Figure out why config module is populating "completion" table
+----------
+-- Notifications
+----------
+-- TODO: Get mini.notify, vim.print, and snacks.ui to work together
+-- BUG: Telescope Notifications picker no longer working
+----------
+----------
+-- Snippets
+----------
+-- TODO: Figure out a way to only add a snippet if the file is titled a certain way. e.g. .debug_config.lua
+-- BUG: DBT snippets keep trying to load in average sql files
+-- FIX: I think I need a way to tell if I"m in a dbt project and then load extra snips configd on that in the sql snip
+-- file?
+----------
+-- Filetype Stuff
+----------
+-- TODO: Set up filetype settings for best practices - as in not all the lsp setup stuff in this file rather in their
+-- own filetype files
+-- TODO: Create a way to automatically make line length set for certain filetypes
+----------
+-- Formatter
+----------
+-- TODO: SQL figure out a way to get the formatter working with query files in dadbodui
+----------
+-- Terminal
+----------
+-- TODO: Get rid of toggle term and just use the api from DVries video
+----------
+-- DAP
+-- BUG: Can't have more than one config in a debug_conf file.
+-- TODO: Create a command to edit/reload project dap configurations in place
+-- TODO: Create a command like GetDapConfig that shows current dap configs
+-- TODO: Create a way so that the .debug_config.lua file can read multiple languages
+-- TODO: Update the debug config to allow for selection for each config and full configs in the project dir
+-- TODO: Create a way for DAP to run multiprocesses by default
+----------
+-- LSP
+----------
+-- TODO: Create a command for open declaration that opens in a new pane
+-- TODO: YAMLLS: fix '---' document start error
+-- TODO: Switch from obsidian to markdown-oxide
+-- Figure out a way to make sure that you know you're in a learning directory so you can switch on oxide rather than
+-- marksman
+-- SUGGESTION: Use root-markers for this
+-- TODO: In lsp, sort out the install function so it works asynchronously, vim.schedule will work for this
+-- TODO: Python Signature help not working! Need to switch from pylsp to jedi and set  up individual bloody capabilities :(
+----------
+-- FORMATTING
+----------
+-- FEATURE: Figure out a way to run mypy on a folder and then send all of the errors to the quick-fix list
+----------
+-- AI
+----------
+-- PLUGIN: Make avante.nvim work
+----------
+-- DADBOD
+----------
+-- BUG: The dadbodui opens in a new tab but once I try to reopen it I want it to go back to that tab
+-- BUG: Keymappings don't stick unless I put them at the bottom of this file
+----------
+-- CODE FOLDING
+----------
+-- TODO: Folded titles displaying as '0'
+-- SUGGESTION: (Steal logic from Markdown.nvim should help with this problem)
+----------
+-- MARKDOWN
+----------
+-- TODO: Figure out how to get a custom comment on `gcc`
+-- SUGGESTION: in config folder after -> ftplugin -> create a markdown.lua file and use a similar makeup to the sql
+-- sibling file
+----------
+-- Treesitter
+----------
+-- BUG: Key map in config Not using config keymapping files
+-- BUG: Python Docstrings not conforming to injection code, start with minial config and work from there.
+-- TODO: Figure out how to get only the examples in a python module docstring to highlight as python code
+-- TODO: On buffer picker, figure out how to delete an unwritten buffer on ALT | SHIFT | d
+----------
+-- Oil.nvim
+----------
+-- TODO: Key map <leader>feh to open in current directory with hidden files if oil isn't open
+----------
+-- Feature Ideas
+----------
+-- FEATURE: Create a minimal config for dbugging
+-- FEATURE: Prime talked about only updating every year, perhaps I have a plugin that allows me to manage my config,
+-- basically a way of taking this comment list and then upvote certain things and then schedule days where I can
+-- update the config, and gets the most pressing issues (i.e. this is currently annoying me, it gets an upvote for the
+-- next config day).
+-- PLUGIN: Snacks.nvim (especially, buf-delete, indent-lines, dashboard)
+--------------------------------
 
--------------------------------
+--------------------------------
 -- Priority Settings
 --------------------------------
 -- Set the config path
-vim.g["config_path"] = "~/config/nvim"
+vim.g["config_path"] = "~/.config/nvim"
 -- Set the mapleader
-vim.g["mapleader"] = "\\"
+vim.g["mapleader"] = " "
+-- TermGuiColors
+vim.opt.termguicolors = true
+----------
 
 --------------------------------
--- Luaisms for Vim Stuff
+-- Add Config Modules to RTPath
+--------------------------------
+
+-- Core Settings
+----------
+local configpath = vim.fn.stdpath("config") .. "/lua/config"
+package.path = package.path .. ";" .. configpath .. "/init.lua"
+----------
+
+-- Lsp Settings
+----------
+local lsppath = vim.fn.stdpath("config") .. "/lua/lsp_config"
+package.path = package.path .. ";" .. lsppath .. "/init.lua"
+----------
+
+-- Snippets
+----------
+local snippath = vim.fn.stdpath("config") .. "/snippets"
+package.path = package.path .. ";" .. snippath
+----------
+
+-- Plugins Path
+----------
+local plugin_path = vim.fn.stdpath("data") .. "/lazy"
+local lazypath = plugin_path .. "/lazy.nvim"
+vim.opt.rtp:prepend(lazypath)
+require("package_setup")
+----------
+
+--------------------------------
+-- Configure Editing Commands
+--------------------------------
+
+-- Utils for Editing
+----------
+local function edit_based_on_ft(folder, suffix)
+  local ft = vim.bo.filetype -- Get current buffer's filetype
+  if ft == "" then
+    vim.notify("No filetype detected!", vim.log.levels.WARN)
+    return
+  end
+  local path = table.concat({ folder, ft }, "/")
+  vim.cmd("edit " .. path .. suffix)
+end
+
+----------
+
+-- Commands for Editing
+----------
+vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {})
+vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/lua/package_setup.lua", {})
+vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins/", {})
+vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp_config/", {})
+vim.api.nvim_create_user_command("Editconfig", "e ~/.config/nvim/lua/config/", {})
+vim.api.nvim_create_user_command("Editsnips", "e ~/.config/nvim/snippets/", {})
+vim.api.nvim_create_user_command("Editterm", "e ~/.wezterm.lua", {})
+vim.api.nvim_create_user_command("Editqueries", function()
+  edit_based_on_ft("~/.config/nvim/after/queries", "/")
+end, {})
+vim.api.nvim_create_user_command("Editft", function()
+  edit_based_on_ft("~/.config/nvim/after/ftplugin", ".lua")
+end, {})
+vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {})
+----------
+
+--------------------------------
+-- Vim, Sims, and Requires
+--------------------------------
+
+-- Requires
+----------
+-- Modules
+local config = require("config")
+local utils = config.utils
+local tC = utils.tableConcat
+local python_path = utils.get_python_path()
+local python_packages = utils.get_python_packages()
+local dashboard_config = config.dashboard_config
+local ft_settings = config.fileconfig
+local fn = vim.fn
+----------
+
+-------------------------------
+-- General Settings
+-------------------------------
+
+-- Set Core Options
+----------
+config.options.setup()
+----------
+
+-- Setup Keymaps
+----------
+config.keymaps.setup()
+----------
+
+-- Load Snippets
+----------
+config.snips.snip_maps()
+----------
+
+-- Set & Customize Colour Scheme
+----------
+vim.o.background = "light"
+vim.cmd.colorscheme("gruvbox")
+----------
+
+-- Greeting Screen
+----------
+require("startup").setup(dashboard_config)
+----------
+
+--------------------------------
+-- Installer and Package Management
 --------------------------------
 
 -- Variables
 ----------
-local cmd = vim.cmd -- vim commands
-local api = vim.api -- vim api (I'm not sure what this does)
-local fn = vim.fn -- vim functions
-local keymap = vim.keymap
-local g = vim.g -- global variables
-local opt = vim.opt -- vim options
-local gopt = vim.o -- global options
-local bopt = vim.bo -- buffer options
-local wopt = vim.wo -- window options
-
--- Functions
---------
-
--- ex (Currenly this is a wrapper for everything not yet implemented in nvim)
-----------
-local ex = setmetatable({}, {
-    __index = function(t, k)
-        local command = k:gsub("_$", "!")
-        local f = function(...)
-            return api.nvim_command(table.concat(vim.tbl_flatten { command, ... }, " "))
-        end
-        rawset(t, k, f)
-        return f
-    end
-});
-
--- Map(function, table)
-function Map(func, tbl)
-    local newtbl = {}
-    for i, v in pairs(tbl) do
-        newtbl[i] = func(v)
-    end
-    return newtbl
-end
-
+local lsp_config = require("lsp_config").config
+vim.lsp.set_log_level("debug")
 ----------
 
--- Filter(function, table)
-function Filter(func, tbl)
-    local newtbl = {}
-    for i, v in pairs(tbl) do
-        if func(v) then
-            newtbl[i] = v
-        end
-    end
-    return newtbl
-end
-
-----------------
-
-
---------------------------------
--- Plugin Loading and Settings
---------------------------------
--- Install Packer and Sync if required (vim-plug was going to be more complicated and I'm lazy)
-----------------
-local install_path = fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-    -- Clone packer and install
-    api.nvim_command('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path .. ' --depth=1')
-end
--- Load Packer
-cmd [[packadd packer.nvim]]
--- Load Plugins
-----------------
-require("packer").startup(function()
-    -- Packer can manage itself as an optional plugin
-    use { "wbthomason/packer.nvim", opt = true }
-    -- Autocompletion
-    ----------
-    use { 'hrsh7th/nvim-cmp',
-        -- Extensions for NvimCmp
-        requires = {
-            use 'hrsh7th/cmp-nvim-lsp',
-            use 'saadparwaiz1/cmp_luasnip',
-            use 'hrsh7th/cmp-path',
-            use 'hrsh7th/cmp-buffer',
-            use 'hrsh7th/cmp-nvim-lua',
-            use 'hrsh7th/cmp-cmdline',
-            use 'ray-x/cmp-treesitter',
-            use 'L3MON4D3/LuaSnip',
-            use 'rcarriga/nvim-notify',
-        }
-    }
-    -- Language Server Protocol
-    ----------
-    use { 'neovim/nvim-lspconfig',
-        wants = { "nvim-cmp", "mason.nvim", "mason-lspconfig.nvim", "lsp_signature.nvim" },
-        requires = { 'williamboman/mason-lspconfig.nvim', 'williamboman/mason.nvim', 'ray-x/lsp_signature.nvim',
-            'hrsh7th/nvim-cmp', 'L3MON4D3/LuaSnip' }, }
-    use { 'jose-elias-alvarez/null-ls.nvim', branch = 'main' }
-    -- Debug Adapter Protocol
-    ----------
-    use { 'mfussenegger/nvim-dap', requires = { 'mfussenegger/nvim-dap-python' } }
-    use { 'rcarriga/nvim-dap-ui', requires = { 'mfussenegger/nvim-dap' } }
-    -- Testing Plugins
-    ----------
-    use 'nvim-lua/plenary.nvim'
-    use 'nvim-treesitter/nvim-treesitter'
-    use 'antoinemadec/FixCursorHold.nvim'
-    use 'nvim-neotest/neotest'
-    use 'nvim-neotest/neotest-python'
-    use 'tpope/vim-cucumber'
-    -- File System and Plugins
-    ----------
-    use { 'kyazdani42/nvim-tree.lua', requires = { 'kyazdani42/nvim-web-devicons', }, }
-    use 'yggdroot/indentline'
-    use 'tpope/vim-fugitive'
-    use 'editorconfig/editorconfig-vim'
-    use 'plasticboy/vim-markdown'
-    -- Colors and Themes
-    ------------
-    use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
-    use 'altercation/vim-colors-solarized'
-    use 'nvie/vim-flake8'
-    -- DevIcons
-    use 'kyazdani42/nvim-web-devicons'
-    -- Theme
-    use 'ii14/onedark.nvim'
-    use 'mechatroner/rainbow_csv'
-    -- Languages
-    ------------
-    use 'itchyny/vim-gitbranch'
-    use 'ekalinin/Dockerfile.vim'
-    use 'rust-lang/rust.vim'
-    use 'sheerun/vim-polyglot'
-    use 'arzg/vim-rust-syntax-ext'
-    use 'chrisbra/csv.vim'
-    -- Dart/Flutter
-    use 'dart-lang/dart-vim-plugin'
-    use 'thosakwe/vim-flutter'
-    -- Alignment
-    use 'junegunn/vim-easy-align'
-    -- HardMode
-    use 'takac/vim-hardtime'
-    -- Database Workbench
-    use 'tpope/vim-dadbod'
-    use 'kristijanhusak/vim-dadbod-ui'
-    -- Working with Kitty
-    use { "fladson/vim-kitty", branch = "main" }
-    -- Terminal Behaviour
-    use { 'akinsho/toggleterm.nvim', tag = 'v2.*' }
-    -- Nvim Telescope
-    use { 'nvim-telescope/telescope.nvim', requires = { "BurntSushi/ripgrep", "sharkdp/fd", opt = false }, }
-    -- End of Plugins
-end)
-
--- Sync Plugins via Alias
-------------------
-api.nvim_create_user_command('PackUpdate', 'lua require("packer").sync()', {})
-------------------
-
---------------------------------
--- Configure Vimrc from Vim
---------------------------------
-
--- Commands
+-- Packages for Install
 ----------
-api.nvim_create_user_command('Editvim', 'e ~/.config/nvim/init.lua', {}) -- Edit Config
-api.nvim_create_user_command('Srcv', 'luafile ~/.config/nvim/init.lua', {}) -- Source Config
-----------
-
---------------------------------
--- Color Schemes and Themes
---------------------------------
-
--- Set TermGuiColors true
-----------
-opt.termguicolors = true
-
-
--- Load Color Scheme
-----------
--- cmd [[ colorscheme onedark ]]
-opt.colorscheme = "onedark"
-----------
-
--- Rainbow Brackets Options
-----------
-g['rainbow_active'] = 1
-----------
-
--- Load Webdevicons
-----------
-require 'nvim-web-devicons'.setup { default = true }
-require 'nvim-web-devicons'.get_icons()
-----------
-
--- Status Line Settings
-----------
-opt.laststatus = 2
-----------
-
--- Highlighting
----------
-hl(0, 'LspDiagnosticsUnderlineError', { bg = '#EB4917', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineWarning', { bg = '#EBA217', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineInformation', { bg = '#17D6EB', underline = true, blend = 50 })
-hl(0, 'LspDiagnosticsUnderlineHint', { bg = '#17EB7A', underline = true, blend = 50 })
---------------------------------
--- Editor Options, Settings, Commands
---------------------------------
-
--- Options
-----------
--- Line Numbers On
-opt.number = true
--- Other Enconding and Formatting settings
-opt.linebreak = true
-opt.autoindent = true
-opt.foldenable = false
-opt.encoding = 'UTF-8'
-opt.showmode = false
-opt.splitbelow = true
-opt.signcolumn = 'yes'
--- Default Tabstop & Shiftwidth
-opt.tabstop = 4
-opt.shiftwidth = 4
-opt.expandtab = true
-----------
-
--- Settings
-----------
-g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
-----------
-
--- Commands
-----------
-cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
-----------
-
--------------------------------"
--- Language Specific Settings
--------------------------------"
-
--- Filetype Enable
------------
-cmd [[ filetype on ]]
-cmd [[ filetype plugin indent on ]]
-----------
-
--- FileTypes
-----------
-cmd [[ au FileType cpp setlocal et ts=2 sw=2 ]] -- C++ Language
-cmd [[ au BufRead,BufNewFile *.hcl set filetype=ini ]] -- HCL Language
-cmd [[ au BufNewFile,BufRead Jenkinsfile set filetype=groovy ]] -- JenkinsFile
-cmd [[ au FileType python setlocal et ts=4 sw=4 sts=4 ]] -- Python Language
-cmd [[ au FileType typescript setlocal ts=2 sw=2 sts=2 ]] -- Typescript Settings
-cmd [[ au BufRead,BufNewFile Vagrantfile set filetype=ruby ]] -- Vagrant Files
-----------
-
--- Markdown
----------
-cmd [[ au FileType markdown setlocal ts=2 sw=2 sts=2 ]]
-cmd [[ au FileType markdown setlocal spell spelllang=en_gb ]]
-cmd [[ au FileType markdown inoremap <TAB> <C-t> ]]
--- Markdown Syntax Highlighting
-g['vim_markdown_fenced_languages'] = [['csharp=cs', 'json=javascript']]
-g['vim_markdown_folding_disabled'] = 1
-g['vim_markdown_conceal_code_blocks'] = 0
-g['vim_markdown_conceal'] = 0
--- Set .draft files to Markdown
-cmd [[ au BufRead,BufNewFile *.draft set filetype=markdown ]]
-----------
-
--- GitCommit
-----------
-g['EditorConfig_exclude_patterns'] = { 'fugitive://.*', 'scp://.*' }
-cmd [[ au FileType gitcommit let b:EditorConfig_disable = 1 ]]
-----------
-
-----------------------------------
--- Editor Mappings
-----------------------------------
-
--- Redo set to uppercase U
-----------
-keymap.set('n', 'U', 'redo', { silent = true, noremap = true })
-----------
-
-
--- Set Write/Quit to shortcuts
----------
-keymap.set('n', '<leader>ww', ':w<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>ws', ':source %<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>wqq', ':wq<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>wqa', ':wqa<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>wa', ':wa<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>qa', ':qa<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>qa!', '<cmd>qa!<cr>', { silent = false, noremap = true })
-keymap.set('n', '<leader>qq', ':q<CR>', { silent = false, noremap = true })
-keymap.set('n', '<leader>q!', ':q!<CR>', { silent = false, noremap = true })
-----------
-
--- When the enter key is pressed it takes away the highlighting in from the last text search
-----------
-keymap.set("n", "<cr>", ":nohlsearch<CR>", { silent = true })
-keymap.set("n", "n", ":set hlsearch<CR>n", { silent = true })
-keymap.set("n", "N", ":set hlsearch<CR>N", { silent = true })
-----------
-
--- Remap Visual and Insert mode to use Normal Modes Tab Rules
-----------
-keymap.set("i", ">>", "<c-t>", {})
-keymap.set("i", "<<", "<c-d>", {})
-----------
-
--- Map Movement Keys to Ctrl hjlk in Terminal, and Command Modes
-----------
-keymap.set("t", "<c-h>", "<Left>", {})
-keymap.set("t", "<c-h>", "<Left>", {})
-keymap.set("t", "<c-j>", "<Down>", {})
-keymap.set("t", "<c-k>", "<Up>", {})
-keymap.set("c", "<c-l>", "<Right>", {})
-keymap.set("c", "<c-j>", "<Down>", {})
-keymap.set("c", "<c-k>", "<Up>", {})
-keymap.set("c", "<c-l>", "<Right>", {})
-----------
-
--- Tab Control
----------
--- Navigation
-keymap.set("", "<C-t>k", ":tabr<cr>", {})
-keymap.set("", "<C-t>j", ":tabl<cr>", {})
-keymap.set("", "<C-t>l", ":tabn<cr>", {})
-keymap.set("", "<C-t>h", ":tabp<cr>", {})
--- Close Current Tab
-keymap.set("", "<C-t>c", ":tabc<cr>", {})
--- Close all other Tabs
-keymap.set("", "<C-t>o", ":tabo<cr>", {})
--- New Tab - note n is already used as a search text tool and cannot be mapped
-keymap.set("", "<C-t><c-n>", ":tabnew<cr>", {})
-----------
-
--- Tmux Pane Resizing
----------
--- Terminal
-keymap.set("t", "<c-a><c-j>", "<c-\\><c-n>:res-5<CR>i", {})
-keymap.set("t", "<c-a><c-k>", "<c-\\><c-n>:res+5<CR>i", {})
-keymap.set("t", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("t", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Insert
-keymap.set("i", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("i", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("i", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("i", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Command
-keymap.set("c", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("c", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("c", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("c", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
--- Normal
-keymap.set("n", "<c-a><c-j>", ":res-5<CR>", {})
-keymap.set("n", "<c-a><c-k>", ":res+5<CR>", {})
-keymap.set("n", "<c-a><c-h>", "<c-\\><c-n>:vertical resize -5<CR>i", {})
-keymap.set("n", "<c-a><c-l>", "<c-\\><c-n>:vertical resize +5<CR>i", {})
-----------
-
------------------------------------------
--- Leader Remappings, Plugin Commands
------------------------------------------
-
--- Note
-----------
--- I'll use leader mappings for plugins and super extra goodies
--- however ones I use all the time will be mapped to `<c-` or a specific key
--- This follows the conventions <leader>{plugin key}{command key}
--- I've listed already use leader commands here
-----------
-
--- Mappings
-----------
--- Write Commands: <leader>w
--- Quit Commands: <leader>q
--- Terminal - TerminalToggle : <leader>t & <leader> q
--- Snippets - LuaSnip : <leader>s
--- Filetree - NvimTree : <c-n>
--- Buffer Management - Telescope Nvim: <leader>f
--- Database - DadBod: : <leader>d
--- Testing - Ultest : <leader>x (T is being used for the terminal)
--- Code Alignment - EasyAlign : <leader>e
--- AutoComplete and Diagnostics - NvimCmp (and dependents): <leader>c & g
-----------
-
-----------------------------------
--- Terminal Settings
-----------------------------------
-
-require("toggleterm").setup {
-    -- Options
-    ----------
-    open_mapping = '<Leader>t',
-    direction = 'tab',
-    persist_mode = true,
-    close_on_exit = true,
-    terminal_mappings = true,
-    hide_numbers = true,
-    on_open = function()
-        cmd [[ TermExec cmd="source ~/.bash_profile &&  clear" ]]
-    end,
-    on_exit = function()
-        cmd [[silent! ! unset HIGHER_TERM_CALLED ]]
-    end
+-- Core Language Servers
+local lsp_servers_ei = {
+  "bash-language-server",
+  "emmet-ls",
+  "json-lsp",
+  "lua-language-server",
+  "marksman",
+  "python-lsp-server",
+  "ruff",
+  "ty",
+  "rust-analyzer",
+  "sqlls",
+  "taplo",
+  "terraform-ls",
+  "texlab",
+  "ltex-ls",
+  "tflint",
+  "yaml-language-server",
+  "graphql-language-service-cli",
+}
+-- Formatters
+local formatters_ei = {
+  "docformatter",
+  "jq",
+  "markdownlint",
+  "prettier",
+  "ruff",
+  "beautysh",
+  "stylua",
+  "tex-fmt",
+  "yq",
+}
+-- Linters
+local linters_ei = {
+  "djlint",
+  "htmlhint",
+  "jsonlint",
+  "luacheck",
+  "markdownlint",
+  "mypy",
+  "proselint",
+  "ruff",
+  "rstcheck",
+  "shellcheck",
+  "shellharden",
+  "sqlfluff",
+  "stylelint",
+  "tflint",
+  "write-good",
+  "yamllint",
+}
+-- Debuggers
+local debuggers_ei = {
+  "bash-debug-adapter",
+  "codelldb",
+  "debugpy",
 }
 
--- Mappings
-----------
-keymap.set("t", "<leader>q", "<CR>exit<CR><CR>", { noremap = true, silent = true }) -- Send exit command
-keymap.set("t", "<Esc>", "<c-\\><c-n>", { noremap = true, silent = true }) -- Use Esc to change modes in the terminal
-keymap.set("t", "vim", "say \"You're already in vim! You're a dumb ass!\"", { noremap = true, silent = true })
-keymap.set("t", "editvim", "say \"You're already in vim! This is why no one loves you!\"",
-    { noremap = true, silent = true })
-
 ----------
 
------------------------------
--- Filetree Options - NvimTree
------------------------------
-
-require("nvim-tree").setup {
-    -- Options 1
-    ----------
-    auto_reload_on_write = true,
-    create_in_closed_folder = true,
-    hijack_cursor = true,
-    hijack_netrw = true,
-    sort_by = "name",
-    sync_root_with_cwd = true,
-    view = {
-        adaptive_size = true,
-        centralize_selection = false,
-        width = 50,
-        side = "right",
-        relativenumber = true,
-        signcolumn = "yes",
-        -- Mappings
-        ----------
-        mappings = {
-            custom_only = false,
-            list = {
-                { key = { "<CR>", "o", "<2-LeftMouse>" }, action = "edit" },
-                { key = "<S-CR>", action = "edit_in_place" },
-                { key = "O", action = "edit_no_picker" },
-                { key = { "l", "<2-RightMouse>" }, action = "cd" },
-                { key = "<C-v>", action = "vsplit" },
-                { key = "<C-x>", action = "split" },
-                { key = "<C-t>", action = "tabnew" },
-                { key = "<", action = "prev_sibling" },
-                { key = ">", action = "next_sibling" },
-                { key = "P", action = "parent_node" },
-                { key = "<BS>", action = "close_node" },
-                { key = "<Tab>", action = "preview" },
-                { key = "I", action = "toggle_git_ignored" },
-                { key = "H", action = "toggle_dotfiles" },
-                { key = "U", action = "toggle_custom" },
-                { key = "r", action = "refresh" },
-                { key = "ma", action = "create" },
-                { key = "md", action = "remove" },
-                { key = "mD", action = "trash" },
-                { key = "mm", action = "rename" },
-                { key = "mM", action = "full_rename" },
-                { key = "mx", action = "cut" },
-                { key = "mc", action = "copy" },
-                { key = "mp", action = "paste" },
-                { key = "my", action = "copy_name" },
-                { key = "mYr", action = "copy_path" },
-                { key = "mYa", action = "copy_absolute_path" },
-                { key = "[s", action = "prev_diag_item" },
-                { key = "[g", action = "prev_git_item" },
-                { key = "]s", action = "next_diag_item" },
-                { key = "]g", action = "next_git_item" },
-                { key = "h", action = "dir_up" },
-                { key = "s", action = "system_open" },
-                { key = "f", action = "live_filter" },
-                { key = "F", action = "clear_live_filter" },
-                { key = "q", action = "close" },
-                { key = "W", action = "collapse_all" },
-                { key = "E", action = "expand_all" },
-                { key = "S", action = "search_node" },
-                { key = ".", action = "run_file_command" },
-                { key = "<C-k>", action = "toggle_file_info" },
-                { key = "g?", action = "toggle_help" },
-                { key = "mtm", action = "toggle_mark" },
-                { key = "mbm", action = "bulk_move" },
-            },
-        },
-    },
-    -- Options 2
-    ----------
-    renderer = {
-        highlight_git = true,
-        full_name = false,
-        root_folder_modifier = ":~",
-    },
-    diagnostics = {
-        enable = true,
-    },
-    filters = {
-        dotfiles = true,
-    },
-    git = {
-        enable = true,
-        ignore = false,
-    },
-    actions = {
-        open_file = {
-            quit_on_open = false,
-            resize_window = true,
-            window_picker = {
-                enable = true,
-            },
-        },
-    },
-}
+-- Install Packages
+----------
+lsp_config.package_setup(tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, lsp_servers_ei))))
 ----------
 
--- NvimTree Git Plugin Symbols
-----------
-cmd [[ autocmd FileType NvimTree setlocal relativenumber ]] -- make sure relative line numbers are used
-----------
+--------------------------------
+-- Language Server Protocol Setup
+--------------------------------
 
--- Mappings
+-- Capabilities Attach Function
 ----------
-keymap.set("n", "<C-n>", ":NvimTreeToggle<CR>", {}) -- Remap the open and close to C-n
--- Terminal Commands, autoswitch focussed pane and then switch to nerdtree,
-keymap.set("t", "<C-n>", "<C-\\><C-n><c-w>k :NvimTreeToggle<CR>", {}) -- assumes the terminal is horizontally split and on the bottom
------------------
-
------------------------------
--- LuaLine Configuration
------------------------------
-
--- Config
+-- On Attach
+local on_attach = function(client, bufnr)
+  lsp_config.lsp_options()
+  lsp_config.lsp_mappings()
+  if client.server_capabilities.documentSymbolProvider then
+    require("nvim-navic").attach(client, bufnr)
+  end
+end
+-- Capabilities
+local capabilities = vim.tbl_deep_extend(
+  "force",
+  vim.lsp.protocol.make_client_capabilities(),
+  require("blink.cmp").get_lsp_capabilities({}, false)
+)
 ----------
-require("lualine").setup({
-    options = {
-        section_separators = { left = '|', right = '|' },
-        component_separators = { left = '', right = '' },
+-- Servers
+----------
+lsp_config.setup("pylsp", {
+  on_attach = on_attach,
+  cmd = { utils.get_venv_command("pylsp") },
+  filetypes = { "python", "py" },
+  capabilities = capabilities,
+  settings = {
+    pylsp = {
+      plugins = {
+        jedi_signature_help = { enabled = true },
+        jedi_completion = { enabled = true },
+        pycodestyle = { enabled = false },
+        mccabe = { enabled = false },
+        pyflakes = { enabled = false },
+        flake8 = { enabled = false },
+        pylint = { enabled = false },
+        pylsp_mypy = { enabled = true },
+        pyls_isort = { enabled = false },
+      },
     },
-    sections = {
-        lualine_a = { { 'mode', fmt = function(res) return res:sub(1, 1) end } },
-        lualine_b = { 'branch', 'diff', 'diagnostics' },
-        lualine_c = { 'filename' },
-        lualine_x = { 'encoding', 'filetype' },
-        lualine_y = { "os.date('%H:%M %Y-%m-%d')" },
-        lualine_z = { 'progress', 'location', }
+  },
+  root_markers = {
+    ".git",
+    "pyproject.toml",
+    "setup.py",
+    "setup.cfg",
+    "requirements.txt",
+    "Pipfile",
+  },
+})
+lsp_config.setup("ruff", {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "python", "py" },
+  cmd = {
+    utils.get_venv_command("ruff"),
+    "server",
+    "--config",
+    vim.fn.getcwd() .. "/pyproject.toml",
+  },
+  root_markers = { ".git", "pyproject.toml", "ruff.toml", ".ruff.toml" },
+  init_options = {
+    settings = {
+      logLevel = "debug",
     },
-    inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
-        lualine_y = {},
-        lualine_z = {}
+  },
+})
+lsp_config.setup("ty", {
+  cmd = { utils.get_venv_command("ty"), "server" },
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "python" },
+  root_dir = vim.fs.root(0, { ".git/", "pyproject.toml" }),
+})
+lsp_config.setup("lua-ls", {
+  on_attach = on_attach,
+  cmd = { "lua-language-server" },
+  filetypes = { "lua" },
+  root_markers = {
+    ".luarc.json",
+    ".luarc.jsonc",
+    ".luacheckrc",
+    ".stylua.toml",
+    "stylua.toml",
+    "selene.toml",
+    "selene.yml",
+    ".git",
+  },
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      diagnostics = { globals = { "vim", "quarto", "require", "table", "string" } },
+      workspace = {
+        checkThirdParty = false,
+      },
+      runtime = { verions = "LuaJIT" },
+      completion = { autoRequire = false },
+      telemetry = { enable = false },
+    },
+  },
+})
+lsp_config.setup("marksman", {
+  on_attach = on_attach,
+  cmd = { "marksman", "server" },
+  root_markers = { ".marksman.toml", ".git" },
+  capabilities = capabilities,
+  filetypes = {
+    "markdown",
+    "quarto",
+    "markdown.mdx",
+  },
+})
+lsp_config.setup("yamlls", {
+  on_attach = on_attach,
+  cmd = { "yaml-language-server", "--stdio" },
+  filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
+  root_markers = { ".git" },
+  capabilities = capabilities,
+  settings = {
+    yaml = {
+      validate = true,
+      completion = true,
+      hover = true,
+      disable = { "line-length" },
+    },
+    redhat = { telemetry = { enabled = false } },
+  },
+})
+lsp_config.setup("ltex", {
+  on_attach = on_attach,
+  cmd = { "ltex-ls" },
+  root_markers = { ".git" },
+  get_language_id = function(_, filetype)
+    local language_id_mapping = {
+      bib = "bibtex",
+      plaintex = "tex",
+      rnoweb = "rsweave",
+      rst = "rst",
+      tex = "latex",
+      text = "plaintext",
     }
+    local language_id = language_id_mapping[filetype]
+    if language_id then
+      return language_id
+    else
+      return filetype
+    end
+  end,
+  capabilities = capabilities,
+  single_file_support = true,
+  settings = {
+    ltex = {
+      language = "en-GB",
+    },
+  },
+  filetypes = {
+    "bib",
+    "gitcommit",
+    "org",
+    "plaintex",
+    "rst",
+    "rnoweb",
+    "tex",
+    "pandoc",
+    "quarto",
+    "rmd",
+    "context",
+    "html",
+    "xhtml",
+    "mail",
+    "text",
+  },
+})
+lsp_config.setup("taplo", {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "toml" },
+  root_pattern = { ".config", ".git" },
+})
+lsp_config.setup("graphql", { on_attach = on_attach, capabilities = capabilities })
+lsp_config.setup("jsonls", { on_attach = on_attach, capabilities = capabilities })
+lsp_config.setup("bash-language-server", {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "sh", "shell", "bash" },
 })
 ----------
-
--- Turn Filename Into FilePath
--- function! LightlineTruncatedFileName()
---     let l:filePath = expand('%')
---     return winwidth(0) > 100 ? l:filePath : pathshorten(l:filePath)
--- endfunction
-
--- Shorten Branch Name If Necessary
--- function! LightlineGitBranchName()
---     let l:gitbranch = gitbranch#name()
---     return winwidth(0) > 100 ? l:gitbranch : join(split(l:gitbranch, "-")[-3:], "-")
--- endfunction
-
-
----------------------------------
--- Telescope Settings
----------------------------------
-
--- Mappings
+-- UI
 ----------
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { silent = true }) -- Find File
-keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { silent = true })
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { silent = true }) -- Find Buffer
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { silent = true })
-keymap.set("n", "<C-b>s", "<cmd>Telescope buffers<cr>", { silent = true, noremap = true })
--- Picker Mappings
-require("telescope").setup {
-    pickers = {
-        buffers = {
-            mappings = {
-                -- Redo this action so you can take a parameter that allows for force = true and force = false for unsaved files
-                i = { ["<c-d>"] = "delete_buffer" }
-            }
-        }
-    }
+lsp_config.set_signs()
+lsp_config.injected_setup()
+----------
+
+-- Formatter Setup
+----------
+require("conform").setup({
+  log_level = vim.log.levels.DEBUG,
+  debug = true,
+  formatters_by_ft = {
+    ["*"] = { "injected" },
+    bash = { "beautysh" },
+    graphql = { "prettier" },
+    jinja = { "djlint" },
+    json = { "jq" },
+    lua = { "stylua" },
+    markdown = { "markdownlint", "injected" },
+    python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
+    shell = { "beautysh" },
+    sh = { "beautysh" },
+    sql = { "sqlfluff" },
+    rst = { "rstfmt" },
+    rust = { "rustfmt" },
+    terraform = { "terraform_fmt" },
+    tex = { "tex-fmt" },
+    yaml = { "yq" },
+    toml = { "taplo" },
+  },
+  formatters = {
+    stylua = {
+      command = "stylua",
+      args = {
+        "--search-parent-directories",
+        "--stdin-filepath",
+        "$FILENAME",
+        "--indent-width",
+        "2",
+        "--indent-type",
+        "Spaces",
+        "--column-width",
+        "120",
+        "-",
+      },
+    },
+    sqlfluff = {
+      command = function()
+        return utils.get_venv_command("sqlfluff") or "sqlfluff"
+      end,
+      args = {
+        "fix",
+        "--FIX-EVEN-UNPARSABLE",
+        "--config",
+        os.getenv("HOME") .. "/.config/sqlfluff/.sqlfluff",
+        "$FILENAME",
+      },
+      stdin = false,
+    },
+    docformatter = {
+      command = utils.get_mason_package("docformatter"),
+      args = { "--in-place", "$FILENAME", "--wrap-summaries", "90", "--wrap-descriptions", "90", "--force-wrap" },
+      stdin = false,
+    },
+    markdownlint = {
+      args = {
+        "--disable",
+        "MD013",
+        "MD012",
+        "MD041",
+        "MD053",
+        "--fix",
+        "$FILENAME",
+      },
+    },
+  },
+})
+lsp_config.formatter_config()
+----------
+
+-- Linter Setup
+----------
+local lint = require("lint")
+-- Configure Linters
+lint.linters_by_ft = {
+  ["*"] = { "compiler" },
+  bash = { "shellcheck" },
+  css = { "stylelint", "prettier" },
+  html = { "htmlhint" },
+  jinja = { "djlint" },
+  json = { "jsonlint" },
+  lua = { "luacheck" },
+  markdown = { "markdownlint", "proselint", "write_good" },
+  python = { "ruff" },
+  quarto = { "markdownlint", "proselint", "write_good" },
+  rst = { "rstcheck" },
+  sql = { "sqlfluff" },
+  terraform = { "tflint" },
+  yaml = { "yamllint" },
 }
+-- Markdownlint
+local markdownlint = lint.linters.markdownlint
+markdownlint.args = {
+  "--disable",
+  "MD013",
+  "MD012",
+  "MD041",
+}
+-- MyPy
+local mypy = lint.linters.mypy
+mypy.cmd = utils.get_venv_command("mypy")
+
+-- SQLFluff
+local sqlfluff = lint.linters.sqlfluff
+sqlfluff.cmd = utils.get_venv_command("sqlfluff")
+sqlfluff.args = {
+  "lint",
+  "--config",
+  os.getenv("HOME") .. "/.config/sqlfluff/.sqlfluff",
+  "--format=json",
+  "--dialect=postgres",
+}
+
+-- General Config
+lsp_config.linter_config()
 ----------
 
+--------------------------------
+-- Dap Setup
+--------------------------------
+-- Vars
+----------
+local dap = require("dap")
+local bash_debug_adapter_bin = lsp_config.tool_dir .. "/packages/bash-debug-adapter/bash-debug-adapter"
+local bashdb_dir = lsp_config.tool_dir .. "/packages/bash-debug-adapter/extension/bashdb_dir"
+----------
+
+-- Configuration
+----------
+-- Python
+dap.configurations.python = {
+  {
+    type = "python",
+    request = "launch",
+    name = "Python: Current file",
+    program = "${file}",
+    cwd = fn.getcwd(),
+    pythonPath = python_path,
+    env = { PYTHONPATH = python_packages },
+    justMyCode = false,
+  },
+  {
+    name = "Pytest: Current File",
+    type = "python",
+    request = "launch",
+    module = "pytest",
+    args = { "--pdb", "${file}" },
+    cwd = fn.getcwd(),
+    pythonPath = python_path,
+    env = { PYTHONPATH = python_packages },
+    console = "integratedTerminal",
+    justMyCode = false,
+  },
+}
+dap.adapters.python = {
+  type = "executable",
+  command = python_path, -- e.g., "/usr/bin/python3"
+  args = { "-m", "debugpy.adapter" },
+}
+-- Shell/Bash
+dap.configurations.sh = {
+  {
+    name = "Launch Bash debugger",
+    type = "sh",
+    request = "launch",
+    program = "${file}",
+    cwd = "${fileDirname}",
+    pathBashdb = bashdb_dir .. "/bashdb",
+    pathBashdbLib = bashdb_dir,
+    pathBash = "bash",
+    pathCat = "cat",
+    pathMkfifo = "mkfifo",
+    pathPkill = "pkill",
+    env = {},
+    args = {},
+  },
+}
+dap.adapters.sh = {
+  type = "executable",
+  command = bash_debug_adapter_bin,
+}
+-- Lua
+dap.configurations.lua = {
+  {
+    type = "nlua",
+    request = "attach",
+    name = "Attach to running Neovim instance",
+  },
+}
+
+dap.adapters.nlua = function(callback, config)
+  callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
+end
+----------
+
+--------------------------------
+-- Filetypes Setup
+--------------------------------
+
+-- Load Custom File Types
+----------
+ft_settings.custom_file_types()
+
+-- Load File Type Settings
+----------
+for k, v in pairs(ft_settings.ft) do
+  v()
+end
+
+--------------------------------
+-- Database mappings
+--------------------------------
+-- NOTE: I don't know why the fuck this needs to be here but it doesn't work otherwise :/
+local lk = require("config.keymaps").lk
+local descMap = require("config.utils").desc_keymap
+
+-- KeyMaps
+----------
+descMap({ "n" }, lk.database, "u", ":tabnew<CR>:DBUIToggle<CR>:set nu<CR>:set relativenumber<CR>", "Toggle DB UI")
+descMap({ "n" }, lk.database, "f", ":DBUIFindBuffer<CR>", "Find DB Buffer")
+descMap({ "n" }, lk.database, "r", ":DBUIRenameBuffer<CR>", "Rename DB Buffer")
+descMap({ "n" }, lk.database, "l", ":DBUILastQueryInfo<CR>", "Run Last Query")
+vim.keymap.set({ "n", "v" }, lk.database.key .. "x", "<Plug>(DBUI_ExecuteQuery)", { desc = "Run Query" })
+----------
+vim.g.db_ui_use_nerd_fonts = 1
+vim.print(python_packages)
+--------------------------------
+---- EOF
 ---------------------------------
--- Easy Align
----------------------------------
-
--- Start interactive EasyAlign in visual mode (e.g. vipga)
-keymap.set("x", "<leader>e", "<Plug>(EasyAlign)<CR>", {})
-
--- Start interactive EasyAlign for a motion/text object (e.g. gaip)
-keymap.set("n", "<leader>e", "<Plug>(EasyAlign)<CR>", {})
-
----------------
-
----------------------------------"
--- Database Commands - DadBod
----------------------------------"
-
--- Options
----------
-g['db_ui_save_location'] = '~/.config/db_ui'
-g['dd_ui_use_nerd_fonts'] = 1
-----------
-
--- Mappings
----------
-keymap.set("n", "<leader>du", ":DBUIToggle<CR>", { silent = true })
-keymap.set("n", "<leader>df", ":DBUIFindBuffer<CR>", { silent = true })
-keymap.set("n", "<leader>dr", ":DBUIRenameBuffer<CR>", { silent = true })
-keymap.set("n", "<leader>dl", ":DBUILastQueryInfo<CR>", { silent = true })
-----------------
-
----------------------------------"
--- LSP Config
----------------------------------"
-
--- Notes
-----------
--- All Lsp Settings are configured in nvim/lua/lsp.lua
-----------
-
--- Commands
-----------
-api.nvim_create_user_command('Editlsp', 'e ~/.config/nvim/lua/lsp.lua', {})
-----------
-
--- Load File
-----------
-require("lsp")
-----------
-
---------------------------------
--- Workspace Specific Configs
---------------------------------
-
--- Allow WorkSpace Specific Init
--- if filereadable("./ws_init.lua")
---     luafile ./ws_init.lua
--- endif
-
---------------------------------
--- EOF
--------------------------------

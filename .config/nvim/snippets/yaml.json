@@ -1,0 +1,10 @@
+{
+  "ct_exists": {
+    "prefix": "ct_exists",
+    "body": "- name: ${1:name}\n  tests:\n    - column_exists:\n        tags: [existence]"
+  },
+  "t_type": {
+    "prefix": "t_type",
+    "body": "#          - check_type:\n#              type: ${1:data_type}"
+  }
+}

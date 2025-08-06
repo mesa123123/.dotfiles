@@ -6,7 +6,7 @@ function pause(){
 
 # -------- Global Script Variables --------- 
 
-learning_working_directory="/home/${USER}/dev/learning"
+learning_working_directory="/home/${USER}/Learning"
 
 # --------- Script Functions --------- 
 
@@ -24,9 +24,9 @@ function timestamppush()
 # ---------  Business Logic Begins Here ---------
 
 # ---- Sync Dotfiles
-if [ -z "${TMUX}" ] && [ -z "${PIPENV_ACTIVE}" ] && [ -z "${VIMRUNTIME}" ];
+if [ -z "${TMUX}" ] && [ -z "${PIPENV_ACTIVE}" ] && [ -z "${VIMRUNTIME}" ] && [ -z "${POETRY_ACTIVE}" ];
 then
-    timestamppush ${learning_working_directory}
+    timestamppush "${learning_working_directory}"
     ~/.dotfiles/sync.sh -m end -r no
     pause "...Exit tasks are complete, please press any key to leave shell"
 fi

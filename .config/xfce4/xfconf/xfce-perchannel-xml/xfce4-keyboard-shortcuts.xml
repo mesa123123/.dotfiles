@@ -10,6 +10,7 @@
       <property name="&lt;Alt&gt;F3" type="empty">
         <property name="startup-notify" type="empty"/>
       </property>
+      <property name="XF86LogOff" type="empty"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;Delete" type="empty"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;l" type="empty"/>
       <property name="&lt;Primary&gt;&lt;Alt&gt;t" type="empty"/>
@@ -27,8 +28,18 @@
       <property name="&lt;Primary&gt;&lt;Alt&gt;Escape" type="empty"/>
       <property name="&lt;Primary&gt;&lt;Shift&gt;Escape" type="empty"/>
       <property name="&lt;Super&gt;r" type="empty">
+        <property name="XF86Calendar" type="empty"/>
+        <property name="XF86Memo" type="empty"/>
+        <property name="XF86Terminal" type="empty"/>
+        <property name="XF86Explorer" type="empty"/>
+        <property name="XF86AudioMedia" type="empty"/>
+        <property name="XF86AudioPlay" type="empty"/>
+        <property name="XF86AudioPrev" type="empty"/>
+        <property name="XF86AudioNext" type="empty"/>
+        <property name="XF86Calculator" type="empty"/>
         <property name="startup-notify" type="empty"/>
       </property>
+      <property name="&lt;Alt&gt;&lt;Super&gt;s" type="empty"/>
       <property name="&lt;Control&gt;&lt;Alt&gt;Delete" type="empty"/>
       <property name="&lt;Control&gt;Escape" type="empty"/>
     </property>
@@ -54,8 +65,6 @@
       <property name="&lt;Primary&gt;&lt;Shift&gt;Print" type="string" value="xfce4-screenshooter -r"/>
       <property name="&lt;Alt&gt;F1" type="string" value="xfce4-popup-whiskermenu"/>
       <property name="&lt;Super&gt;1" type="string" value="/usr/bin/google-chrome-stable %U -password-store=basic "/>
-      <property name="&lt;Super&gt;2" type="string" value="kitty"/>
-      <property name="&lt;Super&gt;3" type="string" value="thunar %f"/>
       <property name="&lt;Super&gt;e" type="string" value="thunar"/>
       <property name="&lt;Super&gt;s" type="string" value="xfce4-appfinder --collapsed">
         <property name="startup-notify" type="bool" value="true"/>
@@ -64,6 +73,14 @@
       <property name="&lt;Shift&gt;&lt;Super&gt;Right" type="string" value="/usr/local/sbin/move-to-next-monitor"/>
       <property name="&lt;Shift&gt;&lt;Super&gt;Left" type="string" value="/usr/local/sbin/move-to-next-monitor"/>
       <property name="&lt;Super&gt;f" type="string" value="xfce4-find-cursor"/>
+      <property name="&lt;Shift&gt;&lt;Super&gt;s" type="string" value="xfce4-screenshooter -r"/>
+      <property name="&lt;Super&gt;3" type="string" value="spotify"/>
+      <property name="&lt;Super&gt;l" type="string" value="xflock4"/>
+      <property name="&lt;Super&gt;2" type="string" value="kitty"/>
+      <property name="&lt;Super&gt;grave" type="string" value="xcolor -s clipboard"/>
+      <property name="&lt;Alt&gt;comma" type="string" value="spotify playback previous"/>
+      <property name="&lt;Alt&gt;period" type="string" value="spotify playback next"/>
+      <property name="&lt;Alt&gt;space" type="string" value="spotify playback play-pause"/>
     </property>
   </property>
   <property name="xfwm4" type="empty">
@@ -122,8 +139,8 @@
       <property name="&lt;Primary&gt;F12" type="empty"/>
       <property name="&lt;Super&gt;KP_Left" type="empty"/>
       <property name="&lt;Super&gt;KP_Right" type="empty"/>
-      <property name="&lt;Super&gt;KP_Up" type="empty"/>
       <property name="&lt;Super&gt;KP_Down" type="empty"/>
+      <property name="&lt;Super&gt;KP_Up" type="empty"/>
       <property name="&lt;Super&gt;KP_Page_Up" type="empty"/>
       <property name="&lt;Super&gt;KP_Home" type="empty"/>
       <property name="&lt;Super&gt;KP_End" type="empty"/>
@@ -175,7 +192,6 @@
       <property name="&lt;Control&gt;&lt;Alt&gt;Up" type="string" value="up_workspace_key"/>
       <property name="Escape" type="string" value="cancel_key"/>
       <property name="&lt;Alt&gt;&lt;Shift&gt;Tab" type="string" value="cycle_reverse_windows_key"/>
-      <property name="&lt;Alt&gt;space" type="string" value="popup_menu_key"/>
       <property name="&lt;Alt&gt;Delete" type="string" value="del_workspace_key"/>
       <property name="&lt;Alt&gt;F4" type="string" value="close_window_key"/>
       <property name="&lt;Shift&gt;&lt;Alt&gt;Page_Down" type="string" value="lower_window_key"/>

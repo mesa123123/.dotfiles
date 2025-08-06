@@ -1,0 +1,34 @@
+{
+  "linksame": {
+    "prefix": "linksame",
+    "body": "[${1:name}][${1:name}Link]"
+  },
+  "linkdiff": {
+    "prefix": "linkdiff",
+    "body": "[${1:name}][${2:link}Link]"
+  },
+  "linkseemore": {
+    "prefix": "linkseemore",
+    "body": "[(further reading)][${1:name}Link]"
+  },
+  "internallink": {
+    "prefix": "internallink",
+    "body": "[${1:text}](#${2:heading})"
+  },
+  "anchorlink": {
+    "prefix": "anchorlink",
+    "body": "[${1:text}](#${2:heading})"
+  },
+  "reference": {
+    "prefix": "reference",
+    "body": "[${1:name}Link]: ${2:link}"
+  },
+  "comment": {
+    "prefix": "comment",
+    "body": "[//]: # (${1:Comment})"
+  },
+  "README_scaffold": {
+    "prefix": "README_scaffold",
+    "body": "---\nlast_edit: ${2:date}\nstatus: draft\n---\n\n# ${1:Title}\n\n## Purpose\n\n## Design\n\n### Components\n\n### Process\n\n## Setup\n\n## Known Issues\n\n[//]: # (References)\n"
+  }
+}
