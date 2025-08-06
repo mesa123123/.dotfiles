@@ -1,7 +1,7 @@
 return {
-	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
-	config = function()
-		require("lualine").setup(require("core").line_config)
-	end,
+  "nvim-lualine/lualine.nvim",
+  dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
+  config = function()
+    require("lualine").setup(require("config").line_config)
+  end,
 }

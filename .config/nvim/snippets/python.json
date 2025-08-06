@@ -1,0 +1,6 @@
+{
+  "ifnamemain": {
+    "prefix": "ifnamemain",
+    "body": "if __name__ == \"__main__\":\n\t${1:code_here}"
+  }
+}
