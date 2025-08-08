@@ -2,6 +2,8 @@ local M = {}
 
 M.utils = require("config.utils")
 M.dashboard_config = require("config.dashboard")
+M.lsp_config = require("config.lsp_config")
+M.dap_config = require("config.dap_config")
 M.options = require("config.options")
 M.filetree = require("config.filetree")
 M.keymaps = require("config.keymaps")

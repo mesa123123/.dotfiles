@@ -1,7 +1,7 @@
 ------------------------------
----#####################
--- #  Main Nvim Config  #  --
--- ######################  --
+-- ###################### --
+-- #  Main Nvim Config  # --
+-- ###################### --
 --------------------------------
 
 --------------------------------
@@ -13,8 +13,6 @@
 -- Notifications
 ----------
 -- TODO: Get mini.notify, vim.print, and snacks.ui to work together
--- BUG: Telescope Notifications picker no longer working
-----------
 ----------
 -- Snippets
 ----------
@@ -47,22 +45,15 @@
 ----------
 -- LSP
 ----------
--- TODO: Create a command for open declaration that opens in a new pane
 -- TODO: YAMLLS: fix '---' document start error
 -- TODO: Switch from obsidian to markdown-oxide
 -- Figure out a way to make sure that you know you're in a learning directory so you can switch on oxide rather than
 -- marksman
 -- SUGGESTION: Use root-markers for this
--- TODO: In lsp, sort out the install function so it works asynchronously, vim.schedule will work for this
--- TODO: Python Signature help not working! Need to switch from pylsp to jedi and set  up individual bloody capabilities :(
 ----------
 -- FORMATTING
 ----------
 -- FEATURE: Figure out a way to run mypy on a folder and then send all of the errors to the quick-fix list
-----------
--- AI
-----------
--- PLUGIN: Make avante.nvim work
 ----------
 -- DADBOD
 ----------
@@ -122,12 +113,6 @@ local configpath = vim.fn.stdpath("config") .. "/lua/config"
 package.path = package.path .. ";" .. configpath .. "/init.lua"
 ----------
 
--- Lsp Settings
-----------
-local lsppath = vim.fn.stdpath("config") .. "/lua/lsp_config"
-package.path = package.path .. ";" .. lsppath .. "/init.lua"
-----------
-
 -- Snippets
 ----------
 local snippath = vim.fn.stdpath("config") .. "/snippets"
@@ -165,7 +150,7 @@ end
 vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {})
 vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/lua/package_setup.lua", {})
 vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins/", {})
-vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp_config/", {})
+vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lsp/", {})
 vim.api.nvim_create_user_command("Editconfig", "e ~/.config/nvim/lua/config/", {})
 vim.api.nvim_create_user_command("Editsnips", "e ~/.config/nvim/snippets/", {})
 vim.api.nvim_create_user_command("Editterm", "e ~/.wezterm.lua", {})
@@ -231,7 +216,7 @@ require("startup").setup(dashboard_config)
 
 -- Variables
 ----------
-local lsp_config = require("lsp_config").config
+local lsp_config = require("config").lsp_config
 vim.lsp.set_log_level("debug")
 ----------
 
@@ -306,200 +291,29 @@ lsp_config.package_setup(tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, lsp_s
 -- Language Server Protocol Setup
 --------------------------------
 
--- Capabilities Attach Function
-----------
--- On Attach
-local on_attach = function(client, bufnr)
-  lsp_config.lsp_options()
-  lsp_config.lsp_mappings()
-  if client.server_capabilities.documentSymbolProvider then
-    require("nvim-navic").attach(client, bufnr)
-  end
-end
--- Capabilities
-local capabilities = vim.tbl_deep_extend(
-  "force",
-  vim.lsp.protocol.make_client_capabilities(),
-  require("blink.cmp").get_lsp_capabilities({}, false)
-)
 -- Diagnostics
 lsp_config.diagnostics()
 ----------
 -- Servers
 ----------
-lsp_config.setup("pylsp", {
-  on_attach = on_attach,
-  cmd = { utils.get_venv_command("pylsp") },
-  filetypes = { "python", "py" },
-  capabilities = capabilities,
-  settings = {
-    pylsp = {
-      plugins = {
-        jedi_signature_help = { enabled = true },
-        jedi_completion = { enabled = true },
-        pycodestyle = { enabled = false },
-        mccabe = { enabled = false },
-        pyflakes = { enabled = false },
-        flake8 = { enabled = false },
-        pylint = { enabled = false },
-        pylsp_mypy = { enabled = true },
-        pyls_isort = { enabled = false },
-      },
-    },
-  },
-  root_markers = {
-    ".git",
-    "pyproject.toml",
-    "setup.py",
-    "setup.cfg",
-    "requirements.txt",
-    "Pipfile",
-  },
-})
-lsp_config.setup("ruff", {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "python", "py" },
-  cmd = {
-    utils.get_venv_command("ruff"),
-    "server",
-    "--config",
-    vim.fn.getcwd() .. "/pyproject.toml",
-  },
-  root_markers = { ".git", "pyproject.toml", "ruff.toml", ".ruff.toml" },
-  init_options = {
-    settings = {
-      logLevel = "debug",
-    },
-  },
-})
-lsp_config.setup("ty", {
-  cmd = { utils.get_venv_command("ty"), "server" },
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "python" },
-  root_dir = vim.fs.root(0, { ".git/", "pyproject.toml" }),
-})
-lsp_config.setup("lua-ls", {
-  on_attach = on_attach,
-  cmd = { "lua-language-server" },
-  filetypes = { "lua" },
-  root_markers = {
-    ".luarc.json",
-    ".luarc.jsonc",
-    ".luacheckrc",
-    ".stylua.toml",
-    "stylua.toml",
-    "selene.toml",
-    "selene.yml",
-    ".git",
-  },
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      diagnostics = { globals = { "vim", "quarto", "require", "table", "string" } },
-      workspace = {
-        checkThirdParty = false,
-      },
-      runtime = { verions = "LuaJIT" },
-      completion = { autoRequire = false },
-      telemetry = { enable = false },
-    },
-  },
-})
-lsp_config.setup("marksman", {
-  on_attach = on_attach,
-  cmd = { "marksman", "server" },
-  root_markers = { ".marksman.toml", ".git" },
-  capabilities = capabilities,
-  filetypes = {
-    "markdown",
-    "quarto",
-    "markdown.mdx",
-  },
-})
-lsp_config.setup("yamlls", {
-  on_attach = on_attach,
-  cmd = { "yaml-language-server", "--stdio" },
-  filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
-  root_markers = { ".git" },
-  capabilities = capabilities,
-  settings = {
-    yaml = {
-      validate = true,
-      completion = true,
-      hover = true,
-      disable = { "line-length" },
-    },
-    redhat = { telemetry = { enabled = false } },
-  },
-})
-lsp_config.setup("ltex", {
-  on_attach = on_attach,
-  cmd = { "ltex-ls" },
-  root_markers = { ".git" },
-  get_language_id = function(_, filetype)
-    local language_id_mapping = {
-      bib = "bibtex",
-      plaintex = "tex",
-      rnoweb = "rsweave",
-      rst = "rst",
-      tex = "latex",
-      text = "plaintext",
-    }
-    local language_id = language_id_mapping[filetype]
-    if language_id then
-      return language_id
-    else
-      return filetype
-    end
-  end,
-  capabilities = capabilities,
-  single_file_support = true,
-  settings = {
-    ltex = {
-      language = "en-GB",
-    },
-  },
-  filetypes = {
-    "bib",
-    "gitcommit",
-    "org",
-    "plaintex",
-    "rst",
-    "rnoweb",
-    "tex",
-    "pandoc",
-    "quarto",
-    "rmd",
-    "context",
-    "html",
-    "xhtml",
-    "mail",
-    "text",
-  },
-})
-lsp_config.setup("taplo", {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "toml" },
-  root_pattern = { ".config", ".git" },
-})
-lsp_config.setup("graphql", { on_attach = on_attach, capabilities = capabilities })
-lsp_config.setup("jsonls", { on_attach = on_attach, capabilities = capabilities })
-lsp_config.setup("bash-language-server", {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "sh", "shell", "bash" },
-})
-----------
--- UI
+for _, v in ipairs(lsp_servers_ei) do
+  if v == "lua-language-server" then
+    lsp_config.setup("lua_ls")
+  else
+    lsp_config.setup(v)
+  end
+end
 ----------
 lsp_config.injected_setup()
 ----------
 
+--------------------------------
+-- Formatters & Linter Setup
+--------------------------------
+
 -- Formatter Setup
 ----------
+
 require("conform").setup({
   log_level = vim.log.levels.DEBUG,
   debug = true,
@@ -615,6 +429,22 @@ sqlfluff.args = {
   "--dialect=postgres",
 }
 
+local luacheck = lint.linters.luacheck
+luacheck.cmd = "luacheck"
+luacheck.stdin = true
+luacheck.args = {
+  "--globals",
+  "vim",
+  "lvim",
+  "reload",
+  "--",
+}
+luacheck.stream = "stdout"
+luacheck.ignore_exitcode = true
+luacheck.parser = require("lint.parser").from_errorformat("%f:%l:%c: %m", {
+  source = "luacheck",
+})
+
 -- General Config
 lsp_config.linter_config()
 ----------
@@ -707,7 +537,7 @@ ft_settings.custom_file_types()
 
 -- Load File Type Settings
 ----------
-for k, v in pairs(ft_settings.ft) do
+for _, v in pairs(ft_settings.ft) do
   v()
 end
 
