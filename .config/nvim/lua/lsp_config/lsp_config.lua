@@ -290,7 +290,7 @@ end
 -- LSP Signs
 ----------
 -- Function to set them
-M.set_signs = function()
+M.diagnostics = function()
   local icons = { Error = "󰅙 ", Warn = " ", Hint = " ", Info = " " }
   vim.diagnostic.config({
     signs = {
@@ -303,6 +303,10 @@ M.set_signs = function()
       },
       numhl = "", -- To clear the number highlight if you don't want it
     },
+    virtual_lines = true,
+    current_line = true,
+    virtual_text = false,
+    update_on_insert = true
   })
 end
 ----------

@@ -322,6 +322,8 @@ local capabilities = vim.tbl_deep_extend(
   vim.lsp.protocol.make_client_capabilities(),
   require("blink.cmp").get_lsp_capabilities({}, false)
 )
+-- Diagnostics
+lsp_config.diagnostics()
 ----------
 -- Servers
 ----------
@@ -493,7 +495,6 @@ lsp_config.setup("bash-language-server", {
 ----------
 -- UI
 ----------
-lsp_config.set_signs()
 lsp_config.injected_setup()
 ----------
 
