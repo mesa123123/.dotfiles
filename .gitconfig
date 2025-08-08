@@ -1,6 +1,3 @@
-[user]
-    email = pbowman2@c.snap.com
-    name = Peter Bowman
 [core]
     pager = delta
     fsmonitor = true
@@ -34,18 +31,6 @@
     remote   = yellow
     upstream = green
     plain    = blue
-[url "git@github.sc-corp.net:"]
-        insteadOf = git://github.sc-corp.net
+
 [init]
 	defaultBranch = main
-#### AUTOMATICALLY ADDED FOR GITLFSSERVER ACCESS. DO NOT REMOVE.
-[credential "http://localhost:58144"]
-    helper =
-    helper = "/usr/local/bin/snapaccess git gitlfsserver-credential-helper"
-
-[credential "http://localhost:55162"]
-    helper =
-    helper = "/usr/local/bin/snapaccess git gitlfsserver-credential-helper --staging"
-#### END GITLFSSERVER CONFIG
-[url "git@github.com:"]
-	insteadOf = https://github.com/
