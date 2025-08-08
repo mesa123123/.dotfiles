@@ -14,11 +14,9 @@ return {
       icons = { mappings = false },
     },
   },
-  -- Linting Plugins
+  -- Linting & Formatting Plugins
   ----------
   { "mfussenegger/nvim-lint", event = "VeryLazy" },
-  -- Formatting
-  ----------
   { "stevearc/conform.nvim", event = "VeryLazy" },
   ----------
   -- Tools Manager
@@ -26,16 +24,12 @@ return {
   {
     "williamboman/mason.nvim",
     dependencies = {
-      "neovim/nvim-lspconfig",
       "jay-babu/mason-nvim-dap.nvim",
       "jay-babu/mason-null-ls.nvim",
-      -- neodev
       "folke/neodev.nvim",
-      -- Nice popup windows
       "ray-x/lsp_signature.nvim",
     },
   },
-  { "neovim/nvim-lsp-config", url = "git@github.com:neovim/nvim-lspconfig.git", lazy = false },
   ----------
   -- Debug Adapter Protocol
   ----------
@@ -50,7 +44,7 @@ return {
       "theHamsta/nvim-dap-virtual-text",
     },
     config = function()
-      require("lsp_config.dap_config")
+      require("config.dap_config").setup()
     end,
   },
   ----------

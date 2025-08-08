@@ -95,11 +95,8 @@
 --------------------------------
 -- Priority Settings
 --------------------------------
--- Set the config path
 vim.g["config_path"] = "~/.config/nvim"
--- Set the mapleader
 vim.g["mapleader"] = " "
--- TermGuiColors
 vim.opt.termguicolors = true
 ----------
 
@@ -160,7 +157,7 @@ end, {})
 vim.api.nvim_create_user_command("Editft", function()
   edit_based_on_ft("~/.config/nvim/after/ftplugin", ".lua")
 end, {})
-vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {})
+vim.api.nvim_create_user_command("Sov", "so " .. vim.env.HOME .. vim.g["config_path"] .. "init.lua", {})
 ----------
 
 --------------------------------
@@ -176,7 +173,6 @@ local tC = utils.tableConcat
 local python_path = utils.get_python_path()
 local python_packages = utils.get_python_packages()
 local dashboard_config = config.dashboard_config
-local ft_settings = config.fileconfig
 local fn = vim.fn
 ----------
 
@@ -184,18 +180,10 @@ local fn = vim.fn
 -- General Settings
 -------------------------------
 
--- Set Core Options
+-- Core Config Setups
 ----------
 config.options.setup()
-----------
-
--- Setup Keymaps
-----------
 config.keymaps.setup()
-----------
-
--- Load Snippets
-----------
 config.snips.snip_maps()
 ----------
 
@@ -205,9 +193,35 @@ vim.o.background = "light"
 vim.cmd.colorscheme("gruvbox")
 ----------
 
--- Greeting Screen
+-- Dashboard
 ----------
 require("startup").setup(dashboard_config)
+----------
+
+-- Globals
+----------
+vim.g["do_filetype_lua"] = 1
+vim.g["did_load_filetypes"] = 0
+----------
+
+-- Load Custom File Types
+----------
+config.fileconfig.custom_file_types()
+----------
+
+--------------------------------
+-- Autocommands
+--------------------------------
+
+-- Only activate merge tool on a merge diff
+----------
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  callback = function()
+    if vim.opt.diff:get() then
+      require("config.vcs").mergetool_mappings()
+    end
+  end,
+})
 ----------
 
 --------------------------------
@@ -279,7 +293,6 @@ local debuggers_ei = {
   "codelldb",
   "debugpy",
 }
-
 ----------
 
 -- Install Packages
@@ -292,8 +305,10 @@ lsp_config.package_setup(tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, lsp_s
 --------------------------------
 
 -- Diagnostics
+----------
 lsp_config.diagnostics()
 ----------
+
 -- Servers
 ----------
 for _, v in ipairs(lsp_servers_ei) do
@@ -303,8 +318,6 @@ for _, v in ipairs(lsp_servers_ei) do
     lsp_config.setup(v)
   end
 end
-----------
-lsp_config.injected_setup()
 ----------
 
 --------------------------------
@@ -429,6 +442,7 @@ sqlfluff.args = {
   "--dialect=postgres",
 }
 
+-- Luacheck
 local luacheck = lint.linters.luacheck
 luacheck.cmd = "luacheck"
 luacheck.stdin = true
@@ -445,13 +459,13 @@ luacheck.parser = require("lint.parser").from_errorformat("%f:%l:%c: %m", {
   source = "luacheck",
 })
 
--- General Config
 lsp_config.linter_config()
 ----------
 
 --------------------------------
 -- Dap Setup
 --------------------------------
+
 -- Vars
 ----------
 local dap = require("dap")
@@ -526,20 +540,6 @@ dap.adapters.nlua = function(callback, config)
   callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
 end
 ----------
-
---------------------------------
--- Filetypes Setup
---------------------------------
-
--- Load Custom File Types
-----------
-ft_settings.custom_file_types()
-
--- Load File Type Settings
-----------
-for _, v in pairs(ft_settings.ft) do
-  v()
-end
 
 --------------------------------
 -- Database mappings

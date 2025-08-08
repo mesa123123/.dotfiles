@@ -17,7 +17,6 @@ local hl = vim.api.nvim_set_hl
 -- Requires
 ----------
 local palette = require("config.colors").palette
-local utils = require("config.utils")
 ----------
 
 -- Define Highlight
@@ -58,6 +57,7 @@ local edit_mappings = {
     },
     { "  Folder", "Oil", "fe" },
     { "  Plugins", "Editplugins", "p" },
+    { "  Lsp", "Editlsp", "l" },
     { "  Config", "Editconfig", "c" },
     { "  Snips", "Editsnips", "s" },
     { "  Ft", "Editft", "ft" },

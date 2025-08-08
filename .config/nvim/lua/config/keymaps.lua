@@ -4,21 +4,6 @@ local M = {}
 -- Vim, Sims, and Requires
 --------------------------------
 
--- Vim Vars
-----------
--- Module Table
-local M = {}
-local keymap = vim.keymap
-local cmd = vim.cmd
-----------
-
--- Require
-----------
-local utils = require("config.utils")
-local keyopts = utils.keyopts
-local makeDescMap = utils.desc_keymap
-----------
-
 -- Functions
 ----------
 -- Saves having to type <leader> over and over again, also creates the assist descriptions as it goes
@@ -28,7 +13,7 @@ M.l = function(key, desc)
 end
 -- Creates a description for menu keys (keys that have sub keys)
 M.makeDesc = function(km)
-  keymap.set("n", "" .. km.key .. "", "<CMD>" .. km.key .. "<CR>", { desc = "Opts: " .. km.desc })
+  vim.keymap.set("n", "" .. km.key .. "", "<CMD>" .. km.key .. "<CR>", { desc = "Opts: " .. km.desc })
 end
 -- This creates a telescope help message that behaves how I want it to
 M.telescope_help = function()
@@ -51,7 +36,7 @@ M.telescope_help = function()
       end,
     })
   end
-  return cmd(":h ")
+  return vim.cmd(":h ")
 end
 -- Dark Mode Toggle
 M.toggle_dark_mode = function()
@@ -167,35 +152,37 @@ M.lk = {
 -- Key Mappings Table Normal
 --------------------------------
 M.setup = function()
+  local makeDescMap = require("config.utils").desc_keymap
+  local keyopts = require("config.utils").keyopts
   local lk = M.lk
   for _, v in pairs(lk) do
     M.makeDesc(v)
   end
-  keymap.set("n", "[", "[", keyopts({ desc = "Go To Previous" }))
-  keymap.set("n", "]", "]", keyopts({ desc = "Go To Next" }))
-  keymap.set("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
-  keymap.set({ "n", "i" }, "<c-.>", "<c-t>", keyopts({ desc = "Tab forwards" }))
-  keymap.set({ "n", "i" }, "<c-,>", "<c-d>", keyopts({ desc = "Tab Backwards" }))
-  keymap.set({ "n", "v" }, "K", "H", keyopts({ desc = "Top of Page" }))
-  keymap.set({ "n", "v" }, "J", "L", keyopts({ desc = "Bottom of Page" }))
-  keymap.set({ "n", "v" }, "H", "0", keyopts({ desc = "Start of Line" }))
-  keymap.set({ "n", "v" }, "L", "$", keyopts({ desc = "End of Line" }))
-  keymap.set({ "n", "i", "v", "c" }, "£", "#", keyopts())
-  keymap.set({ "n", "i", "v", "c" }, "§", "£", keyopts())
-  keymap.set({ "n", "i", "v", "c" }, "f£", "f#", keyopts())
-  keymap.set({ "n", "i", "v", "c" }, "F£", "F#", keyopts())
-  keymap.set("n", "0", "K", keyopts())
-  keymap.set("n", "$", "J", keyopts())
-  keymap.set("n", "dL", "d$", keyopts())
-  keymap.set("n", "dH", "d0", keyopts())
-  keymap.set("n", "yH", "y0", keyopts())
-  keymap.set("n", "yL", "y$", keyopts())
-  keymap.set({ "n", "v" }, "<C-e>", "5<c-e>", keyopts())
-  keymap.set({ "n", "v" }, "<C-y>", "5<c-y>", keyopts())
-  keymap.set("n", "<cr>", ":nohlsearch<CR>", keyopts())
-  keymap.set("n", "n", ":set hlsearch<CR>n", keyopts())
-  keymap.set("n", "N", ":set hlsearch<CR>N", keyopts())
-  keymap.set({ "n", "v" }, lk.paste.key, '"+p', keyopts({ desc = lk.paste.desc }))
+  vim.keymap.set("n", "[", "[", keyopts({ desc = "Go To Previous" }))
+  vim.keymap.set("n", "]", "]", keyopts({ desc = "Go To Next" }))
+  vim.keymap.set("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
+  vim.keymap.set({ "n", "i" }, "<c-.>", "<c-t>", keyopts({ desc = "Tab forwards" }))
+  vim.keymap.set({ "n", "i" }, "<c-,>", "<c-d>", keyopts({ desc = "Tab Backwards" }))
+  vim.keymap.set({ "n", "v" }, "K", "H", keyopts({ desc = "Top of Page" }))
+  vim.keymap.set({ "n", "v" }, "J", "L", keyopts({ desc = "Bottom of Page" }))
+  vim.keymap.set({ "n", "v" }, "H", "0", keyopts({ desc = "Start of Line" }))
+  vim.keymap.set({ "n", "v" }, "L", "$", keyopts({ desc = "End of Line" }))
+  vim.keymap.set({ "n", "i", "v", "c" }, "£", "#", keyopts())
+  vim.keymap.set({ "n", "i", "v", "c" }, "§", "£", keyopts())
+  vim.keymap.set({ "n", "i", "v", "c" }, "f£", "f#", keyopts())
+  vim.keymap.set({ "n", "i", "v", "c" }, "F£", "F#", keyopts())
+  vim.keymap.set("n", "0", "K", keyopts())
+  vim.keymap.set("n", "$", "J", keyopts())
+  vim.keymap.set("n", "dL", "d$", keyopts())
+  vim.keymap.set("n", "dH", "d0", keyopts())
+  vim.keymap.set("n", "yH", "y0", keyopts())
+  vim.keymap.set("n", "yL", "y$", keyopts())
+  vim.keymap.set({ "n", "v" }, "<C-e>", "5<c-e>", keyopts())
+  vim.keymap.set({ "n", "v" }, "<C-y>", "5<c-y>", keyopts())
+  vim.keymap.set("n", "<cr>", ":nohlsearch<CR>", keyopts())
+  vim.keymap.set("n", "n", ":set hlsearch<CR>n", keyopts())
+  vim.keymap.set("n", "N", ":set hlsearch<CR>N", keyopts())
+  vim.keymap.set({ "n", "v" }, lk.paste.key, '"+p', keyopts({ desc = lk.paste.desc }))
   makeDescMap({ "n", "v" }, lk.resize, "j", ":res-15<CR>", "Move Partition Down")
   makeDescMap({ "n", "v" }, lk.resize, "k", ":res+15<CR>", "Move Partition Up")
   makeDescMap({ "n", "v" }, lk.resize, "h", ":vertical resize -15<CR>", "Move Partition Left")

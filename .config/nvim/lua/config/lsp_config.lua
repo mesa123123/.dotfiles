@@ -61,11 +61,6 @@ M.lsp_options = function()
   ----------
   vim.b["max_line_length"] = 0
   vim.lsp.inlay_hint.enable(true)
-  vim.lsp.with(vim.lsp.handlers.hover, { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } })
-  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-    vim.lsp.handlers.signature_help,
-    { border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" } }
-  )
 end
 ----------
 
@@ -87,7 +82,7 @@ M.lsp_mappings = function()
   nmap("]G", "lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})", "LSP: Previous Error")
   nmap("g=", "lua vim.lsp.buf.code_action()", "LSP: Take Code Action")
   nmap("gi", "lua require('config.utils').insertVirtualText()", "LSP: Function & Library Info")
-  descMap({ "n" }, lk.codeAction, "w", "lua vim.diagnostic.open_float()", "LSP: Open Diagnostics Window")
+  descMap({ "n" }, lk.codeAction, "w", ":lua vim.diagnostic.open_float()<CR>", "LSP: Open Diagnostics Window")
   descMap({ "n" }, lk.codeAction, "R", ":lua vim.lsp.buf.rename()<CR>", "Code Action:  Rename Item Under Cursor")
   descMap(
     { "n" },
@@ -203,7 +198,6 @@ M.diagnostics = function()
         [vim.diagnostic.severity.HINT] = icons.Hint,
         [vim.diagnostic.severity.INFO] = icons.Info,
       },
-      numhl = "", -- To clear the number highlight if you don't want it
     },
     virtual_lines = true,
     current_line = true,
@@ -275,48 +269,6 @@ M.linter_config = function()
     "LSP: Try Lint"
   )
   ----------
-end
-----------
-
---------------------------------
--- Attach Injected
---------------------------------
-M.injected_setup = function()
-  local nmap = require("config.utils").norm_keyset
-  local bo = vim.bo
-  local lk = require("config.keymaps").lk
-  local lreq = "lua require"
-  local otter_start = function()
-    local otter = require("otter")
-    local filetype = bo.filetype
-    if filetype == "python" then
-      otter.activate({ "htmldjango", "html", "sql" })
-    end
-    if filetype == "qmd" then
-      otter.activate({ "python" })
-    end
-    nmap(
-      lk.codeAction_injectedLanguage .. "d",
-      lreq .. '"otter".ask_definition()',
-      "Code Action Injected: Show Definition"
-    )
-    nmap(
-      lk.codeAction_injectedLanguage .. "t",
-      lreq .. '"otter".ask_type_definition()',
-      "Code Action Injected: Show Type Definition"
-    )
-    nmap(lk.codeAction_injectedLanguage .. "I", lreq .. '"otter".ask_hover()', "Code Action Injected: Show Info")
-    nmap(
-      lk.codeAction_injectedLanguage .. "s",
-      lreq .. '"otter".ask_document_symbols()',
-      "Code Action Injected: Show Symbols"
-    )
-    nmap(lk.codeAction_injectedLanguage .. "R", lreq .. '"otter".ask_rename()', "Code Action Injected: Rename")
-    nmap(lk.codeAction_injectedLanguage .. "f", lreq .. '"otter".ask_format()', "Code Action Injected: Format")
-  end
-  vim.api.nvim_create_user_command("OtterActivate", function()
-    otter_start()
-  end, {})
 end
 ----------
 
