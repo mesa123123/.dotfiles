@@ -8,7 +8,6 @@ return {
     "nvim-telescope/telescope-ui-select.nvim",
     "stevearc/oil.nvim",
     "refractalize/oil-git-status.nvim",
-    "nvim-tree/nvim-web-devicons", -- for oil
     "leath-dub/snipe.nvim",
   },
   event = "VeryLazy",
