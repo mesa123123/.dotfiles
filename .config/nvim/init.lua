@@ -195,8 +195,9 @@ vim.cmd.colorscheme("gruvbox")
 
 -- Dashboard
 ----------
-require("startup").setup(dashboard_config)
-----------
+-- require("startup").setup(dashboard_config)
+require('mini.starter').setup()
+-- ----------
 
 -- Globals
 ----------
@@ -206,7 +207,26 @@ vim.g["did_load_filetypes"] = 0
 
 -- Load Custom File Types
 ----------
-config.fileconfig.custom_file_types()
+vim.filetype.add({
+  filename = {
+    ["Vagrantfile"] = "ruby",
+    ["Jenkinsfile"] = "groovy",
+    [".sqlfluff"] = "ini",
+    ["output.output"] = "log",
+    [".zshrc"] = "bash",
+  },
+  pattern = { [".*req.*.txt"] = "requirements" },
+  extension = {
+    hcl = "ini",
+    draft = "markdown",
+    env = "config",
+    jinja = "jinja",
+    vy = "python",
+    quarto = "quarto",
+    qmd = "quarto",
+    snippet = "json",
+  },
+})
 ----------
 
 --------------------------------

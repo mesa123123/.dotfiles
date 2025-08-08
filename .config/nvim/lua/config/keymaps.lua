@@ -1,4 +1,13 @@
+------------------------------
+-- ###################### --
+-- #   Key Map Options  # --
+-- ###################### --
+--------------------------------
+
+-- Module
+----------
 local M = {}
+----------
 
 --------------------------------
 -- Vim, Sims, and Requires
@@ -7,14 +16,6 @@ local M = {}
 -- Functions
 ----------
 -- Saves having to type <leader> over and over again, also creates the assist descriptions as it goes
-M.l = function(key, desc)
-  local full_key = "<leader>" .. key
-  return { key = full_key, desc = desc }
-end
--- Creates a description for menu keys (keys that have sub keys)
-M.makeDesc = function(km)
-  vim.keymap.set("n", "" .. km.key .. "", "<CMD>" .. km.key .. "<CR>", { desc = "Opts: " .. km.desc })
-end
 -- This creates a telescope help message that behaves how I want it to
 M.telescope_help = function()
   if pcall(require, "telescope") then
@@ -58,105 +59,85 @@ end
 ----------
 
 --------------------------------
--- Leader Key Vars
+-- Leader Keys
 --------------------------------
 
+-- Setup Leader Key Table
+----------
+-- Setup Function
+M.l = function(key, desc)
+  local full_key = "<leader>" .. key
+  return { key = full_key, desc = desc }
+end
+-- Leader Tables
 M.lk = {
-  -- System
-  ----------
-  -- Clipboard
-  yank = M.l("y", "System Copy"),
-  paste = M.l("p", "System Paste"),
-  -- Writing
-  write = M.l("w", "File Write Commands"),
-  write_quit = M.l("wq", "Write & Quit Commands"),
-  -- Quitting
-  quit = M.l("q", "Close & Quit Commands"),
-  quit_all = M.l("qa", "Quit All Commands"),
-  quit_buffer = M.l("qb", "Quit Buffer Commands"),
-  -- Spelling
-  spell = M.l("z", "Spell Check"),
-  -- Commands
-  sysRun = M.l("!", "Run System Command"),
-  luaRun = M.l(":", "Run Lua Command"),
-  -- Help
-  assist = M.l("?", "Mapping Assist"),
-  vimHelp = M.l(";", "Vim Help"),
-  -- File Mgmt
-  file = M.l("f", "File & Buffer Options"),
-  file_manuals = M.l("fm", "Manuals Options"),
-  file_history = M.l("fH", "History Options"),
-  buffer_explorer = M.l("fb", "Buffer Options"),
-  file_explorer = M.l("fe", "File Explorer Options"),
-  -- Tabs & Panes
-  window = M.l("w", "Window Options"),
-  tab = M.l("t", "Tab Options"),
-  resize = M.l("r", "Pane Resize"),
-  -- Movement
-  explore = M.l("e", "[E]xplore Current File"),
-  -- Dark/Light Mode Toggle
-  highlights = M.l("h", "Color/[H]ighlight Opts"),
-  ----------
-  -- Development
-  ----------
-  -- Terminal
-  terminal = M.l("A", "Terminal Applications"),
   ai = M.l("a", "Ai Assistant"),
-  -- Run Code
-  exec = M.l("x", "Code Execution"),
-  exec_http = M.l("xh", "Http Calls"),
-  exec_test = M.l("xt", "Testing"),
-  exec_test_coverage = M.l("xtc", "Coverage"),
-  -- Debugging
-  debug = M.l("b", "Debug Opts"),
-  debug_session = M.l("bs", "Session"),
-  debug_fileView = M.l("bf", "Debug Views"),
-  debug_languageOpts = M.l("bw", "[D]ebug [L]anguage Options"),
-  debug_config = M.l("ba", "[D]ebug [A]rranger"),
-  -- Code Actions
+  buffer_explorer = M.l("fb", "Buffer Options"),
   codeAction = M.l("c", "Code & Diagnostic Actions"),
   codeAction_symbols = M.l("cs", "Language Server Symbol Options"),
   codeAction_injectedLanguage = M.l("cL", "Injected Language Options"),
   codeAction_format = M.l("cf", "LSP: Format Code"),
   codeAction_lint = M.l("cl", "LSP: Lint Code"),
   codeAction_alignment = M.l("ce", "Code Alignment"),
-  snippet = M.l("s", "Snippets"),
-  ----------
-  -- Wiki
-  ----------
-  wiki = M.l("k", "Wiki Options"),
-  wiki_createPage = M.l("kc", "Create Options"),
-  wiki_linkOpts = M.l("kl", "Link Options"),
-  -- Notebook Functionality
+  database = M.l("d", "Database"),
+  debug = M.l("b", "Debug Opts"),
+  debug_session = M.l("bs", "Session"),
+  debug_fileView = M.l("bf", "Debug Views"),
+  debug_languageOpts = M.l("bw", "[D]ebug [L]anguage Options"),
+  debug_config = M.l("ba", "[D]ebug [A]rranger"),
+  exec = M.l("x", "Code Execution"),
+  exec_http = M.l("xh", "Http Calls"),
+  exec_test = M.l("xt", "Testing"),
+  exec_test_coverage = M.l("xtc", "Coverage"),
+  explore = M.l("e", "[E]xplore Current File"),
+  file = M.l("f", "File & Buffer Options"),
+  file_manuals = M.l("fm", "Manuals Options"),
+  file_history = M.l("fH", "History Options"),
+  file_explorer = M.l("fe", "File Explorer Options"),
+  highlights = M.l("h", "Color/[H]ighlight Opts"),
+  luaRun = M.l(":", "Run Lua Command"),
+  assist = M.l("?", "Mapping Assist"),
   notebook = M.l("n", "Notebooks"),
   notebook_kernel = M.l("nk", "Notebook Kernel Opts"),
   notebook_insert = M.l("ni", "Notebook Insert Opts"),
   notebook_run = M.l("nx", "Notebook Insert Opts"),
-  ----------
-  -- Misc
-  ----------
-  -- Dataconfig
-  database = M.l("d", "Database"),
-  -- Version Control Commands -- fugitive: <leader>v
+  paste = M.l("p", "System Paste"),
+  quit = M.l("q", "Close & Quit Commands"),
+  quit_all = M.l("qa", "Quit All Commands"),
+  quit_buffer = M.l("qb", "Quit Buffer Commands"),
+  resize = M.l("r", "Pane Resize"),
+  snippet = M.l("s", "Snippets"),
+  spell = M.l("z", "Spell Check"),
+  sysRun = M.l("!", "Run System Command"),
+  tab = M.l("t", "Tab Options"),
+  terminal = M.l("A", "Terminal Applications"),
+  todo = M.l("m", "Todos"),
+  uniqueft = M.l("u", "[U]nique to this format"),
   vcs = M.l("v", "Version Control"),
   vcs_file = M.l("vf", "VCS: File Options"),
-  -- Todo Highlights -- todocomments.nvim: <leader>m
-  todo = M.l("m", "Todos"),
-  ----------
-  -- Filetype Mappings
-  ----------
-  uniqueft = M.l("u", "[U]nique to this format"),
+  vimHelp = M.l(";", "Vim Help"),
+  wiki = M.l("k", "Wiki Options"),
+  wiki_createPage = M.l("kc", "Create Options"),
+  wiki_linkOpts = M.l("kl", "Link Options"),
+  window = M.l("w", "Window Options"),
+  write = M.l("w", "File Write Commands"),
+  write_quit = M.l("wq", "Write & Quit Commands"),
+  yank = M.l("y", "System Copy"),
 }
+----------
 
 --------------------------------
--- Key Mappings Table Normal
+-- Key Mappings Setup
 --------------------------------
 M.setup = function()
   local makeDescMap = require("config.utils").desc_keymap
   local keyopts = require("config.utils").keyopts
   local lk = M.lk
+  local makeDesc = function(km)
+    vim.keymap.set("n", "" .. km.key .. "", "<CMD>" .. km.key .. "<CR>", { desc = "Opts: " .. km.desc })
+  end
   for _, v in pairs(lk) do
-    M.makeDesc(v)
+    makeDesc(v)
   end
   vim.keymap.set("n", "[", "[", keyopts({ desc = "Go To Previous" }))
   vim.keymap.set("n", "]", "]", keyopts({ desc = "Go To Next" }))
@@ -249,4 +230,10 @@ M.setup = function()
 end
 --------------------------------
 
+--------------------------------
+-- Return Table
+--------------------------------
+
 return M
+
+--------------------------------

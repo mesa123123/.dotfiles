@@ -23,27 +23,6 @@ local palette = require("config.colors").palette
 ----------
 hl(0, "DashboardTitle", { fg = palette.dark2 })
 hl(0, "DashboardMappings", { fg = palette.dark3 })
-----------
-
--- Sections Defn
-----------
-local title_line = {
-  type = "text",
-  content = {
-    "                                ",
-    "                                ",
-    "                                ",
-    "                                ",
-    "                                ",
-    "                                ",
-    "                                ",
-    "                               ",
-    "                                ",
-  },
-  margin = 0,
-  align = "center",
-  highlight = "DashboardTitle",
-}
 
 local edit_mappings = {
   type = "mapping",
@@ -67,7 +46,6 @@ local edit_mappings = {
 }
 
 return {
-  title_line = title_line,
   edit_mappings = edit_mappings,
   colors = {
     background = palette.light0_hard,
@@ -75,7 +53,7 @@ return {
   empty_lines_between_mappings = false,
   disable_statuslines = true,
   options = {},
-  parts = { "title_line", "edit_mappings" },
+  parts = { "edit_mappings" },
 }
 
 ----------

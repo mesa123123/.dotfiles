@@ -26,8 +26,6 @@ return {
     dependencies = {
       "jay-babu/mason-nvim-dap.nvim",
       "jay-babu/mason-null-ls.nvim",
-      "folke/neodev.nvim",
-      "ray-x/lsp_signature.nvim",
     },
   },
   ----------
@@ -36,11 +34,7 @@ return {
   {
     "mfussenegger/nvim-dap",
     dependencies = {
-      -- Python Funcs
       "mfussenegger/nvim-dap-python",
-      -- NvimConfig Funcs - This is the debugger for your config
-      "jbyuki/one-small-step-for-vimkind",
-      -- Cool Ui Elements
       "theHamsta/nvim-dap-virtual-text",
     },
     config = function()
@@ -84,14 +78,7 @@ return {
       require("mini.notify").setup()
     end,
   },
-  {
-    "dstein64/nvim-scrollview",
-    enabled = true,
-    opts = {
-      current_only = true,
-      signs_on_startup = {},
-    },
-  },
+
   {
     "norcalli/nvim-colorizer.lua",
     config = function()
@@ -137,13 +124,7 @@ return {
     },
   },
   { "onsails/lspkind.nvim", event = "VeryLazy" },
-  -- Dashboard
-  {
-    "startup-nvim/startup.nvim",
-    event = "VimEnter",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-  },
-  -- Syntax Stuff
+  { "echasnovski/mini.starter", event = "VimEnter", version = false },
   {
     "fei6409/log-highlight.nvim",
     config = function()
@@ -153,14 +134,6 @@ return {
     end,
   },
   ----------
-  -- CmdLine
-  ----------
-  { "stevearc/dressing.nvim", event = "VeryLazy" },
-  ----------
-  -- Writing Functionality
-  ----------
-  -- Wiki - Obsidian nvim
-  { "epwalsh/obsidian.nvim", event = "VeryLazy" },
   -- Latex - VimTex
   {
     "lervag/vimtex",
