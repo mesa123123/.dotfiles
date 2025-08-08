@@ -10,14 +10,6 @@
 
 -- Vim Vars
 ----------
-local cmd = vim.cmd
-local api = vim.api
-local fn = vim.fn
-local keymap = vim.keymap
-local ft = vim.filetype
-local hl = vim.api.nvim_set_hl
-local diagnostic = vim.diagnostic
-local opt = vim.opt
 local gv = vim.g
 ----------
 
@@ -31,7 +23,11 @@ local M = {}
 --------------------------------
 
 M.setup = function()
+  local opt = vim.opt
+  local api = vim.api
+
   -- Line Numbers On
+  --
   opt.relativenumber = true
   opt.number = true
   -- Other Encoding and Formatting settings
@@ -52,6 +48,7 @@ M.setup = function()
   opt.conceallevel = 1
   -- Mouse off
   opt.mouse = "a"
+  opt.winborder = "rounded"
   -- Spell Check On
   opt.spell = true
   opt.spelllang = "en_gb"
@@ -65,14 +62,6 @@ M.setup = function()
   -- Settings
   --------------------------------
   gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
-  -- Virtual Text Enabled Globally
-  diagnostic.config({
-    virtual_text = true,
-    underline = true,
-    signs = true,
-  })
-  ------------
-
   -- AutoCmds
   ----------
   -- Create Group
