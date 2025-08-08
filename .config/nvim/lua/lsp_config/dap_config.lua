@@ -104,8 +104,15 @@ end, "Launch Debug Server")
 -- UI Commands
 ----------
 local duw = 'require("dap.ui.widgets")'
+local set_nu = ":set nu<CR>:set rnu<CR>"
 desc_map({ "n" }, lk.debug, "v", "<CMD>lua " .. duw .. ".hover()<CR>", "Variable Info")
-desc_map({ "n" }, lk.debug, "S", "<CMD>lua " .. duw .. ".cursor_float(" .. duw .. ".scopes)<CR>", "Scope Info")
+desc_map(
+  { "n" },
+  lk.debug,
+  "S",
+  "<CMD>lua " .. duw .. ".cursor_float(" .. duw .. ".scopes)<CR>" .. set_nu,
+  "Scope Info"
+)
 desc_map({ "n" }, lk.debug, "F", "<CMD>lua " .. duw .. ".cursor_float(" .. duw .. ".frames)<CR>", "Stack Frame Info")
 desc_map(
   { "n" },
