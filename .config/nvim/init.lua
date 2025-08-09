@@ -166,13 +166,11 @@ vim.api.nvim_create_user_command("Sov", "so " .. vim.env.HOME .. vim.g["config_p
 
 -- Requires
 ----------
--- Modules
 local config = require("config")
 local utils = config.utils
 local tC = utils.tableConcat
 local python_path = utils.get_python_path()
 local python_packages = utils.get_python_packages()
-local dashboard_config = config.dashboard_config
 local fn = vim.fn
 ----------
 
@@ -195,8 +193,16 @@ vim.cmd.colorscheme("gruvbox")
 
 -- Dashboard
 ----------
--- require("startup").setup(dashboard_config)
-require('mini.starter').setup()
+require("mini.starter").setup({
+  items = {
+    { name = "Editvim ", action = "Editvim", section = "Options" },
+    { name = "Folder ", action = "Oil", section = "Options" },
+    { name = "Plugins ", action = "Editplugins", "p", section = "Options" },
+    { name = "Config ", action = "Editconfig", section = "Options" },
+    { name = "Snips ", action = "Editsnips", section = "Options" },
+    { name = "Ft ", action = "Editft", section = "Options" },
+  },
+})
 -- ----------
 
 -- Globals
