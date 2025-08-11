@@ -10,12 +10,13 @@
     alias ll='eza -lgxh'
     alias la='eza -a'
     alias lt='eza -gT'
-}
+} 
 # If not use regular ls aliases
 [[ "$(cargo install --list | grep -c "eza")" -le 0 ]] && {
     alias ll='ls --color -alF'
     alias la='ls --color -A'
     alias l='ls --color -CF'
+    echo "Couldn't find eza, installing..." && cargo install eza
 }
 alias ..="cd ../"
 alias ...="cd ../../"
@@ -36,6 +37,7 @@ alias dothome='cd ~/.dotfiles'
 [[ $(echo "$SHELL" | grep -c bash) == 1 ]]  &&  {
     alias resetbash='source ~/.bashrc' && alias editbash='vim ~/.bashrc && source ~/.bashrc'
 }
+alias santa="sudo santactl sync --clean"
 
 alias editfuncs="vim ~/.shell_functions && source ~/.shell_functions"
 alias editalias='vim ~/.bash_aliases && source ~/.bash_aliases'
@@ -46,6 +48,8 @@ alias edittmux="vim ~/.tmux.conf"
 alias editkitty="vim ~/.config/kitty/kitty.conf"
 alias editwez="vim ~/.wezterm.lua"
 alias editgit="vim ~/.gitconfig"
+alias editssh="vim ~/.ssh/config"
+alias editstarship="vim ~/.config/starship.toml"
 alias editmise="vim ~/.config/mise/mise.toml"
 
 # --------
@@ -102,11 +106,6 @@ alias compose='docker compose'
 alias db='databricks'
 # --------
 
-# Hardware Application Commands
-# --------
-alias bluetooth="blueman-manager"
-# --------
-
 # Screen Commands
 # --------
 alias tmux="TERM=screen-256color-bce tmux"
@@ -140,11 +139,13 @@ cargocheck ()
         else
             alias "${2}"="${3}"
         fi
+    else
+	    cargo install "${1}"
     fi
 }
 cargocheck bat cat
 cargocheck broot tree
-cargocheck fd find
+cargocheck fd-find fd find
 cargocheck xq jq
 cargocheck xh curl "xh --style auto"
 cargocheck mise asdf
@@ -155,7 +156,9 @@ cargocheck tealdeer man tldr
 cargocheck du-dust du dust
 cargocheck git-delta diff delta 
 cargocheck ripgrep grep "rg --no-ignore"
+cargocheck zellij tmux
 cargocheck ncspot spotify
+# cargocheck ncspot spotify
 
 # If zoxide is installed use that over cd
 [[ "$(cargo install --list | grep -c "zoxide")" -ge 1 ]] && {
@@ -196,15 +199,15 @@ alias galias='cat ~/.bash_aliases | grep git'
 alias gs='git status --short'
 alias gd='git diff'
 alias gdf='git diff --name-only'
-alias gdom='git diff origin/main'
-alias gdfom='git diff origin/main --name-only'
+alias gdom='git diff $(git upn) $(git hb)'
+alias gdfom='git diff $(git upn) $(git hb) --name-only'
 alias gr='git reset --hard'
 alias grh='git reset --hard head'
-alias grom='git reset --hard origin/main'
-alias gR='git rm -r'
+alias grom='git reset --hard $(git upn) $(git hb)'
 alias ga='git add'
-alias gu='git fetch && git pull origin main'
+alias gu='git fetch && git pull origin master'
 alias gb='git branch'
+alias gba='git branch -a'
 alias gbD='git branch -D'
 alias gC='git checkout'
 alias gCb='git checkout -b'
