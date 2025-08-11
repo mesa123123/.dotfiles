@@ -1,4 +1,4 @@
-------------------------------
+--------------------------------
 -- ###################### --
 -- #  Main Nvim Config  # --
 -- ###################### --
@@ -567,10 +567,8 @@ dap.adapters.nlua = function(callback, config)
 end
 ----------
 
---------------------------------
--- Database mappings
---------------------------------
--- NOTE: I don't know why the fuck this needs to be here but it doesn't work otherwise :/
+-- Toggle Database
+----------
 local lk = require("config.keymaps").lk
 local descMap = require("config.utils").desc_keymap
 
@@ -583,7 +581,8 @@ descMap({ "n" }, lk.database, "l", ":DBUILastQueryInfo<CR>", "Run Last Query")
 vim.keymap.set({ "n", "v" }, lk.database.key .. "x", "<Plug>(DBUI_ExecuteQuery)", { desc = "Run Query" })
 ----------
 vim.g.db_ui_use_nerd_fonts = 1
-vim.print(python_packages)
+----------
+
 --------------------------------
 ---- EOF
 ---------------------------------
