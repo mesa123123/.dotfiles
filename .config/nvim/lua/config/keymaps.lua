@@ -127,18 +127,24 @@ M.lk = {
 ----------
 
 --------------------------------
+-- Make Leader Key Descriptions
+--------------------------------
+
+M.get_leader_descriptions = function()
+  local leader_clues = {}
+  for _, v in pairs(M.lk) do
+    table.insert(leader_clues, { mode = "n", key = v.key, desc = "+" .. v.desc })
+  end
+  return leader_clues
+end
+
+--------------------------------
 -- Key Mappings Setup
 --------------------------------
 M.setup = function()
   local makeDescMap = require("config.utils").desc_keymap
   local keyopts = require("config.utils").keyopts
   local lk = M.lk
-  local makeDesc = function(km)
-    vim.keymap.set("n", "" .. km.key .. "", "<CMD>" .. km.key .. "<CR>", { desc = "Opts: " .. km.desc })
-  end
-  for _, v in pairs(lk) do
-    makeDesc(v)
-  end
   vim.keymap.set("n", "[", "[", keyopts({ desc = "Go To Previous" }))
   vim.keymap.set("n", "]", "]", keyopts({ desc = "Go To Next" }))
   vim.keymap.set("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
@@ -228,6 +234,10 @@ M.setup = function()
     "E[x]ec [V]isual Lua Block"
   )
 end
+--------------------------------
+
+--------------------------------
+-- Key Help UI Setup
 --------------------------------
 
 --------------------------------

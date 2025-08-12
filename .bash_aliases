@@ -157,8 +157,6 @@ cargocheck du-dust du dust
 cargocheck git-delta diff delta 
 cargocheck ripgrep grep "rg --no-ignore"
 cargocheck zellij tmux
-cargocheck ncspot spotify
-# cargocheck ncspot spotify
 
 # If zoxide is installed use that over cd
 [[ "$(cargo install --list | grep -c "zoxide")" -ge 1 ]] && {

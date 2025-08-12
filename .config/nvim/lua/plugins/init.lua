@@ -7,13 +7,6 @@ return {
     priority = 1000,
     config = true,
   },
-  {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    opts = {
-      icons = { mappings = false },
-    },
-  },
   -- Linting & Formatting Plugins
   ----------
   { "mfussenegger/nvim-lint", event = "VeryLazy" },
@@ -76,6 +69,35 @@ return {
     version = "*",
     config = function()
       require("mini.notify").setup()
+    end,
+  },
+  {
+    "echasnovski/mini.clue",
+    config = function()
+      local miniclue = require("mini.clue")
+      local all_clues = {}
+
+      local function add_clues(clue_list)
+        for _, clue in ipairs(clue_list) do
+          table.insert(all_clues, clue)
+        end
+      end
+
+      add_clues(require("config.keymaps").get_leader_descriptions())
+      -- add_clues(miniclue.gen_clues.builtin_completion())
+      -- add_clues(miniclue.gen_clues.g())
+      -- add_clues(miniclue.gen_clues.marks())
+      -- add_clues(miniclue.gen_clues.registers())
+      -- add_clues(miniclue.gen_clues.windows())
+      -- add_clues(miniclue.gen_clues.z())
+      miniclue.setup({
+        triggers = {
+          { mode = "n", keys = "<Leader>" },
+          { mode = "x", keys = "<Leader>" },
+          { mode = "v", keys = "<Leader>" },
+        },
+        clues = all_clues,
+      })
     end,
   },
 

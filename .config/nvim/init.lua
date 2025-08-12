@@ -157,7 +157,7 @@ end, {})
 vim.api.nvim_create_user_command("Editft", function()
   edit_based_on_ft("~/.config/nvim/after/ftplugin", ".lua")
 end, {})
-vim.api.nvim_create_user_command("Sov", "so " .. vim.env.HOME .. vim.g["config_path"] .. "init.lua", {})
+vim.api.nvim_create_user_command("Sov", "so " .. vim.g["config_path"] .. "/init.lua", {})
 ----------
 
 --------------------------------
