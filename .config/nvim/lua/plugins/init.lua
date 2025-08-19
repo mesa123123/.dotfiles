@@ -7,6 +7,59 @@ return {
     priority = 1000,
     config = true,
   },
+  -- StatusLine
+  ----------
+  {
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
+    config = function()
+      require("lualine").setup(require("config").line_config)
+    end,
+  },
+  ----------
+  -- Outline
+  ----------
+  {
+    "hedyhli/outline.nvim",
+    config = function()
+      local utils = require("config.utils")
+      local descMap = utils.desc_keymap
+      local lk = require("config.keymaps").lk
+      descMap({ "n" }, lk.explore, "e", ":Outline<CR>", "Outline")
+      require("outline").setup({
+        outline_window = {
+          show_numbers = true,
+          show_relative_numbers = true,
+        },
+      })
+    end,
+  },
+  -- Telescope
+  ----------
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "BurntSushi/ripgrep",
+      "sharkdp/fd",
+      "nvim-telescope/telescope-dap.nvim",
+      "piersolenski/telescope-import.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+      "stevearc/oil.nvim",
+      "refractalize/oil-git-status.nvim",
+      "leath-dub/snipe.nvim",
+    },
+    event = "VeryLazy",
+    config = function()
+      local ftree = require("config").filetree
+      require("telescope").setup(ftree.telescope_config())
+      require("snipe").setup(ftree.snipe_config)
+      require("oil").setup(ftree.file_tree_config)
+      require("oil-git-status").setup()
+      ftree.extension_load()
+      ftree.set_mappings()
+    end,
+  },
+  ----------
   -- Linting & Formatting Plugins
   ----------
   { "mfussenegger/nvim-lint", event = "VeryLazy" },
@@ -83,9 +136,9 @@ return {
         end
       end
 
+      add_clues(miniclue.gen_clues.g())
       add_clues(require("config.keymaps").get_leader_descriptions())
       -- add_clues(miniclue.gen_clues.builtin_completion())
-      -- add_clues(miniclue.gen_clues.g())
       -- add_clues(miniclue.gen_clues.marks())
       -- add_clues(miniclue.gen_clues.registers())
       -- add_clues(miniclue.gen_clues.windows())
@@ -95,6 +148,8 @@ return {
           { mode = "n", keys = "<Leader>" },
           { mode = "x", keys = "<Leader>" },
           { mode = "v", keys = "<Leader>" },
+          { mode = "n", keys = "g" },
+          { mode = "x", keys = "g" },
         },
         clues = all_clues,
       })
@@ -180,6 +235,7 @@ return {
       -- Setup render-markdown
       require("render-markdown").setup({
         completions = { blink = { enabled = true } },
+        latex = { enabled = false },
       })
     end,
     opts = {

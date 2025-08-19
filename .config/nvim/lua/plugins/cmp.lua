@@ -13,6 +13,7 @@ return {
       default = { "omni", "lsp", "path", "buffer", "snippets" },
       per_filetype = {
         sql = { "omni", "lsp", "snippets", "buffer", "path" },
+        markdown = { "markdown", "lsp", "snippets", "buffer", "path", "omni" },
         codecompanion = { "codecompanion", "path", "buffer" },
       },
     },

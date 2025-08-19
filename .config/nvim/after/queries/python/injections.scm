@@ -1,12 +1,11 @@
 ; extends
 ;; Match Module Strings as Markdown
 (module (expression_statement(string (string_content) @injection.content (#set! injection.language "rst")(#match? @injection.content "########"))) . (import_from_statement))
-
 (module (expression_statement(string (string_content) @injection.content (#set! injection.language "rst")(#match? @injection.content "########"))) . (import_statement))
+(module (expression_statement(string (string_content) @injection.content (#set! injection.language "rst")(#match? @injection.content "########"))) . (future_import_statement))
 
 ;; Match string content as sql
 (string (string_content) @injection.content (#set! injection.language "sql")(#match? @injection.content "SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN|CREATE|DROP|ALTER"))
-
 ;;; Match strings preceded by a comment directive "TS:sql"
 (_ 
   (comment) @_comment  ;; Match a comment
