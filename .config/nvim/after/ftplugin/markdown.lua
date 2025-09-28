@@ -1,4 +1,4 @@
-vim.bo.commentstring = "[//]: # %s"
+vim.opt_local.commentstring = "[//]: # (%s)"
 vim.wo.spell = true
 vim.bo.spelllang = "en_gb"
 vim.bo.tabstop = 2

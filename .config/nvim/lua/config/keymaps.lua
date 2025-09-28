@@ -131,11 +131,14 @@ M.lk = {
 --------------------------------
 
 M.get_leader_descriptions = function()
-  local leader_clues = {}
-  for _, v in pairs(M.lk) do
-    table.insert(leader_clues, { mode = "n", key = v.key, desc = "+" .. v.desc })
+  local leader_descriptions = function(mode, prefix)
+    local clues = {}
+    for _, v in pairs(M.lk) do
+      table.insert(clues, { mode = mode, key = prefix .. v.key, desc = "+" .. v.desc })
+    end
+    return clues
   end
-  return leader_clues
+  return leader_descriptions("n", vim.g["mapleader"])
 end
 
 --------------------------------

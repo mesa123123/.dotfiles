@@ -26,7 +26,6 @@
 ---
 --- Note: This is a community fork of `pyls`.
 return {
-
   cmd = { require("config.utils").get_venv_command("pylsp") },
   filetypes = { "python", "py" },
   settings = {

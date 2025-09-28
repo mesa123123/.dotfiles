@@ -1,4 +1,4 @@
---------------------------------
+-------------------------------
 -- ###################### --
 -- #  Main Nvim Config  # --
 -- ###################### --
@@ -145,6 +145,7 @@ end
 -- Commands for Editing
 ----------
 vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {})
+vim.api.nvim_create_user_command("Editworkspace", "e " .. vim.fn.getcwd() .. "/.nvim.lua", {})
 vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/lua/package_setup.lua", {})
 vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins/", {})
 vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lsp/", {})
@@ -183,6 +184,7 @@ local fn = vim.fn
 config.options.setup()
 config.keymaps.setup()
 config.snips.snip_maps()
+config.commands.setup()
 ----------
 
 -- Set & Customize Colour Scheme
@@ -191,11 +193,21 @@ vim.o.background = "light"
 vim.cmd.colorscheme("gruvbox")
 ----------
 
+-- Workspace Settings
+----------
+local workspace = config.workspace.load()
+-- Load Config Function
+local get_workspace_setting = function(key, default_value)
+  return (workspace and workspace[key]) or default_value
+end
+----------
+
 -- Dashboard
 ----------
 require("mini.starter").setup({
   items = {
-    { name = "Editvim ", action = "Editvim", section = "Options" },
+    { name = "VimSettings ", action = "Editvim", section = "Options" },
+    { name = "ProjectSettings ", action = "Editworkspace", section = "Options" },
     { name = "Folder ", action = "Oil", section = "Options" },
     { name = "Plugins ", action = "Editplugins", "p", section = "Options" },
     { name = "Config ", action = "Editconfig", section = "Options" },
@@ -272,6 +284,7 @@ local lsp_servers_ei = {
   "python-lsp-server",
   "ruff",
   "ty",
+  "pyright",
   "rust-analyzer",
   "sqlls",
   "taplo",
@@ -289,6 +302,7 @@ local formatters_ei = {
   "markdownlint",
   "prettier",
   "ruff",
+  "isort",
   "beautysh",
   "stylua",
   "tex-fmt",
@@ -298,6 +312,7 @@ local formatters_ei = {
 local linters_ei = {
   "djlint",
   "htmlhint",
+  "flake8",
   "jsonlint",
   "luacheck",
   "markdownlint",
@@ -319,11 +334,14 @@ local debuggers_ei = {
   "codelldb",
   "debugpy",
 }
+
+local default_ensure_installed = tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, lsp_servers_ei)))
 ----------
 
 -- Install Packages
 ----------
-lsp_config.package_setup(tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, lsp_servers_ei))))
+local ensure_installed = get_workspace_setting("ensure_installed", default_ensure_installed)
+lsp_config.package_setup(ensure_installed)
 ----------
 
 --------------------------------
@@ -337,7 +355,7 @@ lsp_config.diagnostics()
 
 -- Servers
 ----------
-for _, v in ipairs(lsp_servers_ei) do
+for _, v in ipairs(ensure_installed) do
   if v == "lua-language-server" then
     lsp_config.setup("lua_ls")
   elseif v == "python-lsp-server" then
@@ -354,84 +372,89 @@ end
 
 -- Formatter Setup
 ----------
+local default_formatters_by_ft = {
+  ["*"] = { "injected" },
+  bash = { "beautysh" },
+  graphql = { "prettier" },
+  jinja = { "djlint" },
+  json = { "jq" },
+  lua = { "stylua" },
+  markdown = { "markdownlint", "injected" },
+  python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
+  shell = { "beautysh" },
+  sh = { "beautysh" },
+  sql = { "sqlfluff" },
+  rst = { "rstfmt" },
+  rust = { "rustfmt" },
+  terraform = { "terraform_fmt" },
+  tex = { "tex-fmt" },
+  yaml = { "yq" },
+  toml = { "taplo" },
+}
+
+local default_formatters = {
+  stylua = {
+    command = "stylua",
+    args = {
+      "--search-parent-directories",
+      "--stdin-filepath",
+      "$filename",
+      "--indent-width",
+      "2",
+      "--indent-type",
+      "spaces",
+      "--column-width",
+      "120",
+      "-",
+    },
+  },
+  sqlfluff = {
+    command = function()
+      return utils.get_venv_command("sqlfluff") or "sqlfluff"
+    end,
+    args = {
+      "fix",
+      "--fix-even-unparsable",
+      "--config",
+      vim.env.HOME .. "/.config/sqlfluff/.sqlfluff",
+      "$filename",
+    },
+    stdin = false,
+  },
+  docformatter = {
+    command = utils.get_mason_package("docformatter"),
+    args = { "--in-place", "$filename", "--wrap-summaries", "90", "--wrap-descriptions", "90", "--force-wrap" },
+    stdin = false,
+  },
+  markdownlint = {
+    args = {
+      "--disable",
+      "md013",
+      "md012",
+      "md041",
+      "md053",
+      "--fix",
+      "$filename",
+    },
+  },
+}
+
+local formatters_by_ft = get_workspace_setting("formatters_by_ft", default_formatters_by_ft)
+local formatters = get_workspace_setting("formatters", default_formatters)
 
 require("conform").setup({
   log_level = vim.log.levels.DEBUG,
   debug = true,
-  formatters_by_ft = {
-    ["*"] = { "injected" },
-    bash = { "beautysh" },
-    graphql = { "prettier" },
-    jinja = { "djlint" },
-    json = { "jq" },
-    lua = { "stylua" },
-    markdown = { "markdownlint", "injected" },
-    python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
-    shell = { "beautysh" },
-    sh = { "beautysh" },
-    sql = { "sqlfluff" },
-    rst = { "rstfmt" },
-    rust = { "rustfmt" },
-    terraform = { "terraform_fmt" },
-    tex = { "tex-fmt" },
-    yaml = { "yq" },
-    toml = { "taplo" },
-  },
-  formatters = {
-    stylua = {
-      command = "stylua",
-      args = {
-        "--search-parent-directories",
-        "--stdin-filepath",
-        "$FILENAME",
-        "--indent-width",
-        "2",
-        "--indent-type",
-        "Spaces",
-        "--column-width",
-        "120",
-        "-",
-      },
-    },
-    sqlfluff = {
-      command = function()
-        return utils.get_venv_command("sqlfluff") or "sqlfluff"
-      end,
-      args = {
-        "fix",
-        "--FIX-EVEN-UNPARSABLE",
-        "--config",
-        os.getenv("HOME") .. "/.config/sqlfluff/.sqlfluff",
-        "$FILENAME",
-      },
-      stdin = false,
-    },
-    docformatter = {
-      command = utils.get_mason_package("docformatter"),
-      args = { "--in-place", "$FILENAME", "--wrap-summaries", "90", "--wrap-descriptions", "90", "--force-wrap" },
-      stdin = false,
-    },
-    markdownlint = {
-      args = {
-        "--disable",
-        "MD013",
-        "MD012",
-        "MD041",
-        "MD053",
-        "--fix",
-        "$FILENAME",
-      },
-    },
-  },
+  formatters_by_ft = formatters_by_ft,
+  formatters = formatters,
 })
 lsp_config.formatter_config()
 ----------
 
 -- Linter Setup
 ----------
-local lint = require("lint")
--- Configure Linters
-lint.linters_by_ft = {
+
+local default_linters_by_ft = {
   ["*"] = { "compiler" },
   bash = { "shellcheck" },
   css = { "stylelint", "prettier" },
@@ -447,6 +470,20 @@ lint.linters_by_ft = {
   terraform = { "tflint" },
   yaml = { "yamllint" },
 }
+local linters_by_ft = get_workspace_setting("linters_by_ft", default_linters_by_ft)
+
+local lint = require("lint")
+-- Configure Linters
+lint.linters_by_ft = linters_by_ft
+-- Python Linters
+for _, linter_name in ipairs(linters_by_ft.python) do
+  local original_linter = lint.linters[linter_name]
+  if original_linter then
+    lint.linters[linter_name] = vim.tbl_deep_extend("force", {}, original_linter, {
+      cmd = utils.get_venv_command(linter_name),
+    })
+  end
+end
 -- Markdownlint
 local markdownlint = lint.linters.markdownlint
 markdownlint.args = {
@@ -455,10 +492,6 @@ markdownlint.args = {
   "MD012",
   "MD041",
 }
--- MyPy
-local mypy = lint.linters.mypy
-mypy.cmd = utils.get_venv_command("mypy")
-
 -- SQLFluff
 local sqlfluff = lint.linters.sqlfluff
 sqlfluff.cmd = utils.get_venv_command("sqlfluff")
