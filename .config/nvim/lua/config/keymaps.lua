@@ -1,35 +1,21 @@
+------------------------------
+-- ###################### --
+-- #   Key Map Options  # --
+-- ###################### --
+--------------------------------
+
+-- Module
+----------
 local M = {}
+----------
 
 --------------------------------
 -- Vim, Sims, and Requires
 --------------------------------
 
--- Vim Vars
-----------
--- Module Table
-local M = {}
-local keymap = vim.keymap
-local cmd = vim.cmd
-----------
-
--- Require
-----------
-local utils = require("config.utils")
-local keyopts = utils.keyopts
-local makeDescMap = utils.desc_keymap
-----------
-
 -- Functions
 ----------
 -- Saves having to type <leader> over and over again, also creates the assist descriptions as it goes
-M.l = function(key, desc)
-  local full_key = "<leader>" .. key
-  return { key = full_key, desc = desc }
-end
--- Creates a description for menu keys (keys that have sub keys)
-M.makeDesc = function(km)
-  keymap.set("n", "" .. km.key .. "", "<CMD>" .. km.key .. "<CR>", { desc = "Opts: " .. km.desc })
-end
 -- This creates a telescope help message that behaves how I want it to
 M.telescope_help = function()
   if pcall(require, "telescope") then
@@ -51,7 +37,7 @@ M.telescope_help = function()
       end,
     })
   end
-  return cmd(":h ")
+  return vim.cmd(":h ")
 end
 -- Dark Mode Toggle
 M.toggle_dark_mode = function()
@@ -73,129 +59,120 @@ end
 ----------
 
 --------------------------------
--- Leader Key Vars
+-- Leader Keys
 --------------------------------
 
+-- Setup Leader Key Table
+----------
+-- Setup Function
+M.l = function(key, desc)
+  local full_key = "<leader>" .. key
+  return { key = full_key, desc = desc }
+end
+-- Leader Tables
 M.lk = {
-  -- System
-  ----------
-  -- Clipboard
-  yank = M.l("y", "System Copy"),
-  paste = M.l("p", "System Paste"),
-  -- Writing
-  write = M.l("w", "File Write Commands"),
-  write_quit = M.l("wq", "Write & Quit Commands"),
-  -- Quitting
-  quit = M.l("q", "Close & Quit Commands"),
-  quit_all = M.l("qa", "Quit All Commands"),
-  quit_buffer = M.l("qb", "Quit Buffer Commands"),
-  -- Spelling
-  spell = M.l("z", "Spell Check"),
-  -- Commands
-  sysRun = M.l("!", "Run System Command"),
-  luaRun = M.l(":", "Run Lua Command"),
-  -- Help
-  assist = M.l("?", "Mapping Assist"),
-  vimHelp = M.l(";", "Vim Help"),
-  -- File Mgmt
-  file = M.l("f", "File & Buffer Options"),
-  file_manuals = M.l("fm", "Manuals Options"),
-  file_history = M.l("fH", "History Options"),
-  buffer_explorer = M.l("fb", "Buffer Options"),
-  file_explorer = M.l("fe", "File Explorer Options"),
-  -- Tabs & Panes
-  window = M.l("w", "Window Options"),
-  tab = M.l("t", "Tab Options"),
-  resize = M.l("r", "Pane Resize"),
-  -- Movement
-  explore = M.l("e", "[E]xplore Current File"),
-  -- Dark/Light Mode Toggle
-  highlights = M.l("h", "Color/[H]ighlight Opts"),
-  ----------
-  -- Development
-  ----------
-  -- Terminal
-  terminal = M.l("A", "Terminal Applications"),
   ai = M.l("a", "Ai Assistant"),
-  -- Run Code
-  exec = M.l("x", "Code Execution"),
-  exec_http = M.l("xh", "Http Calls"),
-  exec_test = M.l("xt", "Testing"),
-  exec_test_coverage = M.l("xtc", "Coverage"),
-  -- Debugging
-  debug = M.l("b", "Debug Opts"),
-  debug_session = M.l("bs", "Session"),
-  debug_fileView = M.l("bf", "Debug Views"),
-  debug_languageOpts = M.l("bw", "[D]ebug [L]anguage Options"),
-  debug_config = M.l("ba", "[D]ebug [A]rranger"),
-  -- Code Actions
+  buffer_explorer = M.l("fb", "Buffer Options"),
   codeAction = M.l("c", "Code & Diagnostic Actions"),
   codeAction_symbols = M.l("cs", "Language Server Symbol Options"),
   codeAction_injectedLanguage = M.l("cL", "Injected Language Options"),
   codeAction_format = M.l("cf", "LSP: Format Code"),
   codeAction_lint = M.l("cl", "LSP: Lint Code"),
   codeAction_alignment = M.l("ce", "Code Alignment"),
-  snippet = M.l("s", "Snippets"),
-  ----------
-  -- Wiki
-  ----------
-  wiki = M.l("k", "Wiki Options"),
-  wiki_createPage = M.l("kc", "Create Options"),
-  wiki_linkOpts = M.l("kl", "Link Options"),
-  -- Notebook Functionality
+  database = M.l("d", "Database"),
+  debug = M.l("b", "Debug Opts"),
+  debug_session = M.l("bs", "Session"),
+  debug_fileView = M.l("bf", "Debug Views"),
+  debug_languageOpts = M.l("bw", "[D]ebug [L]anguage Options"),
+  debug_config = M.l("ba", "[D]ebug [A]rranger"),
+  exec = M.l("x", "Code Execution"),
+  exec_http = M.l("xh", "Http Calls"),
+  exec_test = M.l("xt", "Testing"),
+  exec_test_coverage = M.l("xtc", "Coverage"),
+  explore = M.l("e", "[E]xplore Current File"),
+  file = M.l("f", "File & Buffer Options"),
+  file_manuals = M.l("fm", "Manuals Options"),
+  file_history = M.l("fH", "History Options"),
+  file_explorer = M.l("fe", "File Explorer Options"),
+  highlights = M.l("h", "Color/[H]ighlight Opts"),
+  luaRun = M.l(":", "Run Lua Command"),
+  assist = M.l("?", "Mapping Assist"),
   notebook = M.l("n", "Notebooks"),
   notebook_kernel = M.l("nk", "Notebook Kernel Opts"),
   notebook_insert = M.l("ni", "Notebook Insert Opts"),
   notebook_run = M.l("nx", "Notebook Insert Opts"),
-  ----------
-  -- Misc
-  ----------
-  -- Dataconfig
-  database = M.l("d", "Database"),
-  -- Version Control Commands -- fugitive: <leader>v
+  paste = M.l("p", "System Paste"),
+  quit = M.l("q", "Close & Quit Commands"),
+  quit_all = M.l("qa", "Quit All Commands"),
+  quit_buffer = M.l("qb", "Quit Buffer Commands"),
+  resize = M.l("r", "Pane Resize"),
+  snippet = M.l("s", "Snippets"),
+  spell = M.l("z", "Spell Check"),
+  sysRun = M.l("!", "Run System Command"),
+  tab = M.l("t", "Tab Options"),
+  terminal = M.l("A", "Terminal Applications"),
+  todo = M.l("m", "Todos"),
+  uniqueft = M.l("u", "[U]nique to this format"),
   vcs = M.l("v", "Version Control"),
   vcs_file = M.l("vf", "VCS: File Options"),
-  -- Todo Highlights -- todocomments.nvim: <leader>m
-  todo = M.l("m", "Todos"),
-  ----------
-  -- Filetype Mappings
-  ----------
-  uniqueft = M.l("u", "[U]nique to this format"),
+  vimHelp = M.l(";", "Vim Help"),
+  wiki = M.l("k", "Wiki Options"),
+  wiki_createPage = M.l("kc", "Create Options"),
+  wiki_linkOpts = M.l("kl", "Link Options"),
+  window = M.l("w", "Window Options"),
+  write = M.l("w", "File Write Commands"),
+  write_quit = M.l("wq", "Write & Quit Commands"),
+  yank = M.l("y", "System Copy"),
 }
+----------
 
 --------------------------------
--- Key Mappings Table Normal
+-- Make Leader Key Descriptions
+--------------------------------
+
+M.get_leader_descriptions = function()
+  local leader_descriptions = function(mode, prefix)
+    local clues = {}
+    for _, v in pairs(M.lk) do
+      table.insert(clues, { mode = mode, key = prefix .. v.key, desc = "+" .. v.desc })
+    end
+    return clues
+  end
+  return leader_descriptions("n", vim.g["mapleader"])
+end
+
+--------------------------------
+-- Key Mappings Setup
 --------------------------------
 M.setup = function()
+  local makeDescMap = require("config.utils").desc_keymap
+  local keyopts = require("config.utils").keyopts
   local lk = M.lk
-  for _, v in pairs(lk) do
-    M.makeDesc(v)
-  end
-  keymap.set("n", "[", "[", keyopts({ desc = "Go To Previous" }))
-  keymap.set("n", "]", "]", keyopts({ desc = "Go To Next" }))
-  keymap.set("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
-  keymap.set({ "n", "i" }, "<c-.>", "<c-t>", keyopts({ desc = "Tab forwards" }))
-  keymap.set({ "n", "i" }, "<c-,>", "<c-d>", keyopts({ desc = "Tab Backwards" }))
-  keymap.set({ "n", "v" }, "K", "H", keyopts({ desc = "Top of Page" }))
-  keymap.set({ "n", "v" }, "J", "L", keyopts({ desc = "Bottom of Page" }))
-  keymap.set({ "n", "v" }, "H", "0", keyopts({ desc = "Start of Line" }))
-  keymap.set({ "n", "v" }, "L", "$", keyopts({ desc = "End of Line" }))
-  keymap.set({ "n", "i", "v", "c" }, "£", "#", keyopts())
-  keymap.set({ "n", "i", "v", "c" }, "§", "£", keyopts())
-  keymap.set({ "n", "i", "v", "c" }, "f£", "f#", keyopts())
-  keymap.set({ "n", "i", "v", "c" }, "F£", "F#", keyopts())
-  keymap.set("n", "0", "K", keyopts())
-  keymap.set("n", "$", "J", keyopts())
-  keymap.set("n", "dL", "d$", keyopts())
-  keymap.set("n", "dH", "d0", keyopts())
-  keymap.set("n", "yH", "y0", keyopts())
-  keymap.set("n", "yL", "y$", keyopts())
-  keymap.set({ "n", "v" }, "<C-e>", "5<c-e>", keyopts())
-  keymap.set({ "n", "v" }, "<C-y>", "5<c-y>", keyopts())
-  keymap.set("n", "<cr>", ":nohlsearch<CR>", keyopts())
-  keymap.set("n", "n", ":set hlsearch<CR>n", keyopts())
-  keymap.set("n", "N", ":set hlsearch<CR>N", keyopts())
-  keymap.set({ "n", "v" }, lk.paste.key, '"+p', keyopts({ desc = lk.paste.desc }))
+  vim.keymap.set("n", "[", "[", keyopts({ desc = "Go To Previous" }))
+  vim.keymap.set("n", "]", "]", keyopts({ desc = "Go To Next" }))
+  vim.keymap.set("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
+  vim.keymap.set({ "n", "i" }, "<c-.>", "<c-t>", keyopts({ desc = "Tab forwards" }))
+  vim.keymap.set({ "n", "i" }, "<c-,>", "<c-d>", keyopts({ desc = "Tab Backwards" }))
+  vim.keymap.set({ "n", "v" }, "K", "H", keyopts({ desc = "Top of Page" }))
+  vim.keymap.set({ "n", "v" }, "J", "L", keyopts({ desc = "Bottom of Page" }))
+  vim.keymap.set({ "n", "v" }, "H", "0", keyopts({ desc = "Start of Line" }))
+  vim.keymap.set({ "n", "v" }, "L", "$", keyopts({ desc = "End of Line" }))
+  vim.keymap.set({ "n", "i", "v", "c" }, "£", "#", keyopts())
+  vim.keymap.set({ "n", "i", "v", "c" }, "§", "£", keyopts())
+  vim.keymap.set({ "n", "i", "v", "c" }, "f£", "f#", keyopts())
+  vim.keymap.set({ "n", "i", "v", "c" }, "F£", "F#", keyopts())
+  vim.keymap.set("n", "0", "K", keyopts())
+  vim.keymap.set("n", "$", "J", keyopts())
+  vim.keymap.set("n", "dL", "d$", keyopts())
+  vim.keymap.set("n", "dH", "d0", keyopts())
+  vim.keymap.set("n", "yH", "y0", keyopts())
+  vim.keymap.set("n", "yL", "y$", keyopts())
+  vim.keymap.set({ "n", "v" }, "<C-e>", "5<c-e>", keyopts())
+  vim.keymap.set({ "n", "v" }, "<C-y>", "5<c-y>", keyopts())
+  vim.keymap.set("n", "<cr>", ":nohlsearch<CR>", keyopts())
+  vim.keymap.set("n", "n", ":set hlsearch<CR>n", keyopts())
+  vim.keymap.set("n", "N", ":set hlsearch<CR>N", keyopts())
+  vim.keymap.set({ "n", "v" }, lk.paste.key, '"+p', keyopts({ desc = lk.paste.desc }))
   makeDescMap({ "n", "v" }, lk.resize, "j", ":res-15<CR>", "Move Partition Down")
   makeDescMap({ "n", "v" }, lk.resize, "k", ":res+15<CR>", "Move Partition Up")
   makeDescMap({ "n", "v" }, lk.resize, "h", ":vertical resize -15<CR>", "Move Partition Left")
@@ -262,4 +239,14 @@ M.setup = function()
 end
 --------------------------------
 
+--------------------------------
+-- Key Help UI Setup
+--------------------------------
+
+--------------------------------
+-- Return Table
+--------------------------------
+
 return M
+
+--------------------------------

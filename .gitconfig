@@ -1,3 +1,6 @@
+[user]
+    email = ${GIT_AUTHOR_EMAIL}
+    name = ${GIT_AUTHOR_NAME}
 [core]
     pager = delta
     fsmonitor = true
@@ -21,7 +24,8 @@
     update = !git fetch origin && git pull origin main 
     listlast = show --name-only --oneline
     po = push origin
-# --------
+    upname = !git remote | egrep -o '(upstream|origin)' | tail -1
+    hb = !git remote show $(git upstream-name) | awk '/HEAD branch/ {print $NF}'
 [safe]
     directory = *
 
@@ -31,6 +35,9 @@
     remote   = yellow
     upstream = green
     plain    = blue
-
+[url "git@github.sc-corp.net:"]
+        insteadOf = git://github.sc-corp.net
 [init]
 	defaultBranch = main
+[url "git@github.com:"]
+	insteadOf = https://github.com/

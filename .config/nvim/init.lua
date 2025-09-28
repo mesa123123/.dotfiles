@@ -1,7 +1,7 @@
-------------------------------
----#####################
--- #  Main Nvim Config  #  --
--- ######################  --
+-------------------------------
+-- ###################### --
+-- #  Main Nvim Config  # --
+-- ###################### --
 --------------------------------
 
 --------------------------------
@@ -13,8 +13,6 @@
 -- Notifications
 ----------
 -- TODO: Get mini.notify, vim.print, and snacks.ui to work together
--- BUG: Telescope Notifications picker no longer working
-----------
 ----------
 -- Snippets
 ----------
@@ -47,22 +45,15 @@
 ----------
 -- LSP
 ----------
--- TODO: Create a command for open declaration that opens in a new pane
 -- TODO: YAMLLS: fix '---' document start error
 -- TODO: Switch from obsidian to markdown-oxide
 -- Figure out a way to make sure that you know you're in a learning directory so you can switch on oxide rather than
 -- marksman
 -- SUGGESTION: Use root-markers for this
--- TODO: In lsp, sort out the install function so it works asynchronously, vim.schedule will work for this
--- TODO: Python Signature help not working! Need to switch from pylsp to jedi and set  up individual bloody capabilities :(
 ----------
 -- FORMATTING
 ----------
 -- FEATURE: Figure out a way to run mypy on a folder and then send all of the errors to the quick-fix list
-----------
--- AI
-----------
--- PLUGIN: Make avante.nvim work
 ----------
 -- DADBOD
 ----------
@@ -104,11 +95,8 @@
 --------------------------------
 -- Priority Settings
 --------------------------------
--- Set the config path
 vim.g["config_path"] = "~/.config/nvim"
--- Set the mapleader
 vim.g["mapleader"] = " "
--- TermGuiColors
 vim.opt.termguicolors = true
 ----------
 
@@ -120,12 +108,6 @@ vim.opt.termguicolors = true
 ----------
 local configpath = vim.fn.stdpath("config") .. "/lua/config"
 package.path = package.path .. ";" .. configpath .. "/init.lua"
-----------
-
--- Lsp Settings
-----------
-local lsppath = vim.fn.stdpath("config") .. "/lua/lsp_config"
-package.path = package.path .. ";" .. lsppath .. "/init.lua"
 ----------
 
 -- Snippets
@@ -163,9 +145,10 @@ end
 -- Commands for Editing
 ----------
 vim.api.nvim_create_user_command("Editvim", "e ~/.config/nvim/init.lua", {})
+vim.api.nvim_create_user_command("Editworkspace", "e " .. vim.fn.getcwd() .. "/.nvim.lua", {})
 vim.api.nvim_create_user_command("Editpackagesetup", "e ~/.config/nvim/lua/package_setup.lua", {})
 vim.api.nvim_create_user_command("Editplugins", "e ~/.config/nvim/lua/plugins/", {})
-vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lua/lsp_config/", {})
+vim.api.nvim_create_user_command("Editlsp", "e ~/.config/nvim/lsp/", {})
 vim.api.nvim_create_user_command("Editconfig", "e ~/.config/nvim/lua/config/", {})
 vim.api.nvim_create_user_command("Editsnips", "e ~/.config/nvim/snippets/", {})
 vim.api.nvim_create_user_command("Editterm", "e ~/.wezterm.lua", {})
@@ -175,7 +158,7 @@ end, {})
 vim.api.nvim_create_user_command("Editft", function()
   edit_based_on_ft("~/.config/nvim/after/ftplugin", ".lua")
 end, {})
-vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {})
+vim.api.nvim_create_user_command("Sov", "so " .. vim.g["config_path"] .. "/init.lua", {})
 ----------
 
 --------------------------------
@@ -184,14 +167,11 @@ vim.api.nvim_create_user_command("Srcvim", "luafile ~/.config/nvim/init.lua", {}
 
 -- Requires
 ----------
--- Modules
 local config = require("config")
 local utils = config.utils
 local tC = utils.tableConcat
 local python_path = utils.get_python_path()
 local python_packages = utils.get_python_packages()
-local dashboard_config = config.dashboard_config
-local ft_settings = config.fileconfig
 local fn = vim.fn
 ----------
 
@@ -199,19 +179,12 @@ local fn = vim.fn
 -- General Settings
 -------------------------------
 
--- Set Core Options
+-- Core Config Setups
 ----------
 config.options.setup()
-----------
-
--- Setup Keymaps
-----------
 config.keymaps.setup()
-----------
-
--- Load Snippets
-----------
 config.snips.snip_maps()
+config.commands.setup()
 ----------
 
 -- Set & Customize Colour Scheme
@@ -220,9 +193,73 @@ vim.o.background = "light"
 vim.cmd.colorscheme("gruvbox")
 ----------
 
--- Greeting Screen
+-- Workspace Settings
 ----------
-require("startup").setup(dashboard_config)
+local workspace = config.workspace.load()
+-- Load Config Function
+local get_workspace_setting = function(key, default_value)
+  return (workspace and workspace[key]) or default_value
+end
+----------
+
+-- Dashboard
+----------
+require("mini.starter").setup({
+  items = {
+    { name = "VimSettings ", action = "Editvim", section = "Options" },
+    { name = "ProjectSettings ", action = "Editworkspace", section = "Options" },
+    { name = "Folder ", action = "Oil", section = "Options" },
+    { name = "Plugins ", action = "Editplugins", "p", section = "Options" },
+    { name = "Config ", action = "Editconfig", section = "Options" },
+    { name = "Snips ", action = "Editsnips", section = "Options" },
+    { name = "Ft ", action = "Editft", section = "Options" },
+  },
+})
+-- ----------
+
+-- Globals
+----------
+vim.g["do_filetype_lua"] = 1
+vim.g["did_load_filetypes"] = 0
+----------
+
+-- Load Custom File Types
+----------
+vim.filetype.add({
+  filename = {
+    ["Vagrantfile"] = "ruby",
+    ["Jenkinsfile"] = "groovy",
+    [".sqlfluff"] = "ini",
+    ["output.output"] = "log",
+    [".zshrc"] = "bash",
+  },
+  pattern = { [".*req.*.txt"] = "requirements" },
+  extension = {
+    hcl = "ini",
+    draft = "markdown",
+    env = "config",
+    jinja = "jinja",
+    vy = "python",
+    quarto = "quarto",
+    qmd = "quarto",
+    snippet = "json",
+  },
+})
+----------
+
+--------------------------------
+-- Autocommands
+--------------------------------
+
+-- Only activate merge tool on a merge diff
+----------
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  callback = function()
+    if vim.opt.diff:get() then
+      require("config.vcs").mergetool_mappings()
+    end
+  end,
+})
 ----------
 
 --------------------------------
@@ -231,7 +268,7 @@ require("startup").setup(dashboard_config)
 
 -- Variables
 ----------
-local lsp_config = require("lsp_config").config
+local lsp_config = require("config").lsp_config
 vim.lsp.set_log_level("debug")
 ----------
 
@@ -247,6 +284,7 @@ local lsp_servers_ei = {
   "python-lsp-server",
   "ruff",
   "ty",
+  "pyright",
   "rust-analyzer",
   "sqlls",
   "taplo",
@@ -264,6 +302,7 @@ local formatters_ei = {
   "markdownlint",
   "prettier",
   "ruff",
+  "isort",
   "beautysh",
   "stylua",
   "tex-fmt",
@@ -273,6 +312,7 @@ local formatters_ei = {
 local linters_ei = {
   "djlint",
   "htmlhint",
+  "flake8",
   "jsonlint",
   "luacheck",
   "markdownlint",
@@ -295,288 +335,126 @@ local debuggers_ei = {
   "debugpy",
 }
 
+local default_ensure_installed = tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, lsp_servers_ei)))
 ----------
 
 -- Install Packages
 ----------
-lsp_config.package_setup(tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, lsp_servers_ei))))
+local ensure_installed = get_workspace_setting("ensure_installed", default_ensure_installed)
+lsp_config.package_setup(ensure_installed)
 ----------
 
 --------------------------------
 -- Language Server Protocol Setup
 --------------------------------
 
--- Capabilities Attach Function
-----------
--- On Attach
-local on_attach = function(client, bufnr)
-  lsp_config.lsp_options()
-  lsp_config.lsp_mappings()
-  if client.server_capabilities.documentSymbolProvider then
-    require("nvim-navic").attach(client, bufnr)
-  end
-end
--- Capabilities
-local capabilities = vim.tbl_deep_extend(
-  "force",
-  vim.lsp.protocol.make_client_capabilities(),
-  require("blink.cmp").get_lsp_capabilities({}, false)
-)
 -- Diagnostics
+----------
 lsp_config.diagnostics()
 ----------
+
 -- Servers
 ----------
-lsp_config.setup("pylsp", {
-  on_attach = on_attach,
-  cmd = { utils.get_venv_command("pylsp") },
-  filetypes = { "python", "py" },
-  capabilities = capabilities,
-  settings = {
-    pylsp = {
-      plugins = {
-        jedi_signature_help = { enabled = true },
-        jedi_completion = { enabled = true },
-        pycodestyle = { enabled = false },
-        mccabe = { enabled = false },
-        pyflakes = { enabled = false },
-        flake8 = { enabled = false },
-        pylint = { enabled = false },
-        pylsp_mypy = { enabled = true },
-        pyls_isort = { enabled = false },
-      },
-    },
-  },
-  root_markers = {
-    ".git",
-    "pyproject.toml",
-    "setup.py",
-    "setup.cfg",
-    "requirements.txt",
-    "Pipfile",
-  },
-})
-lsp_config.setup("ruff", {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "python", "py" },
-  cmd = {
-    utils.get_venv_command("ruff"),
-    "server",
-    "--config",
-    vim.fn.getcwd() .. "/pyproject.toml",
-  },
-  root_markers = { ".git", "pyproject.toml", "ruff.toml", ".ruff.toml" },
-  init_options = {
-    settings = {
-      logLevel = "debug",
-    },
-  },
-})
-lsp_config.setup("ty", {
-  cmd = { utils.get_venv_command("ty"), "server" },
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "python" },
-  root_dir = vim.fs.root(0, { ".git/", "pyproject.toml" }),
-})
-lsp_config.setup("lua-ls", {
-  on_attach = on_attach,
-  cmd = { "lua-language-server" },
-  filetypes = { "lua" },
-  root_markers = {
-    ".luarc.json",
-    ".luarc.jsonc",
-    ".luacheckrc",
-    ".stylua.toml",
-    "stylua.toml",
-    "selene.toml",
-    "selene.yml",
-    ".git",
-  },
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      diagnostics = { globals = { "vim", "quarto", "require", "table", "string" } },
-      workspace = {
-        checkThirdParty = false,
-      },
-      runtime = { verions = "LuaJIT" },
-      completion = { autoRequire = false },
-      telemetry = { enable = false },
-    },
-  },
-})
-lsp_config.setup("marksman", {
-  on_attach = on_attach,
-  cmd = { "marksman", "server" },
-  root_markers = { ".marksman.toml", ".git" },
-  capabilities = capabilities,
-  filetypes = {
-    "markdown",
-    "quarto",
-    "markdown.mdx",
-  },
-})
-lsp_config.setup("yamlls", {
-  on_attach = on_attach,
-  cmd = { "yaml-language-server", "--stdio" },
-  filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
-  root_markers = { ".git" },
-  capabilities = capabilities,
-  settings = {
-    yaml = {
-      validate = true,
-      completion = true,
-      hover = true,
-      disable = { "line-length" },
-    },
-    redhat = { telemetry = { enabled = false } },
-  },
-})
-lsp_config.setup("ltex", {
-  on_attach = on_attach,
-  cmd = { "ltex-ls" },
-  root_markers = { ".git" },
-  get_language_id = function(_, filetype)
-    local language_id_mapping = {
-      bib = "bibtex",
-      plaintex = "tex",
-      rnoweb = "rsweave",
-      rst = "rst",
-      tex = "latex",
-      text = "plaintext",
-    }
-    local language_id = language_id_mapping[filetype]
-    if language_id then
-      return language_id
-    else
-      return filetype
-    end
-  end,
-  capabilities = capabilities,
-  single_file_support = true,
-  settings = {
-    ltex = {
-      language = "en-GB",
-    },
-  },
-  filetypes = {
-    "bib",
-    "gitcommit",
-    "org",
-    "plaintex",
-    "rst",
-    "rnoweb",
-    "tex",
-    "pandoc",
-    "quarto",
-    "rmd",
-    "context",
-    "html",
-    "xhtml",
-    "mail",
-    "text",
-  },
-})
-lsp_config.setup("taplo", {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "toml" },
-  root_pattern = { ".config", ".git" },
-})
-lsp_config.setup("graphql", { on_attach = on_attach, capabilities = capabilities })
-lsp_config.setup("jsonls", { on_attach = on_attach, capabilities = capabilities })
-lsp_config.setup("bash-language-server", {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "sh", "shell", "bash" },
-})
+for _, v in ipairs(ensure_installed) do
+  if v == "lua-language-server" then
+    lsp_config.setup("lua_ls")
+  elseif v == "python-lsp-server" then
+    lsp_config.setup("pylsp")
+  else
+    lsp_config.setup(v)
+  end
+end
 ----------
--- UI
-----------
-lsp_config.injected_setup()
-----------
+
+--------------------------------
+-- Formatters & Linter Setup
+--------------------------------
 
 -- Formatter Setup
 ----------
+local default_formatters_by_ft = {
+  ["*"] = { "injected" },
+  bash = { "beautysh" },
+  graphql = { "prettier" },
+  jinja = { "djlint" },
+  json = { "jq" },
+  lua = { "stylua" },
+  markdown = { "markdownlint", "injected" },
+  python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
+  shell = { "beautysh" },
+  sh = { "beautysh" },
+  sql = { "sqlfluff" },
+  rst = { "rstfmt" },
+  rust = { "rustfmt" },
+  terraform = { "terraform_fmt" },
+  tex = { "tex-fmt" },
+  yaml = { "yq" },
+  toml = { "taplo" },
+}
+
+local default_formatters = {
+  stylua = {
+    command = "stylua",
+    args = {
+      "--search-parent-directories",
+      "--stdin-filepath",
+      "$filename",
+      "--indent-width",
+      "2",
+      "--indent-type",
+      "spaces",
+      "--column-width",
+      "120",
+      "-",
+    },
+  },
+  sqlfluff = {
+    command = function()
+      return utils.get_venv_command("sqlfluff") or "sqlfluff"
+    end,
+    args = {
+      "fix",
+      "--fix-even-unparsable",
+      "--config",
+      vim.env.HOME .. "/.config/sqlfluff/.sqlfluff",
+      "$filename",
+    },
+    stdin = false,
+  },
+  docformatter = {
+    command = utils.get_mason_package("docformatter"),
+    args = { "--in-place", "$filename", "--wrap-summaries", "90", "--wrap-descriptions", "90", "--force-wrap" },
+    stdin = false,
+  },
+  markdownlint = {
+    args = {
+      "--disable",
+      "md013",
+      "md012",
+      "md041",
+      "md053",
+      "--fix",
+      "$filename",
+    },
+  },
+}
+
+local formatters_by_ft = get_workspace_setting("formatters_by_ft", default_formatters_by_ft)
+local formatters = get_workspace_setting("formatters", default_formatters)
+
 require("conform").setup({
   log_level = vim.log.levels.DEBUG,
   debug = true,
-  formatters_by_ft = {
-    ["*"] = { "injected" },
-    bash = { "beautysh" },
-    graphql = { "prettier" },
-    jinja = { "djlint" },
-    json = { "jq" },
-    lua = { "stylua" },
-    markdown = { "markdownlint", "injected" },
-    python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
-    shell = { "beautysh" },
-    sh = { "beautysh" },
-    sql = { "sqlfluff" },
-    rst = { "rstfmt" },
-    rust = { "rustfmt" },
-    terraform = { "terraform_fmt" },
-    tex = { "tex-fmt" },
-    yaml = { "yq" },
-    toml = { "taplo" },
-  },
-  formatters = {
-    stylua = {
-      command = "stylua",
-      args = {
-        "--search-parent-directories",
-        "--stdin-filepath",
-        "$FILENAME",
-        "--indent-width",
-        "2",
-        "--indent-type",
-        "Spaces",
-        "--column-width",
-        "120",
-        "-",
-      },
-    },
-    sqlfluff = {
-      command = function()
-        return utils.get_venv_command("sqlfluff") or "sqlfluff"
-      end,
-      args = {
-        "fix",
-        "--FIX-EVEN-UNPARSABLE",
-        "--config",
-        os.getenv("HOME") .. "/.config/sqlfluff/.sqlfluff",
-        "$FILENAME",
-      },
-      stdin = false,
-    },
-    docformatter = {
-      command = utils.get_mason_package("docformatter"),
-      args = { "--in-place", "$FILENAME", "--wrap-summaries", "90", "--wrap-descriptions", "90", "--force-wrap" },
-      stdin = false,
-    },
-    markdownlint = {
-      args = {
-        "--disable",
-        "MD013",
-        "MD012",
-        "MD041",
-        "MD053",
-        "--fix",
-        "$FILENAME",
-      },
-    },
-  },
+  formatters_by_ft = formatters_by_ft,
+  formatters = formatters,
 })
 lsp_config.formatter_config()
 ----------
 
 -- Linter Setup
 ----------
-local lint = require("lint")
--- Configure Linters
-lint.linters_by_ft = {
+
+local default_linters_by_ft = {
   ["*"] = { "compiler" },
   bash = { "shellcheck" },
   css = { "stylelint", "prettier" },
@@ -592,6 +470,20 @@ lint.linters_by_ft = {
   terraform = { "tflint" },
   yaml = { "yamllint" },
 }
+local linters_by_ft = get_workspace_setting("linters_by_ft", default_linters_by_ft)
+
+local lint = require("lint")
+-- Configure Linters
+lint.linters_by_ft = linters_by_ft
+-- Python Linters
+for _, linter_name in ipairs(linters_by_ft.python) do
+  local original_linter = lint.linters[linter_name]
+  if original_linter then
+    lint.linters[linter_name] = vim.tbl_deep_extend("force", {}, original_linter, {
+      cmd = utils.get_venv_command(linter_name),
+    })
+  end
+end
 -- Markdownlint
 local markdownlint = lint.linters.markdownlint
 markdownlint.args = {
@@ -600,10 +492,6 @@ markdownlint.args = {
   "MD012",
   "MD041",
 }
--- MyPy
-local mypy = lint.linters.mypy
-mypy.cmd = utils.get_venv_command("mypy")
-
 -- SQLFluff
 local sqlfluff = lint.linters.sqlfluff
 sqlfluff.cmd = utils.get_venv_command("sqlfluff")
@@ -615,13 +503,30 @@ sqlfluff.args = {
   "--dialect=postgres",
 }
 
--- General Config
+-- Luacheck
+local luacheck = lint.linters.luacheck
+luacheck.cmd = "luacheck"
+luacheck.stdin = true
+luacheck.args = {
+  "--globals",
+  "vim",
+  "lvim",
+  "reload",
+  "--",
+}
+luacheck.stream = "stdout"
+luacheck.ignore_exitcode = true
+luacheck.parser = require("lint.parser").from_errorformat("%f:%l:%c: %m", {
+  source = "luacheck",
+})
+
 lsp_config.linter_config()
 ----------
 
 --------------------------------
 -- Dap Setup
 --------------------------------
+
 -- Vars
 ----------
 local dap = require("dap")
@@ -697,24 +602,8 @@ dap.adapters.nlua = function(callback, config)
 end
 ----------
 
---------------------------------
--- Filetypes Setup
---------------------------------
-
--- Load Custom File Types
+-- Toggle Database
 ----------
-ft_settings.custom_file_types()
-
--- Load File Type Settings
-----------
-for k, v in pairs(ft_settings.ft) do
-  v()
-end
-
---------------------------------
--- Database mappings
---------------------------------
--- NOTE: I don't know why the fuck this needs to be here but it doesn't work otherwise :/
 local lk = require("config.keymaps").lk
 local descMap = require("config.utils").desc_keymap
 
@@ -727,7 +616,8 @@ descMap({ "n" }, lk.database, "l", ":DBUILastQueryInfo<CR>", "Run Last Query")
 vim.keymap.set({ "n", "v" }, lk.database.key .. "x", "<Plug>(DBUI_ExecuteQuery)", { desc = "Run Query" })
 ----------
 vim.g.db_ui_use_nerd_fonts = 1
-vim.print(python_packages)
+----------
+
 --------------------------------
 ---- EOF
 ---------------------------------

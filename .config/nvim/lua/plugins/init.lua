@@ -7,18 +7,62 @@ return {
     priority = 1000,
     config = true,
   },
+  -- StatusLine
+  ----------
   {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    opts = {
-      icons = { mappings = false },
-    },
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
+    config = function()
+      require("lualine").setup(require("config").line_config)
+    end,
   },
-  -- Linting Plugins
+  ----------
+  -- Outline
+  ----------
+  {
+    "hedyhli/outline.nvim",
+    config = function()
+      local utils = require("config.utils")
+      local descMap = utils.desc_keymap
+      local lk = require("config.keymaps").lk
+      descMap({ "n" }, lk.explore, "e", ":Outline<CR>", "Outline")
+      require("outline").setup({
+        outline_window = {
+          show_numbers = true,
+          show_relative_numbers = true,
+        },
+      })
+    end,
+  },
+  -- Telescope
+  ----------
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "BurntSushi/ripgrep",
+      "sharkdp/fd",
+      "nvim-telescope/telescope-dap.nvim",
+      "piersolenski/telescope-import.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+      "stevearc/oil.nvim",
+      "refractalize/oil-git-status.nvim",
+      "leath-dub/snipe.nvim",
+    },
+    event = "VeryLazy",
+    config = function()
+      local ftree = require("config").filetree
+      require("telescope").setup(ftree.telescope_config())
+      require("snipe").setup(ftree.snipe_config)
+      require("oil").setup(ftree.file_tree_config)
+      require("oil-git-status").setup()
+      ftree.extension_load()
+      ftree.set_mappings()
+    end,
+  },
+  ----------
+  -- Linting & Formatting Plugins
   ----------
   { "mfussenegger/nvim-lint", event = "VeryLazy" },
-  -- Formatting
-  ----------
   { "stevearc/conform.nvim", event = "VeryLazy" },
   ----------
   -- Tools Manager
@@ -26,31 +70,21 @@ return {
   {
     "williamboman/mason.nvim",
     dependencies = {
-      "neovim/nvim-lspconfig",
       "jay-babu/mason-nvim-dap.nvim",
       "jay-babu/mason-null-ls.nvim",
-      -- neodev
-      "folke/neodev.nvim",
-      -- Nice popup windows
-      "ray-x/lsp_signature.nvim",
     },
   },
-  { "neovim/nvim-lsp-config", url = "git@github.com:neovim/nvim-lspconfig.git", lazy = false },
   ----------
   -- Debug Adapter Protocol
   ----------
   {
     "mfussenegger/nvim-dap",
     dependencies = {
-      -- Python Funcs
       "mfussenegger/nvim-dap-python",
-      -- NvimConfig Funcs - This is the debugger for your config
-      "jbyuki/one-small-step-for-vimkind",
-      -- Cool Ui Elements
       "theHamsta/nvim-dap-virtual-text",
     },
     config = function()
-      require("lsp_config.dap_config")
+      require("config.dap_config").setup()
     end,
   },
   ----------
@@ -91,13 +125,37 @@ return {
     end,
   },
   {
-    "dstein64/nvim-scrollview",
-    enabled = true,
-    opts = {
-      current_only = true,
-      signs_on_startup = {},
-    },
+    "echasnovski/mini.clue",
+    config = function()
+      local miniclue = require("mini.clue")
+      local all_clues = {}
+
+      local function add_clues(clue_list)
+        for _, clue in ipairs(clue_list) do
+          table.insert(all_clues, clue)
+        end
+      end
+
+      add_clues(miniclue.gen_clues.g())
+      add_clues(require("config.keymaps").get_leader_descriptions())
+      -- add_clues(miniclue.gen_clues.builtin_completion())
+      -- add_clues(miniclue.gen_clues.marks())
+      -- add_clues(miniclue.gen_clues.registers())
+      -- add_clues(miniclue.gen_clues.windows())
+      -- add_clues(miniclue.gen_clues.z())
+      miniclue.setup({
+        triggers = {
+          { mode = "n", keys = "<Leader>" },
+          { mode = "x", keys = "<Leader>" },
+          { mode = "v", keys = "<Leader>" },
+          { mode = "n", keys = "g" },
+          { mode = "x", keys = "g" },
+        },
+        clues = all_clues,
+      })
+    end,
   },
+
   {
     "norcalli/nvim-colorizer.lua",
     config = function()
@@ -143,13 +201,7 @@ return {
     },
   },
   { "onsails/lspkind.nvim", event = "VeryLazy" },
-  -- Dashboard
-  {
-    "startup-nvim/startup.nvim",
-    event = "VimEnter",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-  },
-  -- Syntax Stuff
+  { "echasnovski/mini.starter", event = "VimEnter", version = false },
   {
     "fei6409/log-highlight.nvim",
     config = function()
@@ -159,14 +211,6 @@ return {
     end,
   },
   ----------
-  -- CmdLine
-  ----------
-  { "stevearc/dressing.nvim", event = "VeryLazy" },
-  ----------
-  -- Writing Functionality
-  ----------
-  -- Wiki - Obsidian nvim
-  { "epwalsh/obsidian.nvim", event = "VeryLazy" },
   -- Latex - VimTex
   {
     "lervag/vimtex",
@@ -191,6 +235,7 @@ return {
       -- Setup render-markdown
       require("render-markdown").setup({
         completions = { blink = { enabled = true } },
+        latex = { enabled = false },
       })
     end,
     opts = {

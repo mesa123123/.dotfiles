@@ -245,7 +245,7 @@ end
 -- Get Pyenv Packages if active
 ----------
 M.get_mason_package = function(command)
-  local lsp_config = require("lsp_config").config
+  local lsp_config = require("config.lsp_config")
   return lsp_config.tool_dir .. "/bin/" .. command
 end
 ----------
