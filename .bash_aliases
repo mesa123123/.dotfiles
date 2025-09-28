@@ -10,6 +10,7 @@
     alias ll='eza -lgxh'
     alias la='eza -a'
     alias lt='eza -gT'
+    alias tree='eza -gT'
 } 
 # If not use regular ls aliases
 [[ "$(cargo install --list | grep -c "eza")" -le 0 ]] && {
@@ -23,7 +24,7 @@ alias ...="cd ../../"
 alias ....="cd ../../../"
 alias .....="cd ../../../../"
 alias ......="cd ../../../../../"
-alias .-="cd -"
+alias .-="pwd"
 alias winhome='cd $WINHOME'
 alias learnhome='cd $LEARNHOME'
 alias dothome='cd ~/.dotfiles'
@@ -144,7 +145,6 @@ cargocheck ()
     fi
 }
 cargocheck bat cat
-cargocheck broot tree
 cargocheck fd-find fd find
 cargocheck xq jq
 cargocheck xh curl "xh --style auto"

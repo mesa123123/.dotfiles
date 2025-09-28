@@ -340,6 +340,8 @@ lsp_config.diagnostics()
 for _, v in ipairs(lsp_servers_ei) do
   if v == "lua-language-server" then
     lsp_config.setup("lua_ls")
+  elseif v == "python-lsp-server" then
+    lsp_config.setup("pylsp")
   else
     lsp_config.setup(v)
   end
