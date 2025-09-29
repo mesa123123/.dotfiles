@@ -5,7 +5,6 @@ return {
       "nvim-treesitter/nvim-treesitter",
     },
     priority = 1000,
-    config = true,
   },
   -- StatusLine
   ----------

@@ -23,9 +23,6 @@ local lazypath = plugin_path .. "/lazy.nvim"
 -- Rocks installed through luarocks.nvim
 package.path = package.path .. ";" .. plugin_path .. "/luarocks.nvim/.rocks/share/lua/5.1/?.lua"
 package.path = package.path .. ";" .. plugin_path .. "/luarocks.nvim/.rocks/share/lua/5.1/?/init.lua"
--- Rocks installed through local luarocks
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
 ----------
 
 -- Install Package Manager(s)
@@ -45,10 +42,4 @@ end
 -- Load Plugins
 ----------
 require("lazy").setup({ { import = "plugins" } }, {})
-----------
-
--- Install Rocks
-----------
-local _rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" }
-require("luarocks-nvim").setup({ rocks = _rocks })
 ----------

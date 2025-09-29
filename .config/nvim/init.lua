@@ -9,6 +9,7 @@
 --------------------------------
 -- TODO: config.utils table_concat, update it so it works with any number of tables
 -- TODO: Figure out why config module is populating "completion" table
+--      local has_completion,completion = pcall(require, 'completion')
 ----------
 -- Notifications
 ----------
@@ -103,11 +104,10 @@ vim.opt.termguicolors = true
 --------------------------------
 -- Add Config Modules to RTPath
 --------------------------------
-
 -- Core Settings
 ----------
 local configpath = vim.fn.stdpath("config") .. "/lua/config"
-package.path = package.path .. ";" .. configpath .. "/init.lua"
+package.path = package.path .. ";" .. configpath
 ----------
 
 -- Snippets
