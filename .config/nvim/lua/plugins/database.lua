@@ -29,7 +29,10 @@ return {
   },
   {
     "kristijanhusak/vim-dadbod-ui",
-    dependencies = { "tpope/vim-dadbod" },
+    dependencies = {
+      "tpope/vim-dadbod",
+      { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
+    },
     config = function()
       local lk = require("config.keymaps").lk
       local nmap = require("config.utils").norm_keyset
@@ -48,10 +51,5 @@ return {
       nmap(lk.database.key .. "l", "DBUILastQueryInfo", "Run Last Query")
       vim.keymap.set({ "n", "v" }, lk.database.key .. "x", "<Plug>(DBUI_ExecuteQuery)", { desc = "Run Query" })
     end,
-  },
-  {
-    "kristijanhusak/vim-dadbod-completion",
-    ft = { "sql", "mysql", "plsql" },
-    dependencies = { "blink.cmp", "tpope/vim-dadbod" },
   },
 }
