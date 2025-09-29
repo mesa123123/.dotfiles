@@ -211,15 +211,20 @@ end
 -- Beautify Function
 --------------------------------
 
-Lint_and_format = function()
-  require("conform").format({
-    async = true,
-    lsp_fallback = true,
-    callback = function()
-      require("lint").try_lint()
-      vim.print("Formatted & Linted")
-    end,
-  })
+M.lint_and_format = function()
+  if vim.is_callable(vim.b.ft_format) then
+    vim.print("Running a special format for filetype: " .. vim.bo.filetype)
+    vim.b.ft_format()
+  else
+    require("conform").format({
+      async = true,
+      lsp_fallback = true,
+      callback = function()
+        require("lint").try_lint()
+        vim.print("Formatted & Linted")
+      end,
+    })
+  end
 end
 
 --------------------------------
@@ -232,11 +237,9 @@ M.formatter_config = function()
   ----------
   -- Options
   ----------
-  require("config.utils").norm_keyset(
-    require("config.keymaps").lk.codeAction_format.key,
-    'lua require("conform").format({async= true, lsp_fallback = false})<CR>: lua require("lint").try_lint()<CR>:lua vim.print("Formatted & Linted")',
-    "LSP: Beautify Code"
-  )
+  local lk = require("config.keymaps").lk
+  local descMap = require("config.utils").desc_keymap
+  descMap({"n"}, lk.codeAction, "f", M.lint_and_format,  "LSP: Beautify Code")
   vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
   vim.lsp.buf.format = {
     timeout = 10000,

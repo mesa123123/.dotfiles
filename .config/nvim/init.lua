@@ -373,7 +373,6 @@ end
 -- Formatter Setup
 ----------
 local default_formatters_by_ft = {
-  ["*"] = { "injected" },
   bash = { "beautysh" },
   graphql = { "prettier" },
   jinja = { "djlint" },
@@ -413,13 +412,11 @@ local default_formatters = {
       return utils.get_venv_command("sqlfluff") or "sqlfluff"
     end,
     args = {
-      "fix",
-      "--fix-even-unparsable",
+      "format",
       "--config",
       vim.env.HOME .. "/.config/sqlfluff/.sqlfluff",
-      "$filename",
+      "-",
     },
-    stdin = false,
   },
   docformatter = {
     command = utils.get_mason_package("docformatter"),
@@ -500,7 +497,6 @@ sqlfluff.args = {
   "--config",
   os.getenv("HOME") .. "/.config/sqlfluff/.sqlfluff",
   "--format=json",
-  "--dialect=postgres",
 }
 
 -- Luacheck

@@ -1,62 +1,57 @@
 return {
-  "tpope/vim-dadbod",
-  dependencies = { "kristijanhusak/vim-dadbod-ui", "kristijanhusak/vim-dadbod-completion" },
-  cmd = {
-    "DBUI",
-    "DBUIToggle",
-    "DBUIAddConnection",
-    "DBUIFindBuffer",
-  },
-  config = function()
-    -- Vims, Ims, Vars
-    ----------
-    local lk = require("config.keymaps").lk
-    local nmap = require("config.utils").norm_keyset
-    local gv = vim.g
-    local api = vim.api
-    ----------
-    -- Options
-    ----------
-    local dbcons_file = "~/.config/db_ui_connections/connections.json"
-    gv["db_ui_save_location"] = "~/.config/db_ui_connections"
-    gv.db_ui_use_nerd_fonts = 1
+  {
+    "tpope/vim-dadbod",
+    cmd = {
+      "DBUI",
+      "DBUIToggle",
+      "DBUIAddConnection",
+      "DBUIFindBuffer",
+    },
+    config = function()
+      local home = vim.fn.expand("$HOME")
+      local rc_path = home .. "/.bigqueryrc"
 
-    -- Commands
-    ----------
-    api.nvim_create_user_command("EditDbConns", "e " .. dbcons_file .. "", {})
-
-    -- KeyMaps
-    ----------
-    nmap(lk.dataconfig.key .. "u", "DBUIToggle<CR>:set nu<CR>:set relativenumber", "Toggle DB UI")
-    nmap(lk.dataconfig.key .. "f", "DBUIFindBuffer", "Find DB Buffer")
-    nmap(lk.dataconfig.key .. "r", "DBUIRenameBuffer", "Rename DB Buffer")
-    nmap(lk.dataconfig.key .. "l", "DBUILastQueryInfo", "Run Last Query")
-    vim.keymap.set({ "n", "v" }, lk.dataconfig.key .. "x", "<Plug>(DBUI_ExecuteQuery)", { desc = "Run Query" })
-
-    -- BigQuery Custom Driver Definition
-
-    ------------------------------------------
-    local bigquery_driver_func = function(connection_url, query_string)
-      local project_id = connection_url:match("bigquery://([^/]+)")
-      if not project_id then
-        return "echo 'Error: BigQuery project ID not found in connection URL. Please ensure it is in the format: bigquery://your-project-id'"
+      local f = io.open(rc_path, "r")
+      if f then
+        f:close()
+        return
       end
-      local temp_file_path = vim.fn.tempname() .. ".sql"
-      local file = io.open(temp_file_path, "w")
-      if file then
-        file:write(query_string)
-        io.close(file)
+
+      local out = io.open(rc_path, "w")
+      if out then
+        out:write("[query]\n--use_legacy_sql=false\n")
+        out:close()
+        vim.notify("Created ~/.bigqueryrc (--use_legacy_sql=false)", vim.log.levels.INFO)
       else
-        return "echo 'Error: Could not create temporary file for BigQuery query.'"
+        vim.notify("Failed to write ~/.bigqueryrc", vim.log.levels.ERROR)
       end
-      local cmd =
-        string.format("bq --project_id=%s query --nouse_legacy_sql --format=csv < %s", project_id, temp_file_path)
-      return cmd
-    end
-    if not gv.dadbod_drivers then
-      gv.dadbod_drivers = {}
-    end
-    gv.dadbod_drivers.bigquery = bigquery_driver_func
-  end,
+    end,
+  },
+  {
+    "kristijanhusak/vim-dadbod-ui",
+    dependencies = { "tpope/vim-dadbod" },
+    config = function()
+      local lk = require("config.keymaps").lk
+      local nmap = require("config.utils").norm_keyset
+      local gv = vim.g
+      local api = vim.api
+
+      local dbcons_file = "~/.config/db_ui_connections/connections.json"
+      gv["db_ui_save_location"] = "~/.config/db_ui_connections"
+      gv.db_ui_use_nerd_fonts = 1
+
+      api.nvim_create_user_command("EditDbConns", "e " .. dbcons_file .. "", {})
+
+      nmap(lk.database.key .. "u", "DBUIToggle<CR>:set nu<CR>:set relativenumber", "Toggle DB UI")
+      nmap(lk.database.key .. "f", "DBUIFindBuffer", "Find DB Buffer")
+      nmap(lk.database.key .. "r", "DBUIRenameBuffer", "Rename DB Buffer")
+      nmap(lk.database.key .. "l", "DBUILastQueryInfo", "Run Last Query")
+      vim.keymap.set({ "n", "v" }, lk.database.key .. "x", "<Plug>(DBUI_ExecuteQuery)", { desc = "Run Query" })
+    end,
+  },
+  {
+    "kristijanhusak/vim-dadbod-completion",
+    ft = { "sql", "mysql", "plsql" },
+    dependencies = { "blink.cmp", "tpope/vim-dadbod" },
+  },
 }
-----------

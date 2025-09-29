@@ -105,6 +105,26 @@ end
 -- All Mappings
 --------------------------------
 
+M.utils = {
+  find_files = function()
+    require("telescope.builtin").find_files({
+      theme = require("telescope.themes").get_dropdown({
+        layout_strategy = "vertical",
+        layout_config = {
+          preview_cutoff = 10,
+          height = 0.95,
+          width = 0.95,
+          prompt_position = "bottom",
+        },
+      }),
+      find_command = { "fd", "--type", "f", "--color", "never", "--no-ignore-vcs" },
+    })
+  end,
+  snipe = function()
+    require("snipe").open_buffer_menu()
+  end,
+}
+
 -- Return Function
 ----------
 M.set_mappings = function()
@@ -114,11 +134,7 @@ M.set_mappings = function()
   nmap(lk.file.key .. "c", "Telescope commands theme=dropdown", "[C]ommands")
   nmap(lk.file.key .. "C", "Telescope colorscheme theme=dropdown", "[C]olor Schemes")
   nmap(lk.file.key .. "d", "Telescope diagnostics", "[D]iagnostics")
-  nmap(
-    lk.file.key .. "f",
-    "lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown({ find_command = { 'fd', '--type', 'f', '--color', 'never', '--no-ignore-vcs' }}))",
-    "[F]ind Files"
-  )
+  descMap({ "n" }, lk.file, "f", M.utils.find_files, "[F]ind Files")
 
   nmap(lk.file.key .. "g", "Telescope live_grep theme=dropdown", "Live [G]rep")
   nmap(lk.file.key .. "i", "Telescope import theme=dropdown", "[I]mports")
@@ -139,9 +155,7 @@ M.set_mappings = function()
   nmap(lk.file_explorer.key .. "h", "lua require('oil').toggle_hidden()", "Toggle [H]idden Files")
   -- Buffer Key Maps
   descMap({ "n" }, lk.buffer_explorer, "b", "<CMD>Telescope buffers theme=dropdown<CR>", "Buffer Mgmt")
-  descMap({ "n" }, lk.buffer_explorer, "f", function()
-    require("snipe").open_buffer_menu()
-  end, "Snipe Buffer")
+  descMap({ "n" }, lk.buffer_explorer, "f", M.utils.snipe, "Snipe Buffer")
 end
 ----------
 
