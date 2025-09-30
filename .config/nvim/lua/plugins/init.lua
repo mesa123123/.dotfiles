@@ -137,6 +137,7 @@ return {
 
       add_clues(miniclue.gen_clues.g())
       add_clues(require("config.keymaps").get_leader_descriptions())
+      add_clues(miniclue.gen_clues.z())
       -- add_clues(miniclue.gen_clues.builtin_completion())
       -- add_clues(miniclue.gen_clues.marks())
       -- add_clues(miniclue.gen_clues.registers())

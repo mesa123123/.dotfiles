@@ -1,30 +1,16 @@
 ---@brief
 ---
---- https://github.com/AdaCore/ada_language_server
+--- https://github.com/agda/agda-language-server
 ---
---- Installation instructions can be found [here](https://github.com/AdaCore/ada_language_server#Install).
----
---- Workspace-specific [settings](https://github.com/AdaCore/ada_language_server/blob/master/doc/settings.md) such as `projectFile` can be provided in a `.als.json` file at the root of the workspace.
---- Alternatively, configuration may be passed as a "settings" object to `vim.lsp.config('ada_ls', {})`:
----
---- ```lua
---- vim.lsp.config('ada_ls', {
----     settings = {
----       ada = {
----         projectFile = "project.gpr";
----         scenarioVariables = { ... };
----       }
----     }
---- })
---- ```
+--- Language Server for Agda.
 
 local util = require 'lspconfig.util'
 
 return {
-  cmd = { 'ada_language_server' },
-  filetypes = { 'ada' },
+  cmd = { 'als' },
+  filetypes = { 'agda' },
   root_dir = function(bufnr, on_dir)
     local fname = vim.api.nvim_buf_get_name(bufnr)
-    on_dir(util.root_pattern('Makefile', '.git', 'alire.toml', '*.gpr', '*.adc')(fname))
+    on_dir(util.root_pattern('.git', '*.agda-lib')(fname))
   end,
 }

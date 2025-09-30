@@ -6,14 +6,14 @@ node_modules/
 !.config/xfce4/xfconf/*
 !.config/xfce4/panel/*
 # Nvim Config
-!.config/nvim/*
-!.config/nvim/colors/*
-!.config/nvim/after/*
-!.config/nvim/queries/*
-!.config/nvim/spell/*
-!.config/nvim/lua/lsp/*
-!.config/nvim/lua/ft/*
-!.conig/nvim/lua/core/*
-!.config/nvim/lua/plugins/*
-.config/nvim/lua/lsp_servers
-.config/
+# !.config/nvim/*
+# !.config/nvim/colors/*
+# !.config/nvim/after/*
+# !.config/nvim/queries/*
+# !.config/nvim/spell/*
+# !.config/nvim/lua/lsp/*
+# !.config/nvim/lua/ft/*
+# !.conig/nvim/lua/core/*
+# !.config/nvim/lua/plugins/*
+# .config/nvim/lua/lsp_servers
+# .config/
