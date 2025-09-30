@@ -31,7 +31,6 @@ return {
     "kristijanhusak/vim-dadbod-ui",
     dependencies = {
       "tpope/vim-dadbod",
-      { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
     },
     config = function()
       local lk = require("config.keymaps").lk
