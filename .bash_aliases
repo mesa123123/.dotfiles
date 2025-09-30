@@ -6,15 +6,15 @@
 # --------
 # If eza is installed use that over ls
 [[ "$(cargo install --list | grep -c "eza")" -ge 1 ]] && {
-    alias ls='eza'
-    alias ll='eza -lgxh'
+    alias eza='eza -hgx --icons=always --git'
+    alias ls='eza --icons --git'
+    alias ll='eza -la'
     alias la='eza -a'
-    alias lt='eza -gT'
-    alias tree='eza -gT'
+    alias tree='eza -Tla'
 } 
 # If not use regular ls aliases
 [[ "$(cargo install --list | grep -c "eza")" -le 0 ]] && {
-    alias ll='ls --color -alF'
+    alias ll='ls --color -AalF'
     alias la='ls --color -A'
     alias l='ls --color -CF'
     echo "Couldn't find eza, installing..." && cargo install eza
@@ -24,7 +24,7 @@ alias ...="cd ../../"
 alias ....="cd ../../../"
 alias .....="cd ../../../../"
 alias ......="cd ../../../../../"
-alias .-="pwd"
+alias .-="cd -"
 alias winhome='cd $WINHOME'
 alias learnhome='cd $LEARNHOME'
 alias dothome='cd ~/.dotfiles'
@@ -38,7 +38,6 @@ alias dothome='cd ~/.dotfiles'
 [[ $(echo "$SHELL" | grep -c bash) == 1 ]]  &&  {
     alias resetbash='source ~/.bashrc' && alias editbash='vim ~/.bashrc && source ~/.bashrc'
 }
-alias santa="sudo santactl sync --clean"
 
 alias editfuncs="vim ~/.shell_functions && source ~/.shell_functions"
 alias editalias='vim ~/.bash_aliases && source ~/.bash_aliases'
@@ -145,7 +144,7 @@ cargocheck ()
     fi
 }
 cargocheck bat cat
-cargocheck fd-find fd find
+cargocheck fd-find find fd
 cargocheck xq jq
 cargocheck xh curl "xh --style auto"
 cargocheck mise asdf
@@ -157,6 +156,7 @@ cargocheck du-dust du dust
 cargocheck git-delta diff delta 
 cargocheck ripgrep grep "rg --no-ignore"
 cargocheck zellij tmux
+# cargocheck ncspot spotify
 
 # If zoxide is installed use that over cd
 [[ "$(cargo install --list | grep -c "zoxide")" -ge 1 ]] && {
@@ -201,7 +201,7 @@ alias gdom='git diff $(git upn) $(git hb)'
 alias gdfom='git diff $(git upn) $(git hb) --name-only'
 alias gr='git reset --hard'
 alias grh='git reset --hard head'
-alias grom='git reset --hard $(git upn) $(git hb)'
+alias grom='git reset --hard @{u}'
 alias ga='git add'
 alias gu='git fetch && git pull origin master'
 alias gb='git branch'

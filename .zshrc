@@ -120,19 +120,6 @@ export PATH="$HOME/.local/share/custom_scripts:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 # ----------
 
-
-
-# --------------------------------
-# -- Claude Hooks 
-# --------------------------------
-export CLAUDE_HOOK_TOOL_USE_AFTER="/Users/bowmanpete/Dev/claude-g-scripts/claude-notify-hook.sh"
-export CLAUDE_HOOK_TOOL_USE_BEFORE="/Users/bowmanpete/Dev/claude-g-scripts/claude-notify-hook.sh"
-export CLAUDE_HOOK_TOOL_USE_BLOCKED="/Users/bowmanpete/Dev/claude-g-scripts/claude-notify-hook.sh"
-export CLAUDE_HOOK_USER_PROMPT_AFTER="/Users/bowmanpete/Dev/claude-g-scripts/claude-notify-hook.sh"
-export NOTIFICATION_METHOD="ntfy"
-export NTFY_TOPIC="bowmanpete123claude"  # Already default in script
-# ----------
-
 # --------------------------------
 # -- Editor Settings
 # --------------------------------
@@ -279,6 +266,3 @@ bindkey '^R' fzf-history-widget
 # ----------
 # ---- EOF ----
 # ----------
-
-
-source /Users/bowmanpete/.config/broot/launcher/bash/br
