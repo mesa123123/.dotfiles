@@ -90,6 +90,7 @@
 -- update the config, and gets the most pressing issues (i.e. this is currently annoying me, it gets an upvote for the
 -- next config day).
 -- PLUGIN: Snacks.nvim (especially, buf-delete, indent-lines, dashboard)
+-- PLUGIN: See if mini.hicolours can replace todo.comments
 --------------------------------
 
 --------------------------------
@@ -284,7 +285,6 @@ local lsp_servers_ei = {
   "python-lsp-server",
   "ruff",
   "ty",
-  "pyright",
   "rust-analyzer",
   "sqlls",
   "taplo",
@@ -302,7 +302,6 @@ local formatters_ei = {
   "markdownlint",
   "prettier",
   "ruff",
-  "isort",
   "beautysh",
   "stylua",
   "tex-fmt",
@@ -312,7 +311,6 @@ local formatters_ei = {
 local linters_ei = {
   "djlint",
   "htmlhint",
-  "flake8",
   "jsonlint",
   "luacheck",
   "markdownlint",

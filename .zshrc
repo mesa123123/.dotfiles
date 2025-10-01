@@ -121,16 +121,13 @@ export PATH="$HOME/.local/bin:$PATH"
 # ----------
 
 
-
 # --------------------------------
-# -- Claude Hooks 
+# -- Brew & C Compliation
 # --------------------------------
-export CLAUDE_HOOK_TOOL_USE_AFTER="/Users/bowmanpete/Dev/claude-g-scripts/claude-notify-hook.sh"
-export CLAUDE_HOOK_TOOL_USE_BEFORE="/Users/bowmanpete/Dev/claude-g-scripts/claude-notify-hook.sh"
-export CLAUDE_HOOK_TOOL_USE_BLOCKED="/Users/bowmanpete/Dev/claude-g-scripts/claude-notify-hook.sh"
-export CLAUDE_HOOK_USER_PROMPT_AFTER="/Users/bowmanpete/Dev/claude-g-scripts/claude-notify-hook.sh"
-export NOTIFICATION_METHOD="ntfy"
-export NTFY_TOPIC="bowmanpete123claude"  # Already default in script
+export C_INCLUDE_PATH="/opt/homebrew/include:$C_INCLUDE_PATH"
+export LIBRARY_PATH="/opt/homebrew/lib:$LIBRARY_PATH"
+export LDFLAGS="-L/opt/homebrew/lib"
+export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/homebrew/lib/pkgconfig"
 # ----------
 
 # --------------------------------

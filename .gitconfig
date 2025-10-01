@@ -38,3 +38,6 @@
 	defaultBranch = main
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[user]
+	name = Peter Bowman
+	email = bowmanpete123@gmail.com
