@@ -3,18 +3,22 @@ return {
   dependencies = {
     "rafamadriz/friendly-snippets",
     "saghen/blink.compat",
+    { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
   },
   opts = {
     appearance = {
-      nerd_font_variant = "mono", -- Or "normal"
+      nerd_font_variant = "mono",
     },
     fuzzy = { implementation = "lua" },
     sources = {
-      default = { "omni", "lsp", "path", "buffer", "snippets" },
+      default = { "lsp", "path", "buffer", "snippets", "omni" },
       per_filetype = {
-        sql = { "omni", "lsp", "snippets", "buffer", "path" },
+        sql = { "dadbod", "lsp", "snippets", "buffer", "path", "omni" },
         markdown = { "markdown", "lsp", "snippets", "buffer", "path", "omni" },
         codecompanion = { "codecompanion", "path", "buffer" },
+      },
+      providers = {
+        dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
       },
     },
     keymap = {
@@ -26,7 +30,7 @@ return {
       ["<CR>"] = { "accept", "fallback" },
       ["<C-space>"] = {
         function(cmp)
-          cmp.show({ providers = { "snippets" } })
+          cmp.show({ providers = { "lsp", "path", "buffer", "snippets", "omni" } })
         end,
       },
     },

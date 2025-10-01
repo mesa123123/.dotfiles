@@ -14,3 +14,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
   desc = "Run RainbowAlign on Open",
 })
+vim.b.ft_format = function()
+  vim.cmd("RainbowAlign")
+end

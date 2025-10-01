@@ -9,6 +9,7 @@
 --------------------------------
 -- TODO: config.utils table_concat, update it so it works with any number of tables
 -- TODO: Figure out why config module is populating "completion" table
+--      local has_completion,completion = pcall(require, 'completion')
 ----------
 -- Notifications
 ----------
@@ -104,11 +105,10 @@ vim.opt.termguicolors = true
 --------------------------------
 -- Add Config Modules to RTPath
 --------------------------------
-
 -- Core Settings
 ----------
 local configpath = vim.fn.stdpath("config") .. "/lua/config"
-package.path = package.path .. ";" .. configpath .. "/init.lua"
+package.path = package.path .. ";" .. configpath
 ----------
 
 -- Snippets
@@ -371,7 +371,6 @@ end
 -- Formatter Setup
 ----------
 local default_formatters_by_ft = {
-  ["*"] = { "injected" },
   bash = { "beautysh" },
   graphql = { "prettier" },
   jinja = { "djlint" },
@@ -411,13 +410,11 @@ local default_formatters = {
       return utils.get_venv_command("sqlfluff") or "sqlfluff"
     end,
     args = {
-      "fix",
-      "--fix-even-unparsable",
+      "format",
       "--config",
       vim.env.HOME .. "/.config/sqlfluff/.sqlfluff",
-      "$filename",
+      "-",
     },
-    stdin = false,
   },
   docformatter = {
     command = utils.get_mason_package("docformatter"),
@@ -498,7 +495,6 @@ sqlfluff.args = {
   "--config",
   os.getenv("HOME") .. "/.config/sqlfluff/.sqlfluff",
   "--format=json",
-  "--dialect=postgres",
 }
 
 -- Luacheck

@@ -130,6 +130,7 @@ export LDFLAGS="-L/opt/homebrew/lib"
 export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/homebrew/lib/pkgconfig"
 # ----------
 
+
 # --------------------------------
 # -- Editor Settings
 # --------------------------------
@@ -276,6 +277,3 @@ bindkey '^R' fzf-history-widget
 # ----------
 # ---- EOF ----
 # ----------
-
-
-source /Users/bowmanpete/.config/broot/launcher/bash/br
