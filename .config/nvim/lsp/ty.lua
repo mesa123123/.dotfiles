@@ -5,7 +5,4 @@ return {
   cmd = { 'ty', 'server' },
   filetypes = { 'python' },
   root_markers = { 'ty.toml', 'pyproject.toml', '.git' },
-  cmd = { get_venv_command("ty"), "server" },
-  filetypes = { "python" },
-  root_dir = vim.fs.dirname(vim.fs.find({ ".git", "pyproject.toml" }, { upward = true })[1]),
 }
