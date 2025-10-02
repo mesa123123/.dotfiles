@@ -19,12 +19,12 @@
     alias l='ls --color -CF'
     echo "Couldn't find eza, installing..." && cargo install eza
 }
+alias .="pwd"
 alias ..="cd ../"
 alias ...="cd ../../"
 alias ....="cd ../../../"
 alias .....="cd ../../../../"
 alias ......="cd ../../../../../"
-alias .-="cd -"
 alias winhome='cd $WINHOME'
 alias learnhome='cd $LEARNHOME'
 alias dothome='cd ~/.dotfiles'
