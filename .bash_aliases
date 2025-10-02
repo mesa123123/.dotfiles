@@ -8,8 +8,8 @@
 [[ "$(cargo install --list | grep -c "eza")" -ge 1 ]] && {
     alias eza='eza -hgx --icons=always --git'
     alias ls='eza --icons --git'
-    alias ll='eza -la'
-    alias la='eza -a'
+    alias ll='eza -lgxh'
+    alias lla='eza -lgxha'
     alias tree='eza -Tla'
 } 
 # If not use regular ls aliases

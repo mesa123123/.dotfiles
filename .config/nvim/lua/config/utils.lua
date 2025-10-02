@@ -77,7 +77,7 @@ end
 -- Abstraction for the vast majority of my keymappings
 ----------
 M.norm_keyset = function(key, command, wkdesc)
-  keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = false, desc = wkdesc })
+  keymap.set("n", key, '<cmd>' .. command .. '<CR>', { silent = true, noremap = false, desc = wkdesc })
 end
 -- Loud Version
 M.norm_loudkeyset = function(key, command, wkdesc)
