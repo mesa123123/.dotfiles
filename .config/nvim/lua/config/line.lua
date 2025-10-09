@@ -40,7 +40,7 @@ local zonedtime = {
   function()
     return os.date("%H:%M %Y-%m-%d", os.time())
   end,
-  fmt = trunc(120, 3, 90, true),
+  fmt = trunc(30, 50, 10, true),
 }
 ----------
 

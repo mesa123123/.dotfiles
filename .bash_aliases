@@ -10,7 +10,7 @@
     alias ls='eza --icons --git'
     alias ll='eza -lgxh'
     alias lla='eza -lgxha'
-    alias tree='eza -Tla'
+    alias tree='eza -alT'
 } 
 # If not use regular ls aliases
 [[ "$(cargo install --list | grep -c "eza")" -le 0 ]] && {
