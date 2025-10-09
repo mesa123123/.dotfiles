@@ -5,6 +5,7 @@ node_modules/
 !.config/kitty/
 !.config/xfce4/xfconf/*
 !.config/xfce4/panel/*
+.config/nvim/lazy-lock.json
 # Nvim Config
 # !.config/nvim/*
 # !.config/nvim/colors/*

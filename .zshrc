@@ -127,7 +127,9 @@ export PATH="$HOME/.local/bin:$PATH"
 export C_INCLUDE_PATH="/opt/homebrew/include:$C_INCLUDE_PATH"
 export LIBRARY_PATH="/opt/homebrew/lib:$LIBRARY_PATH"
 export LDFLAGS="-L/opt/homebrew/lib"
-export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/opt/homebrew/lib/pkgconfig"
+export CFLAGS="${CFLAGS} -Wno-incompatible-function-pointer-types"
+export CXXFLAGS="${CXXFLAGS} -Wno-incompatible-function-pointer-types"
+export OBJC_DISABLE_INITIALIZE_FOR_SECTIONS=YES 
 # ----------
 
 
