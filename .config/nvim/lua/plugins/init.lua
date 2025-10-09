@@ -103,7 +103,7 @@ return {
   ----------
   -- Icons
   {
-    "echasnovski/mini.icons",
+    "nvim-mini/mini.icons",
     config = function()
       require("mini.icons").setup({
         lsp = {
@@ -117,14 +117,25 @@ return {
   },
   -- Notifications
   {
-    "echasnovski/mini.notify",
+    "nvim-mini/mini.notify",
     version = "*",
     config = function()
-      require("mini.notify").setup()
+      require("mini.notify").setup({
+        window = {
+          config = {
+            relative = "editor",
+            anchor = "NE",
+            row = 1,
+            col = vim.o.columns,
+            width = 40,
+            border = "rounded",
+          },
+        },
+      })
     end,
   },
   {
-    "echasnovski/mini.clue",
+    "nvim-mini/mini.clue",
     config = function()
       local miniclue = require("mini.clue")
       local all_clues = {}
@@ -202,7 +213,7 @@ return {
     },
   },
   { "onsails/lspkind.nvim", event = "VeryLazy" },
-  { "echasnovski/mini.starter", event = "VimEnter", version = false },
+  { "nvim-mini/mini.starter", event = "VimEnter", version = false },
   {
     "fei6409/log-highlight.nvim",
     config = function()
