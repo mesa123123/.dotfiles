@@ -7,10 +7,11 @@
 # If eza is installed use that over ls
 [[ "$(cargo install --list | grep -c "eza")" -ge 1 ]] && {
     alias eza='eza -hgx --icons=always --git'
-    alias ls='eza --icons --git'
+    alias ls='eza -hgx --icons=always --git'
+    alias la='eza -hgxa --icons=always --git'
     alias ll='eza -lgxh'
     alias lla='eza -lgxha'
-    alias tree='eza -alT'
+    alias tree='eza -Tlhgxa'
 } 
 # If not use regular ls aliases
 [[ "$(cargo install --list | grep -c "eza")" -le 0 ]] && {
