@@ -2,6 +2,7 @@ vim.bo.commentstring = "-- %s"
 vim.bo.tabstop = 2
 vim.bo.shiftwidth = 2
 vim.opt_local.colorcolumn = "90"
+vim.g.loaded_sql_completion = 1
 
 local makeDescMap = require("config.utils").desc_keymap
 local lk = require("config.keymaps").lk
