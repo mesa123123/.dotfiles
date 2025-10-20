@@ -62,6 +62,7 @@ M.setup = function()
   -- Settings
   --------------------------------
   gv["EditorConfig_exclude_patterns"] = { "fugitive://.*", "scp://.*" }
+  gv.loaded_sql_completion = false
   -- AutoCmds
   ----------
   -- Create Group
@@ -109,6 +110,5 @@ M.setup = function()
     }
   end
   ----------
-
 end
 return M
