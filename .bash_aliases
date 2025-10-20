@@ -10,7 +10,7 @@
     alias ls='eza -hgx --icons=always --git'
     alias la='eza -hgxa --icons=always --git'
     alias ll='eza -lgxh'
-    alias lla='eza -lgxha'
+    alias lal='eza -lgxha'
     alias treea='eza -Tlhgxa'
     alias tree='eza -Tlhgx'
 } 
