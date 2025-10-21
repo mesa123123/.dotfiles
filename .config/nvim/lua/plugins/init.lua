@@ -13,6 +13,10 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
     config = function()
       require("lualine").setup(require("config").line_config)
+      require("nvim-navic").setup({
+        highlight = true,
+        lsp = { preference = { "ty" } },
+      })
     end,
   },
   ----------

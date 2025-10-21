@@ -1,4 +1,4 @@
--------------------------------
+
 -- ###################### --
 -- #  Main Nvim Config  # --
 -- ###################### --
@@ -362,6 +362,8 @@ for _, v in ipairs(ensure_installed) do
     lsp_config.setup("pylsp")
   elseif v == "typescript-language-server" then
     lsp_config.setup("ts_ls")
+  elseif v == "ltex-ls" then
+    lsp_config.setup("ltex")
   else
     lsp_config.setup(v)
   end
@@ -385,7 +387,6 @@ local default_formatters_by_ft = {
   shell = { "beautysh" },
   sh = { "beautysh" },
   sql = { "sqlfluff" },
-  rst = { "rstfmt" },
   rust = { "rustfmt" },
   terraform = { "terraform_fmt" },
   typescript = { "prettier" },
