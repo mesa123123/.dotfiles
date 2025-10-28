@@ -149,10 +149,6 @@ return {
       add_clues(miniclue.gen_clues.g())
       add_clues(require("config.keymaps").get_leader_descriptions())
       add_clues(miniclue.gen_clues.z())
-      -- add_clues(miniclue.gen_clues.builtin_completion())
-      -- add_clues(miniclue.gen_clues.marks())
-      -- add_clues(miniclue.gen_clues.registers())
-      -- add_clues(miniclue.gen_clues.windows())
       add_clues(miniclue.gen_clues.z())
       miniclue.setup({
         triggers = {
@@ -165,6 +161,14 @@ return {
           { mode = "x", keys = "z" },
         },
         clues = all_clues,
+        window = {
+          config = {
+            width = "auto",
+            row = "auto",
+            col = "auto",
+            anchor = "NE",
+          },
+        },
       })
     end,
   },
@@ -220,6 +224,14 @@ return {
       require("log-highlight").setup({
         extensions = { "log", "output" },
       })
+    end,
+  },
+  {
+    "rachartier/tiny-inline-diagnostic.nvim",
+    event = "VeryLazy",
+    priority = 1000,
+    config = function()
+      require("tiny-inline-diagnostic").setup()
     end,
   },
   ----------

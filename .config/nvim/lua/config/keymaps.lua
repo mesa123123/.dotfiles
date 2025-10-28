@@ -56,6 +56,20 @@ M.local_filepath_clip = function()
   vim.fn.setreg("+", filepath)
   vim.print("Current file path copied to clipboard: " .. filepath)
 end
+-- Arg list Nav
+M.nav_arglist = function(count)
+  local arglen = vim.fn.argc()
+  if arglen == 0 then
+    return
+  end
+  local current_idx = vim.fn.argidx()
+  local next_idx = (current_idx + count) % arglen
+  if next_idx < 0 then
+    next_idx = next_idx + arglen
+  end
+  vim.cmd(string.format("%darg", next_idx + 1))
+  vim.cmd("args")
+end
 ----------
 
 --------------------------------
@@ -91,6 +105,7 @@ M.lk = {
   exec_test_coverage = M.l("xtc", "Coverage"),
   explore = M.l("e", "[E]xplore Current File"),
   file = M.l("f", "File & Buffer Options"),
+  argument_files = M.l("fa", "Arguemnt File Options"),
   file_manuals = M.l("fm", "Manuals Options"),
   file_history = M.l("fH", "History Options"),
   file_explorer = M.l("fe", "File Explorer Options"),
@@ -148,33 +163,40 @@ M.setup = function()
   local makeDescMap = require("config.utils").desc_keymap
   local keyopts = require("config.utils").keyopts
   local lk = M.lk
-  vim.keymap.set("n", "[", "[", keyopts({ desc = "Go To Previous" }))
-  vim.keymap.set("n", "]", "]", keyopts({ desc = "Go To Next" }))
-  vim.keymap.set("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
-  vim.keymap.set({ "n", "i" }, "<c-.>", "<c-t>", keyopts({ desc = "Tab forwards" }))
-  vim.keymap.set({ "n", "i" }, "<c-,>", "<c-d>", keyopts({ desc = "Tab Backwards" }))
-  vim.keymap.set({ "n", "v" }, "K", "H", keyopts({ desc = "Top of Page" }))
-  vim.keymap.set({ "n", "v" }, "J", "L", keyopts({ desc = "Bottom of Page" }))
-  vim.keymap.set({ "n", "v" }, "H", "0", keyopts({ desc = "Start of Line" }))
-  vim.keymap.set({ "n", "v" }, "L", "$", keyopts({ desc = "End of Line" }))
-  vim.keymap.set({ "n", "i", "v", "c" }, "£", "#", keyopts())
-  vim.keymap.set({ "n", "i", "v", "c" }, "§", "£", keyopts())
-  vim.keymap.set({ "n", "i", "v", "c" }, "f£", "f#", keyopts())
-  vim.keymap.set({ "n", "i", "v", "c" }, "F£", "F#", keyopts())
-  vim.keymap.set("n", "0", "K", keyopts())
-  vim.keymap.set("n", "$", "J", keyopts())
-  vim.keymap.set("n", "dL", "d$", keyopts())
-  vim.keymap.set("n", "dH", "d0", keyopts())
-  vim.keymap.set("n", "yH", "y0", keyopts())
-  vim.keymap.set("n", "yL", "y$", keyopts())
-  vim.keymap.set({ "n", "v" }, "<C-e>", "5<c-e>zz", keyopts())
-  vim.keymap.set({ "n", "v" }, "<C-y>", "5<c-y>zz", keyopts())
-  vim.keymap.set("n", "<cr>", ":nohlsearch<CR>", keyopts())
-  vim.keymap.set("n", "n", ":set hlsearch<CR>n", keyopts())
-  vim.keymap.set("n", "N", ":set hlsearch<CR>N", keyopts())
-  vim.keymap.set("n", "<C-d>", "<C-d>zz", keyopts())
-  vim.keymap.set("n", "<C-u>", "<C-u>zz", keyopts())
-  vim.keymap.set({ "n", "v" }, lk.paste.key, '"+p', keyopts({ desc = lk.paste.desc }))
+  local keymap = vim.keymap.set
+  keymap("n", "[", "[", keyopts({ desc = "Go To Previous" }))
+  keymap("n", "]", "]", keyopts({ desc = "Go To Next" }))
+  keymap("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
+  keymap({ "n", "i" }, "<c-.>", "<c-t>", keyopts({ desc = "Tab forwards" }))
+  keymap({ "n", "i" }, "<c-,>", "<c-d>", keyopts({ desc = "Tab Backwards" }))
+  keymap({ "n", "v" }, "K", "H", keyopts({ desc = "Top of Page" }))
+  keymap({ "n", "v" }, "J", "L", keyopts({ desc = "Bottom of Page" }))
+  keymap({ "n", "v" }, "H", "0", keyopts({ desc = "Start of Line" }))
+  keymap({ "n", "v" }, "L", "$", keyopts({ desc = "End of Line" }))
+  keymap({ "n", "i", "v", "c" }, "£", "#", keyopts())
+  keymap({ "n", "i", "v", "c" }, "§", "£", keyopts())
+  keymap({ "n", "i", "v", "c" }, "f£", "f#", keyopts())
+  keymap({ "n", "i", "v", "c" }, "F£", "F#", keyopts())
+  keymap("n", "0", "K", keyopts())
+  keymap("n", "$", "J", keyopts())
+  keymap("n", "dL", "d$", keyopts())
+  keymap("n", "dH", "d0", keyopts())
+  keymap("n", "yH", "y0", keyopts())
+  keymap("n", "yL", "y$", keyopts())
+  keymap({ "n", "v" }, "<C-e>", "5<c-e>zz", keyopts())
+  keymap({ "n", "v" }, "<C-y>", "5<c-y>zz", keyopts())
+  keymap("n", "<cr>", ":nohlsearch<CR>", keyopts())
+  keymap("n", "n", ":set hlsearch<CR>n", keyopts())
+  keymap("n", "N", ":set hlsearch<CR>N", keyopts())
+  keymap("n", "<C-d>", "<C-d>zz", keyopts())
+  keymap("n", "<C-u>", "<C-u>zz", keyopts())
+  keymap({ "n", "v" }, lk.paste.key, '"+p', keyopts({ desc = lk.paste.desc }))
+  keymap({ "n" }, "[a", function()
+    M.nav_arglist(vim.v.count1 * -1)
+  end, keyopts({ desc = "Prev Arg File" }))
+  keymap({ "n" }, "]a", function()
+    M.nav_arglist(vim.v.count1)
+  end, keyopts({ desc = "Next Arg File" }))
   makeDescMap({ "n", "v" }, lk.resize, "j", ":res-15<CR>", "Move Partition Down")
   makeDescMap({ "n", "v" }, lk.resize, "k", ":res+15<CR>", "Move Partition Up")
   makeDescMap({ "n", "v" }, lk.resize, "h", ":vertical resize -15<CR>", "Move Partition Left")
@@ -185,11 +207,10 @@ M.setup = function()
   makeDescMap({ "n", "v" }, lk.yank, "y", '"+yy', "System Copy: Line")
   makeDescMap({ "n", "v" }, lk.yank, "G", '"+yG', "System Copy: Rest of File")
   makeDescMap({ "n", "v" }, lk.yank, "%", '"+y%', "System Copy: Whole of File")
+  makeDescMap({ "n", "v" }, lk.yank, "f", M.local_filepath_clip, "Filepath to Clipboard")
   makeDescMap({ "n", "v" }, lk.highlights, "o", M.toggle_dark_mode, "[C]hange Background Mode")
-  makeDescMap("n", lk.file, "l", ":bnext<CR>", "NextBuff")
-  makeDescMap("n", lk.file, "h", ":bprev<CR>", "PrevBuff")
   makeDescMap("n", lk.file, "x", ":e new<CR>", "New File")
-  makeDescMap("n", lk.file, "p", M.local_filepath_clip, "Filepath to clipboard")
+  makeDescMap("n", lk.file, "y", M.local_filepath_clip, "Filepath to clipboard")
   makeDescMap("n", lk.write, "w", ":w<CR>", "Write")
   makeDescMap("n", lk.write, "!", ":w!<CR>", "Over-write")
   makeDescMap("n", lk.write, "s", ":so<CR>", "Write and Source to Nvim")
@@ -226,6 +247,7 @@ M.setup = function()
   makeDescMap({ "n" }, lk.vimHelp, "p", ":lua print(", "Print [L]ua Command")
   makeDescMap({ "n" }, lk.vimHelp, "h", M.telescope_help, "Open [H]elp Reference")
   makeDescMap({ "n" }, lk.vimHelp, "s", ":! ", "Run [S]ystem Command")
+  makeDescMap({ "n" }, lk.vimHelp, "fy", ":! ", "[Y]ank, [F]ile  [S]ystem Command")
   makeDescMap(
     { "v" },
     lk.exec,
