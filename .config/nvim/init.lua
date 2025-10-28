@@ -1,4 +1,4 @@
--------------------------------
+
 -- ###################### --
 -- #  Main Nvim Config  # --
 -- ###################### --
@@ -285,7 +285,7 @@ local lsp_servers_ei = {
   "json-lsp",
   "lua-language-server",
   "marksman",
-  "python-lsp-server",
+  "pyright",
   "ruff",
   "ty",
   "rust-analyzer",
@@ -295,6 +295,7 @@ local lsp_servers_ei = {
   "texlab",
   "ltex-ls",
   "tflint",
+  "typescript-language-server",
   "yaml-language-server",
   "graphql-language-service-cli",
 }
@@ -313,6 +314,7 @@ local formatters_ei = {
 -- Linters
 local linters_ei = {
   "djlint",
+  "eslint_d",
   "htmlhint",
   "jsonlint",
   "luacheck",
@@ -363,6 +365,10 @@ for _, v in ipairs(ensure_installed) do
     lsp_config.setup("pylsp")
   elseif v == "json-lsp" then
     lsp_config.setup("jsonls")
+  elseif v == "typescript-language-server" then
+    lsp_config.setup("ts_ls")
+  elseif v == "ltex-ls" then
+    lsp_config.setup("ltex")
   else
     lsp_config.setup(v)
   end
@@ -386,15 +392,15 @@ local default_formatters_by_ft = {
   shell = { "beautysh" },
   sh = { "beautysh" },
   sql = { "sqlfluff" },
-  rst = { "rstfmt" },
   rust = { "rustfmt" },
   terraform = { "terraform_fmt" },
+  typescript = { "prettier" },
   tex = { "tex-fmt" },
   yaml = { "yq" },
   toml = { "taplo" },
 }
 
-local default_formatters = {
+local default_formatter_config = {
   stylua = {
     command = "stylua",
     args = {
@@ -440,13 +446,13 @@ local default_formatters = {
 }
 
 local formatters_by_ft = get_workspace_setting("formatters_by_ft", default_formatters_by_ft)
-local formatters = get_workspace_setting("formatters", default_formatters)
+local formatter_config = get_workspace_setting("formatters", default_formatter_config)
 
 require("conform").setup({
   log_level = vim.log.levels.DEBUG,
   debug = true,
   formatters_by_ft = formatters_by_ft,
-  formatters = formatters,
+  formatters = formatter_config,
 })
 lsp_config.formatter_config()
 ----------
@@ -468,6 +474,7 @@ local default_linters_by_ft = {
   rst = { "rstcheck" },
   sql = { "sqlfluff" },
   terraform = { "tflint" },
+  typescript = { "eslint_d" },
   yaml = { "yamllint" },
 }
 local linters_by_ft = get_workspace_setting("linters_by_ft", default_linters_by_ft)

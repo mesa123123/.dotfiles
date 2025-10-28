@@ -30,16 +30,26 @@ return {
   filetypes = { "python", "py" },
   settings = {
     pylsp = {
+      configurationSources = { "none" },
       plugins = {
-        jedi_signature_help = { enabled = true },
-        jedi_completion = { enabled = true },
-        pycodestyle = { enabled = false },
-        mccabe = { enabled = false },
-        pyflakes = { enabled = false },
-        flake8 = { enabled = false },
+
         pylint = { enabled = false },
         pylsp_mypy = { enabled = true },
         pyls_isort = { enabled = false },
+        rope_autoimport = {
+          enabled = true,
+          completions = {
+            enabled = true,
+          },
+          code_actions = {
+            enabled = true,
+          },
+          memory = true,
+        },
+        rope_rename = { enabled = true },
+        jedi_completion = { enabled = false },
+        jedi_rename = { enabled = false },
+        pyflakes = { enabled = false },
       },
     },
   },
