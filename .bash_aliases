@@ -46,7 +46,7 @@ alias editalias='vim ~/.bash_aliases && source ~/.bash_aliases'
 alias editsecs="vim ~/.bash_secrets && source ~/.bash_secrets"
 alias editaptsource='sudo vim /etc/apt/sources.list'
 alias editexit="vim ~/.bash_exit && source ~/.bash_exit"
-alias edittmux="vim ~/.tmux.conf"
+alias edittmux="vim ~/.config/tmux/tmux.conf"
 alias editkitty="vim ~/.config/kitty/kitty.conf"
 alias editwez="vim ~/.wezterm.lua"
 alias editgit="vim ~/.gitconfig"
@@ -148,7 +148,6 @@ cargocheck ()
 cargocheck bat cat
 cargocheck fd-find find fd
 cargocheck xq jq
-cargocheck xh curl "xh --style auto"
 cargocheck mise asdf
 cargocheck gping ping
 cargocheck tidy-viewer tv
@@ -157,8 +156,6 @@ cargocheck tealdeer man tldr
 cargocheck du-dust du dust
 cargocheck git-delta diff delta 
 cargocheck ripgrep grep "rg --no-ignore"
-cargocheck zellij tmux
-# cargocheck ncspot spotify
 
 # If zoxide is installed use that over cd
 [[ "$(cargo install --list | grep -c "zoxide")" -ge 1 ]] && {

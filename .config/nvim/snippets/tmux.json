@@ -1,0 +1,10 @@
+{
+    "conf_header": {
+        "prefix": "conf_header",
+        "body": "# --------------------------------\n# ${1:Title}\n# --------------------------------\n"
+    },
+    "conf_subheader": {
+        "prefix": "conf_subheader",
+        "body": "# -- ${1:Title}\n# ----------\n${2:Body}\n# ----------\n"
+    }
+}

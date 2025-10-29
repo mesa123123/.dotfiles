@@ -194,8 +194,10 @@ vim.o.background = "light"
 vim.cmd.colorscheme("gruvbox")
 ----------
 
--- Workspace Settings
+-- Workspace Settings - Load Workspace .nvim.lua
 ----------
+vim.o.exrc = true
+vim.o.secure = true
 local workspace = config.workspace.load()
 -- Load Config Function
 local get_workspace_setting = function(key, default_value)
@@ -207,13 +209,14 @@ end
 ----------
 require("mini.starter").setup({
   items = {
-    { name = "VimSettings ", action = "Editvim", section = "Options" },
-    { name = "ProjectSettings ", action = "Editworkspace", section = "Options" },
-    { name = "Folder ", action = "Oil", section = "Options" },
-    { name = "Plugins ", action = "Editplugins", "p", section = "Options" },
-    { name = "Config ", action = "Editconfig", section = "Options" },
-    { name = "Snips ", action = "Editsnips", section = "Options" },
-    { name = "Ft ", action = "Editft", section = "Options" },
+    { name = "Restore Session ", action = "LoadProjectSession", section = "Workspace" },
+    { name = "Folder ", action = "Oil", section = "Workspace" },
+    { name = "VimSettings ", action = "Editvim", section = "Config" },
+    { name = "ProjectSettings ", action = "Editworkspace", section = "Config" },
+    { name = "Plugins ", action = "Editplugins", "p", section = "Config" },
+    { name = "Config ", action = "Editconfig", section = "Config" },
+    { name = "Snips ", action = "Editsnips", section = "Config" },
+    { name = "Ft ", action = "Editft", section = "Config" },
   },
 })
 -- ----------
@@ -360,6 +363,8 @@ for _, v in ipairs(ensure_installed) do
     lsp_config.setup("lua_ls")
   elseif v == "python-lsp-server" then
     lsp_config.setup("pylsp")
+  elseif v == "json-lsp" then
+    lsp_config.setup("jsonls")
   elseif v == "typescript-language-server" then
     lsp_config.setup("ts_ls")
   elseif v == "ltex-ls" then
