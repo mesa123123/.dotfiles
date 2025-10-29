@@ -1,7 +1,7 @@
 {
   "pyproject_scaffold": {
     "prefix": "pyproject_scaffold",
-    "body": "[build-system]\nrequires = [\"setuptools>=42\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"${1:project_name}\"\nversion = \"${2:0.1.0}\"\ndescription = \"${3:Project description here}\"\nauthors = [\n    { name = \"${4:Author Name}\", email = \"${5:author@example.com}\" }\n]\nlicense = { text = \"${6:licence}\" }\ndependencies = [\n    ${9:dependencies}\n]\nrequires-python = \">=${7:python_version}\"\n\n[dependency-groups]\ndev = [\n    \"ruff\",\n    \"ty\",\n    \"debugpy\",\n    \"pytest\",\n \"pyright\",\n  \"docformatter\"\n][tool.docformatter]\nline_length = ${8:line_length}\npre_summary_newline = true\npost_summary_newline = true\nmake_summary_multi_line = false\nforce_wrap = false\nuse_double_quotes = true"
+    "body": "[build-system]\nrequires = [\"setuptools>=42\", \"wheel\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"${1:project_name}\"\nversion = \"${2:0.1.0}\"\ndescription = \"${3:Project description here}\"\nauthors = [\n    { name = \"${4:Author Name}\", email = \"${5:author@example.com}\" }\n]\nlicense = { text = \"${6:licence}\" }\ndependencies = [\n    ${9:dependencies}\n]\nrequires-python = \">=${7:python_version}\"\n\n[dependency-groups]\ndev = [\n    \"ruff\",\n    \"ty\",\n    \"debugpy\",\n    \"pytest\",\n \"pytest-mock\",\n \"pytest-cov\",\n \"pyright\",\n  \"docformatter\"\n]\n\n[tool.docformatter]\nline_length = ${8:line_length}\npre_summary_newline = true\npost_summary_newline = true\nmake_summary_multi_line = false\nforce_wrap = false\nuse_double_quotes = true"
   },
   "scaffold_mise_py": {
     "prefix": "scaffold_mise_py",

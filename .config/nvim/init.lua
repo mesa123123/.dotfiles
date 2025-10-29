@@ -1,4 +1,3 @@
-
 -- ###################### --
 -- #  Main Nvim Config  # --
 -- ###################### --
@@ -277,24 +276,27 @@ vim.lsp.set_log_level("debug")
 ----------
 -- Core Language Servers
 local lsp_servers_ei = {
-  "bash-language-server",
-  "emmet-ls",
-  "json-lsp",
-  "lua-language-server",
-  "marksman",
-  "pyright",
-  "ruff",
-  "ty",
-  "rust-analyzer",
-  "sqlls",
-  "taplo",
-  "terraform-ls",
-  "texlab",
-  "ltex-ls",
-  "tflint",
-  "typescript-language-server",
-  "yaml-language-server",
-  "graphql-language-service-cli",
+  ["bash-language-server"] = "bashls",
+  ["css-lsp"] = "cssls",
+  ["emmet-ls"] = "emmet_ls",
+  ["html-lsp"] = "html",
+  ["jinja-lsp"] = "jinja_lsp",
+  ["json-lsp"] = "jsonls",
+  ["lua-language-server"] = "lua_ls",
+  ["marksman"] = "marksman",
+  ["pyright"] = "pyright",
+  ["ruff"] = "ruff",
+  ["ty"] = "ty",
+  ["rust-analyzer"] = "rust-analyzer",
+  ["sqlls"] = "sqlls",
+  ["taplo"] = "taplo",
+  ["terraform-ls"] = "terraform-ls",
+  ["texlab"] = "texlab",
+  ["ltex-ls"] = "ltex",
+  ["tflint"] = "tflint",
+  ["typescript-language-server"] = "ts_ls",
+  ["yaml-language-server"] = "yamlls",
+  ["graphql-language-service-cli"] = "graphql-language-service-cli",
 }
 -- Formatters
 local formatters_ei = {
@@ -323,7 +325,6 @@ local linters_ei = {
   "shellcheck",
   "shellharden",
   "sqlfluff",
-  "stylelint",
   "tflint",
   "write-good",
   "yamllint",
@@ -335,7 +336,8 @@ local debuggers_ei = {
   "debugpy",
 }
 
-local default_ensure_installed = tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, lsp_servers_ei)))
+local default_ensure_installed =
+  tC(formatters_ei, tC(linters_ei, tC(debuggers_ei, utils.get_table_keys(lsp_servers_ei))))
 ----------
 
 -- Install Packages
@@ -355,18 +357,8 @@ lsp_config.diagnostics()
 
 -- Servers
 ----------
-for _, v in ipairs(ensure_installed) do
-  if v == "lua-language-server" then
-    lsp_config.setup("lua_ls")
-  elseif v == "python-lsp-server" then
-    lsp_config.setup("pylsp")
-  elseif v == "typescript-language-server" then
-    lsp_config.setup("ts_ls")
-  elseif v == "ltex-ls" then
-    lsp_config.setup("ltex")
-  else
-    lsp_config.setup(v)
-  end
+for _, v in pairs(lsp_servers_ei) do
+  lsp_config.setup(v)
 end
 ----------
 
@@ -378,7 +370,10 @@ end
 ----------
 local default_formatters_by_ft = {
   bash = { "beautysh" },
+  css = { "prettier" },
+  html = { "prettier" },
   graphql = { "prettier" },
+  javascript = { "prettier" },
   jinja = { "djlint" },
   json = { "jq" },
   lua = { "stylua" },
@@ -458,7 +453,6 @@ lsp_config.formatter_config()
 local default_linters_by_ft = {
   ["*"] = { "compiler" },
   bash = { "shellcheck" },
-  css = { "stylelint", "prettier" },
   html = { "htmlhint" },
   jinja = { "djlint" },
   json = { "jsonlint" },
@@ -522,6 +516,7 @@ luacheck.parser = require("lint.parser").from_errorformat("%f:%l:%c: %m", {
 })
 
 lsp_config.linter_config()
+vim.api.nvim_create_user_command("LintInfo", lsp_config.linter_config, {})
 ----------
 
 --------------------------------

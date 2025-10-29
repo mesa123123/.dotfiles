@@ -239,7 +239,7 @@ M.formatter_config = function()
   ----------
   local lk = require("config.keymaps").lk
   local descMap = require("config.utils").desc_keymap
-  descMap({"n"}, lk.codeAction, "f", M.lint_and_format,  "LSP: Beautify Code")
+  descMap({ "n" }, lk.codeAction, "f", M.lint_and_format, "LSP: Beautify Code")
   vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
   vim.lsp.buf.format = {
     timeout = 10000,
@@ -272,6 +272,19 @@ M.linter_config = function()
     "LSP: Try Lint"
   )
   ----------
+end
+----------
+
+-- Linter Info
+----------
+M.lint_info = function()
+  local filetype = vim.bo.filetype
+  local linters = require("lint").linters_by_ft[filetype]
+  if linters then
+    print("Linters for " .. filetype .. ": " .. table.concat(linters, ", "))
+  else
+    print("No linters configured for filetype: " .. filetype)
+  end
 end
 ----------
 

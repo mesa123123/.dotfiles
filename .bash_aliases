@@ -157,7 +157,7 @@ cargocheck tealdeer man tldr
 cargocheck du-dust du dust
 cargocheck git-delta diff delta 
 cargocheck ripgrep grep "rg --no-ignore"
-cargocheck zellij tmux
+# cargocheck zellij tmux
 # cargocheck ncspot spotify
 
 # If zoxide is installed use that over cd
@@ -207,7 +207,7 @@ alias grom='git reset --hard @{u}'
 alias gRom='git restore --source=$(git upn)/$(git hb)'
 alias gR='git restore'
 alias ga='git add'
-alias gu='git fetch && git pull origin master'
+alias gu='git fetch && git pull origin main'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbD='git branch -D'

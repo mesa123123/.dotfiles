@@ -77,7 +77,7 @@ end
 -- Abstraction for the vast majority of my keymappings
 ----------
 M.norm_keyset = function(key, command, wkdesc)
-  keymap.set("n", key, '<cmd>' .. command .. '<CR>', { silent = true, noremap = false, desc = wkdesc })
+  keymap.set("n", key, "<cmd>" .. command .. "<CR>", { silent = true, noremap = false, desc = wkdesc })
 end
 -- Loud Version
 M.norm_loudkeyset = function(key, command, wkdesc)
@@ -139,6 +139,17 @@ M.unique = function(tbl)
     end
   end
   return unique
+end
+----------
+
+-- Get Table Keys
+----------
+M.get_table_keys = function(tbl)
+  local keyset = {}
+  for k, v in pairs(tbl) do
+    table.insert(keyset, k)
+  end
+  return keyset
 end
 ----------
 
