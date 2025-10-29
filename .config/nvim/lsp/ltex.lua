@@ -28,14 +28,12 @@ local language_id_mapping = {
   rnoweb = 'rsweave',
   rst = 'restructuredtext',
   tex = 'latex',
-  pandoc = 'markdown',
   text = 'plaintext',
 }
 
 local filetypes = {
   'bib',
   'gitcommit',
-  'markdown',
   'org',
   'plaintex',
   'rst',

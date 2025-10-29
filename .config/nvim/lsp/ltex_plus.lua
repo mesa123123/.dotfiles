@@ -24,7 +24,6 @@
 
 local language_id_mapping = {
   bib = 'bibtex',
-  pandoc = 'markdown',
   plaintex = 'tex',
   rnoweb = 'rsweave',
   rst = 'restructuredtext',
@@ -43,7 +42,6 @@ return {
     'context',
     'gitcommit',
     'html',
-    'markdown',
     'org',
     'pandoc',
     'plaintex',
@@ -67,7 +65,6 @@ return {
         'context',
         'gitcommit',
         'html',
-        'markdown',
         'org',
         'pandoc',
         'plaintex',
