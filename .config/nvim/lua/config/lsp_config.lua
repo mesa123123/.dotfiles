@@ -199,7 +199,7 @@ M.diagnostics = function()
         [vim.diagnostic.severity.INFO] = icons.Info,
       },
     },
-    virtual_lines = true,
+    virtual_lines = false,
     current_line = true,
     virtual_text = false,
     update_on_insert = true,

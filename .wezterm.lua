@@ -96,7 +96,7 @@ config.window_frame = {
 --
 -- Background Settings
 ----------
-config.macos_window_background_blur = 8
+-- config.macos_window_background_blur = 8
 config.background = {
   {
     source = {
@@ -118,6 +118,9 @@ config.enable_kitty_keyboard = true
 config.enable_csi_u_key_encoding = false
 ----------
 --
+-- Leader Key
+----------
+config.leader = { key = "a", mods = "CTRL|SHIFT" }
 --
 -- Key Bindings
 ----------
@@ -153,6 +156,34 @@ config.keys = {
     key = "e",
     mods = "CMD",
     action = wezterm.action.DisableDefaultAssignment,
+  },
+  {
+    key = "|",
+    mods = "CTRL|SHIFT",
+    action = wezterm.action.SplitPane({
+      direction = "Right",
+    }),
+  },
+  {
+    key = "h",
+    mods = "CTRL|SHIFT",
+    action = wezterm.action.AdjustPaneSize({ "Left", 5 }),
+  },
+  {
+    key = "l",
+    mods = "CTRL|SHIFT",
+    action = wezterm.action.AdjustPaneSize({ "Right", 5 }),
+  },
+  -- Pane focus
+  {
+    key = 'h',
+    mods = 'CTRL|SHIFT|CMD',
+    action = wezterm.action.ActivatePaneDirection 'Left',
+  },
+  {
+    key = 'l',
+    mods = 'CTRL|SHIFT|CMD',
+    action = wezterm.action.ActivatePaneDirection 'Right',
   },
 }
 ----------
