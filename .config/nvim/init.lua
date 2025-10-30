@@ -346,6 +346,7 @@ local default_ensure_installed =
 -- Install Packages
 ----------
 local ensure_installed = get_workspace_setting("ensure_installed", default_ensure_installed)
+vim.print(vim.inspect(ensure_installed))
 lsp_config.package_setup(ensure_installed)
 ----------
 
@@ -360,7 +361,8 @@ lsp_config.diagnostics()
 
 -- Servers
 ----------
-for _, v in pairs(lsp_servers_ei) do
+local lsp_servers = get_workspace_setting("ensure_installed", lsp_servers_ei)
+for _, v in pairs(lsp_servers) do
   lsp_config.setup(v)
 end
 ----------
