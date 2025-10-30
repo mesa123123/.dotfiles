@@ -33,6 +33,7 @@ M.setup = function()
   -- Other Encoding and Formatting settings
   opt.linebreak = true
   opt.autoindent = true
+  opt.autoread = true
   opt.encoding = "UTF-8"
   opt.showmode = false
   opt.splitbelow = true

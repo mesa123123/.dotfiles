@@ -30,5 +30,63 @@
   "README_scaffold": {
     "prefix": "README_scaffold",
     "body": "---\nlast_edit: ${2:date}\nstatus: draft\n---\n\n# ${1:Title}\n\n## Purpose\n\n## Design\n\n### Components\n\n### Process\n\n## Setup\n\n## Known Issues\n\n[//]: # (References)\n"
-  }
+  },
+  "ROADMAP_scaffold": {
+    "prefix": "ROADMAP_scaffold",
+    "body": [
+      "#  RoadMap for ${1:Title}",
+      "## Requirements List",
+      "1. ${2:Req 1} (x)",
+      "2. ${3:Req 2} (x)",
+      "3. ${4:Req 3} (x)",
+      "### Work In Progress",
+      "1. ${2:Req 1} (x)",
+      "    1. ${5:Sub_req 1} (x)",
+      "        1. ${6:Task 1} (x)",
+      "### Future",
+      "2. ${3:Req 2} (x)",
+      "3. ${4:Req 3} (x)",
+      "### Scope Creep (x)",
+      ""
+    ],
+    "description": "Creates a new empty timesheet.md document"
+  },
+  "TIMESHEET_scaffold": {
+    "prefix": "TIMESHEET_scaffold",
+    "body": [
+      "# Timesheets",
+      "",
+      "",
+      "## Template",
+      "",
+      "| Date | Progress | Comments | Lessons | Design | Planned |",
+      "| --- | --- | --- | --- | --- | --- |",
+      "|     |     |     |     |Decisions|Progress|",
+      "|  format = |  Any            | in depth |  anything    | references  | Progress |",
+      "| HHMM:dd/mm/yyyy      | Roadmap.rst  |description of |I'll need  |to any ladrs|Planned|",
+      "| | changes      |roadmap changes|to research |that have   |for    |",
+      "|            | format #.#.# |               |            |been made   |session |",
+      "|            | (s->s)      |               |            |            |       |",
+      "",
+      "",
+      "## Timesheet Records",
+      "\n\n"
+    ],
+    "description": "Creates a new empty timesheet.md document"
+  },
+  "TIMESHEET_entry_start": {
+    "prefix": "TIMESHEET_entry_start",
+    "body": [
+      "| Date | Progress | Comments | Lessons | Design | Planned |",
+      "| --- | --- | --- | --- | --- | --- |",
+      "| S: ${1:HHMM}:${2:dd}/${3:mm}/${4:yyyy} |   |    |  |  | ${9:Planned}  |"
+    ],
+    "description": "Creates a new timesheet entry in the TIMESHEET.md"
+  },
+    "TIMESHEET_entry_end": {
+      "prefix": "TIMESHEET_entry_end",
+      "body": ["| E: $L{1:HHMM}:${2:dd}/${3:mm}/${4:yyyy} | ${5:Progress}  | ${6:Comments}   | ${7:Lessons} | ${8:Design} |   |"],
+      "description": "Ends a timesheet entry in a TIMESHEET.md"
+    }
 }
+

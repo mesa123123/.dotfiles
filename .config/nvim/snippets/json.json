@@ -1,12 +1,30 @@
 {
   "newsnip": {
     "prefix": "newsnip",
-    "body": "{\n  \"${1:trigger}\": {\n    \"prefix\": \"${1:trigger}\",\n    \"body\": \"${2:body}\"\n  }\n}",
+    "body": [
+      "\"${1:trigger}\": {",
+      "\"prefix\": \"${1:trigger}\"",
+      "\"body\": [",
+      "${2:body}",
+      "]",
+      "\"description\": \"${3:Description}\""
+    ],
     "description": "Create a new JSON snippet template"
   },
   "snipfile": {
     "prefix": "snipfile",
-    "body": "{\n  \"${1:snippet_name}\": {\n    \"prefix\": \"${2:trigger}\",\n    \"body\": [\n      ${3:\"line1\",}\n      ${4:\"line2\"}\n    ],\n    \"description\": \"${5:description}\"\n  }\n}",
+    "body": [
+      "{",
+      "  \"${1:snippet_name}\": {",
+      "    \"prefix\": \"${2:trigger}\",",
+      "    \"body\": [",
+      "      ${3:\"line1\",}",
+      "      ${4:\"line2\"}",
+      "    ],",
+      "    \"description\": \"${5:description}\"",
+      "  }",
+      "}"
+    ],
     "description": "Create a new JSON snippets file template"
   }
 }
