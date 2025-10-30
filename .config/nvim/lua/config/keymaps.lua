@@ -164,6 +164,8 @@ M.setup = function()
   local keyopts = require("config.utils").keyopts
   local lk = M.lk
   local keymap = vim.keymap.set
+
+  keymap("t", "<ESC>", "<C-\\><C-N>", keyopts({ desc = "Escape Terminal" }))
   keymap("n", "[", "[", keyopts({ desc = "Go To Previous" }))
   keymap("n", "]", "]", keyopts({ desc = "Go To Next" }))
   keymap("n", "U", ":redo<CR>", keyopts({ desc = "Redo" }))
