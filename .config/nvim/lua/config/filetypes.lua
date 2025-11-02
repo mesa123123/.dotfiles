@@ -1,5 +1,22 @@
+
+-- ################## --
+-- # Filetype Setup # --
+-- ################## --
+----------------------
+
+--------------------------------
+-- Module Table
+--------------------------------
+
 local M = {}
-local palette = require("base.theme").palette
+
+----------
+--------------------------------
+-- Custom File Types
+--------------------------------
+
+-- Setup Function
+----------
 
 M.setup = function()
   return vim.filetype.add({
@@ -24,63 +41,80 @@ M.setup = function()
     },
   })
 end
+----------
+
+--------------------------------
+-- Icons Setup
+--------------------------------
+-- Table Declaration
+----------
 M.icons = {}
+----------
+
+-- Config
+----------
 M.icons.config = {
   default = true,
   -- CustomFileTypes
   override_by_filename = {
     ["requirements.txt"] = {
       icon = "",
-      color = palette.bright_blue,
+      -- color = palette.bright_blue,
       cterm_color = "196",
       name = "requirements",
     },
     ["dev-requirements.txt"] = {
       icon = "",
-      color = palette.bright_blue,
+      -- color = palette.bright_blue,
       cterm_color = "196",
       name = "requirements",
     },
   },
 }
-
+----------
+-- Custom Icons
+----------
 M.icons.custom = {
   htmldjango = {
     icon = "",
-    color = palette.bright_red,
+    -- color = palette.bright_red,
     cterm_color = "196",
     name = "Htmldjango",
   },
   jinja = {
     icon = "",
-    color = palette.bright_red,
+    -- color = palette.bright_red,
     cterm_color = "196",
     name = "Jinja",
   },
   rst = {
     icon = "",
-    color = palette.bright_green,
+    -- color = palette.bright_green,
     cterm_color = "lime green",
     name = "rst",
   },
   quarto = {
     icon = "󰄫",
-    color = palette.neutral_blue,
+    -- color = palette.neutral_blue,
     cterm_color = "blue",
     name = "quarto",
   },
   qmd = {
     icon = "󰄫",
-    color = palette.neutral_blue,
+    -- color = palette.neutral_blue,
     cterm_color = "blue",
     name = "qmd",
   },
   strudel = {
     icon = "",
-    color = palette.neutral_red,
+    -- color = palette.neutral_red,
     cterm_color = "red",
     name = "strudel",
   },
 }
+----------
 
+-- Return Table
+----------
 return M
+----------

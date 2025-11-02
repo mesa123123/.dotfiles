@@ -10,7 +10,7 @@ return {
     { "<leader>ac", "<cmd>GeminiSwitchToCli<cr>", desc = "Spawn or switch to AI session" },
     { "<leader>ay", "<cmd>GeminiAccept<cr>", desc = "Accept Geminis Changes" },
     { "<leader>an", "<cmd>GeminiReject<cr>", desc = "Reject Geminis Changes" },
-    { "<leader>aq", "<cmd>GeminiClose<cr>", desc = "Reject Geminis Changes" },
+    { "<leader>aq", "<cmd>GeminiClose<cr>", desc = "Close Gemini Session" },
     {
       "<leader>as",
       function()

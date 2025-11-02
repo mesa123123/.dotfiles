@@ -37,31 +37,6 @@ return {
       })
     end,
   },
-  -- Telescope
-  ----------
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      "BurntSushi/ripgrep",
-      "sharkdp/fd",
-      "nvim-telescope/telescope-dap.nvim",
-      "piersolenski/telescope-import.nvim",
-      "nvim-telescope/telescope-ui-select.nvim",
-      "stevearc/oil.nvim",
-      "refractalize/oil-git-status.nvim",
-      "leath-dub/snipe.nvim",
-    },
-    event = "VeryLazy",
-    config = function()
-      local ftree = require("config").filetree
-      require("telescope").setup(ftree.telescope_config())
-      require("snipe").setup(ftree.snipe_config)
-      require("oil").setup(ftree.file_tree_config)
-      require("oil-git-status").setup()
-      ftree.extension_load()
-      ftree.set_mappings()
-    end,
-  },
   ----------
   -- Linting & Formatting Plugins
   ----------
@@ -115,6 +90,9 @@ return {
             glyph = "",
             hl = "miniiconsgreen",
           },
+        },
+        extension = {
+          str = { glyph = "", hl = "MiniIconsRed" },
         },
       })
     end,
@@ -228,6 +206,39 @@ return {
       require("log-highlight").setup({
         extensions = { "log", "output" },
       })
+    end,
+  },
+  -- FileStuff
+  ----------
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "BurntSushi/ripgrep",
+      "sharkdp/fd",
+      "nvim-telescope/telescope-dap.nvim",
+      "piersolenski/telescope-import.nvim",
+      "nvim-telescope/telescope-ui-select.nvim",
+      "leath-dub/snipe.nvim",
+    },
+    event = "VeryLazy",
+    config = function()
+      local ftree = require("config").filetree
+      require("telescope").setup(ftree.telescope_config())
+      require("snipe").setup(ftree.snipe_config)
+      ftree.extension_load()
+      ftree.set_mappings()
+    end,
+  },
+  {
+    "stevearc/oil.nvim",
+    dependencies = {
+      "refractalize/oil-git-status.nvim",
+      "nvim-mini/mini.icons",
+    },
+    config = function()
+      local ftree = require("config").filetree
+      require("oil").setup(ftree.file_tree_config)
+      require("oil-git-status").setup()
     end,
   },
   {

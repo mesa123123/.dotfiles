@@ -185,6 +185,7 @@ config.options.setup()
 config.keymaps.setup()
 config.snips.snip_maps()
 config.commands.setup()
+-- config.filetypes.setup()
 ----------
 
 -- Set & Customize Colour Scheme
@@ -210,6 +211,7 @@ require("mini.starter").setup({
   items = {
     { name = "Restore Session ", action = "LoadProjectSession", section = "Workspace" },
     { name = "Folder ", action = "Oil", section = "Workspace" },
+    { name = "Database ", action = "DBUIToggle", section = "Workspace" },
     { name = "VimSettings ", action = "Editvim", section = "Config" },
     { name = "ProjectSettings ", action = "Editworkspace", section = "Config" },
     { name = "Plugins ", action = "Editplugins", "p", section = "Config" },
@@ -224,30 +226,6 @@ require("mini.starter").setup({
 ----------
 vim.g["do_filetype_lua"] = 1
 vim.g["did_load_filetypes"] = 0
-----------
-
--- Load Custom File Types
-----------
-vim.filetype.add({
-  filename = {
-    ["Vagrantfile"] = "ruby",
-    ["Jenkinsfile"] = "groovy",
-    [".sqlfluff"] = "ini",
-    ["output.output"] = "log",
-    [".zshrc"] = "bash",
-  },
-  pattern = { [".*req.*.txt"] = "requirements" },
-  extension = {
-    hcl = "ini",
-    draft = "markdown",
-    env = "config",
-    jinja = "jinja",
-    vy = "python",
-    quarto = "quarto",
-    qmd = "quarto",
-    snippet = "json",
-  },
-})
 ----------
 
 --------------------------------
@@ -610,7 +588,8 @@ local descMap = require("config.utils").desc_keymap
 
 -- KeyMaps
 ----------
-descMap({ "n" }, lk.database, "u", ":tabnew<CR>:DBUIToggle<CR>:set nu<CR>:set relativenumber<CR>", "Toggle DB UI")
+descMap({ "n" }, lk.database, "U", ":tabnew<CR>:DBUIToggle<CR>:set nu<CR>:set relativenumber<CR>", "Toggle DB UI")
+descMap({ "n" }, lk.database, "u", ":DBUIToggle<CR>:set nu<CR>:set relativenumber<CR>", "Toggle DB UI")
 descMap({ "n" }, lk.database, "f", ":DBUIFindBuffer<CR>", "Find DB Buffer")
 descMap({ "n" }, lk.database, "r", ":DBUIRenameBuffer<CR>", "Rename DB Buffer")
 descMap({ "n" }, lk.database, "l", ":DBUILastQueryInfo<CR>", "Run Last Query")
