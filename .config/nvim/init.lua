@@ -98,6 +98,8 @@
 --------------------------------
 vim.g["config_path"] = "~/.config/nvim"
 vim.g["mapleader"] = " "
+vim.g.report = 1000
+
 vim.opt.termguicolors = true
 ----------
 
@@ -185,7 +187,7 @@ config.options.setup()
 config.keymaps.setup()
 config.snips.snip_maps()
 config.commands.setup()
--- config.filetypes.setup()
+config.custom_files.setup()
 ----------
 
 -- Set & Customize Colour Scheme
@@ -207,11 +209,18 @@ end
 
 -- Dashboard
 ----------
+-- Setup
+----------
+
 require("mini.starter").setup({
   items = {
     { name = "Restore Session ", action = "LoadProjectSession", section = "Workspace" },
     { name = "Folder ", action = "Oil", section = "Workspace" },
-    { name = "Database ", action = "DBUIToggle", section = "Workspace" },
+    {
+      name = "Database ",
+      action = "OpenDBInNewTab",
+      section = "Workspace",
+    },
     { name = "VimSettings ", action = "Editvim", section = "Config" },
     { name = "ProjectSettings ", action = "Editworkspace", section = "Config" },
     { name = "Plugins ", action = "Editplugins", "p", section = "Config" },
@@ -588,7 +597,7 @@ local descMap = require("config.utils").desc_keymap
 
 -- KeyMaps
 ----------
-descMap({ "n" }, lk.database, "U", ":tabnew<CR>:DBUIToggle<CR>:set nu<CR>:set relativenumber<CR>", "Toggle DB UI")
+descMap({ "n" }, lk.database, "U", ":OpenDBInNewTab<CR>", "Toggle DB UI")
 descMap({ "n" }, lk.database, "u", ":DBUIToggle<CR>:set nu<CR>:set relativenumber<CR>", "Toggle DB UI")
 descMap({ "n" }, lk.database, "f", ":DBUIFindBuffer<CR>", "Find DB Buffer")
 descMap({ "n" }, lk.database, "r", ":DBUIRenameBuffer<CR>", "Rename DB Buffer")

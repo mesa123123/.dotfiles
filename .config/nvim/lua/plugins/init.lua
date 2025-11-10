@@ -84,36 +84,7 @@ return {
   {
     "nvim-mini/mini.icons",
     config = function()
-      require("mini.icons").setup({
-        lsp = {
-          snippet = {
-            glyph = "",
-            hl = "miniiconsgreen",
-          },
-        },
-        extension = {
-          str = { glyph = "", hl = "MiniIconsRed" },
-        },
-      })
-    end,
-  },
-  -- Notifications
-  {
-    "nvim-mini/mini.notify",
-    version = "*",
-    config = function()
-      require("mini.notify").setup({
-        window = {
-          config = {
-            relative = "editor",
-            anchor = "NE",
-            row = 1,
-            col = vim.o.columns,
-            width = 40,
-            border = "rounded",
-          },
-        },
-      })
+      require("mini.icons").setup(require("config").custom_files.icons())
     end,
   },
   {
