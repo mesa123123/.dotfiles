@@ -1,5 +1,29 @@
 local M = {}
-local palette = require('base.theme').palette
+local palette = require("base.theme").palette
+
+M.filetypes.setup = function()
+  return vim.filetype.add({
+    filename = {
+      ["Vagrantfile"] = "ruby",
+      ["Jenkinsfile"] = "groovy",
+      [".sqlfluff"] = "ini",
+      ["output.output"] = "log",
+      [".zshrc"] = "bash",
+    },
+    pattern = { [".*req.*.txt"] = "requirements" },
+    extension = {
+      hcl = "ini",
+      draft = "markdown",
+      env = "config",
+      jinja = "jinja",
+      vy = "python",
+      quarto = "quarto",
+      qmd = "quarto",
+      snippet = "json",
+      str = "javascript",
+    },
+  })
+end
 
 M.config = {
   default = true,
@@ -50,6 +74,12 @@ M.custom_icons = {
     color = palette.neutral_blue,
     cterm_color = "blue",
     name = "qmd",
+  },
+  strudel = {
+    icon = "",
+    color = palette.neutral_red,
+    cterm_color = "red",
+    name = "strudel",
   },
 }
 

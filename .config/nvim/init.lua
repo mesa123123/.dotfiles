@@ -98,6 +98,8 @@
 --------------------------------
 vim.g["config_path"] = "~/.config/nvim"
 vim.g["mapleader"] = " "
+vim.g.report = 1000
+
 vim.opt.termguicolors = true
 ----------
 
@@ -185,6 +187,7 @@ config.options.setup()
 config.keymaps.setup()
 config.snips.snip_maps()
 config.commands.setup()
+config.custom_files.setup()
 ----------
 
 -- Set & Customize Colour Scheme
@@ -206,10 +209,18 @@ end
 
 -- Dashboard
 ----------
+-- Setup
+----------
+
 require("mini.starter").setup({
   items = {
     { name = "Restore Session ", action = "LoadProjectSession", section = "Workspace" },
     { name = "Folder ", action = "Oil", section = "Workspace" },
+    {
+      name = "Database ",
+      action = "OpenDBInNewTab",
+      section = "Workspace",
+    },
     { name = "VimSettings ", action = "Editvim", section = "Config" },
     { name = "ProjectSettings ", action = "Editworkspace", section = "Config" },
     { name = "Plugins ", action = "Editplugins", "p", section = "Config" },
@@ -224,30 +235,6 @@ require("mini.starter").setup({
 ----------
 vim.g["do_filetype_lua"] = 1
 vim.g["did_load_filetypes"] = 0
-----------
-
--- Load Custom File Types
-----------
-vim.filetype.add({
-  filename = {
-    ["Vagrantfile"] = "ruby",
-    ["Jenkinsfile"] = "groovy",
-    [".sqlfluff"] = "ini",
-    ["output.output"] = "log",
-    [".zshrc"] = "bash",
-  },
-  pattern = { [".*req.*.txt"] = "requirements" },
-  extension = {
-    hcl = "ini",
-    draft = "markdown",
-    env = "config",
-    jinja = "jinja",
-    vy = "python",
-    quarto = "quarto",
-    qmd = "quarto",
-    snippet = "json",
-  },
-})
 ----------
 
 --------------------------------
@@ -346,6 +333,7 @@ local default_ensure_installed =
 -- Install Packages
 ----------
 local ensure_installed = get_workspace_setting("ensure_installed", default_ensure_installed)
+vim.print(vim.inspect(ensure_installed))
 lsp_config.package_setup(ensure_installed)
 ----------
 
@@ -360,7 +348,8 @@ lsp_config.diagnostics()
 
 -- Servers
 ----------
-for _, v in pairs(lsp_servers_ei) do
+local lsp_servers = get_workspace_setting("ensure_installed", lsp_servers_ei)
+for _, v in pairs(lsp_servers) do
   lsp_config.setup(v)
 end
 ----------
@@ -608,7 +597,8 @@ local descMap = require("config.utils").desc_keymap
 
 -- KeyMaps
 ----------
-descMap({ "n" }, lk.database, "u", ":tabnew<CR>:DBUIToggle<CR>:set nu<CR>:set relativenumber<CR>", "Toggle DB UI")
+descMap({ "n" }, lk.database, "U", ":OpenDBInNewTab<CR>", "Toggle DB UI")
+descMap({ "n" }, lk.database, "u", ":DBUIToggle<CR>:set nu<CR>:set relativenumber<CR>", "Toggle DB UI")
 descMap({ "n" }, lk.database, "f", ":DBUIFindBuffer<CR>", "Find DB Buffer")
 descMap({ "n" }, lk.database, "r", ":DBUIRenameBuffer<CR>", "Rename DB Buffer")
 descMap({ "n" }, lk.database, "l", ":DBUILastQueryInfo<CR>", "Run Last Query")

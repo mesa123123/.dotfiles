@@ -54,6 +54,32 @@ M.setup = function()
     complete = complete_client,
   })
   ----------
+  -- DB Functions
+  ----------
+  -- Open UI in new tab
+  vim.api.nvim_create_user_command("OpenDBInNewTab", function()
+    vim.cmd("tabnew<CR>")
+    vim.cmd("DBUIToggle")
+    vim.cmd("set nu")
+    vim.cmd("set relativenumber")
+  end, {})
+  -- Move dbout to csv file
+  vim.api.nvim_create_user_command("DBResulttoCSV", function(cmd_opts)
+    local timestamp = os.date("%Y%m%d_%H%M%S")
+    local filename = "dbout_" .. timestamp .. "_result.csv"
+    vim.cmd(":$")
+    vim.cmd("/^+------")
+    vim.cmd("normal! yG")
+    vim.cmd("vs " .. filename)
+    vim.cmd("normal! P")
+    vim.cmd("%s/^| //")
+    vim.cmd("%s/ | /,/g")
+    vim.cmd("%s/^+------.*$//")
+    vim.cmd("g/^\\s*$/d")
+    vim.cmd("RainbowAlign")
+    vim.cmd("bufdo if &filetype == 'dbout' | bdelete! | endif")
+  end, { range = true, desc = "Move DB output to a new CSV file" })
+  ----------
 
   -- Workspace Setup
   ----------
@@ -89,6 +115,7 @@ M.setup = function()
   ----------
 end
 ----------
+
 --------------------------------
 -- Return Table
 --------------------------------
