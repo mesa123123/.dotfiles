@@ -7,6 +7,7 @@ M.filetypes.setup = function()
       ["Vagrantfile"] = "ruby",
       ["Jenkinsfile"] = "groovy",
       [".sqlfluff"] = "ini",
+      [".sqlruff"] = "ini",
       ["output.output"] = "log",
       [".zshrc"] = "bash",
     },
