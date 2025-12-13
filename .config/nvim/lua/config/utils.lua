@@ -482,17 +482,6 @@ M.debug_config = function(default_config)
 end
 ----------
 
--- Function to check for injected_code
-----------
-M.is_code_injected = function(same_ft)
-  if vim.bo.filetype ~= same_ft then
-    return false
-  else
-    return true
-  end
-end
-----------
-
 -- Run whatever lua code is selected
 ----------
 M.execute_lua_selection = function()
@@ -560,6 +549,48 @@ M.insertVirtualText = function()
       { entry.text } -- Text to insert
     )
   end
+end
+----------
+
+--------------------------------
+-- Tree Sitter Functions
+--------------------------------
+
+-- Function to check for injected_code
+----------
+M.is_code_injected = function(same_ft)
+  if vim.bo.filetype ~= same_ft then
+    return false
+  else
+    return true
+  end
+end
+----------
+
+-- Dynamically Creates an Injection we can use in ft files
+----------
+-- For each language create a new query injection
+M.single_query_inject = function(lang, query)
+  local args = {}
+  for _ in string.gmatch(query, "%%s") do
+    table.insert(args, lang)
+  end
+  local full_query = string.format(query, unpack(args))
+  return full_query
+end
+-- Create the whole thing over one injection
+M.create_treesitter_injection_query = function(constant_query, dynamic_query, injection_languages)
+  injection_languages = injection_languages or {}
+  local all_injections_query
+  if #injection_languages > 0 then
+    all_injections_query = "; extends\n"
+    for _, v in ipairs(injection_languages) do
+      all_injections_query = all_injections_query .. M.single_query_inject(v, dynamic_query) .. "\n"
+    end
+  else
+    all_injections_query = ""
+  end
+  return all_injections_query .. constant_query
 end
 ----------
 
