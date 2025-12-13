@@ -56,13 +56,33 @@ M.setup = function()
   ----------
   -- DB Functions
   ----------
+  -- Close MiniStarter If Open
+  vim.api.nvim_create_user_command("CloseMiniStarter", function()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local ft = vim.api.nvim_get_option_value("filetype", { buf = buf })
+      if ft == "ministarter" or ft == "starter" then
+        MiniStarter.close(buf)
+        return true
+      end
+    end
+  end, {})
   -- Open UI in new tab
   vim.api.nvim_create_user_command("OpenDBInNewTab", function()
     vim.cmd("tabnew<CR>")
     vim.cmd("DBUIToggle")
     vim.cmd("set nu")
     vim.cmd("set relativenumber")
+    vim.cmd("CloseMiniStarter")
   end, {})
+  -- Open DB In Current Tab
+  vim.api.nvim_create_user_command("OpenDBInThisTab", function()
+    vim.cmd("DBUIToggle")
+    vim.cmd("set nu")
+    vim.cmd("set relativenumber")
+    vim.cmd("CloseMiniStarter")
+  end, {})
+  --
   -- Move dbout to csv file
   vim.api.nvim_create_user_command("DBResulttoCSV", function(cmd_opts)
     local timestamp = os.date("%Y%m%d_%H%M%S")

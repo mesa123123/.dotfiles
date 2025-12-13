@@ -189,7 +189,7 @@ require("mini.starter").setup({
     { name = "Folder ", action = "Oil", section = "Workspace" },
     {
       name = "Database ",
-      action = "OpenDBInNewTab",
+      action = "OpenDBInThisTab",
       section = "Workspace",
     },
     { name = "VimSettings ", action = "Editvim", section = "Config" },
@@ -249,6 +249,7 @@ local lsp_servers_ei = {
   ["ruff"] = "ruff",
   ["ty"] = "ty",
   ["rust-analyzer"] = "rust-analyzer",
+  ["sqruff"] = "sqruff",
   ["sqlls"] = "sqlls",
   ["taplo"] = "taplo",
   ["terraform-ls"] = "terraform-ls",
@@ -285,7 +286,6 @@ local linters_ei = {
   "rstcheck",
   "shellcheck",
   "shellharden",
-  "sqlfluff",
   "tflint",
   "write-good",
   "yamllint",
@@ -460,7 +460,6 @@ sqlfluff.args = {
   os.getenv("HOME") .. "/.config/sqlfluff/.sqlfluff",
   "--format=json",
 }
-
 -- Luacheck
 local luacheck = lint.linters.luacheck
 luacheck.cmd = "luacheck"
