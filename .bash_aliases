@@ -209,7 +209,7 @@ function git_remote_name() {
 }
 function git_default_branch() {
     local remote_name
-    remote_name=$(get_remote_name)
+    remote_name=$(git_remote_name)
     if [[ $? -ne 0 ]]; then
         return 1
     fi
