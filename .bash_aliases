@@ -52,7 +52,7 @@ alias editwez="vim ~/.wezterm.lua"
 alias editgit="vim ~/.gitconfig"
 alias editssh="vim ~/.ssh/config"
 alias editstarship="vim ~/.config/starship.toml"
-alias editmise="vim ~/.config/mise/mise.toml"
+alias editmise="vim ~/.config/mise/config.toml"
 
 # --------
 editkeys() {
