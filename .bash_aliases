@@ -94,7 +94,7 @@ if [[ $(uname | grep -c "Linux") == 1 ]]; then
     [[ $(cat /proc/version | grep -c "MANJARO") == 1 ]] && alias uur='sudo pacman -Syu --noconfirm && yay --noconfirm -Syu && sudo pamac update --no-confirm && sudo pamac clean --no-confirm && sudo pacman --noconfirm -R $(pacman -Qdtq) ' && alias spacman='sudo pacman' 
     [[ $(cat /proc/version | grep -c "Red Hat") == 1 ]] && alias uur='sudo dnf update -y && sudo dnf upgrade -y && sudo dnf autoremove -y'
 elif [[ $(uname | grep -c "Darwin") == 1 ]]; then
-    alias uur='brew update && brew upgrade && brew cleanup && npm --location=global update'
+    alias uur='brew update && brew upgrade && brew cleanup && npm --location=global update && cargo install-update -a'
 fi
 # --------
 
@@ -155,6 +155,7 @@ cargocheck tealdeer man tldr
 cargocheck du-dust du dust
 cargocheck git-delta diff delta 
 cargocheck ripgrep grep "rg --no-ignore"
+cargocheck cargo-update cargo-update "cargo install-update -a"
 
 # If zoxide is installed use that over cd
 [[ "$(cargo install --list | grep -c "zoxide")" -ge 1 ]] && {
@@ -190,20 +191,46 @@ alias jira_start="start_task"
 
 # Git Aliases
 # ----------
+# Functions
+function git_remote_name() {
+    local remote_name
+    remote_name=$(git remote | command egrep -o '(upstream|origin)' | tail -1 2>/dev/null)
+
+    if [[ -z "$remote_name" ]]; then
+        remote_name=$(git remote | head -1 2>/dev/null)
+
+        if [[ -z "$remote_name" ]]; then
+            command echo "Error: No remotes found in this repository." 1>&2
+            return 1
+        fi
+    fi
+    command echo "$remote_name"
+    return 0
+}
+function git_default_branch() {
+    local remote_name
+    remote_name=$(git_remote_name)
+    if [[ $? -ne 0 ]]; then
+        return 1
+    fi
+    git remote show "$remote_name" | command awk '/HEAD branch/ {print $NF}'
+    return 0
+}
+# Aliases
 alias g='git'
 alias galias='cat ~/.bash_aliases | grep git'
 alias gs='git status --short'
 alias gd='git diff'
 alias gdf='git diff --name-only'
-alias gdom='git diff $(git upn) $(git hb)'
-alias gdfom='git diff $(git upn) $(git hb) --name-only'
+alias gdom='git diff $(git_remote_name) $(git_default_branch)'
+alias gdfom='git diff $(git_remote_name) $(git_default_branch) --name-only'
 alias gr='git reset --hard'
 alias grh='git reset --hard head'
 alias grom='git reset --hard @{u}'
-alias gRom='git restore --source=$(git upn)/$(git hb)'
+alias gRom='git restore --source=$(git_remote_name)/$(git_default_branch)'
 alias gR='git restore'
 alias ga='git add'
-alias gu='git fetch && git pull origin $(git hb)'
+alias gu='git fetch && git pull $(git_remote_name) $(git_default_branch)'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gbD='git branch -D'

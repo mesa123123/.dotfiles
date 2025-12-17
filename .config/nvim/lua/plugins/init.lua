@@ -242,7 +242,6 @@ return {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
-      -- Setup render-markdown
       require("render-markdown").setup({
         completions = { blink = { enabled = true } },
         latex = { enabled = false },

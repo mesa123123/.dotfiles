@@ -21,7 +21,7 @@
     update = !git fetch origin && git pull origin main 
     listlast = show --name-only --oneline
     po = push origin
-    upname = !git remote | egrep -o '(upstream|origin)' | tail -1
+    upn = !git remote | egrep -o '(upstream|origin)' | tail -1
     hb = !git remote show $(git upstream-name) | awk '/HEAD branch/ {print $NF}'
 [safe]
     directory = *

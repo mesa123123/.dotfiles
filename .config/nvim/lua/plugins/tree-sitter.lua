@@ -28,6 +28,7 @@ return {
         "htmldjango",
         "http",
         "javascript",
+        "jinja",
         "jsonc",
         "latex",
         "lua",
@@ -42,7 +43,7 @@ return {
         "toml",
         "typescript",
         "vim",
-        "yaml"
+        "yaml",
       },
       auto_install = true,
       highlight = {
@@ -76,7 +77,6 @@ return {
     })
 
     -- Custom Filetypes
-    treesitter.language.register("htmldjango", "jinja")
     treesitter.language.register("markdown", "quarto")
     ----------
 
